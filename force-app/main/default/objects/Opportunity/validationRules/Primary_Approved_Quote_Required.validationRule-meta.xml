@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Primary_Approved_Quote_Required</fullName>
+    <active>false</active>
+    <description>This validation rule prevents Opportunities from being set to a stage with a Probability of 50% or more unless there is at least one line item or an approved Primary Quote associated with the Opportunity.</description>
+    <errorConditionFormula>AND(
+NOT( $Setup.Application_Settings__c.Disable_Validation_Rules__c ),
+ISPICKVAL( StageName , &apos;Closed Won – Pending Approval&apos;),
+OR(NOT(No_of_Line_Items__c &gt; 0),
+ISBLANK ( SBQQ__PrimaryQuote__c),
+AND(NOT(ISPICKVAL( SBQQ__PrimaryQuote__r.ApprovalStatus__c ,&apos;Approved&apos;)), NOT(ISBLANK ( SBQQ__PrimaryQuote__c))))
+)</errorConditionFormula>
+    <errorMessage>Approved Primary Quote is required for Opportunity stage &quot;Closed Won – Pending Approval&quot;. Please check if Opportunity Product exists.</errorMessage>
+</ValidationRule>

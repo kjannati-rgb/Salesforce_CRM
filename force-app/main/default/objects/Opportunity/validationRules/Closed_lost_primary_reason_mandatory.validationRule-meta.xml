@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Closed_lost_primary_reason_mandatory</fullName>
+    <active>true</active>
+    <description>Prevents users in Practice Intelligence and Market Intelligence from marking Renewal or New Business opportunities as Closed Lost unless both the Closed Lost Primary Reason and Note fields are completed.</description>
+    <errorConditionFormula>text(StageName) = &quot;Closed Lost&quot;
+&amp;&amp;
+((text(Opportunity_Type_Forecast__c) = &quot;Renewal&quot;)
+|| (text(Opportunity_Type_Forecast__c) = &quot;New Business&quot;))
+&amp;&amp;
+((Owner.Business_Group__c = &quot;Practice Intelligence&quot;)
+|| (Owner.Business_Group__c = &quot;Market Intelligence&quot;)
+|| (Owner.Business_Group__c = &quot;MBL Seminars&quot;))
+&amp;&amp;
+NOT($Setup.Application_Settings__c.Disable_Validation_Rules__c)
+&amp;&amp;
+ISCHANGED(StageName)
+&amp;&amp;
+((ISBLANK(TEXT( Closed_Lost_primary_reason__c )))
+||
+ (ISBLANK( Note__c )))</errorConditionFormula>
+    <errorMessage>Please complete both Closed Lost Primary Reason and Note before marking this opportunity as Closed Lost.</errorMessage>
+</ValidationRule>

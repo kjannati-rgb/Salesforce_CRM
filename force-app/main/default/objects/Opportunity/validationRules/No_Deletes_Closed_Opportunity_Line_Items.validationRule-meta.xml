@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>No_Deletes_Closed_Opportunity_Line_Items</fullName>
+    <active>true</active>
+    <description>Prevents non-administrators from deleting line items on an Opportunity once it is Closed Won or Closed Lost.</description>
+    <errorConditionFormula>AND(OR(ISPICKVAL(StageName, &quot;Closed Won&quot;),
+ISPICKVAL(StageName, &quot;Closed Lost&quot;)),
+No_of_Line_Items__c &lt;
+PRIORVALUE(No_of_Line_Items__c),
+NOT( $Setup.Application_Settings__c.Disable_Validation_Rules__c),
+$Profile.Name &lt;&gt; &apos;System Administrator&apos;
+)</errorConditionFormula>
+    <errorMessage>Opportunity Line Items cannot be deleted because the Opportunity is closed.</errorMessage>
+</ValidationRule>

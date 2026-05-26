@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>57.0</apiVersion>
+    <decisions>
+        <name>Collection_empty</name>
+        <label>Collection empty?</label>
+        <locationX>167</locationX>
+        <locationY>382</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_all_lines_for_quote_Inform</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Opp_Inform</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Collection_empty_0_0</name>
+        <label>Collection empty?</label>
+        <locationX>741</locationX>
+        <locationY>607</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_0_0</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_all_lines_for_quote_Pro</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Opp_Pro</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Collection_empty_0_0_0</name>
+        <label>Collection empty?</label>
+        <locationX>281</locationX>
+        <locationY>599</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_0_0_0</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_all_lines_for_quote_Pro</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Opp_Pro_0</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Product_type</name>
+        <label>Product type?</label>
+        <locationX>505</locationX>
+        <locationY>383</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Lexology_Pro</name>
+            <conditionLogic>(1 OR 2) AND NOT(3)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__Product__r.Family</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Subs - Lexology Pro</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__Product__r.Family</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Subs - Lexology Insight</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__Product__r.Name</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <stringValue>Lexology PRO Insights</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_all_lines_for_quote_Pro</targetReference>
+            </connector>
+            <label>Lexology Pro</label>
+        </rules>
+        <rules>
+            <name>Lexology_Inform</name>
+            <conditionLogic>1 AND NOT(2)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__Product__r.Family</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Subs - Lexology Intelligence</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__Product__r.Name</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <stringValue>Lexology PRO Insights</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_all_lines_for_quote_Inform</targetReference>
+            </connector>
+            <label>Lexology Inform</label>
+        </rules>
+        <rules>
+            <name>Content_Subscriptions</name>
+            <conditionLogic>1 AND NOT(2)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__Product__r.Family</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Subs - Specialist Platforms</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__Product__r.Name</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <stringValue>Lexology PRO Insights</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_all_lines_for_quote_Content_Sub</targetReference>
+            </connector>
+            <label>Content Subscriptions</label>
+        </rules>
+    </decisions>
+    <description>Unticks specific boxes on opportunity if GxR, Lexology Pro, or Lexology Inform quote lines removed</description>
+    <environments>Default</environments>
+    <interviewLabel>Quote Line - Tag opportunity when products removed {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Quote Line - Tag opportunity when products removed</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_all_lines_for_quote_Content_Sub</name>
+        <label>Get all lines for quote (Content Sub)</label>
+        <locationX>406</locationX>
+        <locationY>593</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Collection_empty_0_0_0</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SBQQ__Quote__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.SBQQ__Quote__c</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Id</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>SBQQ__ProductFamily__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Subs - Specialist Platforms</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>SBQQ__QuoteLine__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_all_lines_for_quote_Inform</name>
+        <label>Get all lines for quote (Inform)</label>
+        <locationX>316</locationX>
+        <locationY>383</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Collection_empty</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SBQQ__Quote__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.SBQQ__Quote__c</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Id</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>SBQQ__ProductFamily__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Subs - Lexology Intelligence</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>SBQQ__QuoteLine__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_all_lines_for_quote_Pro</name>
+        <label>Get all lines for quote (Pro)</label>
+        <locationX>611</locationX>
+        <locationY>590</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Collection_empty_0_0</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SBQQ__Quote__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.SBQQ__Quote__c</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Id</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>SBQQ__ProductFamily__c</field>
+            <operator>StartsWith</operator>
+            <value>
+                <stringValue>Subs - Lexology Pro</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>SBQQ__QuoteLine__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Opp_Inform</name>
+        <label>Update Opp Inform</label>
+        <locationX>50</locationX>
+        <locationY>385</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.SBQQ__Quote__r.SBQQ__Opportunity2__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Inform_Present__c</field>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Opp_Pro</name>
+        <label>Update Opp Pro</label>
+        <locationX>867</locationX>
+        <locationY>595</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.SBQQ__Quote__r.SBQQ__Opportunity2__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>LexPro_present__c</field>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Opp_Pro_0</name>
+        <label>Update Opp Pro</label>
+        <locationX>165</locationX>
+        <locationY>590</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.SBQQ__Quote__r.SBQQ__Opportunity2__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Content_Sub_Present__c</field>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <start>
+        <locationX>387</locationX>
+        <locationY>47</locationY>
+        <connector>
+            <targetReference>Product_type</targetReference>
+        </connector>
+        <object>SBQQ__QuoteLine__c</object>
+        <recordTriggerType>Delete</recordTriggerType>
+        <triggerType>RecordBeforeDelete</triggerType>
+    </start>
+    <status>Obsolete</status>
+    <variables>
+        <name>vLineCounter</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+</Flow>

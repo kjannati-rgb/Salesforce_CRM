@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Closed_Deal_Email_Alert</name>
+        <label>Closed Deal Email Alert</label>
+        <locationX>473</locationX>
+        <locationY>492</locationY>
+        <actionName>Opportunity.Closed_Won_Deal</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Opportunity.Closed_Won_Deal</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>57.0</apiVersion>
+    <decisions>
+        <name>Disabled_Flow</name>
+        <label>Disabled Flow?</label>
+        <locationX>407</locationX>
+        <locationY>276</locationY>
+        <defaultConnector>
+            <targetReference>Opp_Team</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Disable_Condition</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>DisableFLow</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>Disable_Condition</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Profile.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>System Administrator</stringValue>
+                </rightValue>
+            </conditions>
+            <label>Flow Disabled</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Opp_Team</name>
+        <label>Opp Team</label>
+        <locationX>605</locationX>
+        <locationY>384</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Required</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Owner.Team__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>AllHires</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Owner.Team__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Expert Insight - Lexology In-Depth</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Owner.Team__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Expert Insight - Lexology Panoramic</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Owner.Team__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Expert Insight - GXRs</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Owner.Team__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>LawCareers.Net</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Owner.Team__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Legal Monitor</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Closed_Deal_Email_Alert</targetReference>
+            </connector>
+            <label>Required</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>DisableFLow</name>
+        <dataType>Boolean</dataType>
+        <expression>{!$Setup.Application_Settings__c.Disable_Autolaunch_Lightning_Flow__c}</expression>
+    </formulas>
+    <interviewLabel>Opportunity: Closed Won Deal Email Alert {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Opportunity: Closed Won Deal Email Alert</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>StageName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Closed Won</stringValue>
+            </value>
+        </filters>
+        <object>Opportunity</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <scheduledPaths>
+            <name>X5_Minutes_Later</name>
+            <connector>
+                <targetReference>Disabled_Flow</targetReference>
+            </connector>
+            <label>5 Minutes Later</label>
+            <offsetNumber>5</offsetNumber>
+            <offsetUnit>Minutes</offsetUnit>
+            <recordField>LastModifiedDate</recordField>
+            <timeSource>RecordField</timeSource>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+    <triggerOrder>6</triggerOrder>
+</Flow>

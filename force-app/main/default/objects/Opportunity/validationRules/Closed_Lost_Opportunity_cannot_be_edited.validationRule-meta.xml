@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Closed_Lost_Opportunity_cannot_be_edited</fullName>
+    <active>true</active>
+    <description>Opportunity cannot be edited because it is Closed Lost</description>
+    <errorConditionFormula>AND(ISPICKVAL(PRIORVALUE(StageName),&quot;Closed Lost&quot;),
+$Profile.Name &lt;&gt; &apos;System Administrator&apos;,
+$Profile.Name &lt;&gt; &apos;ALM - Custom: Fin/Ops/HR&apos;,
+$Profile.Name &lt;&gt; &apos;Custom: Fin/Ops/HR&apos;,
+NOT( $Setup.Application_Settings__c.Disable_Validation_Rules__c ))
+&amp;&amp; $Setup.rh2__PS_Settings__c.rh2__Run_Validation_Rule__c</errorConditionFormula>
+    <errorMessage>This Opportunity is Closed Lost and can no longer be edited. Please contact your Salesforce administrator if a change is required.</errorMessage>
+</ValidationRule>

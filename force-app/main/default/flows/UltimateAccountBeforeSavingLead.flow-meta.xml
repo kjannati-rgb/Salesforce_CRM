@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>49.0</apiVersion>
+    <assignments>
+        <name>AssignUltimate</name>
+        <label>AssignUltimate</label>
+        <locationX>859</locationX>
+        <locationY>303</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Ultimate_Account__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>getAccountInfo.Ultimate_Account__c</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <name>AccountNotBlank</name>
+        <label>AccountNotBlank</label>
+        <locationX>353</locationX>
+        <locationY>306</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Not_Blank</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Account__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>getAccountInfo</targetReference>
+            </connector>
+            <label>Not Blank</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Check if the custom setting governing disabling of flows is set</description>
+        <name>Check_Disable_Processes</name>
+        <label>Check Disable Processes</label>
+        <locationX>168</locationX>
+        <locationY>316</locationY>
+        <defaultConnector>
+            <targetReference>AccountNotBlank</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Disable Flow is not set</defaultConnectorLabel>
+        <rules>
+            <name>Disable_Flow_is_set</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>DisableAutoLaunchFlow</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Disable Flow is set</label>
+        </rules>
+    </decisions>
+    <description>Update the Ultimate Account before saving the Lead</description>
+    <formulas>
+        <name>DisableAutoLaunchFlow</name>
+        <dataType>Boolean</dataType>
+        <expression>{!$Setup.Application_Settings__c.Disable_Autolaunch_Lightning_Flow__c}</expression>
+    </formulas>
+    <interviewLabel>UltimateAccountBeforeSavingLead {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>UltimateAccountBeforeSavingLead</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>getAccountInfo</name>
+        <label>getAccountInfo</label>
+        <locationX>568</locationX>
+        <locationY>303</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>AssignUltimate</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Account__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>50</locationY>
+        <connector>
+            <targetReference>Check_Disable_Processes</targetReference>
+        </connector>
+        <object>Lead</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+</Flow>

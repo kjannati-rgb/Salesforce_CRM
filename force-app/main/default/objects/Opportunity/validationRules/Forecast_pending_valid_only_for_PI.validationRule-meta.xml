@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Forecast_pending_valid_only_for_PI</fullName>
+    <active>true</active>
+    <description>Restricts the &quot;Forecast Pending&quot; forecast status to Practice Intelligence / Lexology Intelligence teams (and a designated user); blocks other owner teams from selecting it.</description>
+    <errorConditionFormula>AND(
+Opportunity_Owner_Team__c &lt;&gt; &apos;Lexology Pro&apos;,
+Opportunity_Owner_Team__c &lt;&gt; &apos;Specialist Platforms&apos;,
+Opportunity_Owner_Team__c &lt;&gt; &apos;Lexology Intelligence&apos;,
+Opportunity_Owner_Team__c &lt;&gt; &apos;Lexology Academic&apos;,
+ OwnerId &lt;&gt; &apos;0056g000005rqzu&apos;,
+text(Forecast_Status__c) = &apos;Forecast Pending&apos;)</errorConditionFormula>
+    <errorDisplayField>Forecast_Status__c</errorDisplayField>
+    <errorMessage>Forecast Pending is used only by PI and Intelligence team</errorMessage>
+</ValidationRule>

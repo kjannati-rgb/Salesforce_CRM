@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>50.0</apiVersion>
+    <assignments>
+        <name>Expert_Insights_Jurisdiction</name>
+        <label>Expert Insights Jurisdiction</label>
+        <locationX>440</locationX>
+        <locationY>611</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Tier__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Jurisdiction.Tier_for_Expert_Insights_IP__c</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>GTDT_Jurisdiction</name>
+        <label>GTDT Jurisdiction</label>
+        <locationX>176</locationX>
+        <locationY>611</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Tier__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Jurisdiction.Tier_for_GTDT_TLR__c</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>TLR</name>
+        <label>TLR</label>
+        <locationX>704</locationX>
+        <locationY>611</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Tier__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Jurisdiction.Tier_for_TLR_Regions__c</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <description>Check if the custom setting governing disabling of flows is set</description>
+        <name>Check_Disable_Processes</name>
+        <label>Check Disable Processes</label>
+        <locationX>176</locationX>
+        <locationY>287</locationY>
+        <defaultConnector>
+            <targetReference>Jurisdiction</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Disable Flow is not set</defaultConnectorLabel>
+        <rules>
+            <name>Disable_Flow_is_set</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>DisableAutoLaunchFlow</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Disable Flow is set</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Product_Family</name>
+        <label>Product Family</label>
+        <locationX>440</locationX>
+        <locationY>503</locationY>
+        <defaultConnector>
+            <targetReference>TLR</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Expert_Insight_Lexology_GTDT</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Publication__r.Family</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Expert Insight - Lexology Panoramic</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>GTDT_Jurisdiction</targetReference>
+            </connector>
+            <label>Expert Insight - Lexology GTDT</label>
+        </rules>
+        <rules>
+            <name>Expert_Insight_IP</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Publication__r.Family</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Expert Insight - IP</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Expert_Insights_Jurisdiction</targetReference>
+            </connector>
+            <label>Expert Insight - IP</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>DisableAutoLaunchFlow</name>
+        <dataType>Boolean</dataType>
+        <expression>{!$Setup.Application_Settings__c.Disable_Autolaunch_Lightning_Flow__c}</expression>
+    </formulas>
+    <interviewLabel>Content Slot Tier Assignment {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Content Slot Tier Assignment</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Jurisdiction</name>
+        <label>Jurisdiction</label>
+        <locationX>440</locationX>
+        <locationY>395</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Product_Family</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Jurisdiction__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Jurisdictions__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_Disable_Processes</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Jurisdiction__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Content_Slots__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

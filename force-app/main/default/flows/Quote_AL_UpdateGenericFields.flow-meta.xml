@@ -1,0 +1,1893 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <decisions>
+        <name>Check_for_ALM_products</name>
+        <label>Check for ALM products</label>
+        <locationX>2118</locationX>
+        <locationY>242</locationY>
+        <defaultConnector>
+            <targetReference>Check_if_Quote_is_for_Subscription_or_Non_Subscription_Product</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>isALM_info_services_and_New</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId.Owner:User.Team__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>ALM Legal - Info Services</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>checkIf_isNew</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_field_set</targetReference>
+            </connector>
+            <label>isALM info services and New</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_for_Ultimate_Account</name>
+        <label>Check for Ultimate Account</label>
+        <locationX>2118</locationX>
+        <locationY>1082</locationY>
+        <defaultConnector>
+            <targetReference>Update_Record_Type_and_Approval_Status_for_New_quotes</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Check_if_account_is_changed</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>checkIf_isNew</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>checkIf_AccountIsChanged</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.Ultimate_Account__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Ultimate_Account_on_Quote</targetReference>
+            </connector>
+            <label>Check if account is changed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_if_Quote_is_approved</name>
+        <label>Check if Quote is approved</label>
+        <locationX>2118</locationX>
+        <locationY>1778</locationY>
+        <defaultConnector>
+            <targetReference>Check_Quote_Owner_Region_for_Template_Update</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Approved</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId.ApprovalStatus__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Approved</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Disable_WaterMark</targetReference>
+            </connector>
+            <label>Approved</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_if_Quote_is_for_Subscription_or_Non_Subscription_Product</name>
+        <label>Check if Quote is for Subscription or Non Subscription Product</label>
+        <locationX>2118</locationX>
+        <locationY>542</locationY>
+        <defaultConnector>
+            <targetReference>Check_for_Ultimate_Account</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Subscription</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Sample_Quote_line_to_Identify_Product.SBQQ__RenewedSubscription__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Type_of_Product</targetReference>
+            </connector>
+            <label>Subscription</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_if_quote_is_Renewal_and_New</name>
+        <label>Check if quote is Renewal and New</label>
+        <locationX>2118</locationX>
+        <locationY>4634</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Update4</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__Opportunity2__r.RecordType.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Renewals</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__Opportunity2__r.Name</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Cancellation for Order</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__Opportunity2__r.Name</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Amendment for contract</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>checkIf_isNew</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__Type__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Renewal</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Type_as_Renewal</targetReference>
+            </connector>
+            <label>Update</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_product_Type</name>
+        <label>Check product Type</label>
+        <locationX>1634</locationX>
+        <locationY>3854</locationY>
+        <defaultConnector>
+            <targetReference>Update_Payment_terms_for_new_MBL_quotes</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Custom_User_Gwilym</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId.OwnerId</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>0056g000005rr00AAA</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.EditLinesFieldSetName__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Lex_Insights</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Field_Set_for_Gwilym</targetReference>
+            </connector>
+            <label>Custom: User - Gwilym</label>
+        </rules>
+        <rules>
+            <name>Lexology_Index</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Sample_Quote_line_to_Identify_Product.SBQQ__Product__r.Reporting_Stream__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Performance Data - Lexology Index</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.EditLinesFieldSetName__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>FieldSet_forLexologyIndex</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Field_Set_for_Lexology_Index</targetReference>
+            </connector>
+            <label>Lexology Index</label>
+        </rules>
+        <rules>
+            <name>Rest_Of_the_Products4</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId.Owner:User.Team__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Performance Data - Lexology Index</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.OwnerId</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>0056g000005rr00AAA</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>FieldSet_forRestOfTheProducts</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>FieldSet_forRestOfTheProducts</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Field_Set_for_rest_of_the_Products</targetReference>
+            </connector>
+            <label>Rest Of the Products</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Quote_Owner_Region_for_Template_Update</name>
+        <label>Check Quote Owner Region for Template Update</label>
+        <locationX>2118</locationX>
+        <locationY>2126</locationY>
+        <defaultConnector>
+            <targetReference>Check_Quote_Owner_Region_for_Template_Update2</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>UK</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId.Owner:User.LBR_Legal_Entity__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Law Business Research (UK) Ltd.</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__DefaultTemplate__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Custom_Check_for_Products</targetReference>
+            </connector>
+            <label>UK</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Quote_Owner_Region_for_Template_Update2</name>
+        <label>Check Quote Owner Region for Template Update</label>
+        <locationX>2118</locationX>
+        <locationY>2666</locationY>
+        <defaultConnector>
+            <targetReference>Check_Quote_Owner_Region_for_Template_Update3</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>HK</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId.Owner:User.LBR_Legal_Entity__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Law Business Research (Asia) Ltd.</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__DefaultTemplate__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Custom_Check_for_Products2</targetReference>
+            </connector>
+            <label>HK</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Quote_Owner_Region_for_Template_Update3</name>
+        <label>Check Quote Owner Region for Template Update</label>
+        <locationX>2118</locationX>
+        <locationY>3206</locationY>
+        <defaultConnector>
+            <targetReference>Input_Field_Set</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>USA</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId.Owner:User.LBR_Legal_Entity__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Law Business Research LLC</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__DefaultTemplate__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Custom_Check_for_Products3</targetReference>
+            </connector>
+            <label>USA</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Type_of_Product</name>
+        <label>Check Type of Product</label>
+        <locationX>1766</locationX>
+        <locationY>650</locationY>
+        <defaultConnector>
+            <targetReference>Check_for_Ultimate_Account</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Time_Based</name>
+            <conditionLogic>1 AND (2 OR 3 OR 4)</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Sample_Quote_line_to_Identify_Product.SBQQ__Product__r.Subscription_Model__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Edition-Based</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__SubscriptionTerm__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__StartDate__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__EndDate__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_for_Edition_Based_Products</targetReference>
+            </connector>
+            <label>Edition Based</label>
+        </rules>
+        <rules>
+            <name>Edition_Based2</name>
+            <conditionLogic>1 AND 2</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Sample_Quote_line_to_Identify_Product.SBQQ__Product__r.Subscription_Model__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Time-Based</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__SubscriptionTerm__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>Get_Sample_Quote_line_to_Identify_Product.SBQQ__RenewedSubscription__r.SBQQ__Contract__r.SBQQ__RenewalTerm__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_for_Time_Based_Subscription_Products</targetReference>
+            </connector>
+            <label>Time Based</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Custom_Check_for_Products</name>
+        <label>Custom Check for Products</label>
+        <locationX>1502</locationX>
+        <locationY>2234</locationY>
+        <defaultConnector>
+            <targetReference>Check_Quote_Owner_Region_for_Template_Update2</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Lexology_Index_Reports</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Sample_Quote_line_to_Identify_Product.SBQQ__Product__r.Reporting_Stream__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Performance Data - Lexology Index</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Sample_Quote_line_to_Identify_Product.SBQQ__Product__r.Clean_Product_Code__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>10116484000</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__DefaultTemplate__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>a1GTm0000012ZqjMAE</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Default_Template_for_UK_Lexology_Index_Reports</targetReference>
+            </connector>
+            <label>Lexology Index:Reports</label>
+        </rules>
+        <rules>
+            <name>Lexology_Index_Annual_Package</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Sample_Quote_line_to_Identify_Product.SBQQ__Product__r.Reporting_Stream__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Performance Data - Lexology Index</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Sample_Quote_line_to_Identify_Product.SBQQ__Product__r.Clean_Product_Code__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>10116484000</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__DefaultTemplate__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>a1GTm0000010qvhMAA</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Default_Template_for_UK_Lexology_Index_Annual_Package</targetReference>
+            </connector>
+            <label>Lexology Index: Annual Package</label>
+        </rules>
+        <rules>
+            <name>Specialist_Platforms</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Sample_Quote_line_to_Identify_Product.SBQQ__Product__r.Family</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Subs - Specialist Platforms</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__DefaultTemplate__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>UK_RegionSpecialistPlatforms</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Default_Template_for_UK_Specialist_Platforms</targetReference>
+            </connector>
+            <label>Specialist Platforms</label>
+        </rules>
+        <rules>
+            <name>Rest_of_the_Products</name>
+            <conditionLogic>(1 OR 2 OR 3) AND 4</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__DefaultTemplate__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>UK_RegionTemplates</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__DefaultTemplate__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>UK_RegionSpecialistPlatforms</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Sample_Quote_line_to_Identify_Product.SBQQ__Product__r.Reporting_Stream__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Performance Data - Lexology Index</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__DefaultTemplate__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Default_Template_for_UK</targetReference>
+            </connector>
+            <label>Rest of the Products</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Custom_Check_for_Products2</name>
+        <label>Custom Check for Products</label>
+        <locationX>1502</locationX>
+        <locationY>2774</locationY>
+        <defaultConnector>
+            <targetReference>Check_Quote_Owner_Region_for_Template_Update3</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Lexology_Index_Reports3</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Sample_Quote_line_to_Identify_Product.SBQQ__Product__r.Reporting_Stream__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Performance Data - Lexology Index</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Sample_Quote_line_to_Identify_Product.SBQQ__Product__r.Clean_Product_Code__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>10116484000</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__DefaultTemplate__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>a1GTm0000012ZYzMAM</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Default_Template_for_HK_Lexology_Index_Reports</targetReference>
+            </connector>
+            <label>Lexology Index:Reports</label>
+        </rules>
+        <rules>
+            <name>Lexology_Index_Annual_Package3</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Sample_Quote_line_to_Identify_Product.SBQQ__Product__r.Reporting_Stream__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Performance Data - Lexology Index</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Sample_Quote_line_to_Identify_Product.SBQQ__Product__r.Clean_Product_Code__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>10116484000</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__DefaultTemplate__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>a1GTm0000010qyvMAA</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Default_Template_for_HK_Lexology_Index_Annual_Package</targetReference>
+            </connector>
+            <label>Lexology Index: Annual Package</label>
+        </rules>
+        <rules>
+            <name>Specialist_Platforms2</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Sample_Quote_line_to_Identify_Product.SBQQ__Product__r.Family</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Subs - Specialist Platforms</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Default_Template_for_HK_Specialist_Platforms</targetReference>
+            </connector>
+            <label>Specialist Platforms</label>
+        </rules>
+        <rules>
+            <name>Rest_of_the_Products3</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__DefaultTemplate__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>HK_RegionalTemplates</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Sample_Quote_line_to_Identify_Product.SBQQ__Product__r.Reporting_Stream__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Performance Data - Lexology Index</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Default_Template_for_HK</targetReference>
+            </connector>
+            <label>Rest of the Products</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Custom_Check_for_Products3</name>
+        <label>Custom Check for Products</label>
+        <locationX>1370</locationX>
+        <locationY>3314</locationY>
+        <defaultConnector>
+            <targetReference>Input_Field_Set</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Custom_For_Rebecca</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId.OwnerId</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>0056g000005rr0QAAQ</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__DefaultTemplate__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>a1G6g000001ZQDNEA4</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Custom_UK_quote_template_for_Rebecca_M</targetReference>
+            </connector>
+            <label>Custom: For Rebecca</label>
+        </rules>
+        <rules>
+            <name>Lexology_Index_Reports2</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Sample_Quote_line_to_Identify_Product.SBQQ__Product__r.Reporting_Stream__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Performance Data - Lexology Index</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Sample_Quote_line_to_Identify_Product.SBQQ__Product__r.Clean_Product_Code__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>10116484000</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__DefaultTemplate__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>a1GTm0000012a3dMAA</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Default_Template_for_USA_Lexology_Index_Reports</targetReference>
+            </connector>
+            <label>Lexology Index:Reports</label>
+        </rules>
+        <rules>
+            <name>Lexology_Index_Annual_Package2</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Sample_Quote_line_to_Identify_Product.SBQQ__Product__r.Reporting_Stream__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Performance Data - Lexology Index</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Sample_Quote_line_to_Identify_Product.SBQQ__Product__r.Clean_Product_Code__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>10116484000</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__DefaultTemplate__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>a1GTm0000010qxJMAQ</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Default_Template_for_USA_Lexology_Index_Annual_Package</targetReference>
+            </connector>
+            <label>Lexology Index: Annual Package</label>
+        </rules>
+        <rules>
+            <name>Specialist_Platforms3</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Sample_Quote_line_to_Identify_Product.SBQQ__Product__r.Family</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Subs - Specialist Platforms</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Default_Template_for_USA_Specialist_Platforms</targetReference>
+            </connector>
+            <label>Specialist Platforms</label>
+        </rules>
+        <rules>
+            <name>Rest_of_the_Products2</name>
+            <conditionLogic>(1 OR 3) AND 2</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__DefaultTemplate__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>USA_RegionTemplate</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Sample_Quote_line_to_Identify_Product.SBQQ__Product__r.Reporting_Stream__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Performance Data - Lexology Index</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__DefaultTemplate__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>a1G6g000001ZQDNEA4</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Default_Template_for_USA</targetReference>
+            </connector>
+            <label>Rest of the Products</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Input_Field_Set</name>
+        <label>Input Field Set</label>
+        <locationX>2118</locationX>
+        <locationY>3746</locationY>
+        <defaultConnector>
+            <targetReference>Update_Payment_terms_for_new_MBL_quotes</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Field_is_Default</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId.EditLinesFieldSetName__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>SBQQ__LineEditor</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_product_Type</targetReference>
+            </connector>
+            <label>Field is Default</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Update_Payment_terms_for_new_MBL_quotes</name>
+        <label>Update Payment terms</label>
+        <locationX>2118</locationX>
+        <locationY>4286</locationY>
+        <defaultConnector>
+            <targetReference>Check_if_quote_is_Renewal_and_New</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>MBL</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId.Owner:User.Team__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>MBL Seminars</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>checkIf_isNew</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Draft</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Payment_terms_MBL</targetReference>
+            </connector>
+            <label>MBL</label>
+        </rules>
+        <rules>
+            <name>Docket_Navigator</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId.Owner:User.Team__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Docket Navigator</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.SBQQ__Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Draft</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>checkIf_isNew</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Payment_terms_Docket_Navigator</targetReference>
+            </connector>
+            <label>Docket Navigator</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Update_Record_Type_and_Approval_Status_for_New_quotes</name>
+        <label>Update Record Type and Approval Status for New quotes</label>
+        <locationX>2118</locationX>
+        <locationY>1430</locationY>
+        <defaultConnector>
+            <targetReference>Check_if_Quote_is_approved</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Update</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>checkIf_isNew</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Approval_Status_and_Record_Type</targetReference>
+            </connector>
+            <label>Update</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>FieldSet_forLexologyIndex</name>
+        <dataType>String</dataType>
+        <expression>if(
+{!Get_Sample_Quote_line_to_Identify_Product.SBQQ__Product__r.Clean_Product_Code__c} = &quot;10116484000&quot;, &quot;	Lexology_Index_Annual_Package&quot;,	&quot;Lexology_Index_Report&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>FieldSet_forRestOfTheProducts</name>
+        <dataType>String</dataType>
+        <expression>IF(  
+    TEXT({!recordId.Owner:User.Team__c}) = &quot;LawCareers.Net&quot;, &quot;LCN&quot;,  
+        IF(  
+            TEXT({!recordId.Owner:User.Team__c}) = &quot;Expert Insight - Lexology Panoramic&quot;, &quot;Paid_Content&quot;,  
+            IF(  
+                TEXT({!recordId.Owner:User.Team__c}) = &quot;Expert Insight - GXRs&quot;, &quot;Paid_Content&quot;,  
+                IF(  
+                    TEXT({!recordId.Owner:User.Team__c}) = &quot;Expert Insight - Lexology In-Depth&quot;, &quot;Paid_Content&quot;,  
+                    IF(  
+                        TEXT({!recordId.Owner:User.Team__c}) = &quot;Lex ILO&quot;, &quot;Subscriptions_ILO&quot;,  
+                        IF(  
+                            TEXT({!recordId.Owner:User.Team__c}) = &quot;Lexology Intelligence&quot;, &quot;Lexology_Intelligence&quot;,  
+                            IF(  
+                                TEXT({!recordId.Owner:User.Team__c}) = &quot;Performance Data - GxRs&quot;, &quot;Performance_Data_GXRs&quot;,  
+                                    &quot;&quot; 
+                                )  
+                            )  
+                        )  
+                    )  
+                )  
+            )  
+        )</expression>
+    </formulas>
+    <formulas>
+        <name>HK_RegionalTemplates</name>
+        <dataType>String</dataType>
+        <expression>CASE(  
+    TEXT({!recordId.Owner:User.Team__c}),  
+    &quot;Allhires&quot;, &quot;&quot;,  
+    &quot;MBL Seminars&quot;, &quot;&quot;,  
+    &quot;Performance Data - GxRs&quot;, &quot;a1G4L000000cPWUUA2&quot;,  
+    &quot;Lex ILO&quot;, &quot;a1G6g000001ZTOLEA4&quot;,  
+    &quot;Expert Insight - Lexology In-Depth&quot;, &quot;a1G4L000000cLeRUAU&quot;,  
+    &quot;Lexology Intelligence&quot;, &quot;a1GTm000000YCl7MAG&quot;,  
+    &quot;Lexology PRO&quot;, &quot;a1G6g000001ZQtHEAW&quot;,  
+    &quot;Expert Insight - Lexology Panoramic&quot;, &quot;a1G6g000001ZQJWEA4&quot;,  
+    &quot;Docket Navigator&quot;, &quot;&quot;,  
+    &quot;Advertising&quot;, &quot;&quot;,  
+    &quot;Expert Insight - GXRs&quot;, &quot;a1G4L0000040FIUUA2&quot;,  
+    &quot;LawCareers.Net&quot;, &quot;&quot;,  
+    &quot;Legal Monitor&quot;, &quot;&quot;,  
+    &quot;&quot;  
+)</expression>
+    </formulas>
+    <formulas>
+        <name>HK_RegionSpecialistPlatforms</name>
+        <dataType>String</dataType>
+        <expression>CASE(  
+    TEXT({!Get_Sample_Quote_line_to_Identify_Product.SBQQ__Product__r.Reporting_Stream__c}),  
+    &quot;Subs - Specialist Platforms GAR&quot;, &quot;a1G6g000001ZR52EAG&quot;,  
+    &quot;Subs - Specialist Platforms GBRR&quot;, &quot;a1G4L000000tAV9UAM&quot;,  
+    &quot;Subs - Specialist Platforms GCR&quot;, &quot;a1G6g000001ZR57EAG&quot;,  
+    &quot;Subs - Specialist Platforms GDR&quot;, &quot;a1G6g000001ZR5CEAW&quot;,  
+    &quot;Subs - Specialist Platforms GIR&quot;, &quot;a1G6g000001ZR5HEAW&quot;,  
+    &quot;Subs - Specialist Platforms GRR&quot;, &quot;a1G6g000001ZR5MEAW&quot;,  
+    &quot;Subs - Specialist Platforms iam&quot;, &quot;a1G6g000001ZR5REAW&quot;,  
+    &quot;Subs - Specialist Platforms LL&quot;, &quot;a1G6g000001ZR5lEAG&quot;,  
+    &quot;Subs - Specialist Platforms WTR&quot;, &quot;a1G6g000001ZR5qEAG&quot;, 
+    &quot;&quot; 
+)</expression>
+    </formulas>
+    <formulas>
+        <name>UK_RegionSpecialistPlatforms</name>
+        <dataType>String</dataType>
+        <expression>CASE(  
+    TEXT({!Get_Sample_Quote_line_to_Identify_Product.SBQQ__Product__r.Reporting_Stream__c}),  
+    &quot;Subs - Specialist Platforms GAR&quot;, &quot;a1G4L000002agpwUAA&quot;,  
+    &quot;Subs - Specialist Platforms GBRR&quot;, &quot;a1G4L000000tAVJUA2&quot;,  
+    &quot;Subs - Specialist Platforms GCR&quot;, &quot;a1G4L000000eDcNUAU&quot;,  
+    &quot;Subs - Specialist Platforms GDR&quot;, &quot;a1G4L000002cprSUAQ&quot;,  
+    &quot;Subs - Specialist Platforms GIR&quot;, &quot;a1G4L000002aoCsUAI&quot;,  
+    &quot;Subs - Specialist Platforms GRR&quot;, &quot;a1G6g000001ZTNNEA4&quot;,  
+    &quot;Subs - Specialist Platforms iam&quot;, &quot;a1G4L000003eNIwUAM&quot;,  
+    &quot;Subs - Specialist Platforms LL&quot;, &quot;a1G4L000002ct8RUAQ&quot;,  
+    &quot;Subs - Specialist Platforms WTR&quot;, &quot;a1G4L000002cw7WUAQ&quot;, 
+    &quot;&quot; 
+)</expression>
+    </formulas>
+    <formulas>
+        <name>UK_RegionTemplates</name>
+        <dataType>String</dataType>
+        <expression>CASE(  
+    TEXT({!recordId.Owner:User.Team__c}),  
+    &quot;Allhires&quot;, &quot;a1G6g000001ZMaoEAG&quot;,  
+    &quot;MBL Seminars&quot;, &quot;a1GTm00000021rFMAQ&quot;,  
+    &quot;Performance Data - GxRs&quot;, &quot;a1G4L000000sxWsUAI&quot;,  
+    &quot;Lex ILO&quot;, &quot;a1G6g000001ZT1aEAG&quot;,  
+    &quot;Expert Insight - Lexology In-Depth&quot;, &quot;a1G6g000001ZQDNEA4&quot;,  
+    &quot;Lexology Intelligence&quot;, &quot;a1GTm000000YCgHMAW&quot;,  
+    &quot;Lexology Pro&quot;, &quot;a1G6g000001ZQ83EAG&quot;,  
+    &quot;Expert Insight - Lexology Panoramic&quot;, &quot;a1G6g000001ZPgXEAW&quot;,  
+    &quot;Docket Navigator&quot;, &quot;&quot;,  
+    &quot;Advertising&quot;, &quot;a1G4L000000se8SUAQ&quot;,  
+    &quot;Expert Insight GXRs&quot;, &quot;a1G4L000000safEUAQ&quot;,  
+    &quot;LawCareers.Net&quot;, &quot;a1G6g000001ZPjWEAW&quot;,  
+    &quot;Legal Monitor&quot;, &quot;a1G4L000000DRfnUAG&quot;,  
+    &quot;&quot; 
+)</expression>
+    </formulas>
+    <formulas>
+        <name>USA_RegionSpecialistPlatforms</name>
+        <dataType>String</dataType>
+        <expression>CASE(  
+    TEXT({!Get_Sample_Quote_line_to_Identify_Product.SBQQ__Product__r.Reporting_Stream__c}),  
+    &quot;Subs - Specialist Platforms GAR&quot;, &quot;a1G4L000000aYrPUAU&quot;,  
+    &quot;Subs - Specialist Platforms GBRR&quot;, &quot;a1G4L000000aYrZUAU&quot;,  
+    &quot;Subs - Specialist Platforms GCR&quot;, &quot;a1G4L000000aYrjUAE&quot;,  
+    &quot;Subs - Specialist Platforms GDR&quot;, &quot;a1G4L000000aYrtUAE&quot;,  
+    &quot;Subs - Specialist Platforms GIR&quot;, &quot;a1G4L000000aYs3UAE&quot;,  
+    &quot;Subs - Specialist Platforms GRR&quot;, &quot;a1G4L000000aYsDUAU&quot;,  
+    &quot;Subs - Specialist Platforms iam&quot;, &quot;a1G4L000000aYsNUAU&quot;,  
+    &quot;Subs - Specialist Platforms LL&quot;, &quot;a1G4L000000aYsXUAU&quot;,  
+    &quot;Subs - Specialist Platforms WTR&quot;, &quot;a1G4L000000aYshUAE&quot;, 
+    &quot;&quot; 
+)</expression>
+    </formulas>
+    <formulas>
+        <name>USA_RegionTemplate</name>
+        <dataType>String</dataType>
+        <expression>CASE(  
+    TEXT({!recordId.Owner:User.Team__c}),  
+    &quot;Allhires&quot;, &quot;&quot;,  
+    &quot;MBL Seminars&quot;, &quot;&quot;,  
+    &quot;Performance Data - GxRs&quot;, &quot;a1G4L000003aO9VUAU&quot;,  
+    &quot;Lex ILO&quot;, &quot;&quot;,  
+    &quot;Expert Insight - Lexology In-Depth&quot;, &quot;&quot;,  
+    &quot;Lexology Intelligence&quot;, &quot;a1GTm000000YCoLMAW&quot;,  
+    &quot;Lexology PRO&quot;, &quot;a1G4L000000dlmNUAQ&quot;,  
+    &quot;Expert Insight - Lexology Panoramic&quot;, &quot;&quot;,  
+    &quot;Docket Navigator&quot;, &quot;a1G4L000000e8pSUAQ&quot;,  
+    &quot;Advertising&quot;, &quot;&quot;,  
+    &quot;Expert Insight - GXRs&quot;, &quot;&quot;,  
+    &quot;LawCareers.Net&quot;, &quot;&quot;,  
+    &quot;Legal Monitor&quot;, &quot;&quot;,  
+     &quot;Lexology Academic&quot;, &quot;a1GTm000000qjaXMAQ&quot;,  
+    &quot;&quot; 
+)</expression>
+    </formulas>
+    <interviewLabel>Quote_AL_UpdateGenericFields {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Quote_AL_UpdateGenericFields</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>To identify Product type</description>
+        <name>Get_Sample_Quote_line_to_Identify_Product</name>
+        <label>Get Sample Quote line to Identify Product</label>
+        <locationX>2118</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_for_ALM_products</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Fault_Notification_Quote</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SBQQ__Quote__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>SBQQ__QuoteLine__c</object>
+        <sortField>SBQQ__RenewedSubscription__c</sortField>
+        <sortOrder>Asc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Custom_UK_quote_template_for_Rebecca_M</name>
+        <label>Custom: UK quote template for Rebecca M</label>
+        <locationX>50</locationX>
+        <locationY>3422</locationY>
+        <connector>
+            <targetReference>Input_Field_Set</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Notification_Quote</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>SBQQ__DefaultTemplate__c</field>
+            <value>
+                <stringValue>a1G6g000001ZQDNEA4</stringValue>
+            </value>
+        </inputAssignments>
+        <object>SBQQ__Quote__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Default_Template_for_HK_Specialist_Platforms</name>
+        <label>Default Template for HK -Specialist Platforms</label>
+        <locationX>1502</locationX>
+        <locationY>2882</locationY>
+        <connector>
+            <targetReference>Check_Quote_Owner_Region_for_Template_Update3</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Notification_Quote</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>SBQQ__DefaultTemplate__c</field>
+            <value>
+                <elementReference>HK_RegionSpecialistPlatforms</elementReference>
+            </value>
+        </inputAssignments>
+        <object>SBQQ__Quote__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Default_Template_for_USA_Specialist_Platforms</name>
+        <label>Default Template for USA - Specialist Platforms</label>
+        <locationX>1634</locationX>
+        <locationY>3422</locationY>
+        <connector>
+            <targetReference>Input_Field_Set</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Notification_Quote</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>SBQQ__DefaultTemplate__c</field>
+            <value>
+                <elementReference>USA_RegionSpecialistPlatforms</elementReference>
+            </value>
+        </inputAssignments>
+        <object>SBQQ__Quote__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Disable_WaterMark</name>
+        <label>Disable WaterMark</label>
+        <locationX>1854</locationX>
+        <locationY>1886</locationY>
+        <connector>
+            <targetReference>Check_Quote_Owner_Region_for_Template_Update</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Notification_Quote</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>SBQQ__WatermarkShown__c</field>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>SBQQ__Quote__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Approval_Status_and_Record_Type</name>
+        <label>Update Approval Status and Record Type</label>
+        <locationX>1854</locationX>
+        <locationY>1538</locationY>
+        <connector>
+            <targetReference>Check_if_Quote_is_approved</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Notification_Quote</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>ApprovalStatus__c</field>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>$Setup.QuoteRecordTypes__c.Draft_Record_ID__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>SBQQ__Quote__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Default_Template_for_HK</name>
+        <label>Update Default Template for HK</label>
+        <locationX>2030</locationX>
+        <locationY>2882</locationY>
+        <connector>
+            <targetReference>Check_Quote_Owner_Region_for_Template_Update3</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Notification_Quote</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>SBQQ__DefaultTemplate__c</field>
+            <value>
+                <elementReference>HK_RegionalTemplates</elementReference>
+            </value>
+        </inputAssignments>
+        <object>SBQQ__Quote__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Default_Template_for_HK_Lexology_Index_Annual_Package</name>
+        <label>Update Default Template for HK - Lexology Index: Annual Package</label>
+        <locationX>974</locationX>
+        <locationY>2882</locationY>
+        <connector>
+            <targetReference>Check_Quote_Owner_Region_for_Template_Update3</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Notification_Quote</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>SBQQ__DefaultTemplate__c</field>
+            <value>
+                <stringValue>a1GTm0000010qyvMAA</stringValue>
+            </value>
+        </inputAssignments>
+        <object>SBQQ__Quote__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Default_Template_for_HK_Lexology_Index_Reports</name>
+        <label>Update Default Template for HK - Lexology Index: Reports</label>
+        <locationX>446</locationX>
+        <locationY>2882</locationY>
+        <connector>
+            <targetReference>Check_Quote_Owner_Region_for_Template_Update3</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Notification_Quote</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>SBQQ__DefaultTemplate__c</field>
+            <value>
+                <stringValue>a1GTm0000012ZYzMAM</stringValue>
+            </value>
+        </inputAssignments>
+        <object>SBQQ__Quote__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Default_Template_for_UK</name>
+        <label>Update Default Template for UK</label>
+        <locationX>2030</locationX>
+        <locationY>2342</locationY>
+        <connector>
+            <targetReference>Check_Quote_Owner_Region_for_Template_Update2</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Notification_Quote</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>SBQQ__DefaultTemplate__c</field>
+            <value>
+                <elementReference>UK_RegionTemplates</elementReference>
+            </value>
+        </inputAssignments>
+        <object>SBQQ__Quote__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Default_Template_for_UK_Lexology_Index_Annual_Package</name>
+        <label>Update Default Template for UK - Lexology Index: Annual Package</label>
+        <locationX>974</locationX>
+        <locationY>2342</locationY>
+        <connector>
+            <targetReference>Check_Quote_Owner_Region_for_Template_Update2</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Notification_Quote</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>SBQQ__DefaultTemplate__c</field>
+            <value>
+                <stringValue>a1GTm0000010qvhMAA</stringValue>
+            </value>
+        </inputAssignments>
+        <object>SBQQ__Quote__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Default_Template_for_UK_Lexology_Index_Reports</name>
+        <label>Update Default Template for UK - Lexology Index: Reports</label>
+        <locationX>446</locationX>
+        <locationY>2342</locationY>
+        <connector>
+            <targetReference>Check_Quote_Owner_Region_for_Template_Update2</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Notification_Quote</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>SBQQ__DefaultTemplate__c</field>
+            <value>
+                <stringValue>a1GTm0000012ZqjMAE</stringValue>
+            </value>
+        </inputAssignments>
+        <object>SBQQ__Quote__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Default_Template_for_UK_Specialist_Platforms</name>
+        <label>Update Default Template for UK - Specialist Platforms</label>
+        <locationX>1502</locationX>
+        <locationY>2342</locationY>
+        <connector>
+            <targetReference>Check_Quote_Owner_Region_for_Template_Update2</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Notification_Quote</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>SBQQ__DefaultTemplate__c</field>
+            <value>
+                <elementReference>UK_RegionSpecialistPlatforms</elementReference>
+            </value>
+        </inputAssignments>
+        <object>SBQQ__Quote__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Default_Template_for_USA</name>
+        <label>Update Default Template for USA</label>
+        <locationX>2162</locationX>
+        <locationY>3422</locationY>
+        <connector>
+            <targetReference>Input_Field_Set</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Notification_Quote</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>SBQQ__DefaultTemplate__c</field>
+            <value>
+                <elementReference>USA_RegionTemplate</elementReference>
+            </value>
+        </inputAssignments>
+        <object>SBQQ__Quote__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Default_Template_for_USA_Lexology_Index_Annual_Package</name>
+        <label>Update Default Template for USA - Lexology Index: Annual Package</label>
+        <locationX>1106</locationX>
+        <locationY>3422</locationY>
+        <connector>
+            <targetReference>Input_Field_Set</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Notification_Quote</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>SBQQ__DefaultTemplate__c</field>
+            <value>
+                <stringValue>a1GTm0000010qxJMAQ</stringValue>
+            </value>
+        </inputAssignments>
+        <object>SBQQ__Quote__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Default_Template_for_USA_Lexology_Index_Reports</name>
+        <label>Update Default Template for USA - Lexology Index: Reports</label>
+        <locationX>578</locationX>
+        <locationY>3422</locationY>
+        <connector>
+            <targetReference>Input_Field_Set</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Notification_Quote</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>SBQQ__DefaultTemplate__c</field>
+            <value>
+                <stringValue>a1GTm0000012a3dMAA</stringValue>
+            </value>
+        </inputAssignments>
+        <object>SBQQ__Quote__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_field_set</name>
+        <label>Update field set</label>
+        <locationX>1986</locationX>
+        <locationY>350</locationY>
+        <connector>
+            <targetReference>Check_if_Quote_is_for_Subscription_or_Non_Subscription_Product</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>EditLinesFieldSetName__c</field>
+            <value>
+                <stringValue>ALM_Information_Services</stringValue>
+            </value>
+        </inputAssignments>
+        <object>SBQQ__Quote__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Field_Set_for_Gwilym</name>
+        <label>Update Field Set for Gwilym</label>
+        <locationX>842</locationX>
+        <locationY>3962</locationY>
+        <connector>
+            <targetReference>Update_Payment_terms_for_new_MBL_quotes</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Notification_Quote</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>EditLinesFieldSetName__c</field>
+            <value>
+                <stringValue>Lex_Insights</stringValue>
+            </value>
+        </inputAssignments>
+        <object>SBQQ__Quote__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Field_Set_for_Lexology_Index</name>
+        <label>Update Field Set for Lexology Index</label>
+        <locationX>1370</locationX>
+        <locationY>3962</locationY>
+        <connector>
+            <targetReference>Update_Payment_terms_for_new_MBL_quotes</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Notification_Quote</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>EditLinesFieldSetName__c</field>
+            <value>
+                <elementReference>FieldSet_forLexologyIndex</elementReference>
+            </value>
+        </inputAssignments>
+        <object>SBQQ__Quote__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Field_Set_for_rest_of_the_Products</name>
+        <label>Update Field Set for rest of the Products</label>
+        <locationX>1898</locationX>
+        <locationY>3962</locationY>
+        <connector>
+            <targetReference>Update_Payment_terms_for_new_MBL_quotes</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Notification_Quote</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>EditLinesFieldSetName__c</field>
+            <value>
+                <elementReference>FieldSet_forRestOfTheProducts</elementReference>
+            </value>
+        </inputAssignments>
+        <object>SBQQ__Quote__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_for_Edition_Based_Products</name>
+        <label>Update for Edition Based Products</label>
+        <locationX>1238</locationX>
+        <locationY>758</locationY>
+        <connector>
+            <targetReference>Check_for_Ultimate_Account</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Notification_Quote</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>SBQQ__EndDate__c</field>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SBQQ__StartDate__c</field>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SBQQ__SubscriptionTerm__c</field>
+        </inputAssignments>
+        <object>SBQQ__Quote__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_for_Time_Based_Subscription_Products</name>
+        <label>Update for Time Based Subscription Products</label>
+        <locationX>1766</locationX>
+        <locationY>758</locationY>
+        <connector>
+            <targetReference>Check_for_Ultimate_Account</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Notification_Quote</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SBQQ__Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Draft</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Renewal_Quote__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SBQQ__SubscriptionTerm__c</field>
+            <value>
+                <elementReference>Get_Sample_Quote_line_to_Identify_Product.SBQQ__RenewedSubscription__r.SBQQ__Contract__r.SBQQ__RenewalTerm__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SBQQ__Type__c</field>
+            <value>
+                <stringValue>Renewal</stringValue>
+            </value>
+        </inputAssignments>
+        <object>SBQQ__Quote__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Payment_terms_Docket_Navigator</name>
+        <label>Update Payment terms - Docket Navigator</label>
+        <locationX>2118</locationX>
+        <locationY>4394</locationY>
+        <connector>
+            <targetReference>Check_if_quote_is_Renewal_and_New</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Notification_Quote</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>SBQQ__PaymentTerms__c</field>
+            <value>
+                <stringValue>Net 30</stringValue>
+            </value>
+        </inputAssignments>
+        <object>SBQQ__Quote__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Payment_terms_MBL</name>
+        <label>Update Payment terms - MBL</label>
+        <locationX>1590</locationX>
+        <locationY>4394</locationY>
+        <connector>
+            <targetReference>Check_if_quote_is_Renewal_and_New</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Notification_Quote</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>SBQQ__PaymentTerms__c</field>
+            <value>
+                <stringValue>Net 30</stringValue>
+            </value>
+        </inputAssignments>
+        <object>SBQQ__Quote__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Type_as_Renewal</name>
+        <label>Update Type as Renewal</label>
+        <locationX>1854</locationX>
+        <locationY>4742</locationY>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Notification_Quote</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>SBQQ__Type__c</field>
+            <value>
+                <stringValue>Renewal</stringValue>
+            </value>
+        </inputAssignments>
+        <object>SBQQ__Quote__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Ultimate_Account_on_Quote</name>
+        <label>Update Ultimate Account on Quote</label>
+        <locationX>1854</locationX>
+        <locationY>1190</locationY>
+        <connector>
+            <targetReference>Update_Record_Type_and_Approval_Status_for_New_quotes</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Notification_Quote</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Ultimate_Parent__c</field>
+            <value>
+                <elementReference>recordId.SBQQ__Account__r.Ultimate_Account__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>SBQQ__Quote__c</object>
+    </recordUpdates>
+    <start>
+        <locationX>1992</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Sample_Quote_line_to_Identify_Product</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Fault_Notification_Quote</name>
+        <label>Fault Notification - Quote</label>
+        <locationX>3042</locationX>
+        <locationY>242</locationY>
+        <flowName>Quote_AL_FaultNotification</flowName>
+        <inputAssignments>
+            <name>fault_body</name>
+            <value>
+                <elementReference>fault_body</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>fault_message</name>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>fault_notification_recipients</name>
+            <value>
+                <elementReference>fault_notification_recipients</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <textTemplates>
+        <name>fault_body</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Quote_AL_UpdateGenericFields Error, please contact crm support</text>
+    </textTemplates>
+    <variables>
+        <name>checkIf_AccountIsChanged</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>checkIf_isNew</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>fault_notification_recipients</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <name>recordId</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>SBQQ__Quote__c</objectType>
+    </variables>
+</Flow>

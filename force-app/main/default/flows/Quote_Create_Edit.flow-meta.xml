@@ -1,0 +1,1123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>58.0</apiVersion>
+    <decisions>
+        <name>Check_for_Renewed_Quote_Line_item</name>
+        <label>Check for Renewed Quote Line item</label>
+        <locationX>578</locationX>
+        <locationY>708</locationY>
+        <defaultConnector>
+            <targetReference>Update_Ultimate_Account</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Renewed_Subscription_Quote_Line_Items</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.Name</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Approved</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_For_Sub_product</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_For_Sub_product</name>
+        <label>Check For Sub product</label>
+        <locationX>380</locationX>
+        <locationY>816</locationY>
+        <defaultConnector>
+            <targetReference>Update_Quote_for_non_sub_products</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Non Sub</defaultConnectorLabel>
+        <rules>
+            <name>isSUB</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Renewed_Subscription_Quote_Line_Items.Subscription_Model__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Time-Based</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Quote_Fields_for_subscription_product</targetReference>
+            </connector>
+            <label>isSUB</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_if_flow_is_disabled</name>
+        <label>Check if flow is disabled?</label>
+        <locationX>182</locationX>
+        <locationY>276</locationY>
+        <defaultConnector>
+            <targetReference>Create_Flow_Log_Record</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Disabled</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>var_flowdisabled</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Disabled</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_if_quote_is_Approved</name>
+        <label>Check if quote is Approved</label>
+        <locationX>578</locationX>
+        <locationY>1800</locationY>
+        <defaultConnector>
+            <targetReference>Update_quote_template_for_new_quotes_UK</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Not Approved</defaultConnectorLabel>
+        <rules>
+            <name>Approved</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.ApprovalStatus__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Approved</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Disable_Watermark_if_quote_is_approved</targetReference>
+            </connector>
+            <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+            <label>Approved</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_if_quote_is_new_and_in_draft</name>
+        <label>Check if quote is new and in draft</label>
+        <locationX>578</locationX>
+        <locationY>1500</locationY>
+        <defaultConnector>
+            <targetReference>Check_if_quote_is_Approved</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>FALSE</defaultConnectorLabel>
+        <rules>
+            <name>TRUE15</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>var_Draft</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_quote_record_type_to_draft_and_Approval_status_as_null</targetReference>
+            </connector>
+            <label>TRUE</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Custom_field_set_for_Gwilym_or_Lex_index_or_other</name>
+        <label>Custom field set for Gwilym or Lex index or other</label>
+        <locationX>314</locationX>
+        <locationY>3300</locationY>
+        <defaultConnector>
+            <targetReference>Update_field_set_on_quote</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>User_Gwilym</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.OwnerId</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>0056g000005rr00AAA</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_field_set_on_quote_for_Gwilym</targetReference>
+            </connector>
+            <label>User - Gwilym</label>
+        </rules>
+        <rules>
+            <name>Lexology_Index_Annual_Package</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Owner:User.Team__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Performance Data - Lexology Index</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_field_set_for_Lexology_Index</targetReference>
+            </connector>
+            <label>Lexology Index</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Custom_template_requirement_for_Rebecca</name>
+        <label>Custom template requirement for Rebecca</label>
+        <locationX>380</locationX>
+        <locationY>2808</locationY>
+        <defaultConnector>
+            <targetReference>Update_template_for_USA_region</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Custom_Requirement_True</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.OwnerId</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>0056g000005rr0QAAQ</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_template_for_Rebecca</targetReference>
+            </connector>
+            <label>Custom Requirement - True</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Draft_Docket_Navigator_Payment_Terms</name>
+        <label>Draft - Docket Navigator Payment Terms</label>
+        <locationX>578</locationX>
+        <locationY>3984</locationY>
+        <defaultConnector>
+            <targetReference>New_Renewal_Quote</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>FALSE_Draft - Docket Navigator Payment Terms</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_52</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>var_Docket</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Payment_Term_Net_30</targetReference>
+            </connector>
+            <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+            <label>TRUE_Draft - Docket Navigator Payment Terms</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Draft_MBL_Seminars_Payment_Terms</name>
+        <label>Draft - MBL Seminars Payment Terms</label>
+        <locationX>578</locationX>
+        <locationY>3684</locationY>
+        <defaultConnector>
+            <targetReference>Draft_Docket_Navigator_Payment_Terms</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>FALSE_Draft - MBL Seminars Payment Terms</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_Draft_MBL_Seminars_Payment_Terms</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>var_MBLSeminarsDraft</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>MBL_Seminars_Payment_Terms_30_days</targetReference>
+            </connector>
+            <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+            <label>TRUE_Draft - MBL Seminars Payment Terms</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>New_Renewal_Quote</name>
+        <label>New Renewal Quote</label>
+        <locationX>578</locationX>
+        <locationY>4284</locationY>
+        <defaultConnectorLabel>FALSE_New Quote not Renewal</defaultConnectorLabel>
+        <rules>
+            <name>TRUE16</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>var_opportunity</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Change_Quote_Type13</targetReference>
+            </connector>
+            <label>TRUE</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Set_field_set_for_new_quotes</name>
+        <label>Set field set for new quotes</label>
+        <locationX>578</locationX>
+        <locationY>3192</locationY>
+        <defaultConnector>
+            <targetReference>Draft_MBL_Seminars_Payment_Terms</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>New</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>var_newquote</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Custom_field_set_for_Gwilym_or_Lex_index_or_other</targetReference>
+            </connector>
+            <label>New</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Update_quote_template_for_new_quotes_HK</name>
+        <label>Update quote template for new quotes (HK)</label>
+        <locationX>578</locationX>
+        <locationY>2400</locationY>
+        <defaultConnector>
+            <targetReference>Update_quote_template_for_new_quotes_USA</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Region_HK</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Owner:User.LBR_Legal_Entity__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Law Business Research (Asia) Ltd.</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_template_for_HK_region</targetReference>
+            </connector>
+            <label>Region HK</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Update_quote_template_for_new_quotes_UK</name>
+        <label>Update quote template for new quotes (UK)</label>
+        <locationX>578</locationX>
+        <locationY>2100</locationY>
+        <defaultConnector>
+            <targetReference>Update_quote_template_for_new_quotes_HK</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Region_UK</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Owner:User.LBR_Legal_Entity__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Law Business Research (UK) Ltd.</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_template_for_UK_region</targetReference>
+            </connector>
+            <label>Region UK</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Update_quote_template_for_new_quotes_USA</name>
+        <label>Update quote template for new quotes (USA)</label>
+        <locationX>578</locationX>
+        <locationY>2700</locationY>
+        <defaultConnector>
+            <targetReference>Set_field_set_for_new_quotes</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Region_USA</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Owner:User.LBR_Legal_Entity__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Law Business Research LLC</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Custom_template_requirement_for_Rebecca</targetReference>
+            </connector>
+            <label>Region USA</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Update_Ultimate_Account</name>
+        <label>Update Ultimate Account</label>
+        <locationX>578</locationX>
+        <locationY>1200</locationY>
+        <defaultConnector>
+            <targetReference>Check_if_quote_is_new_and_in_draft</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>FALSE_Update Ultimate Account</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_3</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>var_UltimateAcc</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Ultimate_Account_Details</targetReference>
+            </connector>
+            <label>TRUE_Update Ultimate Account</label>
+        </rules>
+    </decisions>
+    <description>Migrated from the Quote - Create/Edit process using multiple criteria.
+Quote object on edit - calls Content Slot flow</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>var_Asia_Benchmarking</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(ISNEW(),
+ISPICKVAL({!$Record.Owner:User.LBR_Legal_Entity__c},&quot;Law Business Research (Asia) Ltd.&quot;),
+ISPICKVAL({!$Record.Owner:User.Team__c},&quot;Benchmarking&quot;)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_Asia_ILO</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(ISNEW(),
+ISPICKVAL({!$Record.Owner:User.LBR_Legal_Entity__c},&quot;Law Business Research (Asia) Ltd.&quot;),
+ISPICKVAL({!$Record.Owner:User.Team__c},&quot;Lex ILO&quot;)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_Asia_Indepth</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(ISNEW(),
+ISPICKVAL({!$Record.Owner:User.LBR_Legal_Entity__c},&quot;Law Business Research (Asia) Ltd.&quot;),
+ISPICKVAL({!$Record.Owner:User.Team__c},&quot;Expert Insight - Lexology In-Depth&quot;)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_Asia_inform</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(ISNEW(),
+ISPICKVAL({!$Record.Owner:User.LBR_Legal_Entity__c},&quot;Law Business Research (Asia) Ltd.&quot;),
+ISPICKVAL({!$Record.Owner:User.Team__c},&quot;Lexology Intelligence&quot;)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_Asia_LexPro</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(ISNEW(),
+ISPICKVAL({!$Record.Owner:User.LBR_Legal_Entity__c},&quot;Law Business Research (Asia) Ltd.&quot;),
+ISPICKVAL({!$Record.Owner:User.Team__c},&quot;Lex PRO&quot;)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_Asia_Panoramic</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(ISNEW(),
+ISPICKVAL({!$Record.Owner:User.LBR_Legal_Entity__c},&quot;Law Business Research (Asia) Ltd.&quot;),
+ISPICKVAL({!$Record.Owner:User.Team__c},&quot;Expert Insight - Lexology Panoramic&quot;)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_Benchmarking</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(ISNEW(),
+ISPICKVAL({!$User.LBR_Legal_Entity__c},&quot;Law Business Research (UK) Ltd.&quot;),
+ISPICKVAL({!$User.Team__c},&quot;Benchmarking&quot;)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_date</name>
+        <dataType>Date</dataType>
+        <expression>{!Get_Renewed_Subscription_Quote_Line_Items.SBQQ__RenewedSubscription__r.SBQQ__Contract__r.EndDate} +1</expression>
+    </formulas>
+    <formulas>
+        <name>var_Docket</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(
+ISNEW(),
+ISPICKVAL({!$Record.SBQQ__Status__c} , &apos;Draft&apos;), ISPICKVAL({!$Record.Owner:User.Team__c} , &apos;Docket Navigator&apos;)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_docket2</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(ISNEW(),
+ISPICKVAL({!$User.LBR_Legal_Entity__c},&quot;Hopkins Bruce Publishers LLC&quot;),
+ISPICKVAL({!$User.Team__c},&quot;Docket Navigator&quot;)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_Draft</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(
+ISNEW(),
+ISPICKVAL({!$Record.SBQQ__Status__c} , &apos;Draft&apos;)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_fieldset</name>
+        <dataType>String</dataType>
+        <expression>IF(  
+    TEXT({!$Record.Owner:User.Team__c}) = &quot;LawCareers.Net&quot;, &quot;LCN&quot;,  
+        IF(  
+            TEXT({!$Record.Owner:User.Team__c}) = &quot;Expert Insight - Lexology Panoramic&quot;, &quot;Paid_Content&quot;,  
+            IF(  
+                TEXT({!$Record.Owner:User.Team__c}) = &quot;Expert Insight - GXRs&quot;, &quot;Paid_Content&quot;,  
+                IF(  
+                    TEXT({!$Record.Owner:User.Team__c}) = &quot;Expert Insight - Lexology In-Depth&quot;, &quot;Paid_Content&quot;,  
+                    IF(  
+                        TEXT({!$Record.Owner:User.Team__c}) = &quot;Lex ILO&quot;, &quot;Subscriptions_ILO&quot;,  
+                        IF(  
+                            TEXT({!$Record.Owner:User.Team__c}) = &quot;Lexology Intelligence&quot;, &quot;Lexology_Intelligence&quot;,  
+                            IF(  
+                                TEXT({!$Record.Owner:User.Team__c}) = &quot;Performance Data - GxRs&quot;, &quot;Performance_Data_GXRs&quot;,  
+                                    &quot;&quot; 
+                                )  
+                            )  
+                        )  
+                    )  
+                )  
+            )  
+        )</expression>
+    </formulas>
+    <formulas>
+        <name>var_flowdisabled</name>
+        <dataType>Boolean</dataType>
+        <expression>{!$Setup.Application_Settings__c.Disable_Autolaunch_Lightning_Flow__c}</expression>
+    </formulas>
+    <formulas>
+        <name>var_HKregiontemplates</name>
+        <dataType>String</dataType>
+        <expression>CASE(  
+    TEXT({!$Record.Owner:User.Team__c}),  
+    &quot;Allhires&quot;, &quot;&quot;,  
+    &quot;MBL Seminars&quot;, &quot;&quot;,  
+    &quot;Performance Data - GxRs&quot;, &quot;a1G4L000000cPWUUA2&quot;,  
+    &quot;Lex ILO&quot;, &quot;a1G6g000001ZTOLEA4&quot;,  
+    &quot;Expert Insight - Lexology In-Depth&quot;, &quot;a1G4L000000cLeRUAU&quot;,  
+    &quot;Lexology Intelligence&quot;, &quot;a1GTm000000YCl7MAG&quot;,  
+    &quot;Lexology PRO&quot;, &quot;a1G6g000001ZQtHEAW&quot;,  
+    &quot;Expert Insight - Lexology Panoramic&quot;, &quot;a1G6g000001ZQJWEA4&quot;,  
+    &quot;Docket Navigator&quot;, &quot;&quot;,  
+    &quot;Advertising&quot;, &quot;&quot;,  
+    &quot;Expert Insight - GXRs&quot;, &quot;a1G4L0000040FIUUA2&quot;,  
+    &quot;LawCareers.Net&quot;, &quot;&quot;,  
+    &quot;Legal Monitor&quot;, &quot;&quot;,  
+    &quot;Performance Data - Lexology Index&quot;, &quot;a1GTm000000noJpMAI&quot;,  
+    &quot;&quot;  
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_lexindex</name>
+        <dataType>String</dataType>
+        <expression>if(
+{!Get_Sample_quote_line_item_to_identify_product.SBQQ__Product__r.Clean_Product_Code__c} = &quot;10116484000&quot;, &quot;	Lexology_Index_Annual_Package&quot;,	&quot;Lexology_Index_Report&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>var_LexologyIndexTemplate</name>
+        <dataType>String</dataType>
+        <expression>if(text({!$Record.Owner:User.LBR_Legal_Entity__c}) = &apos;Law Business Research (UK) Ltd.&apos; &amp;&amp; text({!$Record.Owner:User.Team__c}) = &apos;Performance Data - Lexology Index&apos;, &apos;a1GTm000000noDNMAY&apos;,
+if(text({!$Record.Owner:User.LBR_Legal_Entity__c}) = &apos;Law Business Research (Asia) Ltd.&apos; &amp;&amp; text({!$Record.Owner:User.Team__c}) = &apos;Performance Data - Lexology Index&apos;, &apos;a1GTm000000noJpMAI&apos;,
+if(text({!$Record.Owner:User.LBR_Legal_Entity__c}) = &apos;Law Business Research LLC&apos; &amp;&amp; text({!$Record.Owner:User.Team__c}) = &apos;Performance Data - Lexology Index&apos;, &apos;a1GTm000000nn9FMAQ&apos;,null)))</expression>
+    </formulas>
+    <formulas>
+        <name>var_LexPro</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(ISNEW(),
+ISPICKVAL({!$User.LBR_Legal_Entity__c},&quot;Law Business Research LLC&quot;),
+ISPICKVAL({!$User.Team__c},&quot;Lex PRO&quot;)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_MBLSeminars</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(ISNEW(),
+ISPICKVAL({!$Record.Owner:User.LBR_Legal_Entity__c},&quot;MBL Seminars Limited&quot;),
+ISPICKVAL({!$Record.Owner:User.Team__c},&quot;MBL Seminars&quot;)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_MBLSeminarsDraft</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(
+ISNEW(),
+ISPICKVAL({!$Record.SBQQ__Status__c} , &apos;Draft&apos;), ISPICKVAL({!$Record.Owner:User.Team__c} , &apos;MBL Seminars&apos;)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_newquote</name>
+        <dataType>Boolean</dataType>
+        <expression>isnew()</expression>
+    </formulas>
+    <formulas>
+        <name>var_opportunity</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(
+ISNEW(),
+{!$Record.SBQQ__Opportunity2__r.RecordType.DeveloperName} = &apos;Renewals&apos;,
+CONTAINS({!$Record.SBQQ__Opportunity2__r.Name}, &apos;Cancellation for Order&apos;) = FALSE,
+CONTAINS({!$Record.SBQQ__Opportunity2__r.Name}, &apos;Amendment for contract&apos;) = FALSE
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_Quotetype</name>
+        <dataType>String</dataType>
+        <expression>{!$Setup.QuoteRecordTypes__c.Draft_Record_ID__c}</expression>
+    </formulas>
+    <formulas>
+        <name>var_UK_Advertising</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(ISNEW(),
+ISPICKVAL({!$Record.Owner:User.LBR_Legal_Entity__c},&quot;Law Business Research (UK) Ltd.&quot;),
+ISPICKVAL({!$Record.Owner:User.Team__c},&quot;Advertising&quot;)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_UK_AllHire</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(ISNEW(),
+ISPICKVAL({!$Record.Owner:User.LBR_Legal_Entity__c},&quot;Law Business Research (UK) Ltd.&quot;),
+ISPICKVAL({!$Record.Owner:User.Team__c},&quot;Allhires&quot;)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_UK_GxRs</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(ISNEW(),
+ISPICKVAL({!$Record.Owner:User.LBR_Legal_Entity__c},&quot;Law Business Research (UK) Ltd.&quot;),
+ISPICKVAL({!$Record.Owner:User.Team__c},&quot;Expert Insight GXRs&quot;)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_UK_ILO</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(ISNEW(),
+ISPICKVAL({!$Record.Owner:User.LBR_Legal_Entity__c},&quot;Law Business Research (UK) Ltd.&quot;),
+ISPICKVAL({!$Record.Owner:User.Team__c},&quot;Lex ILO&quot;)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_UK_Indepth</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(ISNEW(),
+ISPICKVAL({!$Record.Owner:User.LBR_Legal_Entity__c},&quot;Law Business Research (UK) Ltd.&quot;),
+ISPICKVAL({!$Record.Owner:User.Team__c},&quot;Expert Insight - Lexology In-Depth&quot;)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_UK_Inform</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(ISNEW(),
+ISPICKVAL({!$Record.Owner:User.LBR_Legal_Entity__c},&quot;Law Business Research (UK) Ltd.&quot;),
+ISPICKVAL({!$Record.Owner:User.Team__c},&quot;Lexology Intelligence&quot;)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_UK_LCN</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(ISNEW(),
+ISPICKVAL({!$Record.Owner:User.LBR_Legal_Entity__c},&quot;Law Business Research (UK) Ltd.&quot;),
+ISPICKVAL({!$Record.Owner:User.Team__c},&quot;LCN&quot;)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_UK_LEXPRO</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(ISNEW(),
+ISPICKVAL({!$Record.Owner:User.LBR_Legal_Entity__c},&quot;Law Business Research (UK) Ltd.&quot;),
+ISPICKVAL({!$Record.Owner:User.Team__c},&quot;Lex PRO&quot;)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_UK_Panoramic</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(ISNEW(),
+ISPICKVAL({!$Record.Owner:User.LBR_Legal_Entity__c},&quot;Law Business Research (UK) Ltd.&quot;),
+ISPICKVAL({!$Record.Owner:User.Team__c},&quot;Expert Insight - Lexology Panoramic&quot;)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_UKregiontemplates</name>
+        <dataType>String</dataType>
+        <expression>CASE(  
+    TEXT({!$Record.Owner:User.Team__c}),  
+    &quot;Allhires&quot;, &quot;a1G6g000001ZMaoEAG&quot;,  
+    &quot;MBL Seminars&quot;, &quot;a1GTm00000021rFMAQ&quot;,  
+    &quot;Performance Data - GxRs&quot;, &quot;a1G4L000000sxWsUAI&quot;,  
+    &quot;Lex ILO&quot;, &quot;a1G6g000001ZT1aEAG&quot;,  
+    &quot;Expert Insight - Lexology In-Depth&quot;, &quot;a1G6g000001ZQDNEA4&quot;,  
+    &quot;Lexology Intelligence&quot;, &quot;a1GTm000000YCgHMAW&quot;,  
+    &quot;Lexology PRO&quot;, &quot;a1G6g000001ZQ83EAG&quot;,  
+    &quot;Expert Insight - Lexology Panoramic&quot;, &quot;a1G6g000001ZPgXEAW&quot;,  
+    &quot;Docket Navigator&quot;, &quot;&quot;,  
+    &quot;Advertising&quot;, &quot;a1G4L000000se8SUAQ&quot;,  
+    &quot;Expert Insight GXRs&quot;, &quot;a1G4L000000safEUAQ&quot;,  
+    &quot;LawCareers.Net&quot;, &quot;a1G6g000001ZPjWEAW&quot;,  
+    &quot;Legal Monitor&quot;, &quot;a1G4L000000DRfnUAG&quot;,  
+    &quot;Performance Data - Lexology Index&quot;, &quot;a1GTm000000noDNMAY&quot;,  
+    &quot;&quot; 
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_UltimateAcc</name>
+        <dataType>Boolean</dataType>
+        <expression>AND (OR( ISNEW(), ISCHANGED({!$Record.SBQQ__Account__c}  )), 
+NOT(ISBLANK({!$Record.SBQQ__Account__r.Ultimate_Account__c} )))</expression>
+    </formulas>
+    <formulas>
+        <name>var_USAregiontemplates</name>
+        <dataType>String</dataType>
+        <expression>CASE(  
+    TEXT({!$Record.Owner:User.Team__c}),  
+    &quot;Allhires&quot;, &quot;&quot;,  
+    &quot;MBL Seminars&quot;, &quot;&quot;,  
+    &quot;Performance Data - GxRs&quot;, &quot;a1G4L000003aO9VUAU&quot;,  
+    &quot;Lex ILO&quot;, &quot;&quot;,  
+    &quot;Expert Insight - Lexology In-Depth&quot;, &quot;&quot;,  
+    &quot;Lexology Intelligence&quot;, &quot;a1GTm000000YCoLMAW&quot;,  
+    &quot;Lexology PRO&quot;, &quot;a1G4L000000dlmNUAQ&quot;,  
+    &quot;Expert Insight - Lexology Panoramic&quot;, &quot;&quot;,  
+    &quot;Docket Navigator&quot;, &quot;a1G4L000000e8pSUAQ&quot;,  
+    &quot;Advertising&quot;, &quot;&quot;,  
+    &quot;Expert Insight - GXRs&quot;, &quot;&quot;,  
+    &quot;LawCareers.Net&quot;, &quot;&quot;,  
+    &quot;Legal Monitor&quot;, &quot;&quot;,  
+    &quot;Performance Data - Lexology Index&quot;, &quot;a1GTm000000nn9FMAQ&quot;,  
+     &quot;Lexology Academic&quot;, &quot;a1GTm000000qjaXMAQ&quot;,  
+    &quot;&quot; 
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_userLM</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(ISNEW(),
+ISPICKVAL({!$User.LBR_Legal_Entity__c},&quot;Law Business Research (UK) Ltd.&quot;),
+ISPICKVAL({!$User.Team__c},&quot;Legal Monitor&quot;)
+)</expression>
+    </formulas>
+    <interviewLabel>Quote: Create/Edit {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Quote: Create/Edit</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Renewed_Subscription_Quote_Line_Items</name>
+        <label>Get Renewed Subscription Quote Line Items</label>
+        <locationX>578</locationX>
+        <locationY>492</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Sample_quote_line_item_to_identify_product</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SBQQ__RenewedSubscription__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>SBQQ__Quote__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>SBQQ__QuoteLine__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Sample_quote_line_item_to_identify_product</name>
+        <label>Get Sample quote line item to identify product</label>
+        <locationX>578</locationX>
+        <locationY>600</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_for_Renewed_Quote_Line_item</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SBQQ__Quote__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>SBQQ__QuoteLine__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Change_Quote_Type13</name>
+        <label>Change Quote Type</label>
+        <locationX>446</locationX>
+        <locationY>4392</locationY>
+        <inputAssignments>
+            <field>SBQQ__Type__c</field>
+            <value>
+                <stringValue>Renewal</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Disable_Watermark_if_quote_is_approved</name>
+        <label>Disable Watermark if quote is approved</label>
+        <locationX>446</locationX>
+        <locationY>1908</locationY>
+        <connector>
+            <targetReference>Update_quote_template_for_new_quotes_UK</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>SBQQ__WatermarkShown__c</field>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>MBL_Seminars_Payment_Terms_30_days</name>
+        <label>MBL Seminars Payment Terms 30 days</label>
+        <locationX>446</locationX>
+        <locationY>3792</locationY>
+        <connector>
+            <targetReference>Draft_Docket_Navigator_Payment_Terms</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>SBQQ__PaymentTerms__c</field>
+            <value>
+                <stringValue>Net 30</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Payment_Term_Net_30</name>
+        <label>Payment Term - Net 30</label>
+        <locationX>446</locationX>
+        <locationY>4092</locationY>
+        <connector>
+            <targetReference>New_Renewal_Quote</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>SBQQ__PaymentTerms__c</field>
+            <value>
+                <stringValue>Net 30</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_field_set_for_Lexology_Index</name>
+        <label>Update field set for Lexology Index</label>
+        <locationX>314</locationX>
+        <locationY>3408</locationY>
+        <connector>
+            <targetReference>Draft_MBL_Seminars_Payment_Terms</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>EditLinesFieldSetName__c</field>
+            <value>
+                <elementReference>var_lexindex</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_field_set_on_quote</name>
+        <label>Update field set on quote</label>
+        <locationX>578</locationX>
+        <locationY>3408</locationY>
+        <connector>
+            <targetReference>Draft_MBL_Seminars_Payment_Terms</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>EditLinesFieldSetName__c</field>
+            <value>
+                <elementReference>var_fieldset</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_field_set_on_quote_for_Gwilym</name>
+        <label>Update field set on quote for Gwilym</label>
+        <locationX>50</locationX>
+        <locationY>3408</locationY>
+        <connector>
+            <targetReference>Draft_MBL_Seminars_Payment_Terms</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>EditLinesFieldSetName__c</field>
+            <value>
+                <stringValue>Lex_Insights</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <description>Update Quote Field &quot;Renewal Quote&quot; as true, start date, term and type</description>
+        <name>Update_Quote_Fields_for_subscription_product</name>
+        <label>Update Quote Fields for subscription product</label>
+        <locationX>248</locationX>
+        <locationY>924</locationY>
+        <connector>
+            <targetReference>Update_Ultimate_Account</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Renewal_Quote__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SBQQ__StartDate__c</field>
+            <value>
+                <elementReference>var_date</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SBQQ__SubscriptionTerm__c</field>
+            <value>
+                <elementReference>Get_Renewed_Subscription_Quote_Line_Items.SBQQ__RenewedSubscription__r.SBQQ__Contract__r.SBQQ__RenewalTerm__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SBQQ__Type__c</field>
+            <value>
+                <stringValue>Renewal</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <description>Remove Default Start Date</description>
+        <name>Update_Quote_for_non_sub_products</name>
+        <label>Update Quote for non sub products</label>
+        <locationX>512</locationX>
+        <locationY>924</locationY>
+        <connector>
+            <targetReference>Update_Ultimate_Account</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>SBQQ__StartDate__c</field>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_quote_record_type_to_draft_and_Approval_status_as_null</name>
+        <label>Update quote record type to draft and Approval status as null</label>
+        <locationX>446</locationX>
+        <locationY>1608</locationY>
+        <connector>
+            <targetReference>Check_if_quote_is_Approved</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>ApprovalStatus__c</field>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>var_Quotetype</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_template_for_HK_region</name>
+        <label>Update template for HK region</label>
+        <locationX>446</locationX>
+        <locationY>2508</locationY>
+        <connector>
+            <targetReference>Update_quote_template_for_new_quotes_USA</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>SBQQ__DefaultTemplate__c</field>
+            <value>
+                <elementReference>var_HKregiontemplates</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_template_for_Rebecca</name>
+        <label>Update template for Rebecca</label>
+        <locationX>248</locationX>
+        <locationY>2916</locationY>
+        <connector>
+            <targetReference>Set_field_set_for_new_quotes</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>SBQQ__DefaultTemplate__c</field>
+            <value>
+                <stringValue>a1G6g000001ZQDNEA4</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_template_for_UK_region</name>
+        <label>Update template for UK region</label>
+        <locationX>446</locationX>
+        <locationY>2208</locationY>
+        <connector>
+            <targetReference>Update_quote_template_for_new_quotes_HK</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>SBQQ__DefaultTemplate__c</field>
+            <value>
+                <elementReference>var_UKregiontemplates</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_template_for_USA_region</name>
+        <label>Update template for USA region</label>
+        <locationX>512</locationX>
+        <locationY>2916</locationY>
+        <connector>
+            <targetReference>Set_field_set_for_new_quotes</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>SBQQ__DefaultTemplate__c</field>
+            <value>
+                <elementReference>var_USAregiontemplates</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Ultimate_Account_Details</name>
+        <label>Update Ultimate Account Details</label>
+        <locationX>446</locationX>
+        <locationY>1308</locationY>
+        <connector>
+            <targetReference>Check_if_quote_is_new_and_in_draft</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Ultimate_Parent__c</field>
+            <value>
+                <elementReference>$Record.SBQQ__Account__r.Ultimate_Account__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>474</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_if_flow_is_disabled</targetReference>
+        </connector>
+        <object>SBQQ__Quote__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <scheduledPaths>
+            <name>Update_Opportunity_information</name>
+            <connector>
+                <targetReference>Update_opportunity_with_product_stamp</targetReference>
+            </connector>
+            <label>Update Opportunity information</label>
+            <offsetNumber>2</offsetNumber>
+            <offsetUnit>Minutes</offsetUnit>
+            <recordField>LastModifiedDate</recordField>
+            <timeSource>RecordField</timeSource>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+    <subflows>
+        <name>Create_Flow_Log_Record</name>
+        <label>Create Flow Log Record</label>
+        <locationX>578</locationX>
+        <locationY>384</locationY>
+        <connector>
+            <targetReference>Get_Renewed_Subscription_Quote_Line_Items</targetReference>
+        </connector>
+        <flowName>Flow_log_v3</flowName>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>var_flowname</name>
+            <value>
+                <elementReference>var_flowname</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>var_recordname</name>
+            <value>
+                <elementReference>$Record.Name</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <subflows>
+        <name>Update_opportunity_with_product_stamp</name>
+        <label>Update opportunity with product stamp</label>
+        <locationX>1018</locationX>
+        <locationY>276</locationY>
+        <flowName>Quote_AfterUpdate_OppUpdateProductsstamp</flowName>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>$Record</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <variables>
+        <name>var_flowname</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <stringValue>Quote: Create/Edit</stringValue>
+        </value>
+    </variables>
+</Flow>

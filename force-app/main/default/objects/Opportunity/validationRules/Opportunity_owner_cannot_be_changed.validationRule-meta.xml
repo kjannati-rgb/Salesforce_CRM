@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity_owner_cannot_be_changed</fullName>
+    <active>true</active>
+    <description>Opportunity owner cannot be changed by content subs and Lexology team if owner is RENEWALS TEAM</description>
+    <errorConditionFormula>$User.ProfileId &lt;&gt; &apos;00e6g000002Qg47&apos;
+&amp;&amp;
+$UserRole.Id &lt;&gt; &apos;00E6g000000Uux7&apos;
+&amp;&amp;
+$UserRole.Id &lt;&gt; &apos;00E4L000000xa52&apos;
+&amp;&amp;
+$UserRole.Id &lt;&gt; &apos;00E4L000000cSDH&apos;
+&amp;&amp;
+$UserRole.Id &lt;&gt; &apos;00E4L0000018pmi&apos;
+&amp;&amp;
+$UserRole.Id &lt;&gt; &apos;00E4L000000goMa&apos;
+&amp;&amp;
+ischanged(OwnerId)
+&amp;&amp;
+PRIORVALUE(OwnerId)==&apos;0056g000005shq8&apos;
+&amp;&amp;
+(text($User.Team__c)== &apos;Lexology PRO&apos;
+||
+text($User.Team__c) == &apos;Specialist Platforms&apos;)</errorConditionFormula>
+    <errorDisplayField>OwnerId</errorDisplayField>
+    <errorMessage>Opportunity owner cannot be changed, please contact Salesforce Admin</errorMessage>
+</ValidationRule>

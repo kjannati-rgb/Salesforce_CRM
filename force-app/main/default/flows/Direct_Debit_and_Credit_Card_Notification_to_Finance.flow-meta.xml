@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Credit_Card_Email_Alert</name>
+        <label>Credit Card Email Alert</label>
+        <locationX>314</locationX>
+        <locationY>1055</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Create_Credit_Card_Task</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>CC_Body</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <stringValue>Saurabh.Patil@LBResearch.com, bernadette.osullivan@lbresearch.com, Lilli.OHara@lbresearch.com, kamyar.jannati@lbresearch.com, laura.holderstephenson@lbresearch.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>CC_Subject</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>Direct_Debit_Send_Email</name>
+        <label>Direct Debit Send Email</label>
+        <locationX>50</locationX>
+        <locationY>695</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Create_Direct_Debit_Task</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>DD_Body</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <stringValue>Saurabh.Patil@LBResearch.com, bernadette.osullivan@lbresearch.com, Lilli.OHara@lbresearch.com, kamyar.jannati@lbresearch.com, laura.holderstephenson@lbresearch.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>DD_Subject</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+    </actionCalls>
+    <apiVersion>55.0</apiVersion>
+    <assignments>
+        <name>Assign_Collection_variable</name>
+        <label>Assign Collection variable</label>
+        <locationX>446</locationX>
+        <locationY>815</locationY>
+        <assignmentItems>
+            <assignToReference>var_CollectionSize</assignToReference>
+            <operator>AssignCount</operator>
+            <value>
+                <elementReference>Get_Quote_Lines</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Product_Type</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Product_Type</name>
+        <label>Product Type</label>
+        <locationX>446</locationX>
+        <locationY>935</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Product_Exist</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>var_CollectionSize</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Credit_Card_Email_Alert</targetReference>
+            </connector>
+            <label>Product Exist</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Quote_Direct_Debit_or_Credit_Card_Path</name>
+        <label>Quote: Direct Debit or Credit Card Path</label>
+        <locationX>446</locationX>
+        <locationY>575</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Direct_Debit</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Primary_Quote.Payment_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Direct Debit</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Primary_Quote.SBQQ__Opportunity2__r.Id</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>$Record.Id</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Direct_Debit_Send_Email</targetReference>
+            </connector>
+            <label>Direct Debit</label>
+        </rules>
+        <rules>
+            <name>Credit_Card</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Primary_Quote.Payment_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Credit Card</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Primary_Quote.SBQQ__Opportunity2__r.Id</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>$Record.Id</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Quote_Lines</targetReference>
+            </connector>
+            <label>Credit Card</label>
+        </rules>
+    </decisions>
+    <description>This Flow is designed to send email notifications and create tasks for Quotes flagged with Payment Type = Direct Debit or Credit Card.</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>varDateToday</name>
+        <dataType>Date</dataType>
+        <expression>TODAY()</expression>
+    </formulas>
+    <interviewLabel>Direct Debit and Credit Card Notification to Finance {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Direct Debit and Credit Card Notification to Finance</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_Credit_Card_Task</name>
+        <label>Create Credit Card Task</label>
+        <locationX>314</locationX>
+        <locationY>1175</locationY>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>varDateToday</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <elementReference>varCreditCardDescription</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>Get_Queue.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <stringValue>High</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>CreditCardPayment</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Type</field>
+            <value>
+                <stringValue>Credit Card Payment Link Request</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>Get_Primary_Quote.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhoId</field>
+            <value>
+                <elementReference>Get_Primary_Quote.SBQQ__PrimaryContact__r.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_Direct_Debit_Task</name>
+        <label>Create Direct Debit Task</label>
+        <locationX>50</locationX>
+        <locationY>815</locationY>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>varDateToday</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <elementReference>varDirectDebitDescription</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>Get_Queue.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <stringValue>High</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>DirectDebitPayment</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Type</field>
+            <value>
+                <stringValue>Direct Debit Setup</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>Get_Primary_Quote.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhoId</field>
+            <value>
+                <elementReference>Get_Primary_Quote.SBQQ__PrimaryContact__r.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <name>Get_Primary_Quote</name>
+        <label>Get Primary Quote</label>
+        <locationX>446</locationX>
+        <locationY>335</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Queue</targetReference>
+        </connector>
+        <filterLogic>1 AND 2 AND 3 AND (4 OR 5)</filterLogic>
+        <filters>
+            <field>SBQQ__Primary__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>SBQQ__Opportunity2__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>ApprovalStatus__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Approved</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Payment_Type__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Direct Debit</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Payment_Type__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Credit Card</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>SBQQ__Quote__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Queue</name>
+        <label>Get Queue</label>
+        <locationX>446</locationX>
+        <locationY>455</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Quote_Direct_Debit_or_Credit_Card_Path</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Type</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Queue</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Finance_Approvers</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Group</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Quote_Lines</name>
+        <label>Get Quote Lines</label>
+        <locationX>446</locationX>
+        <locationY>695</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_Collection_variable</targetReference>
+        </connector>
+        <filterLogic>1 And 2 And 3</filterLogic>
+        <filters>
+            <field>Product_Type__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Ticket</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Product_Type__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Book Sales</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>SBQQ__Quote__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Primary_Quote.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>SBQQ__QuoteLine__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>320</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Primary_Quote</targetReference>
+        </connector>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Submitted_to_Approval_Process__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Opportunity</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+    <textTemplates>
+        <name>CC_Body</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Hi Finance Team,
+
+The following Quote {!Get_Primary_Quote.Name} has been flagged with a Payment Type Credit Card. Please can you arrange for the Credit Card payment link to be sent:
+
+Quote Number - {!Get_Primary_Quote.Name}
+Payment Type - {!Get_Primary_Quote.Payment_Type__c}
+Billing Frequency - {!Get_Primary_Quote.SBQQ__BillingFrequency__c}
+Amount - {!Get_Primary_Quote.SBQQ__NetAmount__c}
+Sales Rep - {!Get_Primary_Quote.SBQQ__SalesRep__c}
+
+Once payment has been made please set this task as Completed.
+
+Thanks,
+{!Get_Primary_Quote.Owner:User.Name}</text>
+    </textTemplates>
+    <textTemplates>
+        <name>CC_Subject</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>{!Get_Primary_Quote.Name} - Credit Card</text>
+    </textTemplates>
+    <textTemplates>
+        <name>DD_Body</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Hi Finance Team,
+
+The following Quote {!Get_Primary_Quote.Name} has been flagged with a Payment Type Direct Debit. Please can you arrange for the Direct Debit payment set up to be made?
+
+Quote Number - {!Get_Primary_Quote.Name}
+Payment Type - {!Get_Primary_Quote.Payment_Type__c}
+Billing Frequency - {!Get_Primary_Quote.SBQQ__BillingFrequency__c}
+Amount - {!Get_Primary_Quote.SBQQ__NetAmount__c}
+Sales Rep - {!Get_Primary_Quote.SBQQ__SalesRep__c}
+
+Once payment has been made please set this task as Completed.
+
+Thanks,
+{!Get_Primary_Quote.Owner:User.Name}</text>
+    </textTemplates>
+    <textTemplates>
+        <name>DD_Subject</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>{!Get_Primary_Quote.Name} - Direct Debit</text>
+    </textTemplates>
+    <triggerOrder>4</triggerOrder>
+    <variables>
+        <name>var_CollectionSize</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <scale>2</scale>
+    </variables>
+    <variables>
+        <name>varCreditCardDescription</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>The following Quote Number has been flagged with a Payment Type Credit Card. Please can you arrange for the Credit Card payment link to be sent? Once payment is made please Approve the Opportunity.</stringValue>
+        </value>
+    </variables>
+    <variables>
+        <name>varDirectDebitDescription</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>The following Quote Number has been flagged with a Payment Type Direct Debit. Please can you arrange for the Direct Debit payment to be made and the related Opportunity to be set to Closed Won.</stringValue>
+        </value>
+    </variables>
+</Flow>

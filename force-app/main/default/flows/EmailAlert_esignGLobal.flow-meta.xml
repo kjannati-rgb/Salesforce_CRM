@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Send_Email_Notification_other_notifications</name>
+        <label>Send Email Notification - other notifications</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>recipientAddresses</name>
+            <value/>
+        </inputParameters>
+        <inputParameters>
+            <name>ccAddresses</name>
+            <value/>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <stringValue>lbr.esign@lbresearch.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>composeEmailContent</name>
+            <value>
+                <stringValue>True</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>Subject</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>EmailBody_other</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+        <versionString>2.0.1</versionString>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Email_Notification_signer_signed</name>
+        <label>Send Email Notification - signer signed</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>recipientAddresses</name>
+            <value/>
+        </inputParameters>
+        <inputParameters>
+            <name>ccAddresses</name>
+            <value/>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <stringValue>lbr.esign@lbresearch.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>composeEmailContent</name>
+            <value>
+                <stringValue>True</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>Subject</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>EmailBody_signerinfo</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+        <versionString>2.0.1</versionString>
+    </actionCalls>
+    <apiVersion>64.0</apiVersion>
+    <decisions>
+        <name>Event_type</name>
+        <label>Event type</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Send_Email_Notification_other_notifications</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Signer_signed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Event_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>ENVELOPE_SIGNER_SIGNED</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Email_Notification_signer_signed</targetReference>
+            </connector>
+            <label>Signer signed</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>Subject</name>
+        <dataType>String</dataType>
+        <expression>&quot;Agreement Notification:&quot;+&quot; &quot;+{!$Record.Description__c}</expression>
+    </formulas>
+    <interviewLabel>EmailAlert_esignGLobal {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>EmailAlert_esignGlobal</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <object>eSignGlobal_Agreement_Event__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <scheduledPaths>
+            <name>Async_Path</name>
+            <connector>
+                <targetReference>Event_type</targetReference>
+            </connector>
+            <label>Async Path</label>
+            <maxBatchSize>1</maxBatchSize>
+            <offsetNumber>2</offsetNumber>
+            <offsetUnit>Minutes</offsetUnit>
+            <timeSource>RecordTriggerEvent</timeSource>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>EmailBody_other</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;body style=&quot;font-family: Arial, sans-serif; background-color: #f7f7f7; margin: 0; padding: 0;&quot;&gt;
+ &lt;table align=&quot;center&quot; width=&quot;600&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; style=&quot;background-color: #ffffff; margin-top: 20px; border-radius: 6px; box-shadow: 0 0 6px rgba(0,0,0,0.1);&quot;&gt;
+      &lt;tr&gt;
+        &lt;td align=&quot;center&quot; style=&quot;background-color: #00796b; color: #ffffff; padding: 10px 0; border-radius: 4px 4px 0 0;&quot;&gt;
+          eSign Agreement Information
+        &lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td style=&quot;padding: 20px; font-size: 14px; color: #333333;&quot;&gt;
+ &lt;p&gt;&lt;strong&gt;Opportunity Name:&lt;/strong&gt; {!$Record.eSignGlobal_Agreement__r.Opportunity__r.Name}&lt;/p&gt;
+  &lt;p&gt;&lt;strong&gt;Opportunity Owner:&lt;/strong&gt; {!$Record.eSignGlobal_Agreement__r.Opportunity__r.Owner.FirstName} {!$Record.eSignGlobal_Agreement__r.Opportunity__r.Owner.LastName}&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Stage:&lt;/strong&gt;{!$Record.eSignGlobal_Agreement__r.Opportunity__r.StageName}&lt;/p&gt;
+          &lt;p&gt;&lt;strong&gt;Description:&lt;/strong&gt; {!$Record.Description__c}&lt;/p&gt;
+          &lt;p&gt;&lt;strong&gt;Agreement Status:&lt;/strong&gt; {!$Record.Agreement_Status__c}&lt;/p&gt;
+          &lt;p&gt;&lt;strong&gt;Event Type:&lt;/strong&gt; {!$Record.Event_Type__c}&lt;/p&gt;
+        &lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td align=&quot;center&quot; style=&quot;padding-bottom: 30px;&quot;&gt;
+         &lt;a href=&quot;https://lawbusinessresearch.lightning.force.com/{!$Record.eSignGlobal_Agreement__r.Id}&quot;
+             style=&quot;background-color: #00796b; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 10px; display: inline-block;&quot;&gt;
+             View Agreement
+          &lt;/a&gt;
+        &lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/table&gt;
+  &lt;/body&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>EmailBody_signerinfo</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;body style=&quot;font-family: Arial, sans-serif; background-color: #f7f7f7; margin: 0; padding: 0;&quot;&gt;
+ &lt;table align=&quot;center&quot; width=&quot;600&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; style=&quot;background-color: #ffffff; margin-top: 20px; border-radius: 6px; box-shadow: 0 0 6px rgba(0,0,0,0.1);&quot;&gt;
+      &lt;tr&gt;
+        &lt;td align=&quot;center&quot; style=&quot;background-color: #00796b; color: #ffffff; padding: 10px 0; border-radius: 4px 4px 0 0;&quot;&gt;
+          eSign Agreement Information
+        &lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td style=&quot;padding: 20px; font-size: 14px; color: #333333;&quot;&gt;
+          &lt;p&gt;&lt;strong&gt;Agreement Status:&lt;/strong&gt; {!$Record.Agreement_Status__c}&lt;/p&gt;
+          &lt;p&gt;&lt;strong&gt;Description:&lt;/strong&gt; {!$Record.Description__c}&lt;/p&gt;
+          &lt;p&gt;&lt;strong&gt;Signer Status:&lt;/strong&gt; {!$Record.Signer_Status__c}&lt;/p&gt;
+          &lt;p&gt;&lt;strong&gt;Name:&lt;/strong&gt; {!$Record.User_Name__c}&lt;/p&gt;
+          &lt;p&gt;&lt;strong&gt;Email:&lt;/strong&gt; {!$Record.User_Email__c}&lt;/p&gt;
+          &lt;p&gt;&lt;strong&gt;Date:&lt;/strong&gt; {!$Record.Date__c}&lt;/p&gt;
+          &lt;p&gt;&lt;strong&gt;Sign Order:&lt;/strong&gt; {!$Record.Sign_Order__c}&lt;/p&gt;
+          &lt;p&gt;&lt;strong&gt;Event Type:&lt;/strong&gt; {!$Record.Event_Type__c}&lt;/p&gt;
+        &lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td align=&quot;center&quot; style=&quot;padding-bottom: 30px;&quot;&gt;
+          &lt;a href=&quot;https://lawbusinessresearch.lightning.force.com/{!$Record.eSignGlobal_Agreement__r.Id}&quot;
+             style=&quot;background-color: #00796b; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 5px; display: inline-block;&quot;&gt;
+             View Agreement
+          &lt;/a&gt;
+        &lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/table&gt;
+  &lt;/body&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>Notification_Body</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Agreement Status for {!$Record.eSignGlobal_Agreement__r.Quote_Document__r.SBQQ__Quote__r.SBQQ__Account__r.Name} is {!$Record.eSignGlobal_Agreement__r.Quote_Document__r.SBQQ__SignatureStatus__c}</text>
+    </textTemplates>
+    <variables>
+        <name>id_Of_cVersions</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>Notification_Recipient_Ids</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

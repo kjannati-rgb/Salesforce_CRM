@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Require_Renewal_Email_For_Auto_Renewals</fullName>
+    <active>false</active>
+    <description>Prevents Opportunities with Type = &quot;Auto-Renewal&quot; from being moved to &quot;Closed Won - Pending Approval&quot; unless the &apos;Renewal Email Sent&apos; checkbox is ticked. Ensures the required renewal communication has been completed and recorded before progressing.</description>
+    <errorConditionFormula>AND(
+  ISPICKVAL(Type, &quot;Auto-Renewal&quot;),
+  ISPICKVAL(StageName, &quot;Closed Won – Pending Approval&quot;),
+  NOT(Renewal_Email_Sent__c)
+)</errorConditionFormula>
+    <errorMessage>For Auto-Renewal opportunities, you must send the renewal email and tick the &apos;Renewal Email Sent&apos; checkbox before progressing to Closed Won - Pending Approval.</errorMessage>
+</ValidationRule>

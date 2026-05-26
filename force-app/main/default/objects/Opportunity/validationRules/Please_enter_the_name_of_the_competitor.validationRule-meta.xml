@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Please_enter_the_name_of_the_competitor</fullName>
+    <active>true</active>
+    <description>Requires the Competitor Name to be populated when the Closed Lost primary reason is &quot;Client chose competitor&quot;.</description>
+    <errorConditionFormula>ISPICKVAL(Closed_Lost_primary_reason__c , &quot;Client chose competitor&quot;)
+&amp;&amp;
+ISBLANK( Competitor_name__c )</errorConditionFormula>
+    <errorMessage>Please enter the name of the competitor</errorMessage>
+</ValidationRule>

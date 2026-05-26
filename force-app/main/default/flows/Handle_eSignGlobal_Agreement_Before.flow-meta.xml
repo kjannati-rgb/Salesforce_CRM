@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <assignments>
+        <name>Populate_Date_of_Out_for_Signature</name>
+        <label>Populate Date of Out for Signature</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Date_of_out_for_signature__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>TodaysDATE</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_of_reminder</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Populate_Date_of_Signature</name>
+        <label>Populate Date of Signature</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Date_of_Signature__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>TodaysDATE</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <name>Check_of_reminder</name>
+        <label>Check of reminder</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Date_Time_of_Resend__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Reminder_field</targetReference>
+            </connector>
+            <label>null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_the_Envelope_Status_Value</name>
+        <label>Check the Envelope Status Value</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>In_Progress</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Envelope_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>In Progress</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Populate_Date_of_Out_for_Signature</targetReference>
+            </connector>
+            <label>In Progress</label>
+        </rules>
+        <rules>
+            <name>Completed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Envelope_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Completed</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Populate_Date_of_Signature</targetReference>
+            </connector>
+            <label>Completed</label>
+        </rules>
+    </decisions>
+    <description>Populate Date with Status change</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>Now</name>
+        <dataType>DateTime</dataType>
+        <expression>now()</expression>
+    </formulas>
+    <formulas>
+        <name>TodaysDATE</name>
+        <dataType>Date</dataType>
+        <expression>TODAY()</expression>
+    </formulas>
+    <interviewLabel>Handle eSignGlobal Agreement Before {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Handle eSignGlobal Agreement Before</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Reminder_field</name>
+        <label>Update Reminder field</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>Date_Time_of_Resend__c</field>
+            <value>
+                <elementReference>Now</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_the_Envelope_Status_Value</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Envelope_Status__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>eSignGlobal_Agreement__c</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

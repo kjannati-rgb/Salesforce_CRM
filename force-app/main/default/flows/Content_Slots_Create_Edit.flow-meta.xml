@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>58.0</apiVersion>
+    <decisions>
+        <name>myRule_3</name>
+        <label>Quote Line</label>
+        <locationX>182</locationX>
+        <locationY>323</locationY>
+        <defaultConnector>
+            <targetReference>myRule_5</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>FALSE_Quote Line</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_3</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Quote_Line__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>myRule_3_A1</targetReference>
+            </connector>
+            <label>TRUE_Quote Line</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>myRule_5</name>
+        <label>Order Product</label>
+        <locationX>182</locationX>
+        <locationY>623</locationY>
+        <defaultConnectorLabel>FALSE_Order Product</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_5</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Order_Product__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>myRule_5_A1</targetReference>
+            </connector>
+            <label>TRUE_Order Product</label>
+        </rules>
+    </decisions>
+    <description>Migrated from the Content Slots - Create/Edit process using multiple criteria.
+Content Slot on create and edit</description>
+    <environments>Default</environments>
+    <interviewLabel>PB Migrate Content Slots - Create/Edit {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>PB Migrate Content Slots - Create/Edit</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>myRule_3_A1</name>
+        <label>Update QL</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <connector>
+            <targetReference>myRule_5</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Content_Slot__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Content_Slot__c</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Quote_Lines__r</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>myRule_5_A1</name>
+        <label>Update OP</label>
+        <locationX>50</locationX>
+        <locationY>731</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Content_Slot__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Content_Slot__c</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Order_Products__r</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>myRule_3</targetReference>
+        </connector>
+        <object>Content_Slots__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

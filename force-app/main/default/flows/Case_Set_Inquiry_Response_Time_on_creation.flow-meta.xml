@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>57.0</apiVersion>
+    <assignments>
+        <name>Update_record</name>
+        <label>Update record</label>
+        <locationX>50</locationX>
+        <locationY>611</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.AllHire_Support__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <name>Check_for_deskpro_email_to_case</name>
+        <label>Check for deskpro email to case</label>
+        <locationX>182</locationX>
+        <locationY>503</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Origin</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Origin</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Email</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Owner:Group.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Case - AllHires</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_record</targetReference>
+            </connector>
+            <label>Origin</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <interviewLabel>Case - Set Inquiry Response Time on creation {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Case - Set Inquiry Response Time on creation</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Placeholder_Milestone_Completion_Record</name>
+        <label>Get Placeholder Milestone Completion Record</label>
+        <locationX>182</locationX>
+        <locationY>287</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Update_Case_Initial_Response_Time_Value</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>7 Day Average</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Milestone_Completions__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Case_Initial_Response_Time_Value</name>
+        <label>Update Case Initial Response Time Value/Times</label>
+        <locationX>182</locationX>
+        <locationY>395</locationY>
+        <connector>
+            <targetReference>Check_for_deskpro_email_to_case</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Inquiry_Response_Time_On_Creation__c</field>
+            <value>
+                <elementReference>Get_Placeholder_Milestone_Completion_Record.X7_Day_Average_Text__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Placeholder_Milestone_Completion_Record</targetReference>
+        </connector>
+        <object>Case</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

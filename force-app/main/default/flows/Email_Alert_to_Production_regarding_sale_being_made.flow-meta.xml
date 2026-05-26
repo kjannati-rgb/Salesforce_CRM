@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>Email Alert to Production regarding sale being made</description>
+        <name>Email_Alert_to_Coordinator</name>
+        <label>Email Alert to Coordinator</label>
+        <locationX>264</locationX>
+        <locationY>755</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Loop_Through_Opp_Products</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>body</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>varEmailAddresses</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>subject</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+    </actionCalls>
+    <apiVersion>54.0</apiVersion>
+    <decisions>
+        <name>Check_Condition</name>
+        <label>Check Condition</label>
+        <locationX>396</locationX>
+        <locationY>647</locationY>
+        <defaultConnector>
+            <targetReference>Loop_Through_Opp_Products</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Questions_Sent_Out_Date_Greater_Than_Today</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Through_Opp_Products.Product2.Questions_Sent_Out_Date__c</leftValueReference>
+                <operator>LessThanOrEqualTo</operator>
+                <rightValue>
+                    <elementReference>$Flow.CurrentDate</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_Through_Opp_Products.Product2.Send_Coordinator__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Email_Alert_to_Coordinator</targetReference>
+            </connector>
+            <label>Questions Sent Out Date Greater Than Today</label>
+        </rules>
+    </decisions>
+    <description>This Flow is designed to fire every time an Opportunity is Closed Won and the line item meets:
+
+- Product &gt; Questions_Sent_Out_Date has passed today&apos;s date
+- Product &gt; Send_Coordinator__c</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>varEmailAddresses</name>
+        <dataType>String</dataType>
+        <expression>{!Loop_Through_Opp_Products.Product2.Coordinator__r.Email}+&quot;,&quot;+{!$Record.Owner.Email}</expression>
+    </formulas>
+    <interviewLabel>Email Alert to Production regarding sale being made {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Opportunity: Email alert to production sale being made</label>
+    <loops>
+        <name>Loop_Through_Opp_Products</name>
+        <label>Loop Through Opp Products</label>
+        <locationX>176</locationX>
+        <locationY>539</locationY>
+        <collectionReference>Get_Opportunity_Products</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Check_Condition</targetReference>
+        </nextValueConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Opportunity_Products</name>
+        <label>Get Opportunity Products</label>
+        <locationX>176</locationX>
+        <locationY>431</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Loop_Through_Opp_Products</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>OpportunityId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>OpportunityLineItem</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Create_Flow_Log_Record</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>StageName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Closed Won</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>StageName</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Opportunity</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+    <subflows>
+        <name>Create_Flow_Log_Record</name>
+        <label>Create Flow Log Record</label>
+        <locationX>176</locationX>
+        <locationY>323</locationY>
+        <connector>
+            <targetReference>Get_Opportunity_Products</targetReference>
+        </connector>
+        <flowName>Flow_log_v3</flowName>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>var_flowname</name>
+            <value>
+                <elementReference>var_flowname</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>var_recordname</name>
+            <value>
+                <elementReference>$Record.Name</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <textTemplates>
+        <name>body</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;&lt;strong&gt;&lt;span class=&quot;ql-cursor&quot;&gt;﻿&lt;/span&gt;&lt;/strong&gt;Hi {!Loop_Through_Opp_Products.Product2.Coordinator__r.FirstName} {!Loop_Through_Opp_Products.Product2.Coordinator__r.LastName}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong style=&quot;color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot;&gt;Brand:&lt;/strong&gt;&lt;span style=&quot;color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot;&gt; {!Loop_Through_Opp_Products.Product2.Brand__c}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Title:&lt;/strong&gt; {!Loop_Through_Opp_Products.Product2.Name} - {!Loop_Through_Opp_Products.Adobe_Sign_Content_Slot_Title__c}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Type:&lt;/strong&gt; {!Loop_Through_Opp_Products.Content_Type__c}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Firm: &lt;/strong&gt;{!$Record.Account.Name}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong style=&quot;color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot;&gt;Contact Name:&lt;/strong&gt;&lt;span style=&quot;color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot;&gt; {!$Record.Primary_Contact__r.FirstName} {!$Record.Primary_Contact__r.LastName}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Contact Email:&lt;/strong&gt; {!$Record.Primary_Contact__r.Email}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Deadline: &lt;/strong&gt;{!Loop_Through_Opp_Products.Product2.Submission_Deadline_Date__c}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Special instructions:&lt;/strong&gt; {!$Record.Distribution_Notes__c}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Amount:&lt;/strong&gt; {!Loop_Through_Opp_Products.TotalPrice} {!Loop_Through_Opp_Products.CurrencyIsoCode}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Many thanks,&lt;/p&gt;&lt;p&gt;SFDC&lt;/p&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>subject</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>{!Loop_Through_Opp_Products.Product2.Name} - {!Loop_Through_Opp_Products.Adobe_Sign_Content_Slot_Title__c} - {!Loop_Through_Opp_Products.Content_Type__c}</text>
+    </textTemplates>
+    <triggerOrder>1410</triggerOrder>
+    <variables>
+        <name>var_flowname</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <stringValue>Opportunity: Email alert to production sale being made</stringValue>
+        </value>
+    </variables>
+</Flow>

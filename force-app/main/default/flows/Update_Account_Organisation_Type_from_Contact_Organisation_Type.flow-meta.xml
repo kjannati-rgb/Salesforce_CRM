@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>52.0</apiVersion>
+    <decisions>
+        <description>This decision is checking for the Organisation Type on the Contact and related Account record.</description>
+        <name>Check_for_Organisation_Type_on_the_Contact_and_Account</name>
+        <label>Check for Organisation Type on the Contact and Account</label>
+        <locationX>688</locationX>
+        <locationY>117</locationY>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Contact_has_Organisation_Type_Populated</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Organisation_Type__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Account.Organisation_Type__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Account_Record_with_Organisation_Type_from_Contact</targetReference>
+            </connector>
+            <label>Contact has Organisation Type Populated</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This decision element checks to see if the Flow has been disabled in Custom Settings &gt; Application Settings &gt; Disable Autolaunch Lightning Flow</description>
+        <name>Disable_Flow_is_False</name>
+        <label>Disable Flow is False</label>
+        <locationX>505</locationX>
+        <locationY>116</locationY>
+        <defaultConnector>
+            <targetReference>Check_for_Organisation_Type_on_the_Contact_and_Account</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Disable Flow is not set</defaultConnectorLabel>
+        <rules>
+            <name>Disable_Flow_is_set</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>DisableAutoLaunchFlow</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Disable Flow is set</label>
+        </rules>
+    </decisions>
+    <description>This flow is designed to get around a Pardot synch limitation around the updating of Accounts in SFDC. Essentially this Flow will update the Organisation Type on the Office Account if it is BLANK and the Organisation Type on the Contact record is populated through a Pardot form submission.</description>
+    <formulas>
+        <name>DisableAutoLaunchFlow</name>
+        <dataType>Boolean</dataType>
+        <expression>{!$Setup.Application_Settings__c.Disable_Autolaunch_Lightning_Flow__c}</expression>
+    </formulas>
+    <interviewLabel>Update Account Organisation Type from Contact Organisation Type {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Update Account Organisation Type from Contact Organisation Type</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <description>Where the decisions in the in the prior steps are met; the Organisation Type from the Contact record will UPDATE the Organisation Type on the Account record.</description>
+        <name>Update_Account_Record_with_Organisation_Type_from_Contact</name>
+        <label>Update Account Record with Organisation Type from Contact</label>
+        <locationX>907</locationX>
+        <locationY>122</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.AccountId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Organisation_Type__c</field>
+            <value>
+                <elementReference>$Record.Organisation_Type__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Account</object>
+    </recordUpdates>
+    <start>
+        <locationX>51</locationX>
+        <locationY>50</locationY>
+        <connector>
+            <targetReference>Disable_Flow_is_False</targetReference>
+        </connector>
+        <object>Contact</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

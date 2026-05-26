@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opp_With_Open_Complete_Success_Plan_Task</fullName>
+    <active>true</active>
+    <description>An opportunity with open Complete Success Plan tasks can&apos;t be submitted for approval</description>
+    <errorConditionFormula>AND(ISPICKVAL(StageName,&quot;Closed Won – Pending Approval&quot;),
+Has_Open_Complete_Success_Plan_Task__c = TRUE,
+
+
+$Profile.Name &lt;&gt; &apos;Custom: Fin/Ops/HR&apos;,
+$Profile.Name &lt;&gt; &apos;ALM - Custom: Fin/Ops/HR&apos;,
+$Profile.Name &lt;&gt; &apos;System Administrator&apos;,NOT($Setup.Application_Settings__c.Disable_Validation_Rules__c))</errorConditionFormula>
+    <errorMessage>You have open Complete Success Plan tasks on this opportunity. Please complete them before closing the opportunity.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Bad_Debtor_Account_Flag_on_Opportunity</fullName>
+    <active>true</active>
+    <description>Bad Debtor flagged on Opportunity.</description>
+    <errorConditionFormula>AND(
+  NOT( $Setup.Application_Settings__c.Disable_Validation_Rules__c ),
+ $Profile.Name  &lt;&gt; &quot;System Administrator&quot;,
+  AND(
+    Probability &gt;= 0.50,
+    ISPICKVAL( Account.Debtor_Status__c , &quot;Bad Debtor&quot;)
+  )
+)</errorConditionFormula>
+    <errorMessage>This Account on the Opportunity has been flagged by Finance as having a Debt. Please reach out to Invoicing: invoicing@lbresearch.com to resolve the issue. Where the deal cannot be processed; please move the Opportunity Stage to Closed Lost.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <description>Making the changes to trigger the flow only when Industry, Industry Data Provider and the Industry Category Overide field is changed and adding more condition like checking for null</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>IndustryCategory</name>
+        <dataType>String</dataType>
+        <expression>IF(
+NOT(ISBLANK({!$Record.Industry_Category_Override__c})),
+{!$Record.Industry_Category_Override__c},
+IF(
+ISPICKVAL({!$Record.Industry_ALM__c}, &quot;Law Firm&quot;),
+IF(
+{!$Record.Number_of_Attorneys__c}  &gt;= 151, &quot;Large Law&quot;,
+IF(
+{!$Record.Number_of_Attorneys__c}  &gt;= 71, &quot;Mid-Market Law&quot;,
+IF(
+{!$Record.Number_of_Attorneys__c}  &gt;= 6, &quot;SMB Law&quot;,
+IF(
+{!$Record.Number_of_Attorneys__c} &lt;= 5, &quot;Solo Practitioner Law&quot;,
+&quot;Law Firm - Other&quot;
+)
+)
+)
+),
+CASE(
+{!$Record.Industry_ALM__c},
+&quot;PS - Audit/Tax&quot;, &quot;Professional Services&quot;,
+&quot;Corp - Energy&quot;, &quot;Corporations&quot;,
+&quot;Corp - Auto, Boats, Planes&quot;, &quot;Corporations&quot;,
+&quot;PS - Alternative Dispute Resolution&quot;, &quot;Professional Services&quot;,
+&quot;Corp - Healthcare&quot;, &quot;Corporations&quot;,
+&quot;Corp - Technology&quot;, &quot;Corporations&quot;,
+&quot;Corp - Legal Tech&quot;, &quot;Corporations&quot;,
+&quot;Corp - Food &amp; Beverage&quot;, &quot;Corporations&quot;,
+&quot;Corp - Media &amp; Communications&quot;, &quot;Corporations&quot;,
+&quot;Corp - Retail&quot;, &quot;Corporations&quot;,
+&quot;Corp - Hospitality &amp; Travel&quot;, &quot;Corporations&quot;,
+&quot;PS - Consulting&quot;, &quot;Professional Services&quot;,
+&quot;FS - Banking&quot;, &quot;Financial Services&quot;,
+&quot;Corp - Pharmaceutical&quot;, &quot;Corporations&quot;,
+&quot;Corp - Real Estate&quot;, &quot;Corporations&quot;,
+&quot;FS - Wealth Management&quot;, &quot;Financial Services&quot;,
+&quot;Gov - Not-For-Profit &amp; Association&quot;, &quot;Government Agency&quot;,
+&quot;Gov - Federal Agency&quot;, &quot;Government Agency&quot;,
+&quot;Insurance - Carrier&quot;, &quot;Insurance&quot;,
+&quot;Insurance - Health&quot;, &quot;Insurance&quot;,
+&quot;Insurance - Agency&quot;, &quot;Insurance&quot;,
+&quot;Insurance - Brokerage&quot;, &quot;Insurance&quot;,
+&quot;Insurance&quot;,&quot;Insurance&quot;,
+&quot;Transportation&quot;,&quot;Corporations&quot;,
+&quot;EDU - University (Non-Law School)&quot;, &quot;University (Non-Law School)&quot;,
+&quot;EDU - Law School&quot;, &quot;Law School&quot;,
+&quot;Judiciary - Federal Court&quot;, &quot;Court&quot;,
+&quot;Judiciary - State Court&quot;, &quot;Court&quot;,
+&quot;Judiciary - DA Office&quot;, &quot;Court&quot;,
+&quot;PS - Legal Services&quot;, &quot;Professional Services&quot;,
+&quot;Gov - State Agency&quot;, &quot;Government Agency&quot;,
+&quot;EDU - Secondary or other school&quot;, &quot;University (Non-Law School)&quot;,
+&quot;PS - Recruiting&quot;, &quot;Professional Services&quot;,
+NULL
+)
+)
+)</expression>
+    </formulas>
+    <interviewLabel>Account Update Industry Category {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Account Update Industry Category</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Account</name>
+        <label>Update Account</label>
+        <locationX>176</locationX>
+        <locationY>287</locationY>
+        <inputAssignments>
+            <field>Industry_Category_txt__c</field>
+            <value>
+                <elementReference>IndustryCategory</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Update_Account</targetReference>
+        </connector>
+        <filterLogic>or</filterLogic>
+        <filters>
+            <field>Industry_Data_Provider__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Industry_Data_Provider__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Industry_Category_Override__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Industry_Category_Override__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Industry_ALM__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Industry_ALM__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Account</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>57.0</apiVersion>
+    <decisions>
+        <name>Check_if_there_is_a_connected_Opportunity</name>
+        <label>Check if there is a connected Opportunity</label>
+        <locationX>182</locationX>
+        <locationY>431</locationY>
+        <defaultConnector>
+            <targetReference>Set_Customer_Type_to_Paid</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Connected_opportunity_doesn_t_exist</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Connected_opportunity__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Customer_Type_to_Free</targetReference>
+            </connector>
+            <label>Connected opportunity exists</label>
+        </rules>
+    </decisions>
+    <description>If a connected Opportunity exists the Type is set to Paid and if it does not the Type is set to Free</description>
+    <environments>Default</environments>
+    <interviewLabel>Set Customer Type based on Connected Opportunity {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Case: Set Customer Type based on connected opportunity</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Set_Customer_Type_to_Free</name>
+        <label>Set Customer Type to Free</label>
+        <locationX>50</locationX>
+        <locationY>539</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Customer_Type__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Unknown</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Customer_Type__c</field>
+            <value>
+                <stringValue>Free</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Set_Customer_Type_to_Paid</name>
+        <label>Set Customer Type to Paid</label>
+        <locationX>314</locationX>
+        <locationY>539</locationY>
+        <inputAssignments>
+            <field>Customer_Type__c</field>
+            <value>
+                <stringValue>Paid</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Create_Flow_Log_Record</targetReference>
+        </connector>
+        <object>Case</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Create_Flow_Log_Record</name>
+        <label>Create Flow Log Record</label>
+        <locationX>182</locationX>
+        <locationY>323</locationY>
+        <connector>
+            <targetReference>Check_if_there_is_a_connected_Opportunity</targetReference>
+        </connector>
+        <flowName>Flow_log_v3</flowName>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>var_flowname</name>
+            <value>
+                <elementReference>var_flowname</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>var_recordname</name>
+            <value>
+                <elementReference>$Record.CaseNumber</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <variables>
+        <name>var_flowname</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <stringValue>Case: Set Customer Type based on connected opportunity</stringValue>
+        </value>
+    </variables>
+</Flow>

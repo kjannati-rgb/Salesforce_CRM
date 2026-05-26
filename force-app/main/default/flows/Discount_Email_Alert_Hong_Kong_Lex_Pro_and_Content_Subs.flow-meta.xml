@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Lex_Pro_and_Content_Sub_Vertical_Email_Alert</name>
+        <label>Lex Pro and Content Sub Vertical Email Alert</label>
+        <locationX>176</locationX>
+        <locationY>431</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <stringValue>Angus.Codd@LBResearch.com,kamyar.jannati@lbresearch.com, Saurabh.Patil@LBResearch.com, Sergio.OteroFelipe@LBResearch.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>Lex_Pro_Content_Subs_Subject</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>LexPro_Content_Subs_Body</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>57.0</apiVersion>
+    <description>Angus and Will would like to be notified every time a Lex Pro or Content Subs Quote has a discount of over 50%. This is primarily because they are not part of the Hong Kong approval process.</description>
+    <environments>Default</environments>
+    <interviewLabel>Discount Email Alert Hong Kong Lex Pro and Content Subs {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Email Alert: Discount Email Alert for HK LexPro and Content Subs</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Create_Flow_Log_Record</targetReference>
+        </connector>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterLogic>1 AND 2 AND 5 AND (3 OR 4)</filterLogic>
+        <filters>
+            <field>ApprovalStatus__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Approved</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>SBQQ__AverageCustomerDiscount__c</field>
+            <operator>GreaterThan</operator>
+            <value>
+                <numberValue>50.0</numberValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Sales_Rep_Advanced_Approvals_Grouping__c</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>HK - Lex Pro</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Sales_Rep_Advanced_Approvals_Grouping__c</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>HK - Verticals</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Opportunity_Type__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>New Business</stringValue>
+            </value>
+        </filters>
+        <object>SBQQ__Quote__c</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Create_Flow_Log_Record</name>
+        <label>Create Flow Log Record</label>
+        <locationX>176</locationX>
+        <locationY>323</locationY>
+        <connector>
+            <targetReference>Lex_Pro_and_Content_Sub_Vertical_Email_Alert</targetReference>
+        </connector>
+        <flowName>Flow_log_v3</flowName>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>var_flowname</name>
+            <value>
+                <elementReference>var_flowname</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>var_recordname</name>
+            <value>
+                <elementReference>$Record.Name</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <textTemplates>
+        <name>Lex_Pro_Content_Subs_Subject</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>{!$Record.Name} - Lexology Pro / Content Subs Discount over 50% - Hong Kong</text>
+    </textTemplates>
+    <textTemplates>
+        <name>LexPro_Content_Subs_Body</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Hi Angus,
+
+The following Quote {!$Record.Name} has been Approved with a Discount of over 50% from the Hong Kong team:
+
+Quote Number - {!$Record.Name}
+Discount % - {!$Record.SBQQ__AverageCustomerDiscount__c}
+Amount - {!$Record.SBQQ__NetAmount__c}
+Sales Rep - {!$Record.SBQQ__SalesRep__r.FirstName} {!$Record.SBQQ__SalesRep__r.LastName}
+
+Thanks,
+{!$Record.SBQQ__SalesRep__r.FirstName} {!$Record.SBQQ__SalesRep__r.LastName}</text>
+    </textTemplates>
+    <variables>
+        <name>var_flowname</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <stringValue>Email Alert: Discount Email Alert for HK LexPro and Content Subs </stringValue>
+        </value>
+    </variables>
+</Flow>

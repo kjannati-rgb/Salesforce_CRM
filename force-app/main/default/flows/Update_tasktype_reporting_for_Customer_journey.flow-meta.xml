@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <environments>Default</environments>
+    <interviewLabel>Update tasktype reporting for Customer journey {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Update tasktype reporting for Customer journey</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_taskstype_reporting</name>
+        <label>Update taskstype reporting</label>
+        <locationX>176</locationX>
+        <locationY>252</locationY>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Update_taskstype_reporting</targetReference>
+        </connector>
+        <filterLogic>1 AND 2 AND 3</filterLogic>
+        <filters>
+            <field>TaskTypereporting__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue></stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Completed_Task__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Type</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Meeting</stringValue>
+            </value>
+        </filters>
+        <object>Task</object>
+        <schedule>
+            <frequency>Once</frequency>
+            <startDate>2024-10-17</startDate>
+            <startTime>11:30:00.000Z</startTime>
+        </schedule>
+        <triggerType>Scheduled</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

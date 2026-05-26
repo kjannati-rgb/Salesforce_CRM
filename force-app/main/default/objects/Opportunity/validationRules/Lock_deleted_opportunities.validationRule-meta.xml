@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lock_deleted_opportunities</fullName>
+    <active>true</active>
+    <description>Opportunity record is locked if marked deleted</description>
+    <errorConditionFormula>AND(
+NOT(ISNEW()),
+PRIORVALUE(Deleted__c) = TRUE,
+ $Profile.Name &lt;&gt; &quot;System Administrator&quot;
+)</errorConditionFormula>
+    <errorMessage>This Opportunity is locked because it has been marked as deleted. Please contact your Salesforce administrator if you need to make changes.</errorMessage>
+</ValidationRule>

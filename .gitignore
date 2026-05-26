@@ -1,0 +1,14 @@
+# Salesforce / SFDX local state
+.sf/
+.sfdx/
+.localdevserver/
+deploy-options.json
+
+# Claude / local tooling
+.claude/
+.mcp.json.disabled
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log

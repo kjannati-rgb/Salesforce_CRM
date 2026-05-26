@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Contact_Role_Complete_50</fullName>
+    <active>true</active>
+    <description>Checks whether a contact role is complete for Opportunities with probability &gt;50</description>
+    <errorConditionFormula>AND(
+NOT($Setup.Application_Settings__c.Disable_Validation_Rules__c),
+Probability &gt;= 0.50,
+Has_Complete_Contact_Role__c = FALSE,
+ISBLANK(SBQQ__AmendedContract__c), 
+$Profile.Name &lt;&gt; &apos;System Administrator&apos;,
+$Profile.Name &lt;&gt; &apos;ALM - Custom: Fin/Ops/HR&apos;,
+$Profile.Name &lt;&gt; &apos;Custom: Fin/Ops/HR&apos;,
+$Profile.Name &lt;&gt; &apos;B2BMA Integration User&apos;,
+(
+NOT(TEXT(StageName) = &quot;Cancellation - Pending Review&quot;)
+&amp;&amp;
+NOT(TEXT(StageName) = &quot;Closed Lost&quot;)
+)
+)</errorConditionFormula>
+    <errorMessage>Please make sure the Contact Role is flagged in the Contract Role as the Primary Contact and has an Email, Job Title, First Name and Billing Address.
+
+The associated Account must have Billing Country, City and Street populated.</errorMessage>
+</ValidationRule>

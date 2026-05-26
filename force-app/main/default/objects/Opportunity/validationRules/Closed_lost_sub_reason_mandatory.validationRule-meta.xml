@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Closed_lost_sub_reason_mandatory</fullName>
+    <active>true</active>
+    <description>Closed lost sub reason mandatory if Opp is closed lost</description>
+    <errorConditionFormula>((text(Opportunity_Type_Forecast__c) = &quot;Renewal&quot;)
+|| (text(Opportunity_Type_Forecast__c) = &quot;New Business&quot;))
+&amp;&amp;
+((Owner.Business_Group__c = &quot;Practice Intelligence&quot;)
+|| (Owner.Business_Group__c = &quot;Market Intelligence&quot;)
+|| (Owner.Business_Group__c = &quot;MBL Seminars&quot;))
+&amp;&amp;
+NOT($Setup.Application_Settings__c.Disable_Validation_Rules__c)
+&amp;&amp;
+((ISPICKVAL(Closed_Lost_primary_reason__c ,&quot;Budget issues&quot;))
+||
+(ISPICKVAL(Closed_Lost_primary_reason__c ,&quot;Buyer issues&quot;))
+||
+(ISPICKVAL(Closed_Lost_primary_reason__c ,&quot;Client engagement issue&quot;))
+||
+(ISPICKVAL(Closed_Lost_primary_reason__c ,&quot;Content issues&quot;))
+||
+(ISPICKVAL(Closed_Lost_primary_reason__c ,&quot;Lack of ROI&quot;))
+||
+(ISPICKVAL(Closed_Lost_primary_reason__c ,&quot;LBR cancellation&quot;))
+||
+(ISPICKVAL(Closed_Lost_primary_reason__c ,&quot;LBR engagement issue&quot;))
+||
+(ISPICKVAL(Closed_Lost_primary_reason__c ,&quot;No fault cancellation&quot;))
+||
+(ISPICKVAL(Closed_Lost_primary_reason__c ,&quot;Product issues&quot;)))
+&amp;&amp;
+ISBLANK( TEXT (Closed_Lost_sub_reason__c))</errorConditionFormula>
+    <errorMessage>Please select a closed lost sub reason</errorMessage>
+</ValidationRule>

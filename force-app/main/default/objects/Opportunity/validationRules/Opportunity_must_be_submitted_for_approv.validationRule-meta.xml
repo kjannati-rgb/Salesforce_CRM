@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity_must_be_submitted_for_approv</fullName>
+    <active>true</active>
+    <description>Sales rep cannot closed won an opportunity.</description>
+    <errorConditionFormula>AND(NOT( $Setup.Application_Settings__c.Disable_Validation_Rules__c ), ISPICKVAL( StageName , &apos;Closed Won&apos;),
+$Profile.Name &lt;&gt; &apos;Custom: Data Management&apos;,
+$Profile.Name &lt;&gt; &apos;ALM - Custom: Fin/Ops/HR&apos;,
+$Profile.Name &lt;&gt; &apos;Custom: Fin/Ops/HR&apos;,
+$Profile.Name &lt;&gt; &apos;System Administrator&apos;)
+&amp;&amp;
+$Setup.rh2__PS_Settings__c.rh2__Run_Validation_Rule__c</errorConditionFormula>
+    <errorMessage>You cannot close an Opportunity directly. Please &quot;Submit for Approval&quot;.</errorMessage>
+</ValidationRule>

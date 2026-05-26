@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>End_user_mandatory</fullName>
+    <active>true</active>
+    <description>If Purchased Via is selected, the end user is mandatory</description>
+    <errorConditionFormula>AND(NOT( $Setup.Application_Settings__c.Disable_Validation_Rules__c ), ISPICKVAL( Purchased_Via__c , &apos;Agency&apos;),
+$Profile.Name &lt;&gt; &apos;System Administrator&apos;,
+ISBLANK ( End_User_Account__c ))</errorConditionFormula>
+    <errorDisplayField>End_User_Account__c</errorDisplayField>
+    <errorMessage>Please enter an End User</errorMessage>
+</ValidationRule>

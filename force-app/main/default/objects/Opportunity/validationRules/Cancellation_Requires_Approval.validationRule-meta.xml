@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cancellation_Requires_Approval</fullName>
+    <active>true</active>
+    <description>Cancellations cannot be closed without approval.</description>
+    <errorConditionFormula>AND(NOT( $Setup.Application_Settings__c.Disable_Validation_Rules__c),
+Approved__c = FALSE,
+ISPICKVAL(StageName, &quot;Closed Won - Cancellation&quot;)
+)</errorConditionFormula>
+    <errorMessage>This Cancellation must be approved before it can be closed. Please submit it for approval.</errorMessage>
+</ValidationRule>

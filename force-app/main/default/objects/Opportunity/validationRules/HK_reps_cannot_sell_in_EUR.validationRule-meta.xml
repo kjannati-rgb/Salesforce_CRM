@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>HK_reps_cannot_sell_in_EUR</fullName>
+    <active>true</active>
+    <description>Sales from Hong Kong should only be processed in GBP or USD currencies</description>
+    <errorConditionFormula>text( Owner.LBR_Legal_Entity__c )=&quot;Law Business Research (Asia) Ltd.&quot;
+&amp;&amp;
+text( CurrencyIsoCode ) = &quot;EUR&quot;
+&amp;&amp;
+NOT( $Setup.Application_Settings__c.Disable_Validation_Rules__c )
+&amp;&amp;
+NOT ( $Profile.Name = &quot;System Administrator&quot;)
+&amp;&amp;
+NOT(text(StageName ) = &quot;Closed Lost&quot;)</errorConditionFormula>
+    <errorDisplayField>CurrencyIsoCode</errorDisplayField>
+    <errorMessage>Sales made from Hong Kong cannot be processed in EUR currency. Please choose a different currency for this sale</errorMessage>
+</ValidationRule>

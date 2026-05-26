@@ -1,0 +1,926 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <decisions>
+        <name>Check_if_industry_is_changed</name>
+        <label>Check if industry is changed or New record</label>
+        <locationX>534</locationX>
+        <locationY>2184</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>isChanged_or_New</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Industry</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>isNew</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Industry</targetReference>
+            </connector>
+            <label>isChanged or New</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_if_record_is_office_or_firm</name>
+        <label>Check if record is office or firm</label>
+        <locationX>534</locationX>
+        <locationY>1884</locationY>
+        <defaultConnector>
+            <targetReference>Check_if_industry_is_changed</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Office</defaultConnectorLabel>
+        <rules>
+            <name>Firm</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Firm</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.PO_Required__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_PO_status_on_related_office_records</targetReference>
+            </connector>
+            <label>Firm</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Industry</name>
+        <label>Check Industry</label>
+        <locationX>314</locationX>
+        <locationY>2292</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Part1</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>industry_level1_check_part1</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_industry_level1_part1</targetReference>
+            </connector>
+            <label>Part1</label>
+        </rules>
+        <rules>
+            <name>Part2</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>industry_level1_check_part2</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_industry_level1_part2</targetReference>
+            </connector>
+            <label>Part2</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>myRule_1</name>
+        <label>Check Disable Processes</label>
+        <locationX>160</locationX>
+        <locationY>276</locationY>
+        <defaultConnector>
+            <targetReference>myRule_3</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>FALSE_Check Disable Processes</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_1</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>formula_TRUE_myRule_1</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>TRUE_Check Disable Processes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>myRule_11</name>
+        <label>Push Information to Office</label>
+        <locationX>534</locationX>
+        <locationY>1584</locationY>
+        <defaultConnector>
+            <targetReference>Check_if_record_is_office_or_firm</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>FALSE_Push Information to Office</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_11</name>
+            <conditionLogic>1 AND (2 OR 3 OR 4 OR 5)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Office</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Industry</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Annual_Revenue__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Number_of_Employees__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Organisation_Type__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>myRule_11_A1</targetReference>
+            </connector>
+            <label>TRUE_Push Information to Office</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>myRule_18</name>
+        <label>Ultimate Related Objects</label>
+        <locationX>1062</locationX>
+        <locationY>276</locationY>
+        <defaultConnectorLabel>FALSE_Ultimate Related Objects</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_18</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>formula_TRUE_myRule_18</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>myRule_18_A1</targetReference>
+            </connector>
+            <label>TRUE_Ultimate Related Objects</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>myRule_3</name>
+        <label>Tax Code</label>
+        <locationX>534</locationX>
+        <locationY>384</locationY>
+        <defaultConnector>
+            <targetReference>myRule_5</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>FALSE_Tax Code</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_3</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>formula_TRUE_myRule_3</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>myRule_3_A1</targetReference>
+            </connector>
+            <label>TRUE_Tax Code</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>myRule_5</name>
+        <label>Bad Debtor Status</label>
+        <locationX>534</locationX>
+        <locationY>684</locationY>
+        <defaultConnector>
+            <targetReference>myRule_7</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>FALSE_Bad Debtor Status</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_5</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Debtor_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Problem Debtor</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Debtor_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Bad Debtor</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>myRule_5_A1</targetReference>
+            </connector>
+            <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+            <label>TRUE_Bad Debtor Status</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>myRule_7</name>
+        <label>Good Debtor Status</label>
+        <locationX>534</locationX>
+        <locationY>984</locationY>
+        <defaultConnector>
+            <targetReference>myRule_9</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>FALSE_Good Debtor Status</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_7</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Debtor_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Good Debtor</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>myRule_7_A1</targetReference>
+            </connector>
+            <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+            <label>TRUE_Good Debtor Status</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>myRule_9</name>
+        <label>Update Shipping Address</label>
+        <locationX>534</locationX>
+        <locationY>1284</locationY>
+        <defaultConnector>
+            <targetReference>myRule_11</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>FALSE_Update Shipping Address</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_9</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.ShippingStreet</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.ShippingCity</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.ShippingCountry</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.ShippingState</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.ShippingPostalCode</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>myRule_9_A1</targetReference>
+            </connector>
+            <label>TRUE_Update Shipping Address</label>
+        </rules>
+    </decisions>
+    <description>Migrated from the Account Object - Create/Edit process using multiple criteria.
+All Account Processes are handled here</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>formula_1_myRule_11_A1_7476553338</name>
+        <dataType>String</dataType>
+        <expression>IF(ISBLANK(TEXT({!$Record.Annual_Revenue__c}) ), IF(ISBLANK({!$Record.Ultimate_Account__c}), NULL, IF(ISBLANK(TEXT({!$Record.Ultimate_Account__r.Annual_Revenue__c})), NULL, TEXT({!$Record.Ultimate_Account__r.Annual_Revenue__c}))), TEXT({!$Record.Annual_Revenue__c}))</expression>
+    </formulas>
+    <formulas>
+        <name>formula_2_myRule_11_A1_3929702875</name>
+        <dataType>String</dataType>
+        <expression>IF(ISBLANK(TEXT({!$Record.Industry}) ), IF(ISBLANK({!$Record.Ultimate_Account__c}), NULL, IF(ISBLANK(TEXT({!$Record.Ultimate_Account__r.Industry})), NULL, TEXT({!$Record.Ultimate_Account__r.Industry}))), TEXT({!$Record.Industry}))</expression>
+    </formulas>
+    <formulas>
+        <name>formula_3_myRule_11_A1_7005928005</name>
+        <dataType>String</dataType>
+        <expression>IF(ISBLANK(TEXT({!$Record.Number_of_Employees__c}) ), IF(ISBLANK({!$Record.Ultimate_Account__c}), NULL, IF(ISBLANK(TEXT({!$Record.Ultimate_Account__r.Number_of_Employees__c})), NULL, TEXT({!$Record.Ultimate_Account__r.Number_of_Employees__c}))), TEXT({!$Record.Number_of_Employees__c}))</expression>
+    </formulas>
+    <formulas>
+        <name>formula_4_myRule_11_A1_6387354853</name>
+        <dataType>String</dataType>
+        <expression>IF(ISBLANK(TEXT({!$Record.Number_of_Partners__c}) ), IF(ISBLANK({!$Record.Ultimate_Account__c}), NULL, IF(ISBLANK(TEXT({!$Record.Ultimate_Account__r.Number_of_Partners__c})), NULL, TEXT({!$Record.Ultimate_Account__r.Number_of_Partners__c}))), TEXT({!$Record.Number_of_Partners__c}))</expression>
+    </formulas>
+    <formulas>
+        <name>formula_5_myRule_11_A1_2389924167</name>
+        <dataType>String</dataType>
+        <expression>IF(ISBLANK(TEXT({!$Record.Organisation_Type__c}) ), IF(ISBLANK({!$Record.Ultimate_Account__c}), NULL, IF(ISBLANK(TEXT({!$Record.Ultimate_Account__r.Organisation_Type__c})), NULL, TEXT({!$Record.Ultimate_Account__r.Organisation_Type__c}))), TEXT({!$Record.Organisation_Type__c}))</expression>
+    </formulas>
+    <formulas>
+        <name>formula_TRUE_myRule_1</name>
+        <dataType>Boolean</dataType>
+        <expression>{!$Setup.Application_Settings__c.Disable_Process_Builders__c}</expression>
+    </formulas>
+    <formulas>
+        <name>formula_TRUE_myRule_18</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(
+NOT(ISNEW()),
+ISCHANGED({!$Record.Ultimate_Account__c} )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>formula_TRUE_myRule_3</name>
+        <dataType>Boolean</dataType>
+        <expression>OR (ISNEW (), 
+ISCHANGED ({!$Record.BillingCountry} ))</expression>
+    </formulas>
+    <formulas>
+        <name>industry_level1_check_part1</name>
+        <dataType>Boolean</dataType>
+        <expression>IF(  
+    OR(  
+        ISPICKVAL({!$Record.Industry}, &quot;Agriculture &amp; Agrochemicals&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Beverages&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Fishing&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Food &amp; Drug Retailers&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Food Producers &amp; Processors&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Paper &amp; Forest Products&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Tobacco&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Financial Services Banks&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Diversified Trading &amp; Distributing&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Holding Companies&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Industrial Conglomerates&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Computer &amp; Electronics Retailers&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Containers &amp; Packaging&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Diversified Retailers&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Fashion &amp; Textiles&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Household Goods, Home Improvement &amp; Furnishing&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Personal Products &amp; Services&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Education&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Electrical Components &amp; Equipment&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Electricity Distribution &amp; Transmission&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Electricity Production&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Renewable Energy&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Utilities&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Financial Services Consumer Lending&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Financial Services Corporate&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Financial Services Investment Banking &amp; Brokerage&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Financial Services Investment Services &amp; Management&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Financial Services Market Operators&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Financial Services Pension Providers&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Biotechnology &amp; Medical Research&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Healthcare Providers &amp; Services&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Medical Devices &amp; Technology&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Hotels and Cruise Lines&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Leisure &amp; Recreation&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Restaurants &amp; Bars&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Sports&quot;)  
+    ),   
+    TRUE,   
+    FALSE  
+)</expression>
+    </formulas>
+    <formulas>
+        <name>industry_level1_check_part2</name>
+        <dataType>Boolean</dataType>
+        <expression>IF(  
+    OR(  
+        ISPICKVAL({!$Record.Industry}, &quot;Construction &amp; Engineering&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Industrial Machinery &amp; Equipment&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Real Estate&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Real Estate Residential &amp; Commercial REITs&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Insurance Life &amp; Health&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Insurance Multiline &amp; Brokers&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Insurance Property, Casualty and General&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Reinsurance&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Advertising &amp; Marketing&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Broadcasting&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Casinos &amp; Gaming&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Entertainment Production&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Coal&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Gas Distribution &amp; Transmission&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Metals &amp; Mining&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Oil &amp; Gas Exploration &amp; Production&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Oil Related Services &amp; Equipment&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Pharmaceuticals&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Chemicals&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Business Support Services&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Employment Services&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Environmental Services &amp; Equipment&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Legal Services&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Printing Services&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Professional Information Services&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Publishing&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Hardware, Devices &amp; Electronic Equipment&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Internet Service Providers&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;IT Services &amp; Consulting&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Platforms &amp; Online Marketplaces&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Semiconductors &amp; Semiconductor Equipment&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Software &amp; SaaS&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Telecoms &amp; Networking Equipment&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Telecoms Services&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Aerospace &amp; Defence&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Airlines &amp; Airports&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Automobiles, Auto Parts and Retailers&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Freight &amp; Logistics Services&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Roads, Rail &amp; Sea Transportation&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Shipping, Shipbuilding &amp; Ports&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Transport Services&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Government (Local and National)&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Not-For-Profit Organisations&quot;),  
+        ISPICKVAL({!$Record.Industry}, &quot;Person Account&quot;)  
+    ),   
+    TRUE,   
+    FALSE  
+)</expression>
+    </formulas>
+    <formulas>
+        <name>industry_level1_update_part1</name>
+        <dataType>String</dataType>
+        <expression>CASE(  
+    {!$Record.Industry},  
+    &quot;Agriculture &amp; Agrochemicals&quot;, &quot;Agribusiness &amp; food&quot;,  
+    &quot;Beverages&quot;, &quot;Agribusiness &amp; food&quot;,  
+    &quot;Fishing&quot;, &quot;Agribusiness &amp; food&quot;,  
+    &quot;Food &amp; Drug Retailers&quot;, &quot;Agribusiness &amp; food&quot;,  
+    &quot;Food Producers &amp; Processors&quot;, &quot;Agribusiness &amp; food&quot;,  
+    &quot;Paper &amp; Forest Products&quot;, &quot;Agribusiness &amp; food&quot;,  
+    &quot;Tobacco&quot;, &quot;Agribusiness &amp; food&quot;,  
+
+    &quot;Financial Services Banks&quot;, &quot;Banks&quot;,  
+    
+    &quot;Diversified Trading &amp; Distributing&quot;, &quot;Conglomerates &amp; holding&quot;,  
+    &quot;Holding Companies&quot;, &quot;Conglomerates &amp; holding&quot;,  
+    &quot;Industrial Conglomerates&quot;, &quot;Conglomerates &amp; holding&quot;,  
+
+    &quot;Computer &amp; Electronics Retailers&quot;, &quot;Consumer &amp; retail&quot;,  
+    &quot;Containers &amp; Packaging&quot;, &quot;Consumer &amp; retail&quot;,  
+    &quot;Diversified Retailers&quot;, &quot;Consumer &amp; retail&quot;,  
+    &quot;Fashion &amp; Textiles&quot;, &quot;Consumer &amp; retail&quot;,  
+    &quot;Household Goods, Home Improvement &amp; Furnishing&quot;, &quot;Consumer &amp; retail&quot;,  
+    &quot;Personal Products &amp; Services&quot;, &quot;Consumer &amp; retail&quot;,  
+
+    &quot;Education&quot;, &quot;Education &amp; research&quot;,  
+
+    &quot;Electrical Components &amp; Equipment&quot;, &quot;Energy&quot;,  
+    &quot;Electricity Distribution &amp; Transmission&quot;, &quot;Energy&quot;,  
+    &quot;Electricity Production&quot;, &quot;Energy&quot;,  
+    &quot;Renewable Energy&quot;, &quot;Energy&quot;,  
+    &quot;Utilities&quot;, &quot;Energy&quot;,  
+
+    &quot;Financial Services Consumer Lending&quot;, &quot;Financial services&quot;,  
+    &quot;Financial Services Corporate&quot;, &quot;Financial services&quot;,  
+    &quot;Financial Services Investment Banking &amp; Brokerage&quot;, &quot;Financial services&quot;,  
+    &quot;Financial Services Investment Services &amp; Management&quot;, &quot;Financial services&quot;,  
+    &quot;Financial Services Market Operators&quot;, &quot;Financial services&quot;,  
+    &quot;Financial Services Pension Providers&quot;, &quot;Financial services&quot;,  
+
+    &quot;Biotechnology &amp; Medical Research&quot;, &quot;Healthcare&quot;,  
+    &quot;Healthcare Providers &amp; Services&quot;, &quot;Healthcare&quot;,  
+    &quot;Medical Devices &amp; Technology&quot;, &quot;Healthcare&quot;,  
+
+    &quot;Hotels and Cruise Lines&quot;, &quot;Hospitality &amp; leisure&quot;,  
+    &quot;Leisure &amp; Recreation&quot;, &quot;Hospitality &amp; leisure&quot;,  
+    &quot;Restaurants &amp; Bars&quot;, &quot;Hospitality &amp; leisure&quot;,  
+    &quot;Sports&quot;, &quot;Hospitality &amp; leisure&quot;,  
+    &quot;Unknown&quot;   
+)</expression>
+    </formulas>
+    <formulas>
+        <name>industry_level1_update_part2</name>
+        <dataType>String</dataType>
+        <expression>CASE({!$Record.Industry},  
+  &quot;Construction &amp; Engineering&quot;, &quot;Infrastructure&quot;,  
+    &quot;Industrial Machinery &amp; Equipment&quot;, &quot;Infrastructure&quot;,  
+    &quot;Real Estate&quot;, &quot;Infrastructure&quot;,  
+    &quot;Real Estate Residential &amp; Commercial REITs&quot;, &quot;Infrastructure&quot;,  
+
+    &quot;Insurance Life &amp; Health&quot;, &quot;Insurance&quot;,  
+    &quot;Insurance Multiline &amp; Brokers&quot;, &quot;Insurance&quot;,  
+    &quot;Insurance Property, Casualty and General&quot;, &quot;Insurance&quot;,  
+    &quot;Reinsurance&quot;, &quot;Insurance&quot;,  
+
+    &quot;Advertising &amp; Marketing&quot;, &quot;Media&quot;,  
+    &quot;Broadcasting&quot;, &quot;Media&quot;,  
+    &quot;Casinos &amp; Gaming&quot;, &quot;Media&quot;,  
+    &quot;Entertainment Production&quot;, &quot;Media&quot;,  
+
+    &quot;Coal&quot;, &quot;Natural Resources&quot;,  
+    &quot;Gas Distribution &amp; Transmission&quot;, &quot;Natural Resources&quot;,  
+    &quot;Metals &amp; Mining&quot;, &quot;Natural Resources&quot;,  
+    &quot;Oil &amp; Gas Exploration &amp; Production&quot;, &quot;Natural Resources&quot;,  
+    &quot;Oil Related Services &amp; Equipment&quot;, &quot;Natural Resources&quot;,  
+
+    &quot;Pharmaceuticals&quot;, &quot;Pharmaceuticals &amp; chemicals&quot;,  
+    &quot;Chemicals&quot;, &quot;Pharmaceuticals &amp; chemicals&quot;,  
+
+    &quot;Business Support Services&quot;, &quot;Professional &amp; environmental services&quot;,  
+    &quot;Employment Services&quot;, &quot;Professional &amp; environmental services&quot;,  
+    &quot;Environmental Services &amp; Equipment&quot;, &quot;Professional &amp; environmental services&quot;,  
+    &quot;Legal Services&quot;, &quot;Professional &amp; environmental services&quot;,  
+    &quot;Printing Services&quot;, &quot;Professional &amp; environmental services&quot;,  
+    &quot;Professional Information Services&quot;, &quot;Professional &amp; environmental services&quot;,  
+    &quot;Publishing&quot;, &quot;Professional &amp; environmental services&quot;,  
+
+    &quot;Hardware, Devices &amp; Electronic Equipment&quot;, &quot;Technology&quot;,  
+    &quot;Internet Service Providers&quot;, &quot;Technology&quot;,  
+    &quot;IT Services &amp; Consulting&quot;, &quot;Technology&quot;,  
+    &quot;Platforms &amp; Online Marketplaces&quot;, &quot;Technology&quot;,  
+    &quot;Semiconductors &amp; Semiconductor Equipment&quot;, &quot;Technology&quot;,  
+    &quot;Software &amp; SaaS&quot;, &quot;Technology&quot;,  
+
+    &quot;Telecoms &amp; Networking Equipment&quot;, &quot;Telecommunications&quot;,  
+    &quot;Telecoms Services&quot;, &quot;Telecommunications&quot;,  
+
+    &quot;Aerospace &amp; Defence&quot;, &quot;Transport&quot;,  
+    &quot;Airlines &amp; Airports&quot;, &quot;Transport&quot;,  
+    &quot;Automobiles, Auto Parts and Retailers&quot;, &quot;Transport&quot;,  
+    &quot;Freight &amp; Logistics Services&quot;, &quot;Transport&quot;,  
+    &quot;Roads, Rail &amp; Sea Transportation&quot;, &quot;Transport&quot;,  
+    &quot;Shipping, Shipbuilding &amp; Ports&quot;, &quot;Transport&quot;,  
+    &quot;Transport Services&quot;, &quot;Transport&quot;,  
+
+    &quot;Government (Local and National)&quot;, &quot;Other (do not use)&quot;,  
+    &quot;Not-For-Profit Organisations&quot;, &quot;Other (do not use)&quot;,  
+
+    &quot;Person Account&quot;, &quot;Unknown&quot;,  
+    &quot;Unknown&quot;  
+)</expression>
+    </formulas>
+    <formulas>
+        <name>isNew</name>
+        <dataType>Boolean</dataType>
+        <expression>isnew()</expression>
+    </formulas>
+    <interviewLabel>Account Object - Create/Edit {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Account Object - Create/Edit</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>myRule_11_A1</name>
+        <label>Set Fields</label>
+        <locationX>402</locationX>
+        <locationY>1692</locationY>
+        <connector>
+            <targetReference>Check_if_record_is_office_or_firm</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Annual_Revenue__c</field>
+            <value>
+                <elementReference>formula_1_myRule_11_A1_7476553338</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Industry</field>
+            <value>
+                <elementReference>formula_2_myRule_11_A1_3929702875</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Number_of_Employees__c</field>
+            <value>
+                <elementReference>formula_3_myRule_11_A1_7005928005</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Number_of_Partners__c</field>
+            <value>
+                <elementReference>formula_4_myRule_11_A1_6387354853</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Organisation_Type__c</field>
+            <value>
+                <elementReference>formula_5_myRule_11_A1_2389924167</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>myRule_18_A1</name>
+        <label>Contact Ultimate Account</label>
+        <locationX>930</locationX>
+        <locationY>384</locationY>
+        <connector>
+            <targetReference>myRule_18_A2</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Ultimate_Parent__c</field>
+            <value>
+                <elementReference>$Record.Ultimate_Account__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Contacts</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>myRule_18_A2</name>
+        <label>Opportunity Ultimate Account</label>
+        <locationX>930</locationX>
+        <locationY>492</locationY>
+        <connector>
+            <targetReference>myRule_18_A3</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Ultimate_Account__c</field>
+            <value>
+                <elementReference>$Record.Ultimate_Account__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Opportunities</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>myRule_18_A3</name>
+        <label>Quote Ultimate Account</label>
+        <locationX>930</locationX>
+        <locationY>600</locationY>
+        <connector>
+            <targetReference>myRule_18_A4</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Ultimate_Parent__c</field>
+            <value>
+                <elementReference>$Record.Ultimate_Account__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.SBQQ__Quotes__r</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>myRule_18_A4</name>
+        <label>Order Ultimate Account</label>
+        <locationX>930</locationX>
+        <locationY>708</locationY>
+        <connector>
+            <targetReference>myRule_18_A5</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Ultimate_Parent__c</field>
+            <value>
+                <elementReference>$Record.Ultimate_Account__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Orders</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>myRule_18_A5</name>
+        <label>Contract Ultimate Account</label>
+        <locationX>930</locationX>
+        <locationY>816</locationY>
+        <connector>
+            <targetReference>myRule_18_A6</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Ultimate_Parent__c</field>
+            <value>
+                <elementReference>$Record.Ultimate_Account__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Contracts</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>myRule_18_A6</name>
+        <label>Subscription Ultimate Account</label>
+        <locationX>930</locationX>
+        <locationY>924</locationY>
+        <connector>
+            <targetReference>myRule_18_A7</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Ultimate_Parent__c</field>
+            <value>
+                <elementReference>$Record.Ultimate_Account__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.SBQQ__Subscriptions__r</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>myRule_18_A7</name>
+        <label>Interaction Ultimate Account</label>
+        <locationX>930</locationX>
+        <locationY>1032</locationY>
+        <inputAssignments>
+            <field>Ultimate_Account__c</field>
+            <value>
+                <elementReference>$Record.Ultimate_Account__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.LBR_Interactions__r</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>myRule_5_A1</name>
+        <label>Bad Debtor</label>
+        <locationX>402</locationX>
+        <locationY>792</locationY>
+        <connector>
+            <targetReference>myRule_7</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Bad_Debtor__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>myRule_7_A1</name>
+        <label>Bad Debtor = False</label>
+        <locationX>402</locationX>
+        <locationY>1092</locationY>
+        <connector>
+            <targetReference>myRule_9</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Bad_Debtor__c</field>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>myRule_9_A1</name>
+        <label>Update Shipping Address</label>
+        <locationX>402</locationX>
+        <locationY>1392</locationY>
+        <connector>
+            <targetReference>myRule_11</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>ShippingCity</field>
+            <value>
+                <elementReference>$Record.BillingCity</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ShippingCountry</field>
+            <value>
+                <elementReference>$Record.BillingCountry</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ShippingPostalCode</field>
+            <value>
+                <elementReference>$Record.BillingPostalCode</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ShippingState</field>
+            <value>
+                <elementReference>$Record.BillingState</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ShippingStreet</field>
+            <value>
+                <elementReference>$Record.BillingStreet</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_industry_level1_part1</name>
+        <label>Update industry level1_part1</label>
+        <locationX>50</locationX>
+        <locationY>2400</locationY>
+        <inputAssignments>
+            <field>Industry_Level_One__c</field>
+            <value>
+                <elementReference>industry_level1_update_part1</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_industry_level1_part2</name>
+        <label>Update industry level1_part2</label>
+        <locationX>314</locationX>
+        <locationY>2400</locationY>
+        <inputAssignments>
+            <field>Industry_Level_One__c</field>
+            <value>
+                <elementReference>industry_level1_update_part2</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_PO_status_on_related_office_records</name>
+        <label>Update PO status on related office records</label>
+        <locationX>402</locationX>
+        <locationY>1992</locationY>
+        <connector>
+            <targetReference>Check_if_industry_is_changed</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Ultimate_Account__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>PO_Required__c</field>
+            <value>
+                <elementReference>$Record.PO_Required__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Account</object>
+    </recordUpdates>
+    <start>
+        <locationX>485</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>myRule_1</targetReference>
+        </connector>
+        <object>Account</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <scheduledPaths>
+            <name>Mass_Update_Related_Records</name>
+            <connector>
+                <targetReference>myRule_18</targetReference>
+            </connector>
+            <label>Mass Update Related Records</label>
+            <maxBatchSize>15</maxBatchSize>
+            <offsetNumber>2</offsetNumber>
+            <offsetUnit>Minutes</offsetUnit>
+            <recordField>LastModifiedDate</recordField>
+            <timeSource>RecordField</timeSource>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>myRule_3_A1</name>
+        <label>Fire Flow</label>
+        <locationX>402</locationX>
+        <locationY>492</locationY>
+        <connector>
+            <targetReference>myRule_5</targetReference>
+        </connector>
+        <flowName>Update_Tax_Country_Code</flowName>
+        <inputAssignments>
+            <name>varAccountID</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+</Flow>

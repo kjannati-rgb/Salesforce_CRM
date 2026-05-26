@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <customErrors>
+        <name>Error_Message</name>
+        <label>Error Message</label>
+        <locationX>842</locationX>
+        <locationY>503</locationY>
+        <customErrorMessages>
+            <errorMessage>You are not allowed to delete Opportunities. Please contact crm support</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <customErrors>
+        <name>Error_Message2</name>
+        <label>Error Message</label>
+        <locationX>314</locationX>
+        <locationY>719</locationY>
+        <customErrorMessages>
+            <errorMessage>Closed Won Opportunities cannot be deleted</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <decisions>
+        <name>Check_for_user</name>
+        <label>Check for user</label>
+        <locationX>578</locationX>
+        <locationY>395</locationY>
+        <defaultConnector>
+            <targetReference>Error_Message</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Cannot Delete</defaultConnectorLabel>
+        <rules>
+            <name>Can_Delete</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$User.ProfileId</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>00e6g000002Qg47</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$User.Team__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Finance</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Stage</targetReference>
+            </connector>
+            <label>Can Delete</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_opportunity_name</name>
+        <label>Check opportunity name</label>
+        <locationX>50</locationX>
+        <locationY>611</locationY>
+        <defaultConnector>
+            <targetReference>Error_Message2</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>isCVENT</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Name</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <stringValue>CVENT Online Delegate</stringValue>
+                </rightValue>
+            </conditions>
+            <label>isCVENT</label>
+        </rules>
+        <rules>
+            <name>isSwoogo</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Name</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <stringValue>SWOOGO Online Delegate</stringValue>
+                </rightValue>
+            </conditions>
+            <label>isSwoogo</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Stage</name>
+        <label>Check Stage</label>
+        <locationX>314</locationX>
+        <locationY>503</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Closed_Won</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.StageName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Closed Won</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.StageName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Closed Won - Cancellation</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_opportunity_name</targetReference>
+            </connector>
+            <label>Closed Won</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <interviewLabel>Opportunity: Prevent user from deleting opportunities {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Opportunity: Prevent user from deleting opportunities</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>452</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Create_Log_record</targetReference>
+        </connector>
+        <object>Opportunity</object>
+        <recordTriggerType>Delete</recordTriggerType>
+        <triggerType>RecordBeforeDelete</triggerType>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Create_Log_record</name>
+        <label>Create Log record</label>
+        <locationX>578</locationX>
+        <locationY>287</locationY>
+        <connector>
+            <targetReference>Check_for_user</targetReference>
+        </connector>
+        <flowName>Flow_log_v3</flowName>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <stringValue>{!$Record.Id}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>var_flowname</name>
+            <value>
+                <elementReference>var_flowname</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>var_recordname</name>
+            <value>
+                <elementReference>$Record.Name</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <variables>
+        <name>var_flowdiSabled</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <elementReference>$Setup.Application_Settings__c.Disable_Autolaunch_Lightning_Flow__c</elementReference>
+        </value>
+    </variables>
+    <variables>
+        <name>var_flowname</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>Opportunity: Prevent user from deleting opportunities</stringValue>
+        </value>
+    </variables>
+</Flow>

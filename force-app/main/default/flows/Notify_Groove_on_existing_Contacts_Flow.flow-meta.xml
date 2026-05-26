@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Notify_Groove</name>
+        <label>Notify Groove (Managed)</label>
+        <locationX>176</locationX>
+        <locationY>323</locationY>
+        <actionName>Contact.DaScoopComposer__Notify_Groove</actionName>
+        <actionType>outboundMessage</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <nameSegment>Contact.DaScoopComposer__Notify_Groove</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>56.0</apiVersion>
+    <description>Real time auto import for existing Contacts. Clari flow users added via Salesforce report will match the records in the Salesforce report in real time.</description>
+    <environments>Default</environments>
+    <interviewLabel>Notify Groove on existing Contacts Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Notify Groove on existing Contacts Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <sourceTemplate>DaScoopComposer__Notify_Groove_on_Contact_Created_Flow</sourceTemplate>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Notify_Groove</targetReference>
+        </connector>
+        <filterFormula>ISNEW()</filterFormula>
+        <object>Contact</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

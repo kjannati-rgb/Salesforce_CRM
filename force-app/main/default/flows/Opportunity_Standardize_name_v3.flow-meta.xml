@@ -1,0 +1,1595 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <assignments>
+        <name>Assign_count_to_BG_variable</name>
+        <label>Assign count to BG variable</label>
+        <locationX>3614</locationX>
+        <locationY>890</locationY>
+        <assignmentItems>
+            <assignToReference>BGProductCount</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>1.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>BG_User_Count</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Through_Product_Family.SBQQ__QuoteLine__r.Group_Size__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Previous_Family_To_Filter</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Family_to_variable</name>
+        <label>Assign Family to variable</label>
+        <locationX>3878</locationX>
+        <locationY>674</locationY>
+        <assignmentItems>
+            <assignToReference>var_familyCollection</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Through_Product_Family.Product2.Family</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>var_TotalRecords</assignToReference>
+            <operator>AssignCount</operator>
+            <value>
+                <elementReference>var_familyCollection</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>var_productname</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Through_Product_Family.Product2.Name</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>var_financialyear</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Through_Product_Family.Product2.Financial_Year__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>var_QLquantity</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Through_Product_Family.Quote_Line_Quantity__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>var_family</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Through_Product_Family.Product2.Family</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>var_productnamecollection</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Through_Product_Family.Product2.Name</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>var_Brand</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Through_Product_Family.Product2.Brand__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>var_jurisdiction</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Through_Product_Family.Jurisdiction__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>var_topic</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Through_Product_Family.Topic__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_for_benefitting_group_product</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Performance_Data_Family</name>
+        <label>Assign Performance Data Family</label>
+        <locationX>3878</locationX>
+        <locationY>566</locationY>
+        <assignmentItems>
+            <assignToReference>var_PDNameCollection</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Through_Product_Family.Product2.Name</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>var_PDQuantityv2</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Through_Product_Family.Quantity</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Assign_Family_to_variable</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_values_for_ALM_Events</name>
+        <label>Assign values for ALM Events</label>
+        <locationX>3878</locationX>
+        <locationY>890</locationY>
+        <assignmentItems>
+            <assignToReference>Event_Name</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Through_Product_Family.Product2.Event_Title_Edition__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Previous_Family_To_Filter</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assignment_6</name>
+        <label>Capture event name</label>
+        <locationX>3614</locationX>
+        <locationY>1682</locationY>
+        <assignmentItems>
+            <assignToReference>single_event_name</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_though_ALM_events.Product2.Event_Title_Edition__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>count_alm_events</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>1.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_dupe</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Check_dupe</name>
+        <label>Check dupe</label>
+        <locationX>3702</locationX>
+        <locationY>1958</locationY>
+        <assignmentItems>
+            <assignToReference>capture_ALM_event</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_though_ALM_events.Product2.Event__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>capture_ALM_event</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <stringValue>;</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_though_ALM_events</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Previous_Family_To_Filter</name>
+        <label>Previous Family To Filter</label>
+        <locationX>3658</locationX>
+        <locationY>1166</locationY>
+        <assignmentItems>
+            <assignToReference>var_previousproductcode</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Through_Product_Family.Product2.Clean_Product_Code__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>var_previousproductname</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Through_Product_Family.Product2.Name</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Through_Product_Family</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Check_for_ALM_event_Product</name>
+        <label>Check for ALM event Product</label>
+        <locationX>3702</locationX>
+        <locationY>1466</locationY>
+        <defaultConnector>
+            <targetReference>Check_dupe</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>isAvailable</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_though_ALM_events.Product2.Event_Category__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>ALM</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>dedupe_alm_event</targetReference>
+            </connector>
+            <label>isAvailable</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_for_benefitting_group_product</name>
+        <label>Check for benefitting group product</label>
+        <locationX>3878</locationX>
+        <locationY>782</locationY>
+        <defaultConnector>
+            <targetReference>Previous_Family_To_Filter</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>isBGProduct</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Through_Product_Family.Product2.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Lexology PRO - IH</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_Through_Product_Family.Product2.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Lexology PRO - LF</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_count_to_BG_variable</targetReference>
+            </connector>
+            <label>isBGProduct</label>
+        </rules>
+        <rules>
+            <name>ISALMEventProduct</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Through_Product_Family.Product2.SBQQ__DiscountCategory__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>ALM</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_values_for_ALM_Events</targetReference>
+            </connector>
+            <label>ISALMEventProduct</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_for_dupe_products</name>
+        <label>Check for dupe products</label>
+        <locationX>3658</locationX>
+        <locationY>458</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Performance_Data_Family</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Not Dupe</defaultConnectorLabel>
+        <rules>
+            <name>Dupe</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Through_Product_Family.Product2.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>var_previousproductname</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_Through_Product_Family.Product2.Clean_Product_Code__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>var_previousproductcode</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_Through_Product_Family.Product2.Name</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Subscription ART</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_Through_Product_Family.Product2.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>MBL Credit</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Previous_Family_To_Filter</targetReference>
+            </connector>
+            <label>Dupe</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_if_name_update_is_needed</name>
+        <label>Check if name update is needed</label>
+        <locationX>5396</locationX>
+        <locationY>134</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Needed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId.Reissue__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_line_Items</targetReference>
+            </connector>
+            <label>Needed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Opportunity_Type</name>
+        <label>Check Opportunity Type</label>
+        <locationX>2690</locationX>
+        <locationY>2258</locationY>
+        <defaultConnector>
+            <targetReference>Update_Opportunity_name_LexPro_RN</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Renewal</defaultConnectorLabel>
+        <rules>
+            <name>New_Business</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>New Business</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Upsell</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Downgrade</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Opportunity_name_LexPro_NB</targetReference>
+            </connector>
+            <label>New Business</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Opportunity_Type2</name>
+        <label>Check Opportunity Type</label>
+        <locationX>842</locationX>
+        <locationY>2258</locationY>
+        <defaultConnector>
+            <targetReference>Update_Opportunity_name_Content_Subs_RN</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Renewal</defaultConnectorLabel>
+        <rules>
+            <name>Copy_1_of_New_Business</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>New Business</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Upsell</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Downgrade</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Opportunity_name_Content_Subs</targetReference>
+            </connector>
+            <label>New Business</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Copy_1_of_Check_Opportunity_Type</name>
+        <label>Copy 1 of Check Opportunity Type</label>
+        <locationX>182</locationX>
+        <locationY>2258</locationY>
+        <defaultConnector>
+            <targetReference>Update_Opportunity_name_LexPro_BG_RN</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Renewal</defaultConnectorLabel>
+        <rules>
+            <name>Copy_2_of_New_Business</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>New Business</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Upsell</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Downgrade</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Opportunity_name_LexPro_BG_NB</targetReference>
+            </connector>
+            <label>Copy 2 of New Business</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>dedupe_alm_event</name>
+        <label>dedupe alm event</label>
+        <locationX>3526</locationX>
+        <locationY>1574</locationY>
+        <defaultConnector>
+            <targetReference>Assignment_6</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>isDupe</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>capture_ALM_event</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <elementReference>Loop_though_ALM_events.Product2.Event__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_dupe</targetReference>
+            </connector>
+            <label>isDupe</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Product_Family</name>
+        <label>Product Family</label>
+        <locationX>3350</locationX>
+        <locationY>2150</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Do_Not_Update</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>var_nameCSRN</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <elementReference>recordId.Name</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>var_nameCSNB</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <elementReference>recordId.Name</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>var_nameLMI</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <elementReference>recordId.Name</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>var_nameLexPro_NB</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <elementReference>recordId.Name</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>var_nameLexPro_RN</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <elementReference>recordId.Name</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>var_nameWWLAL</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <elementReference>recordId.Name</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>var_WWLothers</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <elementReference>recordId.Name</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>var_NameDocketNavigator</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <elementReference>recordId.Name</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>var_NameILO</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <elementReference>recordId.Name</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>var_NameBenchmarking</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <elementReference>recordId.Name</elementReference>
+                </rightValue>
+            </conditions>
+            <label>Do Not Update</label>
+        </rules>
+        <rules>
+            <name>Benefitting_Group_Lexology_PRO</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>BGProductCount</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Copy_1_of_Check_Opportunity_Type</targetReference>
+            </connector>
+            <label>Benefitting Group Lexology PRO</label>
+        </rules>
+        <rules>
+            <name>Content_Subs</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>var_family</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Specialist Platforms</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Opportunity_Type2</targetReference>
+            </connector>
+            <label>Content Subs</label>
+        </rules>
+        <rules>
+            <name>Subs_LexPro_LMI</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>var_family</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Subs - Lexology Insight</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Opportunity_name_for_Package</targetReference>
+            </connector>
+            <label>Subs - LexPro LMI</label>
+        </rules>
+        <rules>
+            <name>Subs_Lexology_Inform</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>var_family</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Subs - Lexology Intelligence</stringValue>
+                </rightValue>
+            </conditions>
+            <label>Subs - Lexology Inform</label>
+        </rules>
+        <rules>
+            <name>Subs_LexPro_or_MBL</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>var_family</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Subs - Lexology Pro</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>var_family</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Subs - MBL Seminars</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Opportunity_Type</targetReference>
+            </connector>
+            <label>Subs - LexPro or MBL</label>
+        </rules>
+        <rules>
+            <name>Benchmarking</name>
+            <conditionLogic>1 AND (2 OR 3)</conditionLogic>
+            <conditions>
+                <leftValueReference>var_family</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Performance Data - Lexology Index</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>var_Brand</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <stringValue>Lexology Index</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>var_Brand</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <stringValue>Client Choice</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>WWL</targetReference>
+            </connector>
+            <label>Benchmarking -WWL</label>
+        </rules>
+        <rules>
+            <name>Docket_Navigator</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>var_family</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Subs - Docket Navigator</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Opportunity_name_Docket_Navigator</targetReference>
+            </connector>
+            <label>Docket Navigator</label>
+        </rules>
+        <rules>
+            <name>Subs_ILO</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>var_familyCollection</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Subs - ILO</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Opportunity_name_ILO</targetReference>
+            </connector>
+            <label>Subs - ILO</label>
+        </rules>
+        <rules>
+            <name>Expert_Insight_Lexology_GTDT</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>var_family</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Expert Insight - Lexology Panoramic</stringValue>
+                </rightValue>
+            </conditions>
+            <label>Expert Insight - Lexology GTDT</label>
+        </rules>
+        <rules>
+            <name>Expert_Insight_TLR</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>var_family</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Expert Insight - Lexology In-Depth</stringValue>
+                </rightValue>
+            </conditions>
+            <label>Expert Insight - TLR</label>
+        </rules>
+        <rules>
+            <name>Performance_data</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>var_family</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Performance Data - GxR/IP</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Opportunity_name_Benchmarking</targetReference>
+            </connector>
+            <label>Performance data</label>
+        </rules>
+        <rules>
+            <name>ALM_events</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>single_event_name</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_opportunity_name_for_ALM_events</targetReference>
+            </connector>
+            <label>ALM events</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>WWL</name>
+        <label>WWL</label>
+        <locationX>3746</locationX>
+        <locationY>2258</locationY>
+        <defaultConnector>
+            <targetReference>Update_Opportunity_name_WWL_AL</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>WWL_Present</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>var_productname</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Lexology Index - Annual Package</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Opportunity_name_WWL_AL2</targetReference>
+            </connector>
+            <label>WWL Present</label>
+        </rules>
+    </decisions>
+    <description>This flow standardizes name of the opportunity</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>alm_event_name</name>
+        <dataType>String</dataType>
+        <expression>Left(if(
+{!count_alm_events} = 1,
+
+&quot;Events&quot; + &quot; | &quot; +{!recordId.Account_Name__c}+&quot; | &quot;+{!single_event_name},
+&quot;Events&quot; + &quot; | &quot; +{!recordId.Account_Name__c}+&quot; | &quot;+&quot;Multi Events&quot;
+)
+,120)</expression>
+    </formulas>
+    <formulas>
+        <name>checkmodificationdate</name>
+        <dataType>Boolean</dataType>
+        <expression>{!recordId.SBQQ__PrimaryQuote__r.LastModifiedDate}&gt;{!recordId.LastModifiedDate}</expression>
+    </formulas>
+    <formulas>
+        <name>var_NameBenchmarking</name>
+        <dataType>String</dataType>
+        <expression>if(
+{!var_PDQuantityv2} &gt; 1,
+LEFT(
+&quot;Multi Product - Performance Data&quot;+&quot; | &quot;+text({!recordId.Type})+&quot; | &quot;+text({!recordId.Amount}) + &quot; &quot; +text({!recordId.CurrencyIsoCode})+&quot; | &quot;+{!recordId.Account_Name__c}+&quot; | &quot;+{!recordId.Primary_Contact__r.FirstName}+&quot; &quot;+{!recordId.Primary_Contact__r.LastName},120),
+
+LEFT({!var_productname}+&quot; | &quot;+text({!recordId.Type})+&quot; | &quot;+{!recordId.Account_Name__c}+&quot; | &quot;+text({!recordId.Amount}) + &quot; &quot; +text({!recordId.CurrencyIsoCode})+&quot; | &quot;+{!recordId.Primary_Contact__r.FirstName}+&quot; &quot;+{!recordId.Primary_Contact__r.LastName},120)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_nameCSNB</name>
+        <dataType>String</dataType>
+        <expression>if(
+{!var_TotalRecords}&gt;1 &amp;&amp; text({!recordId.Purchased_Via__c}) != &apos;Agency&apos;,
+LEFT(&quot;GXRs - Multi Line Sub&quot; &amp; &quot; | &quot; &amp; TEXT({!recordId.Type}) &amp; &quot; | &quot; &amp; text({!recordId.Current_Deal_Length__c})&amp;&quot; Months | &quot; &amp; TEXT({!recordId.CurrencyIsoCode}) &amp; &quot; | &quot; &amp; TEXT({!recordId.Amount}) &amp; &quot; | &quot; &amp; {!recordId.Account.Name} &amp; &quot; | &quot; &amp;  {!recordId.Primary_Contact__r.FirstName} &amp; &quot; &quot; &amp; {!recordId.Primary_Contact__r.LastName},120),
+if(
+{!var_TotalRecords}&gt;1 &amp;&amp; text({!recordId.Purchased_Via__c}) == &apos;Agency&apos;,
+LEFT(&quot;GXRs - Multi Line Sub&quot; &amp; &quot; | &quot; &amp; TEXT({!recordId.Type}) &amp; &quot; | &quot; &amp; text({!recordId.Current_Deal_Length__c})&amp;&quot; Months | &quot; &amp; TEXT({!recordId.CurrencyIsoCode}) &amp; &quot; | &quot; &amp; TEXT({!recordId.Amount}) &amp; &quot; | &quot; &amp; {!recordId.End_User_Account__r.Name} &amp; &quot; | &quot; &amp;  {!recordId.Primary_Contact__r.FirstName} &amp; &quot; &quot; &amp; {!recordId.Primary_Contact__r.LastName},120),
+if(
+text({!recordId.Purchased_Via__c}) == &apos;Agency&apos;,
+LEFT({!var_productname} &amp; &quot; | &quot; &amp; TEXT({!recordId.Type}) &amp; &quot; | &quot; &amp; text({!recordId.Current_Deal_Length__c}) &amp; &quot; Months | &quot; &amp; TEXT({!recordId.CurrencyIsoCode}) &amp; &quot; | &quot; &amp; TEXT({!recordId.Amount}) &amp; &quot; | &quot; &amp; {!recordId.End_User_Account__r.Name} &amp; &quot; | &quot; &amp;  {!recordId.Primary_Contact__r.FirstName} &amp; &quot; &quot; &amp; {!recordId.Primary_Contact__r.LastName},120),
+LEFT({!var_productname} &amp; &quot; | &quot; &amp; TEXT({!recordId.Type}) &amp; &quot; | &quot; &amp; text({!recordId.Current_Deal_Length__c}) &amp; &quot; Months | &quot; &amp; TEXT({!recordId.CurrencyIsoCode}) &amp; &quot; | &quot; &amp; TEXT({!recordId.Amount}) &amp; &quot; | &quot; &amp; {!recordId.Account.Name} &amp; &quot; | &quot; &amp;  {!recordId.Primary_Contact__r.FirstName} &amp; &quot; &quot; &amp; {!recordId.Primary_Contact__r.LastName},120)
+)
+)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_nameCSRN</name>
+        <dataType>String</dataType>
+        <expression>LEFT(
+if(
+{!var_TotalRecords}&gt;1 &amp;&amp; text({!recordId.Purchased_Via__c}) !=&apos;Agency&apos;,
+&quot;GXRs - Multi Line Sub&quot; &amp; &quot; | &quot; &amp; TEXT({!recordId.Type}) &amp; &quot; | &quot; &amp; ({!recordId.Budget_Renewal_Month__c}) &amp; &quot; | &quot;  &amp; text({!recordId.Current_Deal_Length__c})&amp;&quot; Months | &quot; &amp; TEXT({!recordId.CurrencyIsoCode}) &amp; &quot; | &quot; &amp; TEXT({!recordId.Amount}) &amp; &quot; | &quot; &amp; {!recordId.Account.Name} &amp; &quot; | &quot; &amp;  {!recordId.Primary_Contact__r.FirstName} &amp; &quot; &quot; &amp; {!recordId.Primary_Contact__r.LastName},
+if(
+{!var_TotalRecords}&gt;1 &amp;&amp; text({!recordId.Purchased_Via__c}) ==&apos;Agency&apos;,
+&quot;GXRs - Multi Line Sub&quot; &amp; &quot; | &quot; &amp; TEXT({!recordId.Type}) &amp; &quot; | &quot; &amp; ({!recordId.Budget_Renewal_Month__c}) &amp; &quot; | &quot;  &amp; text({!recordId.Current_Deal_Length__c})&amp;&quot; Months | &quot; &amp; TEXT({!recordId.CurrencyIsoCode}) &amp; &quot; | &quot; &amp; TEXT({!recordId.Amount}) &amp; &quot; | &quot; &amp; {!recordId.End_User_Account__r.Name} &amp; &quot; | &quot; &amp;  {!recordId.Primary_Contact__r.FirstName} &amp; &quot; &quot; &amp; {!recordId.Primary_Contact__r.LastName},
+if(
+text({!recordId.Purchased_Via__c}) ==&apos;Agency&apos;,
+{!var_productname} &amp; &quot; | &quot; &amp; TEXT({!recordId.Type}) &amp; &quot; | &quot; &amp; ({!recordId.Budget_Renewal_Month__c}) &amp; &quot; | &quot;  &amp;
+text({!recordId.Current_Deal_Length__c}) &amp; &quot; Months | &quot; &amp; TEXT({!recordId.CurrencyIsoCode}) &amp; &quot; | &quot; &amp; TEXT({!recordId.Amount}) &amp; &quot; | &quot; &amp; {!recordId.End_User_Account__r.Name} &amp; &quot; | &quot; &amp;  {!recordId.Primary_Contact__r.FirstName} &amp; &quot; &quot; &amp; {!recordId.Primary_Contact__r.LastName},
+{!var_productname} &amp; &quot; | &quot; &amp; TEXT({!recordId.Type}) &amp; &quot; | &quot; &amp; ({!recordId.Budget_Renewal_Month__c}) &amp; &quot; | &quot;  &amp;
+text({!recordId.Current_Deal_Length__c}) &amp; &quot; Months | &quot; &amp; TEXT({!recordId.CurrencyIsoCode}) &amp; &quot; | &quot; &amp; TEXT({!recordId.Amount}) &amp; &quot; | &quot; &amp; {!recordId.Account.Name} &amp; &quot; | &quot; &amp;  {!recordId.Primary_Contact__r.FirstName} &amp; &quot; &quot; &amp; {!recordId.Primary_Contact__r.LastName}
+)
+)
+),120)</expression>
+    </formulas>
+    <formulas>
+        <name>var_NameDocketNavigator</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    AND(
+        {!var_TotalRecords} &gt; 1,
+        OR(
+            TEXT({!recordId.Type}) = &apos;Renewal&apos;,
+            TEXT({!recordId.Type}) = &apos;Auto-Renewal&apos;
+        )
+    ),
+    LEFT(
+        &quot;Docket Navigator - Multi Product | &quot; &amp; TEXT({!recordId.Type}) &amp; &quot; | &quot; &amp; {!recordId.Budget_Renewal_Month__c} &amp; &quot; | &quot; &amp; TEXT({!recordId.Current_Deal_Length__c}) &amp; &quot; Month(s) | &quot; &amp; TEXT({!recordId.CurrencyIsoCode}) &amp; &quot; | &quot; &amp; TEXT({!recordId.Amount}) &amp; &quot; | &quot; &amp; {!recordId.Account.Name} &amp; &quot; | &quot; &amp; {!recordId.Primary_Contact__r.FirstName} &amp; &quot; &quot; &amp; {!recordId.Primary_Contact__r.LastName},
+        120
+    ),
+    IF(
+        AND(
+            {!var_TotalRecords} &gt; 1,
+            NOT(
+                OR(
+                    TEXT({!recordId.Type}) = &apos;Renewal&apos;,
+                    TEXT({!recordId.Type}) = &apos;Auto-Renewal&apos;
+                )
+            )
+        ),
+        LEFT(
+            &quot;Docket Navigator - Multi Product | &quot; &amp; TEXT({!recordId.Type}) &amp; &quot; | &quot; &amp; TEXT({!recordId.Current_Deal_Length__c}) &amp; &quot; Month(s) | &quot; &amp; TEXT({!recordId.CurrencyIsoCode}) &amp; &quot; | &quot; &amp; TEXT({!recordId.Amount}) &amp; &quot; | &quot; &amp; {!recordId.Account.Name} &amp; &quot; | &quot; &amp; {!recordId.Primary_Contact__r.FirstName} &amp; &quot; &quot; &amp; {!recordId.Primary_Contact__r.LastName},
+            120
+        ),
+        IF(
+            NOT(
+                OR(
+                    TEXT({!recordId.Type}) = &apos;Renewal&apos;,
+                    TEXT({!recordId.Type}) = &apos;Auto-Renewal&apos;
+                )
+            ),
+            LEFT(
+                {!var_productname} &amp; &quot; | &quot; &amp; TEXT({!recordId.Type}) &amp; &quot; | &quot; &amp; TEXT({!recordId.Current_Deal_Length__c}) &amp; &quot; Month(s) | &quot; &amp; TEXT({!var_QLquantity}) &amp; &quot; Users | &quot; &amp; TEXT({!recordId.CurrencyIsoCode}) &amp; &quot; | &quot; &amp; TEXT({!recordId.Amount}) &amp; &quot; | &quot; &amp; {!recordId.Account.Name} &amp; &quot; | &quot; &amp; {!recordId.Primary_Contact__r.FirstName} &amp; &quot; &quot; &amp; {!recordId.Primary_Contact__r.LastName},
+                120
+            ),
+            LEFT(
+                {!var_productname} &amp; &quot; | &quot; &amp; TEXT({!recordId.Type}) &amp;  &quot; | &quot; &amp; {!recordId.Budget_Renewal_Month__c} &amp;&quot; | &quot; &amp; TEXT({!recordId.Current_Deal_Length__c}) &amp; &quot; Month(s) | &quot; &amp; TEXT({!var_QLquantity}) &amp; &quot; Users | &quot; &amp; TEXT({!recordId.CurrencyIsoCode}) &amp; &quot; | &quot; &amp; TEXT({!recordId.Amount}) &amp; &quot; | &quot; &amp; {!recordId.Account.Name} &amp; &quot; | &quot; &amp; {!recordId.Primary_Contact__r.FirstName} &amp; &quot; &quot; &amp; {!recordId.Primary_Contact__r.LastName},
+                120
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_NameILO</name>
+        <dataType>String</dataType>
+        <expression>IF(
+{!var_QLquantity}&gt;1, 
+LEFT(&quot;ILO Newsletter | Multi Topic &amp; Jurisdiction&quot; &amp; &quot; | &quot; &amp; TEXT({!recordId.Type}) &amp; &quot; | &quot; &amp; text({!recordId.Current_Deal_Length__c}) &amp; &quot; Month(s) | &quot; &amp; TEXT({!recordId.CurrencyIsoCode}) &amp; &quot; | &quot; &amp; TEXT({!recordId.Amount}) &amp; &quot; | &quot; &amp; {!recordId.Account.Name} &amp; &quot; | &quot; &amp;  {!recordId.Primary_Contact__r.FirstName} &amp; &quot; &quot; &amp; {!recordId.Primary_Contact__r.LastName},120), 
+
+LEFT({!var_productname} &amp; &quot; | &quot; &amp; {!var_topic} &amp; &quot; | &quot; &amp; {!var_jurisdiction} &amp; &quot; | &quot; &amp; TEXT({!recordId.Type}) &amp; &quot; | &quot; &amp; text({!recordId.Current_Deal_Length__c}) &amp; &quot; Month(s)&quot; &amp; &quot; | &quot; &amp; text({!recordId.CurrencyIsoCode}) &amp; &quot; | &quot; &amp; TEXT({!recordId.Amount}) &amp; &quot; | &quot; &amp; {!recordId.Account.Name} &amp; &quot; | &quot; &amp;  {!recordId.Primary_Contact__r.FirstName} &amp; &quot; &quot; &amp; {!recordId.Primary_Contact__r.LastName},120)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_nameLexologyPROBG_NB</name>
+        <dataType>String</dataType>
+        <expression>Left(if(
+text({!recordId.Purchased_Via__c}) == &apos;Agency&apos;,
+
+{!var_productname}+&quot; | &quot;+text({!recordId.Type})+&quot; | &quot;+text({!recordId.CurrencyIsoCode})+&quot; | &quot;+text({!recordId.Amount})+&quot; | &quot;+text({!recordId.Current_Deal_Length__c})+&quot; &quot;+&quot; Month&quot;+&quot; | &quot;+text({!BG_User_Count})+&quot; &quot;+&quot;User(s)&quot;+&quot; | &quot;+{!recordId.End_User_Account__r.Name}+&quot; | &quot;+{!recordId.Primary_Contact__r.FirstName}+&quot; &quot;+{!recordId.Primary_Contact__r.LastName},
+
+{!var_productname}+&quot; | &quot;+text({!recordId.Type})+&quot; | &quot;+text({!recordId.CurrencyIsoCode})+&quot; | &quot;+text({!recordId.Amount})+&quot; | &quot;+text({!recordId.Current_Deal_Length__c})+&quot; &quot;+&quot; Month&quot;+&quot; | &quot;+text({!BG_User_Count})+&quot; &quot;+&quot;User(s)&quot;+&quot; | &quot;+{!recordId.Account_Name__c}+&quot; | &quot;+{!recordId.Primary_Contact__r.FirstName}+&quot; &quot;+{!recordId.Primary_Contact__r.LastName}
+)
+,120)</expression>
+    </formulas>
+    <formulas>
+        <name>var_nameLexologyPROBG_RN</name>
+        <dataType>String</dataType>
+        <expression>LEFT(if(
+text({!recordId.Purchased_Via__c}) ==&apos;Agency&apos;,
+
+{!var_productname} + &quot; | &quot; + TEXT({!recordId.Type}) + &quot; | &quot; + ({!recordId.Budget_Renewal_Month__c}) + &quot; | &quot; + TEXT({!recordId.Current_Deal_Length__c}) + &quot; Month&quot; + &quot; | &quot; + TEXT({!BG_User_Count}) + &quot; User(s)&quot; + &quot; | &quot; + TEXT({!recordId.CurrencyIsoCode}) + &quot; | &quot; + TEXT({!recordId.Amount}) + &quot; | &quot; + {!recordId.End_User_Account__r.Name} + &quot; | &quot; + {!recordId.Primary_Contact__r.FirstName} + &quot; &quot; + {!recordId.Primary_Contact__r.LastName},
+
+{!var_productname} + &quot; | &quot; + TEXT({!recordId.Type}) + &quot; | &quot; + ({!recordId.Budget_Renewal_Month__c}) + &quot; | &quot; + TEXT({!recordId.Current_Deal_Length__c}) + &quot; Month&quot; + &quot; | &quot; + TEXT({!BG_User_Count}) + &quot; User(s)&quot; + &quot; | &quot; + TEXT({!recordId.CurrencyIsoCode}) + &quot; | &quot; + TEXT({!recordId.Amount}) + &quot; | &quot; + {!recordId.Account_Name__c} + &quot; | &quot; + {!recordId.Primary_Contact__r.FirstName} + &quot; &quot; + {!recordId.Primary_Contact__r.LastName})
+, 120)</expression>
+    </formulas>
+    <formulas>
+        <name>var_nameLexPro_NB</name>
+        <dataType>String</dataType>
+        <expression>Left(if(
+text({!recordId.Purchased_Via__c}) == &apos;Agency&apos;,
+
+{!var_productname}+&quot; | &quot;+text({!recordId.Type})+&quot; | &quot;+text({!recordId.CurrencyIsoCode})+&quot; | &quot;+text({!recordId.Amount})+&quot; | &quot;+text({!recordId.Current_Deal_Length__c})+&quot; &quot;+&quot; Month&quot;+&quot; | &quot;+text({!var_QLquantity})+&quot; &quot;+&quot;User(s)&quot;+&quot; | &quot;+{!recordId.End_User_Account__r.Name}+&quot; | &quot;+{!recordId.Primary_Contact__r.FirstName}+&quot; &quot;+{!recordId.Primary_Contact__r.LastName},
+
+{!var_productname}+&quot; | &quot;+text({!recordId.Type})+&quot; | &quot;+text({!recordId.CurrencyIsoCode})+&quot; | &quot;+text({!recordId.Amount})+&quot; | &quot;+text({!recordId.Current_Deal_Length__c})+&quot; &quot;+&quot; Month&quot;+&quot; | &quot;+text({!var_QLquantity})+&quot; &quot;+&quot;User(s)&quot;+&quot; | &quot;+{!recordId.Account_Name__c}+&quot; | &quot;+{!recordId.Primary_Contact__r.FirstName}+&quot; &quot;+{!recordId.Primary_Contact__r.LastName}
+)
+,120)</expression>
+    </formulas>
+    <formulas>
+        <name>var_nameLexPro_RN</name>
+        <dataType>String</dataType>
+        <expression>LEFT(if(
+text({!recordId.Purchased_Via__c}) ==&apos;Agency&apos;,
+
+{!var_productname} + &quot; | &quot; + TEXT({!recordId.Type}) + &quot; | &quot; + ({!recordId.Budget_Renewal_Month__c}) + &quot; | &quot; + TEXT({!recordId.Current_Deal_Length__c}) + &quot; Month&quot; + &quot; | &quot; + TEXT({!var_QLquantity}) + &quot; User(s)&quot; + &quot; | &quot; + TEXT({!recordId.CurrencyIsoCode}) + &quot; | &quot; + TEXT({!recordId.Amount}) + &quot; | &quot; + {!recordId.End_User_Account__r.Name} + &quot; | &quot; + {!recordId.Primary_Contact__r.FirstName} + &quot; &quot; + {!recordId.Primary_Contact__r.LastName},
+
+{!var_productname} + &quot; | &quot; + TEXT({!recordId.Type}) + &quot; | &quot; + ({!recordId.Budget_Renewal_Month__c}) + &quot; | &quot; + TEXT({!recordId.Current_Deal_Length__c}) + &quot; Month&quot; + &quot; | &quot; + TEXT({!var_QLquantity}) + &quot; User(s)&quot; + &quot; | &quot; + TEXT({!recordId.CurrencyIsoCode}) + &quot; | &quot; + TEXT({!recordId.Amount}) + &quot; | &quot; + {!recordId.Account_Name__c} + &quot; | &quot; + {!recordId.Primary_Contact__r.FirstName} + &quot; &quot; + {!recordId.Primary_Contact__r.LastName})
+, 120)</expression>
+    </formulas>
+    <formulas>
+        <name>var_nameLMI</name>
+        <dataType>String</dataType>
+        <expression>if({!var_TotalRecords}&gt;1,
+
+LEFT(text(YEAR({!recordId.CloseDate}))+&quot; | &quot;+&quot; LCG&quot;+&quot; | &quot;+&quot;LPI&quot;+&quot; | &quot;+&quot; Subs Package&quot;+&quot; | &quot;+{!recordId.Account_Name__c}+&quot; | &quot;+{!recordId.Primary_Contact__r.FirstName}+&quot; &quot;+{!recordId.Primary_Contact__r.LastName},120),
+
+LEFT(text(YEAR({!recordId.CloseDate}))+&quot; | &quot;+&quot; LCG&quot;+&quot; | &quot;+&quot;LPI&quot;+&quot; | &quot;+ {!var_productname}+&quot; | &quot;+{!recordId.Account_Name__c}+&quot; | &quot;+{!recordId.Primary_Contact__r.FirstName}+&quot; &quot;+{!recordId.Primary_Contact__r.LastName},120)
+
+)</expression>
+    </formulas>
+    <formulas>
+        <name>var_nameWWLAL</name>
+        <dataType>String</dataType>
+        <expression>IF(text({!recordId.Type})=&quot;Renewal&quot;, 
+
+LEFT({!var_productname} &amp; &quot; | &quot; &amp; TEXT({!recordId.Type}) &amp; &quot; | &quot; &amp; {!recordId.Budget_Renewal_Month__c} &amp; &quot; | &quot; &amp; TEXT({!recordId.Current_Deal_Length__c}) &amp; &quot; Months | &quot; &amp; TEXT({!recordId.CurrencyIsoCode}) &amp; &quot; | &quot; &amp; TEXT({!recordId.Amount}) &amp; &quot; | &quot; &amp; {!recordId.Account.Name} &amp; &quot; | &quot; &amp;  {!recordId.Primary_Contact__r.FirstName} &amp; &quot; &quot; &amp; {!recordId.Primary_Contact__r.LastName},120),
+
+LEFT({!var_productname} &amp; &quot; | &quot; &amp; TEXT({!recordId.Type}) &amp; &quot; | &quot; &amp; TEXT({!recordId.Current_Deal_Length__c}) &amp; &quot; Months | &quot; &amp; TEXT({!recordId.CurrencyIsoCode}) &amp; &quot; | &quot; &amp; TEXT({!recordId.Amount}) &amp; &quot; | &quot; &amp; {!recordId.Account.Name} &amp; &quot; | &quot; &amp;  {!recordId.Primary_Contact__r.FirstName} &amp; &quot; &quot; &amp; {!recordId.Primary_Contact__r.LastName},120))</expression>
+    </formulas>
+    <formulas>
+        <name>var_WWLothers</name>
+        <dataType>String</dataType>
+        <expression>LEFT({!var_productname} &amp; &quot; | &quot; &amp; TEXT({!recordId.Type}) &amp; &quot; | &quot; &amp; TEXT({!recordId.CurrencyIsoCode}) &amp; &quot; | &quot; &amp; TEXT({!recordId.Amount}) &amp; &quot; | &quot; &amp; {!recordId.Account.Name} &amp; &quot; | &quot; &amp;  {!recordId.Primary_Contact__r.FirstName} &amp; &quot; &quot; &amp; {!recordId.Primary_Contact__r.LastName}, 120)</expression>
+    </formulas>
+    <interviewLabel>Opportunity_AL_SyncOpportunityTeamMembers - {!$User.Username} - {!$Flow.InterviewGuid}- {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Opportunity_AL_StandardiseName</label>
+    <loops>
+        <name>Loop_though_ALM_events</name>
+        <label>Loop though ALM events</label>
+        <locationX>3350</locationX>
+        <locationY>1358</locationY>
+        <collectionReference>Get_line_Items</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Check_for_ALM_event_Product</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Product_Family</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <name>Loop_Through_Product_Family</name>
+        <label>Loop Through Product Family</label>
+        <locationX>3350</locationX>
+        <locationY>350</locationY>
+        <collectionReference>Get_line_Items</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Check_for_dupe_products</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Loop_though_ALM_events</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_line_Items</name>
+        <label>Get line Items</label>
+        <locationX>3350</locationX>
+        <locationY>242</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Loop_Through_Product_Family</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Fault_Email</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>OpportunityId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Product_Name__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>MBL Credit</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>OpportunityLineItem</object>
+        <sortField>TotalPrice</sortField>
+        <sortOrder>Asc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Opportunity_name_Benchmarking</name>
+        <label>Update Opportunity name Benchmarking</label>
+        <locationX>6122</locationX>
+        <locationY>2258</locationY>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Email</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>var_NameBenchmarking</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Opportunity_name_Content_Subs</name>
+        <label>Update Opportunity name Content Subs</label>
+        <locationX>578</locationX>
+        <locationY>2366</locationY>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Email</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>var_nameCSNB</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Opportunity_name_Content_Subs_RN</name>
+        <label>Update Opportunity name Content Subs RN</label>
+        <locationX>1106</locationX>
+        <locationY>2366</locationY>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Email</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>var_nameCSRN</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Opportunity_name_Docket_Navigator</name>
+        <label>Update Opportunity name Docket Navigator</label>
+        <locationX>4538</locationX>
+        <locationY>2258</locationY>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Email</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>var_NameDocketNavigator</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_opportunity_name_for_ALM_events</name>
+        <label>Update opportunity name for ALM events</label>
+        <locationX>6650</locationX>
+        <locationY>2258</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Opportunity_Salesforce_ID__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Opportunity_Salesforce_ID__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>alm_event_name</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Opportunity_name_for_Package</name>
+        <label>Update Opportunity name for LMI</label>
+        <locationX>1634</locationX>
+        <locationY>2258</locationY>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Email</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>var_nameLMI</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Opportunity_name_ILO</name>
+        <label>Update Opportunity name ILO</label>
+        <locationX>5066</locationX>
+        <locationY>2258</locationY>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Email</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>var_NameILO</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Opportunity_name_LexPro_BG_NB</name>
+        <label>Update Opportunity name LexPro BG NB</label>
+        <locationX>50</locationX>
+        <locationY>2366</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>var_nameLexologyPROBG_NB</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Opportunity_name_LexPro_BG_RN</name>
+        <label>Update Opportunity name LexPro BG RN</label>
+        <locationX>314</locationX>
+        <locationY>2366</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>var_nameLexologyPROBG_RN</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Opportunity_name_LexPro_NB</name>
+        <label>Update Opportunity name LexPro NB</label>
+        <locationX>2426</locationX>
+        <locationY>2366</locationY>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Email</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>var_nameLexPro_NB</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Opportunity_name_LexPro_RN</name>
+        <label>Update Opportunity name LexPro RN</label>
+        <locationX>2954</locationX>
+        <locationY>2366</locationY>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Email</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>var_nameLexPro_RN</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Opportunity_name_WWL_AL</name>
+        <label>Update Opportunity name WWL - AL</label>
+        <locationX>4010</locationX>
+        <locationY>2366</locationY>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Email</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>var_WWLothers</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Opportunity_name_WWL_AL2</name>
+        <label>Update Opportunity name WWL - AL</label>
+        <locationX>3482</locationX>
+        <locationY>2366</locationY>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Fault_Email</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>var_nameWWLAL</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <runInMode>SystemModeWithoutSharing</runInMode>
+    <start>
+        <locationX>5270</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_if_name_update_is_needed</targetReference>
+        </connector>
+    </start>
+    <status>Draft</status>
+    <subflows>
+        <name>Fault_Email</name>
+        <label>Fault Email</label>
+        <locationX>7178</locationX>
+        <locationY>350</locationY>
+        <flowName>Opportunity_Fault_Email</flowName>
+        <inputAssignments>
+            <name>fault_body</name>
+            <value>
+                <stringValue>Opportunity_AL_StandardiseName Error, please contact crm supportError, please contact crm support</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>fault_message</name>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>fault_notification_recipients</name>
+            <value>
+                <elementReference>fault_notification_recipient</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <variables>
+        <name>BG_User_Count</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>BGProductCount</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+        <value>
+            <numberValue>0.0</numberValue>
+        </value>
+    </variables>
+    <variables>
+        <name>capture_ALM_event</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>count_alm_events</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+        <value>
+            <numberValue>0.0</numberValue>
+        </value>
+    </variables>
+    <variables>
+        <name>Event_Name</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>fault_notification_recipient</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <name>recordId</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Opportunity</objectType>
+    </variables>
+    <variables>
+        <name>single_event_name</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>var_Brand</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>var_family</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>var_familyCollection</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>var_financialyear</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>var_jurisdiction</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>var_PDNameCollection</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>var_PDQuantityv2</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>var_previousproductcode</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>var_previousproductname</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>var_productname</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>var_productnamecollection</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>var_QLquantity</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>var_topic</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>var_TotalRecords</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+        <value>
+            <numberValue>0.0</numberValue>
+        </value>
+    </variables>
+</Flow>

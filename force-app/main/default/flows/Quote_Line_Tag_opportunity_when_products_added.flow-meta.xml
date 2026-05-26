@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>57.0</apiVersion>
+    <decisions>
+        <name>Product_type</name>
+        <label>Product type?</label>
+        <locationX>430</locationX>
+        <locationY>383</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Lexology_Pro</name>
+            <conditionLogic>(1 OR 2) AND NOT(3)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__Product__r.Family</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Subs - Lexology Pro</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__Product__r.Family</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Subs - Lexology Insight</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__Product__r.Name</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <stringValue>Lexology PRO Insights</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Opp_Pro</targetReference>
+            </connector>
+            <label>Lexology Pro</label>
+        </rules>
+        <rules>
+            <name>Lexology_Inform</name>
+            <conditionLogic>1 AND NOT(2)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__Product__r.Family</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Subs - Lexology Intelligence</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__Product__r.Name</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <stringValue>Lexology PRO Insights</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Opp_Inform</targetReference>
+            </connector>
+            <label>Lexology Inform</label>
+        </rules>
+        <rules>
+            <name>Content_Subscriptions</name>
+            <conditionLogic>1 AND NOT(2)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__Product__r.Family</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Subs - Specialist Platforms</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__Product__r.Name</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <stringValue>Lexology PRO Insights</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Opp_Content_Sub</targetReference>
+            </connector>
+            <label>Content Subscriptions</label>
+        </rules>
+    </decisions>
+    <description>Ticks specific boxes on opportunity if GxR, Lexology Pro, or Lexology Inform quote lines added</description>
+    <environments>Default</environments>
+    <interviewLabel>Quote Line - Tag opportunity when products added {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Quote Line - Tag opportunity when products added</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Opp_Content_Sub</name>
+        <label>Update Opp Content Sub</label>
+        <locationX>512</locationX>
+        <locationY>564</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.SBQQ__Quote__r.SBQQ__Opportunity2__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Content_Sub_Present__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Opp_Inform</name>
+        <label>Update Opp Inform</label>
+        <locationX>247</locationX>
+        <locationY>381</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.SBQQ__Quote__r.SBQQ__Opportunity2__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Inform_Present__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Opp_Pro</name>
+        <label>Update Opp Pro</label>
+        <locationX>354</locationX>
+        <locationY>563</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.SBQQ__Quote__r.SBQQ__Opportunity2__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>LexPro_present__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <start>
+        <locationX>312</locationX>
+        <locationY>47</locationY>
+        <connector>
+            <targetReference>Product_type</targetReference>
+        </connector>
+        <object>SBQQ__QuoteLine__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+</Flow>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>66.0</apiVersion>
+    <decisions>
+        <name>Check_Disable_Processes</name>
+        <label>Check Disable Processes</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Update_Ultimate_Account</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>FALSE_Check Disable Processes</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_Check_Disable_Processes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>var_processdisabled</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>TRUE_Check Disable Processes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Update_Ultimate_Account</name>
+        <label>Update Ultimate Account</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Update_Ultimate_Account1</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>var_checkforaccount</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Ultimate_Account_Details</targetReference>
+            </connector>
+            <label>Update Ultimate Account</label>
+        </rules>
+    </decisions>
+    <description>Runs upon Case records being created and edited</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>var_checkforaccount</name>
+        <dataType>Boolean</dataType>
+        <expression>AND (OR( ISNEW(), ISCHANGED({!$Record.AccountId} )), 
+NOT(ISBLANK({!$Record.Account.Ultimate_Account__c})))</expression>
+    </formulas>
+    <formulas>
+        <name>var_processdisabled</name>
+        <dataType>Boolean</dataType>
+        <expression>{!$Setup.Application_Settings__c.Disable_Process_Builders__c}</expression>
+    </formulas>
+    <interviewLabel>Case Object - Create/Edit {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Case Object - Create/Edit</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Ultimate_Account_Details</name>
+        <label>Update Ultimate Account Details</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>Firm_Account__c</field>
+            <value>
+                <elementReference>$Record.Account.Ultimate_Account__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_Disable_Processes</targetReference>
+        </connector>
+        <object>Case</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

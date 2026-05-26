@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <customErrors>
+        <name>Validation_if_Promo_code_does_not_contain_M</name>
+        <label>Validation if Promo code does not contain M</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Loop_through_line_items_for_Multiyear</targetReference>
+        </connector>
+        <customErrorMessages>
+            <errorMessage>If Billing frequency is Monthly, there should be &quot;M&quot; in the promo code</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <customErrors>
+        <name>Validation_if_Promo_code_does_not_contain_Q</name>
+        <label>Validation if Promo code does not contain Q</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Loop_through_line_items_for_Multiyear</targetReference>
+        </connector>
+        <customErrorMessages>
+            <errorMessage>If Billing frequency is Quarterly, there should be &quot;Q&quot; in the promo code</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <customErrors>
+        <name>Validation_if_Promo_code_does_not_contain_Y</name>
+        <label>Validation if Promo code does not contain Y</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_for_Billing_Frequency</targetReference>
+        </connector>
+        <customErrorMessages>
+            <errorMessage>Multiyear orders would have a &apos;Y&apos; in the promo code (along with the number of years- i.e. a 3 year order would have &apos;Y3&apos; as part of the promo code</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <decisions>
+        <name>Check_for_Billing_Frequency</name>
+        <label>Check for Billing Frequency</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Loop_through_line_items_for_Multiyear</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Quarterly</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__BillingFrequency__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Quarterly</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_promo_code</targetReference>
+            </connector>
+            <label>Quarterly</label>
+        </rules>
+        <rules>
+            <name>Monthly</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__BillingFrequency__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Monthly</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_promo_code_Must_contain_M</targetReference>
+            </connector>
+            <label>Monthly</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_for_legl_entity</name>
+        <label>Check for legl entity</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>ALM</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Owner:User.Team__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>ALM - Subscription</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_quote_lines</targetReference>
+            </connector>
+            <label>ALM</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_if_ALM_Product_exist</name>
+        <label>Check if ALM Product exist</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Exist</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_quote_lines</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Loop_through_line_items_for_Multiyear</targetReference>
+            </connector>
+            <label>Exist</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_promo_code</name>
+        <label>Check promo code</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Validation_if_Promo_code_does_not_contain_Q</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Does Not contain Q</defaultConnectorLabel>
+        <rules>
+            <name>contains_Q</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_through_line_items_for_Multiyear.Promo_Code__c</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>M</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Loop_through_line_items_for_Multiyear</targetReference>
+            </connector>
+            <label>contains Q</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_promo_code_Must_contain_M</name>
+        <label>Check promo code - Must contain M</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Validation_if_Promo_code_does_not_contain_M</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Does Not contain Q</defaultConnectorLabel>
+        <rules>
+            <name>contains_M</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_through_line_items_for_Multiyear.Promo_Code__c</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>M</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Loop_through_line_items_for_Multiyear</targetReference>
+            </connector>
+            <label>contains M</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_promo_code_Must_contain_Y</name>
+        <label>Check promo code - Must contain Y</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Validation_if_Promo_code_does_not_contain_Y</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Does Not contain Q</defaultConnectorLabel>
+        <rules>
+            <name>contains_Y</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_through_line_items_for_Multiyear.Promo_Code__c</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Y</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_for_Billing_Frequency</targetReference>
+            </connector>
+            <label>contains Y</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Term_12</name>
+        <label>Check Term &gt; 12</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Check_for_Billing_Frequency</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>X12</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__SubscriptionTerm__c</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <numberValue>12.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_promo_code_Must_contain_Y</targetReference>
+            </connector>
+            <label>&gt; 12</label>
+        </rules>
+    </decisions>
+    <description>Line item promo code should contain Q</description>
+    <environments>Default</environments>
+    <interviewLabel>Quote_ALM_ValidationRule {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Quote_ALM_ValidationRule</label>
+    <loops>
+        <name>Loop_through_line_items_for_Multiyear</name>
+        <label>Loop through line items for Multiyear</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>Get_quote_lines</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Check_Term_12</targetReference>
+        </nextValueConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_quote_lines</name>
+        <label>Get quote lines</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_if_ALM_Product_exist</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SBQQ__Quote__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Division__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>ALM</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>SBQQ__QuoteLine__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_for_legl_entity</targetReference>
+        </connector>
+        <object>SBQQ__Quote__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>End_User_Must_be_Blank</fullName>
+    <active>true</active>
+    <description>End user must be blank if &quot;Direct&quot; is selected</description>
+    <errorConditionFormula>AND(NOT( $Setup.Application_Settings__c.Disable_Validation_Rules__c ), ISPICKVAL( Purchased_Via__c , &apos;Direct&apos;),
+NOT (ISBLANK ( End_User_Account__c )))</errorConditionFormula>
+    <errorDisplayField>End_User_Account__c</errorDisplayField>
+    <errorMessage>If the &quot;Purchased Via&quot; is Direct, the end user must be left blank.</errorMessage>
+</ValidationRule>

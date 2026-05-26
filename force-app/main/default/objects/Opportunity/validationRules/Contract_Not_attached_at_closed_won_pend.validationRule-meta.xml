@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Contract_Not_attached_at_closed_won_pend</fullName>
+    <active>true</active>
+    <description>Requires a signed contract to be attached before an Opportunity can be moved to &quot;Closed Won – Pending Approval&quot;.</description>
+    <errorConditionFormula>Contract_Attached__c = False
+&amp;&amp; 
+text(StageName)= &quot;Closed Won – Pending Approval&quot;
+&amp;&amp; NOT( $Setup.Application_Settings__c.Disable_Validation_Rules__c )</errorConditionFormula>
+    <errorMessage>Please attach signed contract before pushing opp for approval</errorMessage>
+</ValidationRule>

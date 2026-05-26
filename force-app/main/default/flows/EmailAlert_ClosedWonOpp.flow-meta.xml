@@ -1,0 +1,1345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>ALM_New_Business_Email_Alert</name>
+        <label>ALM New Business Email Alert</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>recipientAddresses</name>
+            <value/>
+        </inputParameters>
+        <inputParameters>
+            <name>ccAddresses</name>
+            <value/>
+        </inputParameters>
+        <inputParameters>
+            <name>bccAddresses</name>
+            <value/>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <stringValue>crmsupport@lbresearch.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>composeEmailContent</name>
+            <value>
+                <stringValue>True</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>subject</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>EmailBody_ALM</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+        <versionString>2.0.1</versionString>
+    </actionCalls>
+    <actionCalls>
+        <name>ALM_Renewal_Email_Alert</name>
+        <label>ALM Renewal Email Alert</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>recipientAddresses</name>
+            <value/>
+        </inputParameters>
+        <inputParameters>
+            <name>ccAddresses</name>
+            <value/>
+        </inputParameters>
+        <inputParameters>
+            <name>bccAddresses</name>
+            <value/>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <stringValue>crmsupport@lbresearch.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>composeEmailContent</name>
+            <value>
+                <stringValue>True</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>subject</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>EmailBodyRN_ALM</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+        <versionString>2.0.1</versionString>
+    </actionCalls>
+    <actionCalls>
+        <name>LBR_New_Business_Email_Alert</name>
+        <label>LBR New Business Email Alert</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>recipientAddresses</name>
+            <value/>
+        </inputParameters>
+        <inputParameters>
+            <name>bccAddresses</name>
+            <value/>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <stringValue>crmsupport@lbresearch.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>composeEmailContent</name>
+            <value>
+                <stringValue>True</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>subject</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>EmailBody_LBR</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+        <versionString>2.0.1</versionString>
+    </actionCalls>
+    <actionCalls>
+        <name>LBR_Renewal_Email_Alert</name>
+        <label>LBR Renewal Email Alert</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>recipientAddresses</name>
+            <value/>
+        </inputParameters>
+        <inputParameters>
+            <name>bccAddresses</name>
+            <value/>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <stringValue>crmsupport@lbresearch.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>composeEmailContent</name>
+            <value>
+                <stringValue>True</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>subject</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>EmailBodyRN_LBR</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>useLineBreaks</name>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+        <versionString>2.0.1</versionString>
+    </actionCalls>
+    <apiVersion>65.0</apiVersion>
+    <assignments>
+        <name>Add_CC_for_PCEM</name>
+        <label>Add CC for PCEM</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>CC_PCEM</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Alice.Lecointe@alm.com</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_for_Chief_Commercialization_Officer_US</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_BCC_as_Chief_Commercialization_Officer</name>
+        <label>Assign BCC as Chief Commercialization Officer</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>BCC_Richard</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Richard.Green@alm.com</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_for_VP_Sales_Mktg_Svcs_Events</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_BCC_as_CRO</name>
+        <label>Assign BCC as CRO</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>BCC_CRO</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Nick.Fielden@lbresearch.com</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_through_line_items</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_BCC_as_CRO_UK</name>
+        <label>Assign BCC as CRO UK</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>BCC_CRO_UK</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>aaron.gill@lbresearch.com</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_for_PCEM_Deal</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_BCC_as_MD_of_Asia</name>
+        <label>Assign BCC as MD of Asia</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>BCC_Asia</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>daniel.cole@lbresearch.com</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_for_Legal_entity2</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_BCC_as_VP_Sales_Mktg_Svcs_Events</name>
+        <label>Assign BCC as VP, Sales, Mktg Svcs &amp; Events</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>BCC_jonathan_Michael</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Michael.Mandl@alm.com,Jonathan.McReynolds@alm.com</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Cro</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Recepients</name>
+        <label>Assign Recepients</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Recipients</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>recordId.Owner.Email</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Recipients</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <stringValue>,</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Recipients</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>recordId.Owner.Manager.Email</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_for_Asia_Deals</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Values</name>
+        <label>Assign Values</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>LineItemTableRN_ALM</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>LineItemRowTemplateRN_ALM</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>LineItemTable_ALM</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>LineItemRowTemplate_ALM</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>LineItemTableRN_LBR</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>LineItemRowTemplateRN_LBR</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>LineItemTable_LBR</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>LineItemRowTemplate_LBR</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Opportunity_Owner</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>recordId.Owner.FirstName</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Opportunity_Owner</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <stringValue> </stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Opportunity_Owner</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>recordId.Owner.LastName</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>CurrencyISOcode</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_through_line_items.CurrencyIsoCode</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Dedupe_recipients</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Values_for_Team_Members</name>
+        <label>Assign Values for Team Members</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>TeamMemberTable</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>TeamRowTemplate</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Copy_1_of_Dedupe_recipients</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Close_The_Table</name>
+        <label>Close The Table</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>LineItemTableRN_ALM</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <stringValue>&lt;/table&gt;</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>LineItemTable_ALM</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <stringValue>&lt;/table&gt;</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>LineItemTable_LBR</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <stringValue>&lt;/table&gt;</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>LineItemTableRN_LBR</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <stringValue>&lt;/table&gt;</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Copy_1_of_Check_the_opportunity_type</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Copy_1_of_Assign_Recepients</name>
+        <label>Assign Recepients</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Recipients</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_through_Team_Members.User.Email</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Recipients</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <stringValue>,</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_through_Team_Members</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Team_Members_Count</name>
+        <label>Team Members Count</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>TeamMemberCount</assignToReference>
+            <operator>AssignCount</operator>
+            <value>
+                <elementReference>Get_Team_Members</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_if_Team_Members_are_available</targetReference>
+        </connector>
+    </assignments>
+    <collectionProcessors>
+        <name>Sort_Line_items</name>
+        <elementSubtype>SortCollectionProcessor</elementSubtype>
+        <label>Sort Line items</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionProcessorType>SortCollectionProcessor</collectionProcessorType>
+        <collectionReference>Get_Line_items</collectionReference>
+        <connector>
+            <targetReference>Get_Team_Members</targetReference>
+        </connector>
+        <sortOptions>
+            <doesPutEmptyStringAndNullFirst>false</doesPutEmptyStringAndNullFirst>
+            <sortField>Product_Name__c</sortField>
+            <sortOrder>Asc</sortOrder>
+        </sortOptions>
+        <sortOptions>
+            <doesPutEmptyStringAndNullFirst>false</doesPutEmptyStringAndNullFirst>
+            <sortField>Start_Date__c</sortField>
+            <sortOrder>Asc</sortOrder>
+        </sortOptions>
+    </collectionProcessors>
+    <decisions>
+        <name>Check_for_Asia_Deals</name>
+        <label>Check for Asia Deals</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Check_for_Legal_entity2</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Asia</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_through_line_items.Opportunity.Owner.LBR_Legal_Entity__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Law Business Research (Asia) Ltd.</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_BCC_as_MD_of_Asia</targetReference>
+            </connector>
+            <label>Asia</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_for_Chief_Commercialization_Officer_US</name>
+        <label>Check for Chief Commercialization Officer US</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Check_for_VP_Sales_Mktg_Svcs_Events</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Chief_Commercialization_Officer_US</name>
+            <conditionLogic>(1 AND 4) OR (2 AND 4) OR (3 AND 4)</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_through_line_items.Product2.Division__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Events</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_through_line_items.Opportunity.Owner.LBR_Legal_Entity__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>ALM Global, LLC</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_through_line_items.Opportunity.Owner.LBR_Legal_Entity__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Law Business Research LLC</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_through_line_items.Product2.Product_Type__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Ticket</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_BCC_as_Chief_Commercialization_Officer</targetReference>
+            </connector>
+            <label>Chief Commercialization Officer - US</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_for_Legal_Entity</name>
+        <label>Check for Legal Entity</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>LBR_Renewal_Email_Alert</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>LBR</defaultConnectorLabel>
+        <rules>
+            <name>ALM</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId.Owner.Team__c</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <stringValue>ALM</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>ALM_Renewal_Email_Alert</targetReference>
+            </connector>
+            <label>ALM</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_for_Legal_entity2</name>
+        <label>Check for Legal entity</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Check_for_PCEM_Deal</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>UK</name>
+            <conditionLogic>(1 AND 2) AND (1 AND 3)</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_through_line_items.Opportunity.Owner.LBR_Legal_Entity__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Law Business Research (UK) Ltd.</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_through_line_items.Product2.Division__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Events</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_through_line_items.Opportunity.Owner.LBR_Legal_Entity__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>MBL Seminars Limited</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_BCC_as_CRO_UK</targetReference>
+            </connector>
+            <label>UK</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_for_PCEM_Deal</name>
+        <label>Check for PCEM Deal</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Check_for_Chief_Commercialization_Officer_US</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Available2</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_through_line_items.Product2.ProductCode</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>PCEM</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Add_CC_for_PCEM</targetReference>
+            </connector>
+            <label>Available</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_for_VP_Sales_Mktg_Svcs_Events</name>
+        <label>Check for VP, Sales, Mktg Svcs &amp; Events</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Cro</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes3</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_through_line_items.Product2.Division__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Events</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_BCC_as_VP_Sales_Mktg_Svcs_Events</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_if_Team_Members_are_available</name>
+        <label>Check if Team Members are available</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Loop_through_line_items</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Available</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Team_Members</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Loop_through_Team_Members</targetReference>
+            </connector>
+            <label>Available</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Copy_1_of_Check_for_Legal_Entity</name>
+        <label>Check for Legal Entity</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>LBR_New_Business_Email_Alert</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>LBR</defaultConnectorLabel>
+        <rules>
+            <name>Copy_1_of_ALM</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId.Owner.Team__c</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <stringValue>ALM</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>ALM_New_Business_Email_Alert</targetReference>
+            </connector>
+            <label>ALM</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Copy_1_of_Check_the_opportunity_type</name>
+        <label>Check the opportunity type</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Copy_1_of_Check_for_Legal_Entity</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Copy_1_of_Renewal</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Renewal</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Auto-Renewal</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_for_Legal_Entity</targetReference>
+            </connector>
+            <label>Renewal</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Copy_1_of_Dedupe_recipients</name>
+        <label>Dedupe recipients</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Copy_1_of_Assign_Recepients</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Copy_1_of_Dupe</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>Recipients</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <elementReference>Loop_through_Team_Members.User.Email</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Loop_through_Team_Members</targetReference>
+            </connector>
+            <label>Dupe</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Cro</name>
+        <label>CRO</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Loop_through_line_items</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>X10k</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_through_line_items.Opportunity.Amount</leftValueReference>
+                <operator>GreaterThanOrEqualTo</operator>
+                <rightValue>
+                    <numberValue>10000.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_BCC_as_CRO</targetReference>
+            </connector>
+            <label>&gt;10k</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Dedupe_recipients</name>
+        <label>Dedupe recipients</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Recepients</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Dupe</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>Recipients</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <elementReference>recordId.Owner.Email</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Recipients</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <elementReference>recordId.Owner.Manager.Email</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_for_Asia_Deals</targetReference>
+            </connector>
+            <label>Dupe</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>skip_cvent_and_Kam_s_opps</name>
+        <label>skip cvent and Kam&apos;s opps</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Get_Line_items</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Skip</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId.Name</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <stringValue>CVENT Online Delegate Sales</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.Owner.Email</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>kamyar.jannati@lbresearch.com</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.Name</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <stringValue>SWOOGO Online Delegate Sales</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId.Owner.Email</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Saurabh.Patil@LBResearch.com</stringValue>
+                </rightValue>
+            </conditions>
+            <label>Skip</label>
+        </rules>
+    </decisions>
+    <description>Sends Email Alert once opp is closed won to owner, manager and opp team members</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>DynamicTeamMemberTableALM</name>
+        <dataType>String</dataType>
+        <expression>IF({!TeamMemberCount} &gt; 0, &quot;&lt;h3&gt;🤜🏻🤛🏻Opportunity Team:&lt;/h3&gt;&lt;table&gt;&lt;tbody&gt;&quot; &amp; {!TeamMemberTable} &amp; &quot;&lt;/tbody&gt;&lt;/table&gt;&quot;, &quot;&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>DynamicTeamMemberTableLBR</name>
+        <dataType>String</dataType>
+        <expression>IF({!TeamMemberCount} &gt; 0, &quot;&lt;h3&gt;🤜🏻🤛🏻Opportunity Team:&lt;/h3&gt;&lt;table&gt;&lt;tbody&gt;&quot; &amp; {!TeamMemberTable} &amp; &quot;&lt;/tbody&gt;&lt;/table&gt;&quot;, &quot;&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>subject</name>
+        <dataType>String</dataType>
+        <expression>&apos;New Closed Won Opportunity&apos; + &apos; | &apos; + {!recordId.Account.Name}</expression>
+    </formulas>
+    <interviewLabel>EmailAlert_ClosedWonOpp {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>EmailAlert_ClosedWonOpp</label>
+    <loops>
+        <name>Loop_through_line_items</name>
+        <label>Loop through line items</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>Get_Line_items</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Assign_Values</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Close_The_Table</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <name>Loop_through_Team_Members</name>
+        <label>Loop through Team Members</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>Get_Team_Members</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Assign_Values_for_Team_Members</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Loop_through_line_items</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Line_items</name>
+        <label>Get Line items</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Sort_Line_items</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>OpportunityId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>OpportunityLineItem</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Team_Members</name>
+        <label>Get Team Members</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Team_Members_Count</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>OpportunityId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Opportunity_Salesforce_ID__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>OpportunityTeamMember</object>
+        <sortField>TeamMemberRole</sortField>
+        <sortOrder>Asc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>skip_cvent_and_Kam_s_opps</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>EmailBody_ALM</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;h2&gt;🎉 Opportunity Closed Won: {!recordId.Name}&lt;/h2&gt;&lt;p&gt;
+&lt;strong&gt;Owner: &lt;/strong&gt;{!Opportunity_Owner}&lt;br/&gt;
+&lt;strong&gt;Stage: &lt;/strong&gt;{!recordId.StageName}&lt;br/&gt;
+&lt;strong&gt;Close Date: &lt;/strong&gt;{!recordId.CloseDate}&lt;br/&gt;
+&lt;strong&gt;Age: &lt;/strong&gt;{!recordId.Opportunity_Age__c} days&lt;br/&gt;
+&lt;strong&gt;Amount: &lt;/strong&gt;{!CurrencyISOcode} {!recordId.Amount}&lt;br/&gt;
+&lt;strong&gt;Annual Contract Value: &lt;/strong&gt;{!CurrencyISOcode} {!recordId.Annual_Contract_Value__c}&lt;br/&gt;
+&lt;strong&gt;Type: &lt;/strong&gt;{!recordId.Type}&lt;br/&gt;
+&lt;strong&gt;Account: &lt;/strong&gt;{!recordId.Account.Name}&lt;/p&gt;&lt;br/&gt; 
+&lt;a href=&quot;https://lawbusinessresearch.lightning.force.com/{!recordId.Opportunity_Salesforce_ID__c}&quot;&gt;🔗 View Opportunity&lt;/a&gt;&lt;br/&gt;
+{!DynamicTeamMemberTableALM}  
+&lt;h3&gt;🧾 Products Sold:&lt;/h3&gt;
+&lt;table&gt;
+  &lt;tbody&gt;
+{!LineItemTableRN_ALM}
+  &lt;/tbody&gt;
+&lt;/table&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>EmailBody_LBR</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;h2&gt;🎉 Opportunity Closed Won: {!recordId.Name}&lt;/h2&gt;&lt;p&gt;
+&lt;strong&gt;Owner: &lt;/strong&gt;{!Opportunity_Owner}&lt;br/&gt;
+&lt;strong&gt;Stage: &lt;/strong&gt;{!recordId.StageName}&lt;br/&gt;
+&lt;strong&gt;Close Date: &lt;/strong&gt;{!recordId.CloseDate}&lt;br/&gt;
+&lt;strong&gt;Amount: &lt;/strong&gt;{!CurrencyISOcode} {!recordId.Amount}&lt;br/&gt;
+&lt;strong&gt;Type: &lt;/strong&gt;{!recordId.Type}&lt;br/&gt;
+&lt;strong&gt;Account: &lt;/strong&gt;{!recordId.Account.Name}&lt;/p&gt;&lt;br/&gt; 
+&lt;a href=&quot;https://lawbusinessresearch.lightning.force.com/{!recordId.Opportunity_Salesforce_ID__c}&quot;&gt;🔗 View Opportunity&lt;/a&gt;&lt;br/&gt;
+{!DynamicTeamMemberTableLBR}
+&lt;h3&gt;🧾 Products Sold:&lt;/h3&gt;
+&lt;table&gt;
+  &lt;tbody&gt;
+{!LineItemTable_LBR}
+  &lt;/tbody&gt;
+&lt;/table&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>EmailBodyRN_ALM</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;h2&gt;🎉 Opportunity Closed Won: {!recordId.Name}&lt;/h2&gt;&lt;p&gt;
+&lt;strong&gt;Owner: &lt;/strong&gt;{!Opportunity_Owner}&lt;br/&gt;
+&lt;strong&gt;Stage: &lt;/strong&gt;{!recordId.StageName}&lt;br/&gt;
+&lt;strong&gt;Close Date: &lt;/strong&gt;{!recordId.CloseDate}&lt;br/&gt;
+&lt;strong&gt;Budget Renewal Date:&lt;/strong&gt;{!recordId.Budget_Renewal_Date__c}&lt;br/&gt;
+&lt;strong&gt;Amount: &lt;/strong&gt;{!CurrencyISOcode} {!recordId.Amount}&lt;br/&gt;
+&lt;strong&gt;Annual Contract Value: &lt;/strong&gt;{!CurrencyISOcode} {!recordId.Annual_Contract_Value__c}&lt;br/&gt;
+&lt;strong&gt;Previous Total Deal Value: &lt;/strong&gt;{!CurrencyISOcode} {!recordId.Previous_Total_Deal_Value__c}&lt;br/&gt;
+&lt;strong&gt;Type: &lt;/strong&gt;{!recordId.Type}&lt;br/&gt;
+&lt;strong&gt;Account: &lt;/strong&gt;{!recordId.Account.Name}&lt;/p&gt;&lt;br/&gt; 
+&lt;a href=&quot;https://lawbusinessresearch.lightning.force.com/{!recordId.Opportunity_Salesforce_ID__c}&quot;&gt;🔗 View Opportunity&lt;/a&gt;&lt;br/&gt;
+{!DynamicTeamMemberTableALM}  
+&lt;h3&gt;🧾 Products Sold:&lt;/h3&gt;
+&lt;table&gt;
+  &lt;tbody&gt;
+{!LineItemTableRN_ALM}
+  &lt;/tbody&gt;
+&lt;/table&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>EmailBodyRN_LBR</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;h2&gt;🎉 Opportunity Closed Won: {!recordId.Name}&lt;/h2&gt;&lt;p&gt;
+&lt;strong&gt;Owner: &lt;/strong&gt;{!Opportunity_Owner}&lt;br/&gt;
+&lt;strong&gt;Stage: &lt;/strong&gt;{!recordId.StageName}&lt;br/&gt;
+&lt;strong&gt;Close Date: &lt;/strong&gt;{!recordId.CloseDate}&lt;br/&gt;
+&lt;strong&gt;Amount: &lt;/strong&gt;{!CurrencyISOcode} {!recordId.Amount}&lt;br/&gt;
+&lt;strong&gt;Budget Renewal Date:&lt;/strong&gt; {!recordId.Budget_Renewal_Date__c}&lt;br/&gt;
+&lt;strong&gt;Type: &lt;/strong&gt;{!recordId.Type}&lt;br/&gt;
+&lt;strong&gt;Account: &lt;/strong&gt;{!recordId.Account.Name}&lt;/p&gt;&lt;br/&gt; 
+&lt;a href=&quot;https://lawbusinessresearch.lightning.force.com/{!recordId.Opportunity_Salesforce_ID__c}&quot;&gt;🔗 View Opportunity&lt;/a&gt;&lt;br/&gt;
+{!DynamicTeamMemberTableLBR}
+&lt;h3&gt;🧾 Products Sold:&lt;/h3&gt;
+  &lt;table&gt;
+&lt;tbody&gt;
+{!LineItemTableRN_LBR}
+  &lt;/tbody&gt;
+&lt;/table&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>LineItemRowTemplate_ALM</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;tr&gt;
+  &lt;td style=&quot;border: 1px solid; padding: 12px 16px; text-align: left; vertical-align: middle; font-family: Arial, sans-serif; font-size: 14px;&quot;&gt;{!Loop_through_line_items.Product2.Name}&lt;/td&gt;
+  &lt;td style=&quot;border: 1px solid; padding: 12px 16px; text-align: center; vertical-align: middle; font-family: Arial, sans-serif; font-size: 14px;&quot;&gt;{!Loop_through_line_items.Start_Date__c}&lt;/td&gt;
+  &lt;td style=&quot;border: 1px solid; padding: 12px 16px; text-align: center; vertical-align: middle; font-family: Arial, sans-serif; font-size: 14px;&quot;&gt;{!Loop_through_line_items.End_Date__c}&lt;/td&gt;
+  &lt;td style=&quot;border: 1px solid; padding: 12px 16px; text-align: center; vertical-align: middle; font-family: Arial, sans-serif; font-size: 14px;&quot;&gt;{!Loop_through_line_items.Number_of_Seats__c}&lt;/td&gt;
+  &lt;td style=&quot;border: 1px solid; padding: 12px 16px; text-align: right; vertical-align: middle; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold;&quot;&gt;{!recordId.CurrencyIsoCode} {!Loop_through_line_items.TotalPrice}&lt;/td&gt;
+&lt;/tr&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>LineItemRowTemplate_LBR</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;tr&gt;
+  &lt;td style=&quot;border: 1px solid; padding: 12px 16px; text-align: left; vertical-align: middle; font-family: Arial, sans-serif; font-size: 14px;&quot;&gt;{!Loop_through_line_items.Product2.Name}&lt;/td&gt;
+  &lt;td style=&quot;border: 1px solid; padding: 12px 16px; text-align: center; vertical-align: middle; font-family: Arial, sans-serif; font-size: 14px;&quot;&gt;{!Loop_through_line_items.Start_Date_SUN_Report__c}&lt;/td&gt;
+  &lt;td style=&quot;border: 1px solid; padding: 12px 16px; text-align: center; vertical-align: middle; font-family: Arial, sans-serif; font-size: 14px;&quot;&gt;{!Loop_through_line_items.End_Date_SUN_Report__c}&lt;/td&gt;
+  &lt;td style=&quot;border: 1px solid; padding: 12px 16px; text-align: center; vertical-align: middle; font-family: Arial, sans-serif; font-size: 14px;&quot;&gt;{!Loop_through_line_items.Quantity}&lt;/td&gt;
+  &lt;td style=&quot;border: 1px solid; padding: 12px 16px; text-align: right; vertical-align: middle; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold;&quot;&gt;{!recordId.CurrencyIsoCode} {!Loop_through_line_items.TotalPrice}&lt;/td&gt;
+&lt;/tr&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>LineItemRowTemplateRN_ALM</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;tr&gt;
+  &lt;td style=&quot;border: 1px solid; padding: 12px 16px; text-align: left; vertical-align: middle; font-family: Arial, sans-serif; font-size: 14px;&quot;&gt;{!Loop_through_line_items.Product2.Name}&lt;/td&gt;
+  &lt;td style=&quot;border: 1px solid; padding: 12px 16px; text-align: center; vertical-align: middle; font-family: Arial, sans-serif; font-size: 14px;&quot;&gt;{!Loop_through_line_items.Start_Date__c}&lt;/td&gt;
+  &lt;td style=&quot;border: 1px solid; padding: 12px 16px; text-align: center; vertical-align: middle; font-family: Arial, sans-serif; font-size: 14px;&quot;&gt;{!Loop_through_line_items.End_Date__c}&lt;/td&gt;
+  &lt;td style=&quot;border: 1px solid; padding: 12px 16px; text-align: center; vertical-align: middle; font-family: Arial, sans-serif; font-size: 14px;&quot;&gt;{!Loop_through_line_items.Number_of_Seats__c}&lt;/td&gt;
+  &lt;td style=&quot;border: 1px solid; padding: 12px 16px; text-align: right; vertical-align: middle; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold;&quot;&gt;{!recordId.CurrencyIsoCode} {!Loop_through_line_items.TotalPrice}&lt;/td&gt;
+&lt;/tr&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>LineItemRowTemplateRN_LBR</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;tr&gt;
+  &lt;td style=&quot;border: 1px solid; padding: 12px 16px; text-align: left; vertical-align: middle; font-family: Arial, sans-serif; font-size: 14px;&quot;&gt;{!Loop_through_line_items.Product2.Name}&lt;/td&gt;
+  &lt;td style=&quot;border: 1px solid; padding: 12px 16px; text-align: center; vertical-align: middle; font-family: Arial, sans-serif; font-size: 14px;&quot;&gt;{!Loop_through_line_items.Start_Date_SUN_Report__c}&lt;/td&gt;
+  &lt;td style=&quot;border: 1px solid; padding: 12px 16px; text-align: center; vertical-align: middle; font-family: Arial, sans-serif; font-size: 14px;&quot;&gt;{!Loop_through_line_items.End_Date_SUN_Report__c}&lt;/td&gt;
+  &lt;td style=&quot;border: 1px solid; padding: 12px 16px; text-align: center; vertical-align: middle; font-family: Arial, sans-serif; font-size: 14px;&quot;&gt;{!Loop_through_line_items.Quantity}&lt;/td&gt;
+  &lt;td style=&quot;border: 1px solid; padding: 12px 16px; text-align: right; vertical-align: middle; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold;&quot;&gt;{!recordId.CurrencyIsoCode} {!Loop_through_line_items.TotalPrice}&lt;/td&gt;
+&lt;/tr&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>TeamRowTemplate</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;tr&gt;
+  &lt;td style=&quot;border: 1px solid #ccc; padding: 12px 16px; text-align: left; vertical-align: middle; font-family: Arial, sans-serif; font-size: 14px;&quot;&gt;{!Loop_through_Team_Members.Name}&lt;/td&gt;
+  &lt;td style=&quot;border: 1px solid #ccc; padding: 12px 16px; text-align: left; vertical-align: middle; font-family: Arial, sans-serif; font-size: 14px;&quot;&gt;{!Loop_through_Team_Members.TeamMemberRole}&lt;/td&gt;
+&lt;/tr&gt;</text>
+    </textTemplates>
+    <variables>
+        <name>BCC</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>saurabh.patil@lbresearch.com,Amy.Hahn@alm.com,adil.musa@lbresearch.com</stringValue>
+        </value>
+    </variables>
+    <variables>
+        <name>BCC_Asia</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>BCC_CRO</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>BCC_CRO_UK</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>BCC_jonathan_Michael</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>BCC_Richard</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>CC_PCEM</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>CC_PI</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>CurrencyISOcode</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>LineItemTable_ALM</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>&lt;table style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;    &lt;tr&gt;      &lt;th style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;Product Name&lt;/th&gt;      &lt;th style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;Start Date&lt;/th&gt;      &lt;th style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;End Date&lt;/th&gt;      &lt;th style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;No of Seats&lt;/th&gt;      &lt;th style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;Total&lt;/th&gt;    &lt;/tr&gt;</stringValue>
+        </value>
+    </variables>
+    <variables>
+        <name>LineItemTable_LBR</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>&lt;table style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;    &lt;tr&gt;      &lt;th style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;Product Name&lt;/th&gt;      &lt;th style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;Start Date&lt;/th&gt;      &lt;th style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;End Date&lt;/th&gt;      &lt;th style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;Quantity&lt;/th&gt;      &lt;th style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;Amount&lt;/th&gt;    &lt;/tr&gt;</stringValue>
+        </value>
+    </variables>
+    <variables>
+        <name>LineItemTableRN_ALM</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>&lt;table style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;    &lt;tr&gt;      &lt;th style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;Product Name&lt;/th&gt;      &lt;th style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;Start Date&lt;/th&gt;      &lt;th style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;End Date&lt;/th&gt;      &lt;th style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;No of Seats&lt;/th&gt;      &lt;th style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;Total&lt;/th&gt;    &lt;/tr&gt;</stringValue>
+        </value>
+    </variables>
+    <variables>
+        <name>LineItemTableRN_LBR</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>&lt;table style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;    &lt;tr&gt;      &lt;th style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;Product Name&lt;/th&gt;      &lt;th style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;Start Date&lt;/th&gt;      &lt;th style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;End Date&lt;/th&gt;      &lt;th style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;Quantity&lt;/th&gt;      &lt;th style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;Amount&lt;/th&gt;    &lt;/tr&gt;</stringValue>
+        </value>
+    </variables>
+    <variables>
+        <name>Opportunity_Owner</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>Opporutnity_age</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>Recipients</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>recordId</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Opportunity</objectType>
+    </variables>
+    <variables>
+        <name>TeamMemberCount</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+        <value>
+            <numberValue>0.0</numberValue>
+        </value>
+    </variables>
+    <variables>
+        <name>TeamMemberTable</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>&lt;table style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;     &lt;tr&gt;       &lt;th style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;Name&lt;/th&gt;       &lt;th style=&quot;border: 1px solid; border-collapse: collapse;&quot;&gt;Role&lt;/th&gt;          &lt;/tr&gt;</stringValue>
+        </value>
+    </variables>
+</Flow>

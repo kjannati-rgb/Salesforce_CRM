@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Add_products_to_the_opportunity</fullName>
+    <active>true</active>
+    <description>This rule prevents Sales reps from transitioning an Opportunity stage from &quot;Identify&quot; to any later stage without first adding products. This rule apply to:
+Panoramic/ GTDT - Sarge
+In-Depth/ TLR - Sarge
+Insight – Mahnaz</description>
+    <errorConditionFormula>AND (
+  CASE( StageName,
+     &quot;Qualify&quot;, 1,
+     &quot;Evaluate&quot;, 1,
+&quot;Negotiate&quot;, 1,
+     &quot;Contract Out&quot;, 1,
+     &quot;Closed Won – Pending Approval&quot;, 1,
+     &quot;Closed Won&quot;, 1,
+     &quot;Closed Won - Cancellation&quot;, 1,
+     0) = 1,
+  
+ CASE ($User.Price_Book__c,
+  &quot;Expert Insight - Lexology Panoramic&quot;, 1,
+  &quot;Expert Insight - Lexology In-Depth&quot;, 1,
+  &quot;Expert Insight - GXRs&quot;, 1,
+   0)= 1,
+
+  NOT(HasOpportunityLineItem))</errorConditionFormula>
+    <errorMessage>To move opportunity stage from Identify, please add products.</errorMessage>
+</ValidationRule>

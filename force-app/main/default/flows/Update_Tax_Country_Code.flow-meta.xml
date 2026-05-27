@@ -128,6 +128,9 @@
         <label>Set to Blank</label>
         <locationX>242</locationX>
         <locationY>638</locationY>
+        <faultConnector>
+            <targetReference>Log_Flow_Error</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -146,6 +149,9 @@
         <label>Update Account</label>
         <locationX>506</locationX>
         <locationY>638</locationY>
+        <faultConnector>
+            <targetReference>Log_Flow_Error</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -170,6 +176,25 @@
         </connector>
     </start>
     <status>Active</status>
+    <subflows>
+        <name>Log_Flow_Error</name>
+        <label>Log Flow Error</label>
+        <locationX>700</locationX>
+        <locationY>638</locationY>
+        <flowName>Flow_log_v3</flowName>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>varAccountID</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>var_flowname</name>
+            <value>
+                <stringValue>Update_Tax_Country_Code</stringValue>
+            </value>
+        </inputAssignments>
+    </subflows>
     <variables>
         <name>varAccountID</name>
         <dataType>String</dataType>

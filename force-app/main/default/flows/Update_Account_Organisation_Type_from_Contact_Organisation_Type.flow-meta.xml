@@ -87,6 +87,9 @@
         <label>Update Account Record with Organisation Type from Contact</label>
         <locationX>907</locationX>
         <locationY>122</locationY>
+        <faultConnector>
+            <targetReference>Log_Flow_Error</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -114,4 +117,29 @@
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
+    <subflows>
+        <name>Log_Flow_Error</name>
+        <label>Log Flow Error</label>
+        <locationX>907</locationX>
+        <locationY>300</locationY>
+        <flowName>Flow_log_v3</flowName>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>var_flowname</name>
+            <value>
+                <stringValue>Update_Account_Organisation_Type_from_Contact</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>var_recordname</name>
+            <value>
+                <elementReference>$Record.Name</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
 </Flow>

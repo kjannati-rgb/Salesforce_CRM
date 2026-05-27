@@ -100,6 +100,9 @@
         <label>Update Contacts</label>
         <locationX>176</locationX>
         <locationY>911</locationY>
+        <faultConnector>
+            <targetReference>Log_Flow_Error</targetReference>
+        </faultConnector>
         <inputReference>CollectionofContactstoUpdate</inputReference>
     </recordUpdates>
     <start>
@@ -122,6 +125,31 @@
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
+    <subflows>
+        <name>Log_Flow_Error</name>
+        <label>Log Flow Error</label>
+        <locationX>440</locationX>
+        <locationY>911</locationY>
+        <flowName>Flow_log_v3</flowName>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>var_flowname</name>
+            <value>
+                <stringValue>Account_is_Inactive</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>var_recordname</name>
+            <value>
+                <elementReference>$Record.Name</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
     <variables>
         <name>CollectionofContactstoUpdate</name>
         <dataType>SObject</dataType>

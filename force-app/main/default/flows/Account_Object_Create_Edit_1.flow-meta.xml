@@ -4,7 +4,7 @@
     <decisions>
         <name>Check_if_industry_is_changed</name>
         <label>Check if industry is changed or New record</label>
-        <locationX>578</locationX>
+        <locationX>534</locationX>
         <locationY>2184</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -33,7 +33,7 @@
     <decisions>
         <name>Check_if_record_is_office_or_firm</name>
         <label>Check if record is office or firm</label>
-        <locationX>578</locationX>
+        <locationX>534</locationX>
         <locationY>1884</locationY>
         <defaultConnector>
             <targetReference>Check_if_industry_is_changed</targetReference>
@@ -102,7 +102,7 @@
     <decisions>
         <name>myRule_1</name>
         <label>Check Disable Processes</label>
-        <locationX>182</locationX>
+        <locationX>160</locationX>
         <locationY>276</locationY>
         <defaultConnector>
             <targetReference>myRule_3</targetReference>
@@ -124,7 +124,7 @@
     <decisions>
         <name>myRule_11</name>
         <label>Push Information to Office</label>
-        <locationX>578</locationX>
+        <locationX>534</locationX>
         <locationY>1584</locationY>
         <defaultConnector>
             <targetReference>Check_if_record_is_office_or_firm</targetReference>
@@ -175,9 +175,31 @@
         </rules>
     </decisions>
     <decisions>
+        <name>myRule_18</name>
+        <label>Ultimate Related Objects</label>
+        <locationX>1062</locationX>
+        <locationY>276</locationY>
+        <defaultConnectorLabel>FALSE_Ultimate Related Objects</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_18</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>formula_TRUE_myRule_18</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>myRule_18_A1</targetReference>
+            </connector>
+            <label>TRUE_Ultimate Related Objects</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>myRule_3</name>
         <label>Tax Code</label>
-        <locationX>578</locationX>
+        <locationX>534</locationX>
         <locationY>384</locationY>
         <defaultConnector>
             <targetReference>myRule_5</targetReference>
@@ -202,7 +224,7 @@
     <decisions>
         <name>myRule_5</name>
         <label>Bad Debtor Status</label>
-        <locationX>578</locationX>
+        <locationX>534</locationX>
         <locationY>684</locationY>
         <defaultConnector>
             <targetReference>myRule_7</targetReference>
@@ -235,7 +257,7 @@
     <decisions>
         <name>myRule_7</name>
         <label>Good Debtor Status</label>
-        <locationX>578</locationX>
+        <locationX>534</locationX>
         <locationY>984</locationY>
         <defaultConnector>
             <targetReference>myRule_9</targetReference>
@@ -261,7 +283,7 @@
     <decisions>
         <name>myRule_9</name>
         <label>Update Shipping Address</label>
-        <locationX>578</locationX>
+        <locationX>534</locationX>
         <locationY>1284</locationY>
         <defaultConnector>
             <targetReference>myRule_11</targetReference>
@@ -594,7 +616,7 @@ ISCHANGED ({!$Record.BillingCountry} ))</expression>
     <recordUpdates>
         <name>myRule_11_A1</name>
         <label>Set Fields</label>
-        <locationX>446</locationX>
+        <locationX>402</locationX>
         <locationY>1692</locationY>
         <connector>
             <targetReference>Check_if_record_is_office_or_firm</targetReference>
@@ -634,19 +656,11 @@ ISCHANGED ({!$Record.BillingCountry} ))</expression>
     <recordUpdates>
         <name>myRule_18_A1</name>
         <label>Contact Ultimate Account</label>
-        <locationX>1106</locationX>
-        <locationY>276</locationY>
+        <locationX>930</locationX>
+        <locationY>384</locationY>
         <connector>
             <targetReference>myRule_18_A2</targetReference>
         </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Ultimate_Parent__c</field>
-            <operator>NotEqualTo</operator>
-            <value>
-                <elementReference>$Record.Ultimate_Account__c</elementReference>
-            </value>
-        </filters>
         <inputAssignments>
             <field>Ultimate_Parent__c</field>
             <value>
@@ -658,19 +672,11 @@ ISCHANGED ({!$Record.BillingCountry} ))</expression>
     <recordUpdates>
         <name>myRule_18_A2</name>
         <label>Opportunity Ultimate Account</label>
-        <locationX>1106</locationX>
-        <locationY>384</locationY>
+        <locationX>930</locationX>
+        <locationY>492</locationY>
         <connector>
             <targetReference>myRule_18_A3</targetReference>
         </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Ultimate_Account__c</field>
-            <operator>NotEqualTo</operator>
-            <value>
-                <elementReference>$Record.Ultimate_Account__c</elementReference>
-            </value>
-        </filters>
         <inputAssignments>
             <field>Ultimate_Account__c</field>
             <value>
@@ -682,19 +688,11 @@ ISCHANGED ({!$Record.BillingCountry} ))</expression>
     <recordUpdates>
         <name>myRule_18_A3</name>
         <label>Quote Ultimate Account</label>
-        <locationX>1106</locationX>
-        <locationY>492</locationY>
+        <locationX>930</locationX>
+        <locationY>600</locationY>
         <connector>
             <targetReference>myRule_18_A4</targetReference>
         </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Ultimate_Parent__c</field>
-            <operator>NotEqualTo</operator>
-            <value>
-                <elementReference>$Record.Ultimate_Account__c</elementReference>
-            </value>
-        </filters>
         <inputAssignments>
             <field>Ultimate_Parent__c</field>
             <value>
@@ -706,19 +704,11 @@ ISCHANGED ({!$Record.BillingCountry} ))</expression>
     <recordUpdates>
         <name>myRule_18_A4</name>
         <label>Order Ultimate Account</label>
-        <locationX>1106</locationX>
-        <locationY>600</locationY>
+        <locationX>930</locationX>
+        <locationY>708</locationY>
         <connector>
             <targetReference>myRule_18_A5</targetReference>
         </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Ultimate_Parent__c</field>
-            <operator>NotEqualTo</operator>
-            <value>
-                <elementReference>$Record.Ultimate_Account__c</elementReference>
-            </value>
-        </filters>
         <inputAssignments>
             <field>Ultimate_Parent__c</field>
             <value>
@@ -730,19 +720,11 @@ ISCHANGED ({!$Record.BillingCountry} ))</expression>
     <recordUpdates>
         <name>myRule_18_A5</name>
         <label>Contract Ultimate Account</label>
-        <locationX>1106</locationX>
-        <locationY>708</locationY>
+        <locationX>930</locationX>
+        <locationY>816</locationY>
         <connector>
             <targetReference>myRule_18_A6</targetReference>
         </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Ultimate_Parent__c</field>
-            <operator>NotEqualTo</operator>
-            <value>
-                <elementReference>$Record.Ultimate_Account__c</elementReference>
-            </value>
-        </filters>
         <inputAssignments>
             <field>Ultimate_Parent__c</field>
             <value>
@@ -754,19 +736,11 @@ ISCHANGED ({!$Record.BillingCountry} ))</expression>
     <recordUpdates>
         <name>myRule_18_A6</name>
         <label>Subscription Ultimate Account</label>
-        <locationX>1106</locationX>
-        <locationY>816</locationY>
+        <locationX>930</locationX>
+        <locationY>924</locationY>
         <connector>
             <targetReference>myRule_18_A7</targetReference>
         </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Ultimate_Parent__c</field>
-            <operator>NotEqualTo</operator>
-            <value>
-                <elementReference>$Record.Ultimate_Account__c</elementReference>
-            </value>
-        </filters>
         <inputAssignments>
             <field>Ultimate_Parent__c</field>
             <value>
@@ -778,16 +752,8 @@ ISCHANGED ({!$Record.BillingCountry} ))</expression>
     <recordUpdates>
         <name>myRule_18_A7</name>
         <label>Interaction Ultimate Account</label>
-        <locationX>1106</locationX>
-        <locationY>924</locationY>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Ultimate_Account__c</field>
-            <operator>NotEqualTo</operator>
-            <value>
-                <elementReference>$Record.Ultimate_Account__c</elementReference>
-            </value>
-        </filters>
+        <locationX>930</locationX>
+        <locationY>1032</locationY>
         <inputAssignments>
             <field>Ultimate_Account__c</field>
             <value>
@@ -799,7 +765,7 @@ ISCHANGED ({!$Record.BillingCountry} ))</expression>
     <recordUpdates>
         <name>myRule_5_A1</name>
         <label>Bad Debtor</label>
-        <locationX>446</locationX>
+        <locationX>402</locationX>
         <locationY>792</locationY>
         <connector>
             <targetReference>myRule_7</targetReference>
@@ -815,7 +781,7 @@ ISCHANGED ({!$Record.BillingCountry} ))</expression>
     <recordUpdates>
         <name>myRule_7_A1</name>
         <label>Bad Debtor = False</label>
-        <locationX>446</locationX>
+        <locationX>402</locationX>
         <locationY>1092</locationY>
         <connector>
             <targetReference>myRule_9</targetReference>
@@ -831,7 +797,7 @@ ISCHANGED ({!$Record.BillingCountry} ))</expression>
     <recordUpdates>
         <name>myRule_9_A1</name>
         <label>Update Shipping Address</label>
-        <locationX>446</locationX>
+        <locationX>402</locationX>
         <locationY>1392</locationY>
         <connector>
             <targetReference>myRule_11</targetReference>
@@ -897,7 +863,7 @@ ISCHANGED ({!$Record.BillingCountry} ))</expression>
     <recordUpdates>
         <name>Update_PO_status_on_related_office_records</name>
         <label>Update PO status on related office records</label>
-        <locationX>446</locationX>
+        <locationX>402</locationX>
         <locationY>1992</locationY>
         <connector>
             <targetReference>Check_if_industry_is_changed</targetReference>
@@ -919,7 +885,7 @@ ISCHANGED ({!$Record.BillingCountry} ))</expression>
         <object>Account</object>
     </recordUpdates>
     <start>
-        <locationX>518</locationX>
+        <locationX>485</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>myRule_1</targetReference>
@@ -929,7 +895,7 @@ ISCHANGED ({!$Record.BillingCountry} ))</expression>
         <scheduledPaths>
             <name>Mass_Update_Related_Records</name>
             <connector>
-                <targetReference>myRule_18_A1</targetReference>
+                <targetReference>myRule_18</targetReference>
             </connector>
             <label>Mass Update Related Records</label>
             <maxBatchSize>15</maxBatchSize>
@@ -940,11 +906,11 @@ ISCHANGED ({!$Record.BillingCountry} ))</expression>
         </scheduledPaths>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Obsolete</status>
+    <status>Active</status>
     <subflows>
         <name>myRule_3_A1</name>
         <label>Fire Flow</label>
-        <locationX>446</locationX>
+        <locationX>402</locationX>
         <locationY>492</locationY>
         <connector>
             <targetReference>myRule_5</targetReference>

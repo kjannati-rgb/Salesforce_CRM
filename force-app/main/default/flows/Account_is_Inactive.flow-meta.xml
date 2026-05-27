@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>56.0</apiVersion>
+    <description>When an Account transitions to Status = Inactive, flags all related Contacts as &quot;Not at Company&quot; (LID__No_longer_at_Company__c) and bulk-updates them. Gated by doesRequireRecordChangedToMeetCriteria so it fires only on the change into Inactive, not on every subsequent save of an already-inactive account.</description>
     <assignments>
         <description>Adds all the Contacts that have gone through the Loop and flagged with &quot;Not at Company&quot; to a Collection Variable ready in the next step to Update all the Contacts in the CRM.</description>
         <name>Add_to_Collection_of_Contacts</name>
         <label>Add to Collection of Contacts</label>
         <locationX>264</locationX>
-        <locationY>647</locationY>
+        <locationY>695</locationY>
         <assignmentItems>
             <assignToReference>CollectionofContactstoUpdate</assignToReference>
             <operator>Add</operator>
@@ -23,7 +24,7 @@
         <name>Assign_Opt_Out_Value</name>
         <label>Assign Opt Out Value</label>
         <locationX>264</locationX>
-        <locationY>539</locationY>
+        <locationY>575</locationY>
         <assignmentItems>
             <assignToReference>My_Contact_Loop.LID__No_longer_at_Company__c</assignToReference>
             <operator>Assign</operator>
@@ -43,7 +44,7 @@
         <name>My_Contact_Loop</name>
         <label>My Contact Loop</label>
         <locationX>176</locationX>
-        <locationY>431</locationY>
+        <locationY>455</locationY>
         <collectionReference>Get_Contacts</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -76,7 +77,7 @@
         <name>Get_Contacts</name>
         <label>Get Contacts</label>
         <locationX>176</locationX>
-        <locationY>323</locationY>
+        <locationY>335</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>My_Contact_Loop</targetReference>
@@ -98,7 +99,7 @@
         <name>Update_Contacts</name>
         <label>Update Contacts</label>
         <locationX>176</locationX>
-        <locationY>839</locationY>
+        <locationY>911</locationY>
         <inputReference>CollectionofContactstoUpdate</inputReference>
     </recordUpdates>
     <start>
@@ -107,6 +108,7 @@
         <connector>
             <targetReference>Get_Contacts</targetReference>
         </connector>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Status__c</field>
@@ -119,7 +121,7 @@
         <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Obsolete</status>
+    <status>Active</status>
     <variables>
         <name>CollectionofContactstoUpdate</name>
         <dataType>SObject</dataType>

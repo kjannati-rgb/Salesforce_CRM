@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Strategic rollout: deploys the from-scratch flow and the 6 Opportunity record pages
+     that surface it as an embedded widget (alongside the existing one). Deploy AFTER the
+     hotfix and AFTER sandbox UAT. The widget visibility rule already supports a pilot via
+     the Can_Add_Remove_Opp_Team_Member__c user flag. -->
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>Opportunity_Team_Member_Manager</members>
+        <name>Flow</name>
+    </types>
+    <types>
+        <members>Opportunity_Record_Page_New_Business</members>
+        <members>Opportunity_Record_Page_New_BusinessALM</members>
+        <members>Opportunity_Record_Page_New_Business_MBL</members>
+        <members>Opportunity_Record_Page_Renewals</members>
+        <members>Opportunity_Record_Page_RenewalsALM</members>
+        <members>Opportunity_Record_Page_Service_Console</members>
+        <name>FlexiPage</name>
+    </types>
+    <version>62.0</version>
+</Package>

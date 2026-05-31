@@ -1,0 +1,1347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <apiVersion>62.0</apiVersion>
+    <description>Screen flow launched from an Opportunity record to add or remove an Opportunity Team Member. Best-in-class rebuild of "Opportunity Team: Create/Remove Team Member Screenflow" (legacy API name Create_Opportunity_Contacts). Runs in System Mode With Sharing. Fault connectors route every DML/Get to a single error screen; guardrails block duplicate members, adding the Opportunity owner, and confirm self-removal; CED/SDR are single-holder roles synced to Opportunity fields; CS Contact members are rolled up into Opportunity.CS_Contact__c.</description>
+    <assignments>
+        <name>asg_AppendCsContact</name>
+        <label>Append CS Contact Name</label>
+        <locationX>176</locationX>
+        <locationY>1718</locationY>
+        <description>Accumulates each CS Contact team member name into a semicolon-delimited string. Assignment only - no DML/SOQL inside the loop, so it is bulk-safe.</description>
+        <assignmentItems>
+            <assignToReference>var_csContactList</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>loop_CsContacts.Name</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>var_csContactList</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <stringValue>;</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>loop_CsContacts</targetReference>
+        </connector>
+    </assignments>
+    <choices>
+        <name>cho_AddUser</name>
+        <choiceText>Add Team Member</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Add User</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>cho_RemoveUser</name>
+        <choiceText>Remove Team Member</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Remove User</stringValue>
+        </value>
+    </choices>
+    <constants>
+        <name>const_FlowName</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Opportunity Team: Create/Remove Team Member Screenflow</stringValue>
+        </value>
+    </constants>
+    <constants>
+        <name>const_RoleCED</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Client Engagement Director</stringValue>
+        </value>
+    </constants>
+    <constants>
+        <name>const_RoleCSContact</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>CS Contact</stringValue>
+        </value>
+    </constants>
+    <constants>
+        <name>const_RoleSDR</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Sales Development Representative</stringValue>
+        </value>
+    </constants>
+    <constants>
+        <name>const_StageClosedWon</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Closed Won</stringValue>
+        </value>
+    </constants>
+    <decisions>
+        <name>dec_AddOrRemove</name>
+        <label>Add or Remove?</label>
+        <locationX>264</locationX>
+        <locationY>758</locationY>
+        <description>Routes to the Add path or the Remove path based on the user's choice on the first screen.</description>
+        <defaultConnector>
+            <targetReference>get_TeamForRemoval</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Remove</defaultConnectorLabel>
+        <rules>
+            <name>dec_AddOrRemove_Add</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>actionChoice</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>cho_AddUser</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>scr_AddMember</targetReference>
+            </connector>
+            <label>Add</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>dec_CedExists</name>
+        <label>CED Already Assigned?</label>
+        <locationX>50</locationX>
+        <locationY>1310</locationY>
+        <description>Client Engagement Director is a single-holder role. If one already exists on the Opportunity, block and ask the user to remove it first.</description>
+        <defaultConnector>
+            <targetReference>create_MemberCED</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No - create</defaultConnectorLabel>
+        <rules>
+            <name>dec_CedExists_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>get_CedHolder</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>scr_CedExists</targetReference>
+            </connector>
+            <label>Yes - blocked</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>dec_ClosedWonGate</name>
+        <label>Closed Won Gate</label>
+        <locationX>264</locationX>
+        <locationY>434</locationY>
+        <description>Team changes are restricted on Closed Won Opportunities for non-admins. System Administrators bypass the gate.</description>
+        <defaultConnector>
+            <targetReference>scr_ChooseAction</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Allowed</defaultConnectorLabel>
+        <rules>
+            <name>dec_ClosedWonGate_Blocked</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>get_Opportunity.StageName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>const_StageClosedWon</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Profile.Name</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>System Administrator</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>get_RenewalOpp</targetReference>
+            </connector>
+            <label>Blocked - Closed Won</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>dec_IsDuplicate</name>
+        <label>Already a Team Member?</label>
+        <locationX>176</locationX>
+        <locationY>1082</locationY>
+        <description>Idempotency guard: if the selected user already has an OpportunityTeamMember record on this Opportunity, block with a friendly message instead of hitting the unique-key DML error.</description>
+        <defaultConnector>
+            <targetReference>dec_RoleOnAdd</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Not a member - continue</defaultConnectorLabel>
+        <rules>
+            <name>dec_IsDuplicate_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>get_ExistingMemberForUser</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>scr_DuplicateBlocked</targetReference>
+            </connector>
+            <label>Yes - blocked</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>dec_IsOwner</name>
+        <label>Is Selected User the Owner?</label>
+        <locationX>176</locationX>
+        <locationY>950</locationY>
+        <description>The Opportunity owner is implicitly on the team and cannot be added as an OpportunityTeamMember (Salesforce rejects it). Block with a clear message.</description>
+        <defaultConnector>
+            <targetReference>get_ExistingMemberForUser</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Not owner - continue</defaultConnectorLabel>
+        <rules>
+            <name>dec_IsOwner_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>UserLookup.recordId</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>get_Opportunity.OwnerId</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>scr_OwnerBlocked</targetReference>
+            </connector>
+            <label>Yes - blocked</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>dec_IsSelfRemoval</name>
+        <label>Removing Yourself?</label>
+        <locationX>440</locationX>
+        <locationY>1082</locationY>
+        <description>If the user is about to remove their own team membership (and may lose access), show a confirmation screen first.</description>
+        <defaultConnector>
+            <targetReference>del_Member</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Removing someone else</defaultConnectorLabel>
+        <rules>
+            <name>dec_IsSelfRemoval_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>dt_TeamMembers.firstSelectedRow.UserId</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>$User.Id</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>scr_ConfirmSelfRemoval</targetReference>
+            </connector>
+            <label>Yes - confirm</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>dec_RemovedCedMatch</name>
+        <label>Removed the Synced CED?</label>
+        <locationX>314</locationX>
+        <locationY>1430</locationY>
+        <description>If the removed member was the user currently stamped on Opportunity.Client_Engagement_Director__c, clear that field to keep it in sync.</description>
+        <defaultConnector>
+            <targetReference>get_CsContactMembers</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No match</defaultConnectorLabel>
+        <rules>
+            <name>dec_RemovedCedMatch_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>get_Opportunity.Client_Engagement_Director__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>dt_TeamMembers.firstSelectedRow.UserId</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>upd_OppClearCed</targetReference>
+            </connector>
+            <label>Match - clear field</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>dec_RemovedSdrMatch</name>
+        <label>Removed the Synced SDR?</label>
+        <locationX>578</locationX>
+        <locationY>1430</locationY>
+        <description>If the removed member was the user currently stamped on Opportunity.Sales_Development_Representative__c, clear that field to keep it in sync.</description>
+        <defaultConnector>
+            <targetReference>get_CsContactMembers</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No match</defaultConnectorLabel>
+        <rules>
+            <name>dec_RemovedSdrMatch_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>get_Opportunity.Sales_Development_Representative__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>dt_TeamMembers.firstSelectedRow.UserId</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>upd_OppClearSdr</targetReference>
+            </connector>
+            <label>Match - clear field</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>dec_RoleOnAdd</name>
+        <label>Role on Add</label>
+        <locationX>176</locationX>
+        <locationY>1190</locationY>
+        <description>Branches the add path by role: CED and SDR are single-holder roles synced to Opportunity fields; all other roles (incl. CS Contact) take the default create path.</description>
+        <defaultConnector>
+            <targetReference>create_MemberOther</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Other role</defaultConnectorLabel>
+        <rules>
+            <name>dec_RoleOnAdd_CED</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>roleChoice</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>const_RoleCED</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>get_CedHolder</targetReference>
+            </connector>
+            <label>Client Engagement Director</label>
+        </rules>
+        <rules>
+            <name>dec_RoleOnAdd_SDR</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>roleChoice</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>const_RoleSDR</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>get_SdrHolder</targetReference>
+            </connector>
+            <label>Sales Development Representative</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>dec_RoleOnRemove</name>
+        <label>Role on Remove</label>
+        <locationX>440</locationX>
+        <locationY>1310</locationY>
+        <description>Branches the remove path by the removed member's role so the synced Opportunity field can be cleared when appropriate.</description>
+        <defaultConnector>
+            <targetReference>get_CsContactMembers</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Other role</defaultConnectorLabel>
+        <rules>
+            <name>dec_RoleOnRemove_CED</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>dt_TeamMembers.firstSelectedRow.TeamMemberRole</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>const_RoleCED</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>dec_RemovedCedMatch</targetReference>
+            </connector>
+            <label>Client Engagement Director</label>
+        </rules>
+        <rules>
+            <name>dec_RoleOnRemove_SDR</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>dt_TeamMembers.firstSelectedRow.TeamMemberRole</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>const_RoleSDR</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>dec_RemovedSdrMatch</targetReference>
+            </connector>
+            <label>Sales Development Representative</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>dec_SdrExists</name>
+        <label>SDR Already Assigned?</label>
+        <locationX>176</locationX>
+        <locationY>1310</locationY>
+        <description>Sales Development Representative is a single-holder role. If one already exists on the Opportunity, block and ask the user to remove it first.</description>
+        <defaultConnector>
+            <targetReference>create_MemberSDR</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No - create</defaultConnectorLabel>
+        <rules>
+            <name>dec_SdrExists_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>get_SdrHolder</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>scr_SdrExists</targetReference>
+            </connector>
+            <label>Yes - blocked</label>
+        </rules>
+    </decisions>
+    <dynamicChoiceSets>
+        <name>dcs_Access</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>OpportunityAccessLevel</picklistField>
+        <picklistObject>OpportunityTeamMember</picklistObject>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>dcs_TeamRole</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>TeamMemberRole</picklistField>
+        <picklistObject>OpportunityTeamMember</picklistObject>
+    </dynamicChoiceSets>
+    <environments>Default</environments>
+    <formulas>
+        <name>fx_csContactList</name>
+        <dataType>String</dataType>
+        <expression>IF(LEN({!var_csContactList}) &gt; 0, LEFT({!var_csContactList}, LEN({!var_csContactList}) - 1), {!var_csContactList})</expression>
+    </formulas>
+    <interviewLabel>Opportunity Team Member Manager {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Opportunity Team: Manage Team Member</label>
+    <loops>
+        <name>loop_CsContacts</name>
+        <label>For Each CS Contact</label>
+        <locationX>50</locationX>
+        <locationY>1610</locationY>
+        <description>Iterates CS Contact team members to rebuild the rollup string. Contains no DML/SOQL - bulk-safe.</description>
+        <collectionReference>get_CsContactMembers</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>asg_AppendCsContact</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>upd_OppCsContact</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordCreates>
+        <name>create_MemberCED</name>
+        <label>Create Team Member (CED)</label>
+        <locationX>50</locationX>
+        <locationY>1430</locationY>
+        <description>Creates the OpportunityTeamMember for the Client Engagement Director role.</description>
+        <connector>
+            <targetReference>upd_OppCed</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>scr_Error</targetReference>
+        </faultConnector>
+        <inputAssignments>
+            <field>OpportunityAccessLevel</field>
+            <value>
+                <elementReference>accessChoice</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OpportunityId</field>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>TeamMemberRole</field>
+            <value>
+                <elementReference>roleChoice</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>UserId</field>
+            <value>
+                <elementReference>UserLookup.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>OpportunityTeamMember</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>create_MemberOther</name>
+        <label>Create Team Member (Other)</label>
+        <locationX>302</locationX>
+        <locationY>1430</locationY>
+        <description>Creates the OpportunityTeamMember for CS Contact and any non-single-holder role, then rebuilds the CS Contact rollup.</description>
+        <connector>
+            <targetReference>get_CsContactMembers</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>scr_Error</targetReference>
+        </faultConnector>
+        <inputAssignments>
+            <field>OpportunityAccessLevel</field>
+            <value>
+                <elementReference>accessChoice</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OpportunityId</field>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>TeamMemberRole</field>
+            <value>
+                <elementReference>roleChoice</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>UserId</field>
+            <value>
+                <elementReference>UserLookup.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>OpportunityTeamMember</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>create_MemberSDR</name>
+        <label>Create Team Member (SDR)</label>
+        <locationX>176</locationX>
+        <locationY>1430</locationY>
+        <description>Creates the OpportunityTeamMember for the Sales Development Representative role.</description>
+        <connector>
+            <targetReference>upd_OppSdr</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>scr_Error</targetReference>
+        </faultConnector>
+        <inputAssignments>
+            <field>OpportunityAccessLevel</field>
+            <value>
+                <elementReference>accessChoice</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OpportunityId</field>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>TeamMemberRole</field>
+            <value>
+                <elementReference>roleChoice</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>UserId</field>
+            <value>
+                <elementReference>UserLookup.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>OpportunityTeamMember</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordDeletes>
+        <name>del_Member</name>
+        <label>Delete Selected Team Member</label>
+        <locationX>440</locationX>
+        <locationY>1190</locationY>
+        <description>Deletes the OpportunityTeamMember selected in the datatable.</description>
+        <connector>
+            <targetReference>dec_RoleOnRemove</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>scr_Error</targetReference>
+        </faultConnector>
+        <inputReference>dt_TeamMembers.firstSelectedRow</inputReference>
+    </recordDeletes>
+    <recordLookups>
+        <name>get_CedHolder</name>
+        <label>Get Existing CED</label>
+        <locationX>50</locationX>
+        <locationY>1190</locationY>
+        <description>Finds an existing Client Engagement Director team member on this Opportunity (single-holder check).</description>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>dec_CedExists</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>scr_Error</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>OpportunityId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>TeamMemberRole</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>const_RoleCED</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>OpportunityTeamMember</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>get_CsContactMembers</name>
+        <label>Get CS Contact Members</label>
+        <locationX>50</locationX>
+        <locationY>1502</locationY>
+        <description>Retrieves all CS Contact team members on this Opportunity to rebuild the CS_Contact__c rollup. Shared convergence point for the add-other and all remove paths.</description>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>loop_CsContacts</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>scr_Error</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>OpportunityId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>TeamMemberRole</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>const_RoleCSContact</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>OpportunityTeamMember</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>get_ExistingMemberForUser</name>
+        <label>Get Existing Member for User</label>
+        <locationX>176</locationX>
+        <locationY>1046</locationY>
+        <description>Per-user duplicate guard: looks for an existing OpportunityTeamMember for the selected user on this Opportunity.</description>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>dec_IsDuplicate</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>scr_Error</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>OpportunityId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>UserId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>UserLookup.recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>OpportunityTeamMember</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>get_Opportunity</name>
+        <label>Get Opportunity</label>
+        <locationX>264</locationX>
+        <locationY>326</locationY>
+        <description>Loads the Opportunity (StageName, OwnerId, and the CED/SDR sync fields) for gating and matching.</description>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>dec_ClosedWonGate</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>scr_Error</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Opportunity</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>get_RenewalOpp</name>
+        <label>Get Renewal Opportunity</label>
+        <locationX>50</locationX>
+        <locationY>542</locationY>
+        <description>Lazily looks up the renewal Opportunity (Previous_Opportunity__c = this record) only when showing the Closed Won message.</description>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>scr_ClosedWon</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>scr_Error</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Previous_Opportunity__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Opportunity</object>
+        <queriedFields>Id</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>get_SdrHolder</name>
+        <label>Get Existing SDR</label>
+        <locationX>176</locationX>
+        <locationY>1190</locationY>
+        <description>Finds an existing Sales Development Representative team member on this Opportunity (single-holder check).</description>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>dec_SdrExists</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>scr_Error</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>OpportunityId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>TeamMemberRole</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>const_RoleSDR</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>OpportunityTeamMember</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>get_TeamForRemoval</name>
+        <label>Get Team for Removal</label>
+        <locationX>440</locationX>
+        <locationY>866</locationY>
+        <description>Retrieves all OpportunityTeamMember records on this Opportunity to populate the removal datatable.</description>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>scr_RemoveSelect</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>scr_Error</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>OpportunityId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>OpportunityTeamMember</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>upd_OppCed</name>
+        <label>Stamp CED on Opportunity</label>
+        <locationX>50</locationX>
+        <locationY>1538</locationY>
+        <description>Sets Opportunity.Client_Engagement_Director__c to the newly added user. Matches by Id.</description>
+        <connector>
+            <targetReference>scr_Success</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>scr_Error</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Client_Engagement_Director__c</field>
+            <value>
+                <elementReference>UserLookup.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>upd_OppClearCed</name>
+        <label>Clear CED on Opportunity</label>
+        <locationX>314</locationX>
+        <locationY>1538</locationY>
+        <description>Clears Opportunity.Client_Engagement_Director__c when the removed member was the synced CED. Matches by Id.</description>
+        <connector>
+            <targetReference>get_CsContactMembers</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>scr_Error</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Client_Engagement_Director__c</field>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>upd_OppClearSdr</name>
+        <label>Clear SDR on Opportunity</label>
+        <locationX>578</locationX>
+        <locationY>1538</locationY>
+        <description>Clears Opportunity.Sales_Development_Representative__c when the removed member was the synced SDR. Matches by Id.</description>
+        <connector>
+            <targetReference>get_CsContactMembers</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>scr_Error</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Sales_Development_Representative__c</field>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>upd_OppCsContact</name>
+        <label>Update CS Contact Rollup</label>
+        <locationX>50</locationX>
+        <locationY>1826</locationY>
+        <description>Writes the rebuilt, de-duplicated CS Contact name list (trailing separator trimmed) to Opportunity.CS_Contact__c. Matches by Id.</description>
+        <connector>
+            <targetReference>scr_Success</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>scr_Error</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>CS_Contact__c</field>
+            <value>
+                <elementReference>fx_csContactList</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>upd_OppSdr</name>
+        <label>Stamp SDR on Opportunity</label>
+        <locationX>176</locationX>
+        <locationY>1538</locationY>
+        <description>Sets Opportunity.Sales_Development_Representative__c to the newly added user. Matches by Id.</description>
+        <connector>
+            <targetReference>scr_Success</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>scr_Error</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Sales_Development_Representative__c</field>
+            <value>
+                <elementReference>UserLookup.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <runInMode>SystemModeWithSharing</runInMode>
+    <screens>
+        <name>scr_AddMember</name>
+        <label>Add Team Member</label>
+        <locationX>176</locationX>
+        <locationY>842</locationY>
+        <description>Collects the user, team role, and access level for the new team member.</description>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>dec_IsOwner</targetReference>
+        </connector>
+        <fields>
+            <name>addHeader</name>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Add a team member to this Opportunity&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>UserLookup</name>
+            <extensionName>flowruntime:lookup</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>fieldApiName</name>
+                <value>
+                    <stringValue>OwnerId</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>label</name>
+                <value>
+                    <stringValue>User</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>objectApiName</name>
+                <value>
+                    <stringValue>Opportunity</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>maxValues</name>
+                <value>
+                    <numberValue>1.0</numberValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>required</name>
+                <value>
+                    <booleanValue>true</booleanValue>
+                </value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+        </fields>
+        <fields>
+            <name>roleChoice</name>
+            <choiceReferences>dcs_TeamRole</choiceReferences>
+            <dataType>String</dataType>
+            <defaultValue>
+                <stringValue>CS Contact</stringValue>
+            </defaultValue>
+            <fieldText>Team Role</fieldText>
+            <fieldType>DropdownBox</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>accessChoice</name>
+            <choiceReferences>dcs_Access</choiceReferences>
+            <dataType>String</dataType>
+            <defaultValue>
+                <stringValue>Edit</stringValue>
+            </defaultValue>
+            <fieldText>Opportunity Access</fieldText>
+            <fieldType>DropdownBox</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>scr_CedExists</name>
+        <label>CED Already Assigned</label>
+        <locationX>314</locationX>
+        <locationY>1310</locationY>
+        <description>Blocks adding a second Client Engagement Director.</description>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>cedExistsMsg</name>
+            <fieldText>&lt;p&gt;A &lt;strong&gt;Client Engagement Director&lt;/strong&gt; is already assigned to this Opportunity. Please remove the existing one before adding a new one.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>scr_ChooseAction</name>
+        <label>Choose Action</label>
+        <locationX>264</locationX>
+        <locationY>650</locationY>
+        <description>Entry screen: add or remove a team member.</description>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>dec_AddOrRemove</targetReference>
+        </connector>
+        <fields>
+            <name>actionHeader</name>
+            <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;Opportunity Team&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>actionChoice</name>
+            <choiceReferences>cho_AddUser</choiceReferences>
+            <choiceReferences>cho_RemoveUser</choiceReferences>
+            <dataType>String</dataType>
+            <defaultSelectedChoiceReference>cho_AddUser</defaultSelectedChoiceReference>
+            <fieldText>What would you like to do?</fieldText>
+            <fieldType>RadioButtons</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+        </fields>
+        <nextOrFinishButtonLabel>Next</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>scr_ClosedWon</name>
+        <label>Closed Won - Restricted</label>
+        <locationX>50</locationX>
+        <locationY>650</locationY>
+        <description>Informs the user that team changes are restricted on Closed Won Opportunities and links to the renewal Opportunity if one exists.</description>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>sub_FlowLog</targetReference>
+        </connector>
+        <fields>
+            <name>closedWonMsg</name>
+            <fieldText>&lt;p&gt;Team changes are restricted on a &lt;strong&gt;Closed Won&lt;/strong&gt; Opportunity.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;If a renewal exists, manage the team there:&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;/{!get_RenewalOpp.Id}&quot;&gt;Open renewal Opportunity&lt;/a&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>scr_ConfirmSelfRemoval</name>
+        <label>Confirm Self Removal</label>
+        <locationX>440</locationX>
+        <locationY>1046</locationY>
+        <description>Warns the user that they are about to remove their own team membership and may lose access.</description>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>del_Member</targetReference>
+        </connector>
+        <fields>
+            <name>selfRemovalMsg</name>
+            <fieldText>&lt;p&gt;&lt;strong&gt;You are about to remove yourself from this Opportunity team.&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;You may lose access to this Opportunity. Click Next to continue, or Back to choose a different member.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <nextOrFinishButtonLabel>Next</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>scr_DuplicateBlocked</name>
+        <label>Already a Team Member</label>
+        <locationX>440</locationX>
+        <locationY>1046</locationY>
+        <description>Blocks adding a user who is already on the team.</description>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>duplicateMsg</name>
+            <fieldText>&lt;p&gt;&lt;strong&gt;{!UserLookup.recordName}&lt;/strong&gt; is already a member of this Opportunity team. No changes were made.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Click Back to choose a different user.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>scr_Error</name>
+        <label>Error</label>
+        <locationX>800</locationX>
+        <locationY>434</locationY>
+        <description>Shared fault screen. Surfaces the fault message to the user and routes to logging.</description>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>sub_FlowLog</targetReference>
+        </connector>
+        <fields>
+            <name>errorMsg</name>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Something went wrong and your change was not saved.&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Please go back and try again. If the problem continues, contact your Salesforce administrator and quote the message below:&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;{!$Flow.FaultMessage}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>scr_OwnerBlocked</name>
+        <label>Owner Cannot Be Added</label>
+        <locationX>440</locationX>
+        <locationY>1046</locationY>
+        <description>Blocks adding the Opportunity owner, who is implicitly on the team.</description>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>ownerMsg</name>
+            <fieldText>&lt;p&gt;&lt;strong&gt;{!UserLookup.recordName}&lt;/strong&gt; is the owner of this Opportunity and is already on the team. The owner cannot be added as a team member.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Click Back to choose a different user.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>scr_RemoveSelect</name>
+        <label>Remove Team Member</label>
+        <locationX>440</locationX>
+        <locationY>974</locationY>
+        <description>Shows current team members in a datatable and requires the user to select exactly one to remove.</description>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>dec_IsSelfRemoval</targetReference>
+        </connector>
+        <fields>
+            <name>removeHeader</name>
+            <fieldText>&lt;p&gt;Select the team member you want to remove.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>dt_TeamMembers</name>
+            <dataTypeMappings>
+                <typeName>T</typeName>
+                <typeValue>OpportunityTeamMember</typeValue>
+            </dataTypeMappings>
+            <extensionName>flowruntime:datatable</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value>
+                    <stringValue>Team Members</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>selectionMode</name>
+                <value>
+                    <stringValue>SINGLE_SELECT</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>minRowSelection</name>
+                <value>
+                    <numberValue>1.0</numberValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>tableData</name>
+                <value>
+                    <elementReference>get_TeamForRemoval</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>columns</name>
+                <value>
+                    <stringValue>[{&quot;apiName&quot;:&quot;Name&quot;,&quot;guid&quot;:&quot;column-7eef&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:0,&quot;label&quot;:&quot;Team Member&quot;,&quot;type&quot;:&quot;text&quot;},{&quot;apiName&quot;:&quot;TeamMemberRole&quot;,&quot;guid&quot;:&quot;column-5d5e&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:1,&quot;label&quot;:&quot;Team Role&quot;,&quot;type&quot;:&quot;text&quot;},{&quot;apiName&quot;:&quot;OpportunityAccessLevel&quot;,&quot;guid&quot;:&quot;column-06a7&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:2,&quot;label&quot;:&quot;Opportunity Access&quot;,&quot;type&quot;:&quot;text&quot;}]</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>maxRowSelection</name>
+                <value>
+                    <numberValue>1.0</numberValue>
+                </value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>scr_SdrExists</name>
+        <label>SDR Already Assigned</label>
+        <locationX>50</locationX>
+        <locationY>1310</locationY>
+        <description>Blocks adding a second Sales Development Representative.</description>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>sdrExistsMsg</name>
+            <fieldText>&lt;p&gt;A &lt;strong&gt;Sales Development Representative&lt;/strong&gt; is already assigned to this Opportunity. Please remove the existing one before adding a new one.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>scr_Success</name>
+        <label>Success</label>
+        <locationX>50</locationX>
+        <locationY>1934</locationY>
+        <description>Confirms the change. Shows an add or remove message depending on the action taken.</description>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>sub_FlowLog</targetReference>
+        </connector>
+        <fields>
+            <name>addSuccessMsg</name>
+            <fieldText>&lt;p&gt;&lt;strong&gt;{!UserLookup.recordName}&lt;/strong&gt; was added to the Opportunity team successfully.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>cho_AddUser</leftValueReference>
+                    <operator>WasSelected</operator>
+                    <rightValue>
+                        <booleanValue>true</booleanValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>removeSuccessMsg</name>
+            <fieldText>&lt;p&gt;The team member was removed successfully.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>cho_RemoveUser</leftValueReference>
+                    <operator>WasSelected</operator>
+                    <rightValue>
+                        <booleanValue>true</booleanValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>Celebration</name>
+            <extensionName>adminshelper:fabullousConfettiFlowComponent</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>confetti</name>
+                <value>
+                    <stringValue>Doppelfontaene</stringValue>
+                </value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+        </fields>
+        <nextOrFinishButtonLabel>Finish</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <start>
+        <locationX>138</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>get_Opportunity</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>sub_FlowLog</name>
+        <label>Create Flow Log Record</label>
+        <locationX>50</locationX>
+        <locationY>2042</locationY>
+        <description>Logs the interview via the shared Flow_log_v3 utility. Shared terminal step for success, closed-won, and error paths.</description>
+        <flowName>Flow_log_v3</flowName>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>var_flowname</name>
+            <value>
+                <elementReference>const_FlowName</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <description>Input: the Opportunity Id. Named recordId so it auto-populates when launched from an Opportunity record page or record action.</description>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>var_csContactList</name>
+        <dataType>String</dataType>
+        <description>Accumulator for the semicolon-delimited CS Contact name rollup. Trimmed via fx_csContactList before write.</description>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

@@ -40,15 +40,6 @@
             <stringValue>Remove User</stringValue>
         </value>
     </choices>
-    <choices>
-        <name>var_Role</name>
-        <choiceText>{!Team_Role}</choiceText>
-        <dataType>String</dataType>
-        <userInput>
-            <isRequired>false</isRequired>
-            <promptText>CS Contact</promptText>
-        </userInput>
-    </choices>
     <decisions>
         <name>Add_or_remove_user</name>
         <label>Add or remove user?</label>
@@ -303,6 +294,11 @@
         <picklistObject>OpportunityTeamMember</picklistObject>
     </dynamicChoiceSets>
     <environments>Default</environments>
+    <formulas>
+        <name>forml_CSContactList</name>
+        <dataType>String</dataType>
+        <expression>IF(LEN({!CS_Contact}) &gt; 0, LEFT({!CS_Contact}, LEN({!CS_Contact}) - 1), {!CS_Contact})</expression>
+    </formulas>
     <interviewLabel>Create Opportunity COntacts {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Opportunity Team: Create/Remove Team Member Screenflow</label>
     <loops>
@@ -346,6 +342,9 @@
         <connector>
             <targetReference>Update_Opportunity</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Flow_Error_Screen</targetReference>
+        </faultConnector>
         <inputAssignments>
             <field>OpportunityAccessLevel</field>
             <value>
@@ -381,6 +380,9 @@
         <connector>
             <targetReference>Get_Opportunity_Team_2</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Flow_Error_Screen</targetReference>
+        </faultConnector>
         <inputAssignments>
             <field>OpportunityAccessLevel</field>
             <value>
@@ -416,6 +418,9 @@
         <connector>
             <targetReference>Copy_1_of_Update_Opportunity</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Flow_Error_Screen</targetReference>
+        </faultConnector>
         <inputAssignments>
             <field>OpportunityAccessLevel</field>
             <value>
@@ -451,6 +456,9 @@
         <connector>
             <targetReference>Check_for_role3</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Flow_Error_Screen</targetReference>
+        </faultConnector>
         <inputReference>Copy_1_of_Show_Exisitng.firstSelectedRow</inputReference>
     </recordDeletes>
     <recordLookups>
@@ -462,6 +470,9 @@
         <connector>
             <targetReference>Does_client_engagement_already_exist</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Flow_Error_Screen</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>OpportunityId</field>
@@ -490,6 +501,9 @@
         <connector>
             <targetReference>Does_sdr_exist</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Flow_Error_Screen</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>OpportunityId</field>
@@ -518,6 +532,9 @@
         <connector>
             <targetReference>Get_Renewal_Opportunity</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Flow_Error_Screen</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -539,6 +556,9 @@
         <connector>
             <targetReference>Delete_Opportunity_Team_Member</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Flow_Error_Screen</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>OpportunityId</field>
@@ -560,6 +580,9 @@
         <connector>
             <targetReference>CS_Contact_Field_Update</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Flow_Error_Screen</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>OpportunityId</field>
@@ -588,6 +611,9 @@
         <connector>
             <targetReference>Check_for_Closed_Won_Opp</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Flow_Error_Screen</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Previous_Opportunity__c</field>
@@ -611,6 +637,9 @@
             <isGoTo>true</isGoTo>
             <targetReference>Success_Screen</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Flow_Error_Screen</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Opportunity_Salesforce_ID__c</field>
@@ -635,6 +664,9 @@
         <connector>
             <targetReference>Get_Opportunity_Team_2</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Flow_Error_Screen</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Opportunity_Salesforce_ID__c</field>
@@ -656,6 +688,9 @@
         <connector>
             <targetReference>Success_Screen</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Flow_Error_Screen</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -667,7 +702,7 @@
         <inputAssignments>
             <field>CS_Contact__c</field>
             <value>
-                <elementReference>CS_Contact</elementReference>
+                <elementReference>forml_CSContactList</elementReference>
             </value>
         </inputAssignments>
         <object>Opportunity</object>
@@ -681,6 +716,9 @@
             <isGoTo>true</isGoTo>
             <targetReference>Success_Screen</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Flow_Error_Screen</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Opportunity_Salesforce_ID__c</field>
@@ -705,6 +743,9 @@
         <connector>
             <targetReference>Get_Opportunity_Team_2</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Flow_Error_Screen</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Opportunity_Salesforce_ID__c</field>
@@ -718,7 +759,7 @@
         </inputAssignments>
         <object>Opportunity</object>
     </recordUpdates>
-    <runInMode>SystemModeWithoutSharing</runInMode>
+    <runInMode>SystemModeWithSharing</runInMode>
     <screens>
         <name>CED_Error</name>
         <label>CED Error</label>
@@ -748,7 +789,7 @@
         </connector>
         <fields>
             <name>Won_Message</name>
-            <fieldText>&lt;p&gt;You Cannot add Opportunity Team member to a Closed Won Opp.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Renewal Opportunity URL:&lt;/p&gt;&lt;p&gt;lawbusinessresearch.lightning.force.com/{!var_renewalid}&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;You Cannot add Opportunity Team member to a Closed Won Opp.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Renewal Opportunity URL:&lt;/p&gt;&lt;p&gt;/{!var_renewalid}&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>
@@ -833,6 +874,22 @@
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <storeOutputAutomatically>true</storeOutputAutomatically>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>Flow_Error_Screen</name>
+        <label>Error</label>
+        <locationX>314</locationX>
+        <locationY>2456</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Flow_Error_Message</name>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Something went wrong and your change was not saved.&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Please go back and try again. If the problem continues, contact your Salesforce administrator and quote the message below:&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;{!$Flow.FaultMessage}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>false</showHeader>
@@ -1076,13 +1133,6 @@
         <value>
             <stringValue>Opportunity Team: Create/Remove Team Member Screenflow</stringValue>
         </value>
-    </variables>
-    <variables>
-        <name>var_idscollection</name>
-        <dataType>String</dataType>
-        <isCollection>true</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>var_renewalid</name>

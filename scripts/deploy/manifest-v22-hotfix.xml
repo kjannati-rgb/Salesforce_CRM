@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Immediate hotfix: deploys the patched team flow as a new Active version (V22 equivalent
+     in production). Drop-in - same API name, same recordid page wiring, no flexipage change. -->
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>Create_Opportunity_Contacts</members>
+        <name>Flow</name>
+    </types>
+    <version>62.0</version>
+</Package>

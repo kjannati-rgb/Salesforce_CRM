@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>Opportunity-ALM - Renewal Opportunities</members>
+        <members>Opportunity-Cancellation</members>
+        <members>Opportunity-Renewal Opportunities</members>
+        <members>Opportunity-CPQ Opportunity Layout</members>
+        <members>Opportunity-ALM - New Business Opportunities</members>
+        <members>Opportunity-New Business Opportunities</members>
+        <name>Layout</name>
+    </types>
+    <types>
+        <members>Opportunity.Renewals_Compact_Layout</members>
+        <members>Opportunity.New_Awesome_Companct_Layout</members>
+        <name>CompactLayout</name>
+    </types>
+    <types>
+        <members>Opportunity.Sales_Development_Representative__c</members>
+        <name>CustomField</name>
+    </types>
+    <types>
+        <members>Opportunity.New_Business</members>
+        <members>Opportunity.Renewals</members>
+        <members>Opportunity.Cancellations</members>
+        <members>Opportunity.Opportunity_Readonly</members>
+        <name>RecordType</name>
+    </types>
+    <types>
+        <members>Create_Opportunity_Contacts</members>
+        <name>Flow</name>
+    </types>
+    <version>62.0</version>
+</Package>

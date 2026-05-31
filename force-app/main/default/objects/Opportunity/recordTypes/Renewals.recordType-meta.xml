@@ -1,0 +1,1959 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Renewals</fullName>
+    <active>true</active>
+    <businessProcess>Renewals</businessProcess>
+    <compactLayoutAssignment>Renewals_Compact_Layout</compactLayoutAssignment>
+    <description>Record Type for Renewal Opportunities</description>
+    <label>Renewals</label>
+    <picklistValues>
+        <picklist>ALM_New_Customer_Type__c</picklist>
+        <values>
+            <fullName>Enterprise</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Individual</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Site Licence</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Auto_Renewal_Clause__c</picklist>
+        <values>
+            <fullName>30</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>60</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>90</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Billing_Entity__c</picklist>
+        <values>
+            <fullName>ALM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GHK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LBR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LLC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MBL</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Billing_Frequency__c</picklist>
+        <values>
+            <fullName>Annual</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bi-Annually</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Monthly</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Quarterly</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Billing_Method__c</picklist>
+        <values>
+            <fullName>Check</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Email</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Payment Plan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Phone</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Postal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Send Invoice</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Upfront Check</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Upfront Credit Card</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Upfront Invoice</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wire Transfer</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>CS_Contact__c</picklist>
+        <values>
+            <fullName>Alexander Mounayer-Rigby</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Alexandra Papadopoulos</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Alice Dearman</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Amy Elderfield</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ankit Chauhan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Beatrice Redgrave-Scott</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chris Riley</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cristina Costa</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Francesca Clixby</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HJ Sirott</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hashim Ali</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Isobel Eastwood</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jermaine Elu</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Joe Turner</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kathy Tse</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Katrina Pimentel</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Laura McCallum</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Maya Engledow</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Oliver Spurr</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Omkar Bayannavar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reyhan Alhas</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shazia Ishaq</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shubhankar Bhardi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Theo Billing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Theodore Hutton</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tom Blower</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Victor Babatunde</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vishnu Kumar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yee Tang</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Closed_Lost_Reason__c</picklist>
+        <values>
+            <fullName>Bad debtor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Budget cut</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Change in audience targeting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Change of content strategy</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Consolidating Lexology products</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Data not detailed enough</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dissolved%2FMerged</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Don%27t know what to do with data</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Issues with LBR service</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No ROI%2Fnot worth cost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No longer ranked</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No response%2Fno reason given</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No time to make use of data%2Ftools</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Paid</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not producing content%2Fdidn%27t write</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Now covered by licence</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Persistent product issues</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Primary contact%2Fpurchaser left%2Fnot in budget</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Product discontinued</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Switching to competitor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wrong audience reading</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Closed_Lost_Reasons_PI__c</picklist>
+        <values>
+            <fullName>Audience</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Competitor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Engagement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LBR internal cancellations</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lack of Budget%2FCost Prohibitive</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No fault cancelations</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Product%2F Content</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ROI%3A can be fit into other areas</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>T%26Cs - Non-Agreement</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Closed_Lost_primary_reason__c</picklist>
+        <values>
+            <fullName>Budget issues</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Buyer issues</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Client chose competitor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Client engagement issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Content issues</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LBR cancellation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LBR engagement issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lack of ROI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No fault cancellation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Product issues</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>T%26Cs - Non-Agreement</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Closed_Lost_reason_detailed__c</picklist>
+        <values>
+            <fullName>Bad debtor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Breach of contract</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CEP incomplete</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Change of internal strategy</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Conditional -  if so%2C who%3F</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Conditional -  if so%2C who%3F When is the expiry of the contract happening%3F</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Contract consolidation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Duplicate</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Firm  dissolved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Firm Merged</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Free Lexology newsfeed was enough%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lack of relevant jurisdictional coverage%2E %C2%A0</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Miss - sold</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New  Primary Contact</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No reason given %2F stopped replying</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not enough BD work %E2%80%93 purchased as a tool for BD%2C opportunities didn%E2%80%99t materialise%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not enough content on clients</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not enough content to warrant investment%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Personal not firm expense</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Platform too hard to navigate%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Practitioners moved elsewhere%2F Loss Change in staff and%2F</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Purchased for a specific project for 1 year%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sanction client</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Subscription Administration error</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Switch to competitor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Touch points unsuccessful</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unable to demonstrate%2Fdeliver value</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wrong persona %2F reader type</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Closed_Lost_sub_reason__c</picklist>
+        <values>
+            <fullName>Account not set up correctly</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bad debtor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Breach of contract</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Budget cut</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Change of content strategy</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Change of internal strategy</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Client does not value product</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Client is wrong persona</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Client stopped replying</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Contract consolidation%2Fcovered by licence agreement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Data not detailed enough</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Didn%27t submit agreed content</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Didn%27t use tools%2Fdidn%27t know how to use data</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dissolved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Duplicate</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LBR not responsive enough</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lack of jurisdictional coverage</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lack of sector coverage</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Merger</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mis-sold</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No reason given</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No time to use data%2Ftools%2Fcontent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not a budget priority</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not eligible for renewal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not enough content%2Ffree newsfeed was enough</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not impressed with results</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not producing content</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Persistent product issues</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Personal expense</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Platform too hard to navigate</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Primary contact left%2Fchange in staff</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Purchased for specific project</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sanctioned client</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Target clients not covered</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Touch points%2FCEP incomplete</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wrong audience</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Credit_Card_Type__c</picklist>
+        <values>
+            <fullName>American Express</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mastercard</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>VISA</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>DB_Competitor__c</picklist>
+        <values>
+            <fullName>Competitor A</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Competitor B</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Competitor C</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Deal_End_Year__c</picklist>
+        <values>
+            <fullName>2015</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2016</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2017</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2018</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2019</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2020</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2021</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2022</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2023</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2024</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2025</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2026</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2027</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2028</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2029</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2030</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2032</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2033</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Deal_Start_Year__c</picklist>
+        <values>
+            <fullName>2015</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2016</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2017</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2018</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2019</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2020</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2021</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2022</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2023</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2024</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2025</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2026</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2027</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2028</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2029</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2030</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Expiration_Month__c</picklist>
+        <values>
+            <fullName>01</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>02</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>03</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>04</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>05</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>06</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>07</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>08</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>09</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>10</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>11</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>12</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Expiration_Year__c</picklist>
+        <values>
+            <fullName>2016</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2017</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2018</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2019</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2020</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2021</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2022</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2023</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2024</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2025</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2026</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2027</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2028</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2029</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2030</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2031</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2032</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2033</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2034</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2035</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>ForecastCategoryName</picklist>
+        <values>
+            <fullName>Best Case</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Closed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Commit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Most Likely</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Omitted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Open</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Forecast_Status__c</picklist>
+        <values>
+            <fullName>Forecast At Risk - High</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Forecast At Risk - Low</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Forecast At Risk - Medium</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Forecast Lost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Forecast Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Forecast Won</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>LeadSource</picklist>
+        <values>
+            <fullName>2018 Alumni List</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>401k Wire</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ALM Unknown</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Advertisement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Affino</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Amendment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Apollo</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>BPRO 2019 Alumni</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CS Qualified</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Claims Magazine Subscriber List</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Clay</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ClearSlide Email</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ClearSlide Meeting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cognism %E2%80%93 Marketing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ConnectAndSell</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer Event</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Delegates - Clicks</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Delegates - Past Delegates</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Demo Request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Direct Enquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EW-Abandoned Cart</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EW-Email Blast</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EW-ExpertPages</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EW-Google</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EW-HG</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EW-JurisPro</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EW-Previous Advertiser</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EW-SEAK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EW-Verdict Search</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EW-Website Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EW-Website Freebie</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Email</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Employee Referral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Event %28External%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Event %28Internal%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Events - Misc%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Events - Past Delegates</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Face to Face  %2F Meeting %2F Sales Trip</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Form Completion</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>FreeERISA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GAR Newsfeed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GCR Newsfeed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GIR Newsfeed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GRR Newsfeed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google AdWords</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google Natural Search</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>House ads</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HubSpot</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IAM Newsfeed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inbound %28Email%2FCall%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incoming source %28phone call%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Latin Lawyer Newsfeed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lead Forensics</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Legal Monitor %E2%80%93 Marketing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LegalCIO</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexology Newsfeed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LinkedIn</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LinkedIn ad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Linkedin Navigator</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MBL - Internal Reports</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MBL - New Business Renewal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MQL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MSG</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Market Intelligence Contributor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Marketing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mentor Highlight Email Clicks</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Online Store</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Online Store - Contact Us</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Online Store- Free Trial</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Partner</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Past Attendees</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Past Attendees 2014-2017</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pinpoint Instructor Material Request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Plan Adviser</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Practice Intelligence Subscriber</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Printed magazine</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Purchased List</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Referral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Referral %28External%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Referral %28Internal%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Renewal</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Search Engine</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Self Sourced - Legal Monitor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Self-Sourced %E2%80%93 Sales</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Self-Sourced %E2%80%93 TBRC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Self-Sourced - Cognism Leads</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Self-Sourced - Data Leads</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sponsorship - Incoming call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Subs - Corporate Subscription Inquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Subs - Database List</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Subs - Desk Research</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Subs - RFT</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Think Advisor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Trade Show</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WTR Newsfeed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Webinar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Webinar %28External%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Webinar %28Internal%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Website</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>White papers</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Word of mouth</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Zoominfo Marketing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>hs_email</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>lead research</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Loss_Reason__c</picklist>
+        <values>
+            <fullName>Already Renewed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Autorenewal Cancelation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Budget Timing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Closed due to inactivity</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Content</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cost%2FBudget</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Decline Upgrade</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Existing Customer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>False Enquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inactive Account</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lost to Competitor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Merged with another account</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Migrated to Online</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Migrated to site license</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No Budget</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Paid</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Poor Follow Up</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Poor Previous Experience</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Product Capabilities</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Product Performance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Product%2FService Gap</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Registered Online</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sales Experience</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Stronger Competitor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Stronger Product</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Timing Gap</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Too Expensive%2FInsufficient Budget</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Upsold%2FIncluded in another opportunity</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wrong Contact%2FLevel</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Marketing_led_renewals__c</picklist>
+        <values>
+            <fullName>Replied %E2%80%93 Question re renewal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Replied - Requested to cancel</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Replied -Confirmed renewal</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>No_Hit__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Opportunity_Type_Forecast__c</picklist>
+        <values>
+            <fullName>Cancellation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Downgrade</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New Business</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Renewal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Upsell</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Payment_Terms__c</picklist>
+        <values>
+            <fullName>Due on receipt</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Net 15</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Net 30</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Net 45</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Net 60</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Net 90</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Payment_Type__c</picklist>
+        <values>
+            <fullName>Bank Transfer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Credit Card</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Invoice</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Online</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Probability_MBL__c</picklist>
+        <values>
+            <fullName>0</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>100</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>25</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>50</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>75</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Purchased_Via__c</picklist>
+        <values>
+            <fullName>Agency</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Direct</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>REVGRD__Status__c</picklist>
+        <values>
+            <fullName>Green</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Red</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yellow</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Renewal_Target_Groups__c</picklist>
+        <values>
+            <fullName>High Risk</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Multi year</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pilot</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Revenue_Stream__c</picklist>
+        <values>
+            <fullName>Benchmarking</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Paid Content</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Share_info_with_other_teams__c</picklist>
+        <values>
+            <fullName>Both</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Content</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Neither</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Product</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Type</picklist>
+        <values>
+            <fullName>Auto-Renewal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Renewal</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>WWL_Type__c</picklist>
+        <values>
+            <fullName>Barrister</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Expert</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lawyer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mediator</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Won_Reason__c</picklist>
+        <values>
+            <fullName>Additional Product</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Content</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Early Renewal Notice</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Existing Client</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Increase Seats</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Personal Relationship</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pricing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Product Capabilities</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Product Performance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sales Experience</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Stronger Product</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Third-Party Endorsement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unique Offering</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Upgrade to Enterprise</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Upgrade to Market Price</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>X2021_Renewals__c</picklist>
+        <values>
+            <fullName>GAR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GCR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GDR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GIR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GRR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IAM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lex GTDT</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lex ILO</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lex Inform</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lex Pro</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WTR</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>sbaa__ApprovalStatus__c</picklist>
+        <values>
+            <fullName>Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Recalled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rejected</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>trumpet__TrumpetSyncStatus__c</picklist>
+        <values>
+            <fullName>Fail</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Success</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

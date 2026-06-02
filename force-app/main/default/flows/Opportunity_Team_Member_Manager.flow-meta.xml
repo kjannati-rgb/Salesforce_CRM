@@ -927,7 +927,7 @@
         </inputAssignments>
         <object>Opportunity</object>
     </recordUpdates>
-    <runInMode>SystemModeWithSharing</runInMode>
+    <runInMode>SystemModeWithoutSharing</runInMode>
     <screens>
         <name>scr_AddMember</name>
         <label>Add Team Member</label>

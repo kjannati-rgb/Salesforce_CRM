@@ -314,6 +314,66 @@
         </connector>
     </assignments>
     <assignments>
+        <name>A_BuildOliClear</name>
+        <label>Build OLI Clear Write</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>vOliLine.Id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_StampOli.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>vOliLine.Full_Contract_Value__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>vNullNumber</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>vUpdateOlis</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>vOliLine</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_StampOli</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>A_BuildOliStamp</name>
+        <label>Build OLI Code Write</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>vOliLine.Id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_StampOli.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>vOliLine.Full_Contract_Value__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>vDerived</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>vUpdateOlis</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>vOliLine</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_StampOli</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>A_BuildStamp</name>
         <label>Build Code Write</label>
         <locationX>0</locationX>
@@ -715,6 +775,9 @@
         <label>Any Writes Queued?</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>D_IsPrimary</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>Nothing to write</defaultConnectorLabel>
         <rules>
             <name>r_HasWrites</name>
@@ -732,7 +795,152 @@
             <label>Has writes</label>
         </rules>
     </decisions>
-    <description>REV-71 Layer 1 engine. Called from Quote_AfterSave_MasterFlow when quote-level totals/calculation change. Evaluates spec §4 at quote scope: excludes bundle child lines (SBQQ__RequiredBy__c or SBQQ__ProductOption__c set), counts distinct standalone products, resolves the bundle family (GLL decisive; LAWM+LWKM by highest summed price; price basis from ALM_Code_Setting__mdt Control), and stamps/clears Full_Contract_Value__c idempotently on every standalone line. Clear mode only removes values matching configured TCV codes — monetary values on single-product deals are never touched (spec §4 caution). ASSUMPTION: see REV-71 spec §8-Q4 — on bundle+standalone mixes the code applies to standalone lines only. ASSUMPTION: VAR price tie resolves to family 1 (spec silent on ties). Kill switch: ALM_Code_Setting__mdt.Control.Layer_1_Active__c.</description>
+    <decisions>
+        <name>D_IsPrimary</name>
+        <label>Primary Quote? (OLI reconciliation)</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Not primary — done</defaultConnectorLabel>
+        <rules>
+            <name>r_Primary</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>in_Quote.SBQQ__Primary__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_OppOLIs</targetReference>
+            </connector>
+            <label>Primary</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>D_HasOlis</name>
+        <label>Any Opportunity Products?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>None — done</defaultConnectorLabel>
+        <rules>
+            <name>r_HasOlis</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_OppOLIs</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Loop_StampOli</targetReference>
+            </connector>
+            <label>Has OLIs</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>D_OliChild</name>
+        <label>Bundle Child OLI?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>D_NeedsWriteOli</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Standalone</defaultConnectorLabel>
+        <rules>
+            <name>r_OliChild</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_StampOli.SBQQ__ParentID__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Loop_StampOli</targetReference>
+            </connector>
+            <label>Child — exclude</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>D_NeedsWriteOli</name>
+        <label>Write Needed For OLI?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Loop_StampOli</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No change</defaultConnectorLabel>
+        <rules>
+            <name>r_OliClear</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>vClearMode</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>frm_IsExistingCodeOli</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>A_BuildOliClear</targetReference>
+            </connector>
+            <label>Clear stale code</label>
+        </rules>
+        <rules>
+            <name>r_OliStamp</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>vClearMode</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_StampOli.Full_Contract_Value__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>vDerived</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>A_BuildOliStamp</targetReference>
+            </connector>
+            <label>Stamp differing code</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>D_AnyOliWrites</name>
+        <label>Any OLI Writes Queued?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Nothing to write</defaultConnectorLabel>
+        <rules>
+            <name>r_HasOliWrites</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>vUpdateOlis</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_OLIs</targetReference>
+            </connector>
+            <label>Has writes</label>
+        </rules>
+    </decisions>
+    <description>REV-71 Layer 1 engine. Called from Quote_AfterSave_MasterFlow when quote-level totals/calculation change. Evaluates spec §4 at quote scope: excludes bundle child lines (SBQQ__RequiredBy__c or SBQQ__ProductOption__c set), counts distinct standalone products, resolves the bundle family (GLL decisive; LAWM+LWKM by highest summed price; price basis from ALM_Code_Setting__mdt Control), and stamps/clears Full_Contract_Value__c idempotently on every standalone line. Clear mode only removes values matching configured TCV codes — monetary values on single-product deals are never touched (spec §4 caution). ASSUMPTION: see REV-71 spec §8-Q4 — on bundle+standalone mixes the code applies to standalone lines only. ASSUMPTION: VAR price tie resolves to family 1 (spec silent on ties). Kill switch: ALM_Code_Setting__mdt.Control.Layer_1_Active__c. When the quote is PRIMARY the engine also reconciles the opportunity's OLIs directly (same derivation, child = SBQQ__ParentID__c): CPQ's twin-field sync carries codes on OLI creation but suppresses re-entrant sync for QL updates made inside its own save transaction, so without this section stamped codes would lag one save behind on existing OLIs (found in KJDEV smoke test, 12 Jun 2026).</description>
     <environments>Default</environments>
     <formulas>
         <name>frm_FamAnchorsNorm</name>
@@ -785,6 +993,11 @@
         <name>frm_IsExistingCode</name>
         <dataType>Boolean</dataType>
         <expression>AND(NOT(ISBLANK({!Loop_Stamp.Full_Contract_Value__c})), OR({!Loop_Stamp.Full_Contract_Value__c} = {!vFam1Code}, {!Loop_Stamp.Full_Contract_Value__c} = {!vFam2Code}, {!Loop_Stamp.Full_Contract_Value__c} = {!vFam3Code}))</expression>
+    </formulas>
+    <formulas>
+        <name>frm_IsExistingCodeOli</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(NOT(ISBLANK({!Loop_StampOli.Full_Contract_Value__c})), OR({!Loop_StampOli.Full_Contract_Value__c} = {!vFam1Code}, {!Loop_StampOli.Full_Contract_Value__c} = {!vFam2Code}, {!Loop_StampOli.Full_Contract_Value__c} = {!vFam3Code}))</expression>
     </formulas>
     <formulas>
         <name>frm_NoAnchorMsg</name>
@@ -847,6 +1060,20 @@
             <targetReference>D_AnyWrites</targetReference>
         </noMoreValuesConnector>
     </loops>
+    <loops>
+        <name>Loop_StampOli</name>
+        <label>Reconcile Opportunity Products</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>Get_OppOLIs</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>D_OliChild</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>D_AnyOliWrites</targetReference>
+        </noMoreValuesConnector>
+    </loops>
     <recordLookups>
         <name>Get_Control</name>
         <label>Get Control Settings</label>
@@ -890,6 +1117,30 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
+        <name>Get_OppOLIs</name>
+        <label>Get Opportunity Products</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>D_HasOlis</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>SF_LogFault</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>OpportunityId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>in_Quote.SBQQ__Opportunity2__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>OpportunityLineItem</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>Get_QuoteLines</name>
         <label>Get All Quote Lines</label>
         <locationX>0</locationX>
@@ -918,10 +1169,23 @@
         <label>Update Standalone Lines</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <connector>
+            <targetReference>D_IsPrimary</targetReference>
+        </connector>
         <faultConnector>
             <targetReference>SF_LogFault</targetReference>
         </faultConnector>
         <inputReference>vUpdateLines</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_OLIs</name>
+        <label>Update Opportunity Products</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <faultConnector>
+            <targetReference>SF_LogFault</targetReference>
+        </faultConnector>
+        <inputReference>vUpdateOlis</inputReference>
     </recordUpdates>
     <runInMode>SystemModeWithoutSharing</runInMode>
     <start>
@@ -1183,6 +1447,22 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>SBQQ__QuoteLine__c</objectType>
+    </variables>
+    <variables>
+        <name>vOliLine</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>OpportunityLineItem</objectType>
+    </variables>
+    <variables>
+        <name>vUpdateOlis</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>OpportunityLineItem</objectType>
     </variables>
     <variables>
         <name>vUseNet</name>

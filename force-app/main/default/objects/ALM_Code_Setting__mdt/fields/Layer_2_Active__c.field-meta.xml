@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Layer_2_Active__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>REV-71 spec §5 kill switch: when unchecked, OLI_ALM_Code_AfterSave (Layer 2, opportunity product safety net) exits without acting. Control record only.</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Layer 2 Active (Opp Product)</label>
+    <type>Checkbox</type>
+</CustomField>

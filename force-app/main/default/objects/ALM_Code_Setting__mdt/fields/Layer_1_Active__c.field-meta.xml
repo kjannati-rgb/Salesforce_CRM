@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Layer_1_Active__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>REV-71 spec §5 kill switch: when unchecked, QL_ALM_Code_AfterSave (Layer 1, quote line engine) exits without acting. Control record only.</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Layer 1 Active (Quote Line)</label>
+    <type>Checkbox</type>
+</CustomField>

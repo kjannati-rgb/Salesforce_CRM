@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Setting_Type__c</fullName>
+    <description>REV-71: discriminator for the three record kinds — Bundle Family (code + anchors), Bundle Parent (exclusion list), Control (switches).</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Setting Type</label>
+    <required>true</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Bundle Family</fullName>
+                <default>false</default>
+                <label>Bundle Family</label>
+            </value>
+            <value>
+                <fullName>Bundle Parent</fullName>
+                <default>false</default>
+                <label>Bundle Parent</label>
+            </value>
+            <value>
+                <fullName>Control</fullName>
+                <default>false</default>
+                <label>Control</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

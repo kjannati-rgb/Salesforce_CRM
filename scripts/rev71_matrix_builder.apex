@@ -108,9 +108,15 @@ if (N == 1) {                                    // 1 product, 1 year -> no code
 } else if (N == 20) {                            // amendment-type quote (approximation)
     q.SBQQ__Type__c = 'Amendment'; update q;
     qls.add(fx.ql(q.Id, 'LAWM', 5000, 1)); qls.add(fx.ql(q.Id, 'LWKM', 8000, 2));
-} else if (N == 16) {                            // legacy inactive bundle, OLI-only historical opp
+} else if (N == 16) {
+    // Legacy-bundle structure on an OLI-only historical opp. NOTE: a true
+    // inactive-product OLI ('Law.com Premium Bundle') cannot be INSERTED via API
+    // (no active PBE) — that state exists only as historical production data and
+    // is covered by the §7 backfill audit. The flow logic under test (child
+    // exclusion via SBQQ__ParentID__c) is product-agnostic; an active bundle
+    // parent exercises the identical path.
     insert new List<OpportunityLineItem>{
-        fx.oli(opp.Id, 'Law.com Premium Bundle', 9000, null),
+        fx.oli(opp.Id, 'Law.com Pro', 9000, null),
         fx.oli(opp.Id, 'LNVM', 0, 'a1ELEGACYCHILD0001'),
         fx.oli(opp.Id, 'NYLM', 0, 'a1ELEGACYCHILD0002'),
         fx.oli(opp.Id, 'LAWM', 5000, null),

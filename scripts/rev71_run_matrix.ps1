@@ -1,4 +1,4 @@
-# REV-71 §6 matrix driver — KJDEV only. Orchestrates 22 scenarios:
+﻿# REV-71 S6 matrix driver - KJDEV only. Orchestrates 22 scenarios:
 #   build (apex) -> calc+save per quote (apex, QLE-equivalent) -> wait for async
 #   calculator -> optional mutation -> re-calc -> verify via SOQL -> results table.
 # Writes audit-reports/rev71-matrix-results.md. Read-only against everything
@@ -31,7 +31,7 @@ function Wait-CalcDone {
         if ($j.result.records[0].c -eq 0) { return }
         Start-Sleep -Seconds 5
     }
-    Write-Warning 'Calculator queueables still in flight after 90s — continuing'
+    Write-Warning 'Calculator queueables still in flight after 90s - continuing'
 }
 
 function Get-Lines([int]$n) {
@@ -91,7 +91,7 @@ $plan = @(
 
 foreach ($s in $plan) {
     $n = $s.N
-    Write-Host ">>> Scenario $n — $($s.Note)"
+    Write-Host ">>> Scenario $n - $($s.Note)"
     $logBefore = 0
     if ($s.LogDelta) { $logBefore = Get-NoAnchorLogCount }
     try {
@@ -124,7 +124,7 @@ foreach ($s in $plan) {
     }
 }
 
-$md = "# REV-71 §6 Matrix Results — KJDEV, $(Get-Date -Format 'yyyy-MM-dd HH:mm')`n`n"
+$md = "# REV-71 S6 Matrix Results - KJDEV, $(Get-Date -Format 'yyyy-MM-dd HH:mm')`n`n"
 $md += "| # | Result | Quote lines | OLIs | Scenario |`n|---|---|---|---|---|`n"
 foreach ($r in $results) { $md += "| $($r.N) | $($r.Result) | $($r.QL) | $($r.OLI) | $($r.Note) |`n" }
 $out = Join-Path $proj 'audit-reports\rev71-matrix-results.md'

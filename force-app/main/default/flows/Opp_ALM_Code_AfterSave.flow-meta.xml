@@ -1201,4 +1201,14 @@
         <isOutput>false</isOutput>
         <objectType>OpportunityLineItem</objectType>
     </variables>
+    <variables>
+        <name>vUseNet</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>true</booleanValue>
+        </value>
+    </variables>
 </Flow>

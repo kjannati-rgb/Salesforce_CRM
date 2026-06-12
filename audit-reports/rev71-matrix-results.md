@@ -41,7 +41,17 @@ is tagged `ZZ REV71-M*`; teardown script staged, not yet run.
    no active PricebookEntry exists for an inactive product. That state exists only as
    pre-existing production data; the §7 backfill audit covers it. The child-exclusion logic
    under test is product-agnostic (`SBQQ__ParentID__c`), exercised here with an active parent.
-3. **17, 19, 20:** mechanism-equivalent approximations. 17 uses the CPQ Quote API (same code
+3. **2, 14 (evidence correction, found 12 Jun evening):** KJDEV's `SBQQ__ProductOption__c`
+   object holds ZERO records (bundle definitions are data, never seeded into this sandbox),
+   so these scenarios built parent-only structures — no real children existed to assert on.
+   Child exclusion is still proven (Apex test `bundleChildLinesAreExcludedAndUntouched`
+   builds a RequiredBy child explicitly; scenario 16 covers ParentID children on OLIs),
+   but **bundle pricing semantics (value on parent vs children) are unverifiable in KJDEV
+   and must be confirmed in production** — open check: do historical coded lines include
+   bundle children (`SBQQ__ParentID__c` populated on lines with codes 1/2/3)? If yes, the
+   stamp rule needs a "include GLL children" branch (derivation unaffected — GLL is
+   decisive by presence, and the LAWM/LWKM price contest involves no bundles).
+4. **17, 19, 20:** mechanism-equivalent approximations. 17 uses the CPQ Quote API (same code
    path as a QLE save). 19/20 use quotes of `SBQQ__Type__c` Renewal/Amendment built directly
    rather than CPQ contract-driven generation (needs a contracted-order pipeline KJDEV's empty
    data can't host). Recommend demonstrating genuine renewal/amendment generation on a

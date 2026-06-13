@@ -108,21 +108,30 @@ handling + determinism; clicks via consolidated validation and Dynamic Forms).
 
 ---
 
-## 4a. Errored-interview drill-down (read-only, 1,218 errors over ~2 weeks, 30 May–12 Jun ≈ 87/day)
+## 4a. Errored-interview drill-down (read-only) — LIVE vs HISTORICAL
 
-| Errors | Flow | Fails at element | Note |
+**Important correction (verified 13 Jun):** of 1,218 errored interviews, **1,098 (90%) are historical
+residue, not live failures.** The top source — "Opportunity Analytics: Update record" (775) — comes from
+two flows (`Opportunity_analytics_product_edited`, `opportunity_analytics_OA_update`) that are **now
+INACTIVE**, replaced by the active Apex class `OpportunityAnalyticsCreate` (v62). Those errors **stop on
+9 Jun** (the deactivation point); they are stale records that can be purged as housekeeping, not remediated.
+
+**LIVE error profile — last 4 days (≈120 interviews), the real reliability targets:**
+
+| Live errors (4d) | Flow | Fails at | Note |
 |---|---|---|---|
-| **775 (64%)** | **Opportunity Analytics: Update record** | `_0` (557), `Update_previous_fields` (68) | Single dominant source — top remediation target |
-| 64 | Opportunity Contact Role: Check for Duplicate | `Get_Contact_Role` | Lookup failing |
-| 25 | Account is Inactive | `Update_Contacts` | Bulk update fault |
-| 20 | Reminder Email For Approvals Flow | `Reminder_Mail_Through_Apex` | Invocable Apex fault |
-| 12 | Order Process Builder Migrate | `Update_Records_as_Activated` | Legacy PB-migrated flow (T-01) |
+| **64** | **Opportunity Contact Role: Check for Duplicate** | `Get_Contact_Role` | **#1 live offender** — lookup faulting on every duplicate-check |
+| ~24 | **Opportunity_AfterUpdate_MasterFlow** | (multiple) | Failing across many sales users (saurabh.patil, william.anderson, sarika.sandhu, willie.guerrero…) — broad daily impact |
+| 10 | Order Process Builder Migrate | `Update_Records_as_Activated` | Legacy PB-migrated flow (T-01) |
 | 8 | Opportunity: Currency update screen flow | `Update_opportunity_currency2` | — |
-| 6 | **Customer Journey** | `Get_Group_..._Ids` | **Confirms R-02 — the hardcoded queue lookups are erroring** |
+| 6 | **Customer Journey** | `Get_Group_..._Ids` | **Confirms R-02 — hardcoded queue lookups erroring** |
 
-One flow (Opportunity Analytics) accounts for ~two-thirds of all flow failures — fixing it alone roughly
-thirds the error volume. Note: errored-interview detail is retained only because these flows roll back on
-error; the true failure rate is higher (flows that fault-and-continue don't persist an interview).
+**Revised R-03 priority:** the live remediation targets are **Opportunity Contact Role: Check for Duplicate**
+and **Opportunity_AfterUpdate_MasterFlow**, not the retired Analytics flow. Two lessons stand on their own:
+(a) deactivated-but-not-deleted flows leave a large stale-error backlog that masks the live signal —
+a monitoring/housekeeping gap; (b) the Apex replacement was done correctly (flow off, Apex on) — evidence
+the team *can* execute the consolidation pattern this roadmap recommends. Caveat: errored interviews persist
+only for roll-back-on-error flows; fault-and-continue flows don't persist, so true live rate is somewhat higher.
 
 ## 5. Assumptions & access gaps
 - **"Centellic" = Law Business Research production** (`kamyar.jannati@lbresearch.com`, IsSandbox=False) — the

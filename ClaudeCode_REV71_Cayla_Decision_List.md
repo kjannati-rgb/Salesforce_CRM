@@ -23,6 +23,15 @@ money usually sits on the child lines, not the bundle header.**
   (ParentID populated). Historically the code sits on standalone + bundle-PARENT lines. This
   actually supports the current "exclude children" build, not the "code every child" change.
 
+**BIGGEST FINDING — the 1-vs-3 rule is not price (audit of LBR_PROD, 13 Jun):**
+- Engine reproduces only **170 of 319 (53%)** of historical codes.
+- Of 113 Law.com+International deals (no GLL), **Law.com is the pricier line in ALL 113** —
+  International is never pricier — yet **41 (38%) were coded 3**. The spec's "highest-priced
+  anchor wins" (§8-Q3) cannot produce this. The real Int'l-vs-Law.com discriminator is unknown
+  and is NOT line price. **This is the #1 question for Cayla.**
+- 102 deals carry a code the engine wouldn't (single-product or Law.com-family add-ons only with
+  no core anchor) → likely the code-1 anchor should be the whole Law.com family, not just LAWM.
+
 **What the live data REVEALS as a problem (this reframes the backfill):**
 - The production codes are the **manual, inconsistent history REV-71 exists to replace** — they
   validate the engine's *structure* but must NOT be treated as a clean oracle of "correct":

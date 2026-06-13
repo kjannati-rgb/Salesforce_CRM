@@ -55,6 +55,23 @@ unguarded elements + 12 hardcoded IDs (merger debt); 294 validation rules (29 on
   - **C (genuine flow bug)** — `Opportunity_AfterUpdate_MasterFlow` throws an unhandled fault on Opportunity DML; **also the prod live #2 error**. Fix the flow → clears live errors AND tests.
 - `RenewalOpportunityHandler2` (979-line CPQ renewal engine): **0 → 35%** via 4 real behaviour-pinning tests.
 
+#### Phase B running tally (fixes applied + verified in KJDEV)
+| Class | Before | After |
+|---|---|---|
+| `OpportunityBillingEntityBatch_Test` | 4 fail | **8/8 green** (bucket A) |
+| `Ast_PopulateAutoRenewalDateBatchTest` | fail | **green** (bucket A) |
+| `Ast_RenewalEmailHelperTest` | fail | **green** (bucket A) |
+| `OpportunityChangePublisherTest` | fail | **green** (via master-flow fix) |
+| `TestALMSplitLineItemBatch` | fail | **green** (bucket A) |
+| `Opportunity` master flow (reliability) | 0/25 fault cov | **8 guarded, prod live #2 error fixed** |
+| 4× `Update*FirmAccountClientStatus` / `OppBillingEntityHandler` / `reductionOrderProduct` | fail | **improved (87% pass)**; residual = governor-101 / restricted-picklist / DML (NOT VR — long tail) |
+
+**Long-tail root causes still open** (each needs per-class diagnosis, not the bypass):
+governor-limit 101 SOQL (the automation pile-up — argues for consolidation), restricted-picklist
+values, and **bucket B** (User-insert fires "Create Contact from User" → access error; fix = `runAs`/
+existing user): `Ast_RenewalEmailBatch HK/UK/US`, `OrderTriggerForRenewalOppTest`. Plus a few singletons
+(`ResolveApprovalRequestsTest` QueryException; `RHX_*` managed-pkg).
+
 ### ⚠ Anomaly to investigate (bucket C)
 `Opportunity_AfterUpdate_MasterFlow` throws `CANNOT_EXECUTE_FLOW_TRIGGER` in prod and tests, **but does
 not appear in FlowDefinitionView / FlowDefinition / Tooling Flow in either org.** It is an orphaned or

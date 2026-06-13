@@ -27,6 +27,19 @@ GenerateQuoteDocTest 4/4, …). So Phase B is **not "write 68 test classes" (mon
 
 **The org is ~7 points from world-class coverage, not ~73.** This is days–weeks, not a multi-quarter rescue.
 
+### The 47 failures resolve into 3 buckets (triaged 13 Jun)
+
+| Bucket | Symptom | Fix | Status |
+|---|---|---|---|
+| **A — Validation-rule** | inserts/updates trip the contact-role / Ultimate-Account VR at high win-probability | one line: `TestDataFactory.bypassAutomation()` in setup | **PROVEN** — fixed `OpportunityBillingEntityBatch_Test` (4→0 fails, 8/8), `Ast_PopulateAutoRenewalDateBatchTest`, `Ast_RenewalEmailHelperTest` |
+| **B — User-insertion side-effect** | test inserts a `User` → the "Create Contact from User" process fires → `INSUFFICIENT_ACCESS_ON_CROSS_REFERENCE_ENTITY` | don't insert Users in tests; use `System.runAs` with an existing user, or seed Contact access | identified (`Ast_RenewalEmailBatchForHK/UK/US`) |
+| **C — Genuine flow bug** | Opportunity DML → `Opportunity_AfterUpdate_MasterFlow` throws *"unhandled fault"*; the bypass does NOT suppress it (flow ignores the setting) | **fix the flow** (it is ALSO the #2 LIVE prod error ~24/4days) — add a fault path / fix the fault, and make it honour the bypass | identified (`OpportunityChangePublisherTest`, likely others) — **overlaps live reliability work** |
+
+**Key insight:** bucket C means a chunk of the "test debt" and the "live reliability" problem are the
+*same root cause* — fixing `Opportunity_AfterUpdate_MasterFlow` clears live errors AND unblocks tests.
+Buckets A (cheap, mechanical) and B (mechanical) clear most failures; C is the real engineering, and it
+pays double.
+
 ## 1. The single most important finding: the debt is BOUNDED
 
 | Metric | Reality (measured) | Implication |

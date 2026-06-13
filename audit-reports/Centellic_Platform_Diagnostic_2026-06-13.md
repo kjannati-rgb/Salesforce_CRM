@@ -126,6 +126,20 @@ INACTIVE**, replaced by the active Apex class `OpportunityAnalyticsCreate` (v62)
 | 8 | Opportunity: Currency update screen flow | `Update_opportunity_currency2` | — |
 | 6 | **Customer Journey** | `Get_Group_..._Ids` | **Confirms R-02 — hardcoded queue lookups erroring** |
 
+**Pilot + root-cause notes (KJDEV repro, 13 Jun):**
+- **Opportunity Contact Role: Check for Duplicate (64 live)** — repro confirmed the Custom Error
+  duplicate-block fires correctly AND does **not** persist a FlowInterview, so the 64 errored interviews
+  are **genuine faults at `Get_Contact_Role`**, not the dup-block. Trivial lookup → almost certainly
+  **governor-limit exhaustion** from the Opportunity 22-automation transaction pile-up. **Fixed (interim):**
+  fault path added → `Platform_Fault_Logger` (logs + save proceeds, no raw error); the log will capture the
+  exact message in prod to confirm the governor hypothesis and target the deeper fix (transaction consolidation).
+- **Customer Journey (6 live, fails at `Get_Group_*`)** — root cause is mixed: some queues looked up
+  dynamically by Name ('Case - Lex PRO') that can return empty post-rename, plus **5 hardcoded queue IDs +
+  7 hardcoded RecordType IDs** scattered across a 154K-char flow (20 lookups / 21 decisions). **This is a
+  scoped rebuild, not an inline edit** — fix approach: replace every hardcoded queue/RT ID with a dynamic
+  lookup by DeveloperName (or CMDT), guard each lookup with the shared fault logger, in a dedicated change
+  with full repro. Overlaps the existing Customer Journey workstream.
+
 **Revised R-03 priority:** the live remediation targets are **Opportunity Contact Role: Check for Duplicate**
 and **Opportunity_AfterUpdate_MasterFlow**, not the retired Analytics flow. Two lessons stand on their own:
 (a) deactivated-but-not-deleted flows leave a large stale-error backlog that masks the live signal —

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Alert_Enabled__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>When true, Platform_Fault_Logger emails Alert_Email_To on faults at or above Min_Severity. Default false = log only (behaviour-neutral on deploy).</description>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Alert Enabled</label>
+    <type>Checkbox</type>
+</CustomField>

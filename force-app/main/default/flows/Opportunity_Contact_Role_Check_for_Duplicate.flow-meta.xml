@@ -68,7 +68,13 @@
             <label>Disabled</label>
         </rules>
     </decisions>
+    <description>Centellic diagnostic Stabilise pilot — added a fault path on Get_Contact_Role routing failures to the shared Platform_Fault_Logger (writes Flow_Log__c) and letting the save proceed, instead of surfacing a raw unhandled error. Duplicate-block behaviour otherwise unchanged.</description>
     <environments>Default</environments>
+    <formulas>
+        <name>frm_RecName</name>
+        <dataType>String</dataType>
+        <expression>&apos;OCR Opp:&apos; &amp; {!$Record.OpportunityId} &amp; &apos; Contact:&apos; &amp; {!$Record.ContactId}</expression>
+    </formulas>
     <formulas>
         <name>var_disableflow</name>
         <dataType>Boolean</dataType>
@@ -115,6 +121,9 @@
         <connector>
             <targetReference>Loop_through_contact_roles</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Log_Fault</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>OpportunityId</field>
@@ -134,6 +143,49 @@
         <object>OpportunityContactRole</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <subflows>
+        <name>Log_Fault</name>
+        <label>Log Fault</label>
+        <locationX>176</locationX>
+        <locationY>539</locationY>
+        <flowName>Platform_Fault_Logger</flowName>
+        <inputAssignments>
+            <name>in_Context</name>
+            <value>
+                <stringValue>Get_Contact_Role lookup</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>in_ErrorMessage</name>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>in_FlowApiName</name>
+            <value>
+                <stringValue>Opportunity_Contact_Role_Check_for_Duplicate</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>in_RecordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>in_RecordName</name>
+            <value>
+                <elementReference>frm_RecName</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>in_Severity</name>
+            <value>
+                <stringValue>Error</stringValue>
+            </value>
+        </inputAssignments>
+    </subflows>
     <start>
         <locationX>50</locationX>
         <locationY>0</locationY>
@@ -144,7 +196,7 @@
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
     <variables>
         <name>var_flowname</name>
         <dataType>String</dataType>

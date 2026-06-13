@@ -58,16 +58,18 @@ box.setStyle(TableStyle([
 ]))
 E.append(Spacer(1,3)); E.append(box); E.append(Spacer(1,5))
 
-E.append(Paragraph('<font color="#2e7d32">&#10004; Confirmed correct &mdash; no discussion needed</font>', sect))
+BULLET = "•"  # real bullet, present in the base font
+
+E.append(Paragraph('<font color="#2e7d32">&#8226;&nbsp; CONFIRMED CORRECT &mdash; no discussion needed</font>', sect))
 for t in [
     "<b>One code per deal</b> &mdash; 0 of 319 deals ever carry two codes.",
     "<b>Code lands on every line</b> of the group, including the secondary product.",
     "<b>Standalone sellable bundles</b> (Law.com Pro, Mid Market) are never coded &mdash; correct.",
     "<b>Bundle child lines</b> are essentially never coded (2 of 874) &mdash; matches the build.",
 ]:
-    E.append(Paragraph(t, bullet, bulletText="&bull;"))
+    E.append(Paragraph(t, bullet, bulletText=BULLET))
 
-E.append(Paragraph('<font color="#b26a00">&#9888; Decisions for Cayla</font>', sect))
+E.append(Paragraph('<font color="#b26a00">&#8226;&nbsp; DECISIONS FOR CAYLA</font>', sect))
 dec = [
     ("1. What makes a Law.com + International deal a &ldquo;1&rdquo; vs a &ldquo;3&rdquo;? <b>It is not price.</b> "
      "In all 113 such deals Law.com is the bigger line, yet 38% were coded <b>3</b>. Some other factor decides it "
@@ -78,9 +80,9 @@ dec = [
      "Should the whole Law.com family trigger code 1, not just the one core product?"),
 ]
 for t in dec:
-    E.append(Paragraph(t, bullet, bulletText="&bull;"))
+    E.append(Paragraph(t, bullet, bulletText=BULLET))
 
-E.append(Paragraph('<font color="#2e6da4">&#128161; Knock-on effect (backfill)</font>', sect))
+E.append(Paragraph('<font color="#2e6da4">&#8226;&nbsp; KNOCK-ON EFFECT (BACKFILL)</font>', sect))
 E.append(Paragraph(
     "Because only 53% of existing codes reproduce, the historical codes <b>cannot be trusted as the target</b> for "
     "clean-up. A read-only audit is ready to list every wrong deal; remediation needs the rules locked <b>and</b> "

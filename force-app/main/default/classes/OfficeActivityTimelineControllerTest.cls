@@ -63,11 +63,14 @@ private class OfficeActivityTimelineControllerTest {
         Account firm = [SELECT Id FROM Account WHERE Name = 'Test Firm' LIMIT 1];
 
         Test.startTest();
-        List<OfficeActivityTimelineController.ActivityWrapper> rows =
+        OfficeActivityTimelineController.TimelineResult result =
             OfficeActivityTimelineController.getOfficeActivities(firm.Id, 36, 1000);
+        List<OfficeActivityTimelineController.ActivityWrapper> rows = result.activities;
         Test.stopTest();
 
         System.assertEquals(5, rows.size(), 'Expected 4 tasks + 1 event across accounts, contacts and opportunities');
+        System.assertEquals(5, result.totalAll, 'Headline total should count all in-scope activity');
+        System.assertEquals(false, result.capped, 'Five rows under the 1000 cap should not be flagged capped');
 
         Set<String> offices = new Set<String>();
         Boolean sawOpenItem = false;
@@ -91,8 +94,9 @@ private class OfficeActivityTimelineControllerTest {
     @isTest
     static void handlesNullId() {
         Test.startTest();
-        List<OfficeActivityTimelineController.ActivityWrapper> rows =
+        OfficeActivityTimelineController.TimelineResult result =
             OfficeActivityTimelineController.getOfficeActivities(null, 36, 1000);
+        List<OfficeActivityTimelineController.ActivityWrapper> rows = result.activities;
         Test.stopTest();
 
         System.assertEquals(0, rows.size(), 'A null accountId should return an empty list, not error');
@@ -108,8 +112,9 @@ private class OfficeActivityTimelineControllerTest {
                         Priority = 'Normal', ActivityDate = Date.today(), WhatId = office.Id);
 
         Test.startTest();
-        List<OfficeActivityTimelineController.ActivityWrapper> rows =
+        OfficeActivityTimelineController.TimelineResult result =
             OfficeActivityTimelineController.getOfficeActivities(firm.Id, 36, 1000);
+        List<OfficeActivityTimelineController.ActivityWrapper> rows = result.activities;
         Test.stopTest();
 
         Boolean sawTypeCall = false;
@@ -136,8 +141,9 @@ private class OfficeActivityTimelineControllerTest {
         );
 
         Test.startTest();
-        List<OfficeActivityTimelineController.ActivityWrapper> rows =
+        OfficeActivityTimelineController.TimelineResult result =
             OfficeActivityTimelineController.getOfficeActivities(firm.Id, 36, 1000);
+        List<OfficeActivityTimelineController.ActivityWrapper> rows = result.activities;
         Test.stopTest();
 
         Boolean checked = false;

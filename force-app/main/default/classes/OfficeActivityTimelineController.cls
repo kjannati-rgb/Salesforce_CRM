@@ -9,10 +9,11 @@ public with sharing class OfficeActivityTimelineController {
     //              upcoming activities are always returned regardless of this window.
     // maxRecords : safety cap applied to Tasks and to Events (each), default 1000.
     @AuraEnabled(cacheable=false)
-    public static List<ActivityWrapper> getOfficeActivities(Id accountId, Integer monthsBack, Integer maxRecords) {
-        List<ActivityWrapper> results = new List<ActivityWrapper>();
+    public static TimelineResult getOfficeActivities(Id accountId, Integer monthsBack, Integer maxRecords) {
+        TimelineResult out = new TimelineResult();
+        List<ActivityWrapper> results = out.activities;
         if (accountId == null) {
-            return results;
+            return out;
         }
 
         Integer windowMonths = (monthsBack != null && monthsBack > 0) ? monthsBack : 36;
@@ -60,7 +61,7 @@ public with sharing class OfficeActivityTimelineController {
         Set<Id> whoScope = contactToAccount.keySet();
 
         if (whatScope.isEmpty() && whoScope.isEmpty()) {
-            return results;
+            return out;
         }
 
         // Closed Task statuses, so the LWC can split open/overdue/upcoming from history.
@@ -171,7 +172,42 @@ public with sharing class OfficeActivityTimelineController {
         }
 
         results.sort();
-        return results;
+
+        // True per-type totals across the whole scope, UNCAPPED — so the headline counts stay
+        // accurate even when the list above is truncated to maxRecords. Aggregate COUNT queries
+        // return one row per group (not per record), so they don't hit the row cap and scale to
+        // firms with far more than maxRecords activities.
+        for (AggregateResult ar : [
+            SELECT Type tp, TaskSubtype st, COUNT(Id) cnt
+            FROM Task
+            WHERE (WhatId IN :whatScope OR WhoId IN :whoScope)
+              AND (ActivityDate >= :sinceDate OR ActivityDate = null OR Status NOT IN :closedStatuses)
+            WITH USER_MODE
+            GROUP BY Type, TaskSubtype
+        ]) {
+            Integer cnt = (Integer) ar.get('cnt');
+            switch on mapTaskType((String) ar.get('st'), (String) ar.get('tp')) {
+                when 'Email' {
+                    out.totalEmails += cnt;
+                }
+                when 'Call' {
+                    out.totalCalls += cnt;
+                }
+                when else {
+                    out.totalTasks += cnt;
+                }
+            }
+        }
+        out.totalMeetings = [
+            SELECT COUNT()
+            FROM Event
+            WHERE (WhatId IN :whatScope OR WhoId IN :whoScope)
+              AND (ActivityDate >= :sinceDate OR ActivityDate = null)
+            WITH USER_MODE
+        ];
+        out.totalAll = out.totalEmails + out.totalCalls + out.totalTasks + out.totalMeetings;
+        out.capped = out.totalAll > results.size();
+        return out;
     }
 
     // Office attribution: prefer the WhatId account/opportunity, else fall back to the WhoId contact.
@@ -234,6 +270,16 @@ public with sharing class OfficeActivityTimelineController {
                 return 'standard:task';
             }
         }
+    }
+
+    public class TimelineResult {
+        @AuraEnabled public List<ActivityWrapper> activities = new List<ActivityWrapper>();
+        @AuraEnabled public Integer totalEmails = 0;
+        @AuraEnabled public Integer totalCalls = 0;
+        @AuraEnabled public Integer totalTasks = 0;
+        @AuraEnabled public Integer totalMeetings = 0;
+        @AuraEnabled public Integer totalAll = 0;
+        @AuraEnabled public Boolean capped = false;
     }
 
     public class ActivityWrapper implements Comparable {

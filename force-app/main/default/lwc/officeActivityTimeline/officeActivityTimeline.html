@@ -14,6 +14,9 @@
                 <div>
                     <h2 class="header-heading">Office activities</h2>
                     <p class="header-sub">{summaryLabel}</p>
+                    <template if:true={cappedNote}>
+                        <p class="header-note">{cappedNote}</p>
+                    </template>
                 </div>
             </div>
             <div class="header-right">

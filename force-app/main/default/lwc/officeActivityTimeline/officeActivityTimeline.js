@@ -33,6 +33,7 @@ export default class OfficeActivityTimeline extends NavigationMixin(LightningEle
     @api maxRecords = 1000;
 
     activities = [];
+    totals;
     error;
     isLoading = true;
     isRefreshing = false;
@@ -62,7 +63,8 @@ export default class OfficeActivityTimeline extends NavigationMixin(LightningEle
                 monthsBack: this.monthsBack,
                 maxRecords: this.maxRecords
             });
-            this.activities = data || [];
+            this.activities = (data && data.activities) || [];
+            this.totals = data || null;
             this.error = undefined;
             if (this.activities.length && !this.selectedId) {
                 this.selectedId = this.activities[0].id;
@@ -70,6 +72,7 @@ export default class OfficeActivityTimeline extends NavigationMixin(LightningEle
         } catch (e) {
             this.error = this.reduceError(e);
             this.activities = [];
+            this.totals = null;
         } finally {
             this.isLoading = false;
         }
@@ -215,9 +218,37 @@ export default class OfficeActivityTimeline extends NavigationMixin(LightningEle
         };
     }
 
+    // With no filters applied, the headline shows the true server-side totals (accurate even when
+    // the list is capped at maxRecords). Once any filter is on, it reflects the loaded filtered set.
+    get isFiltered() {
+        return (
+            this.activeType !== 'All' ||
+            this.officeFilter !== 'All' ||
+            this.ownerFilter !== 'All' ||
+            this.teamFilter !== 'All' ||
+            this.legalEntityFilter !== 'All' ||
+            this.searchKey.trim() !== ''
+        );
+    }
+
     get summary() {
-        const counts = { Email: 0, Call: 0, Task: 0, Event: 0 };
-        this.activities.forEach((a) => {
+        let counts;
+        if (!this.isFiltered && this.totals) {
+            counts = {
+                Email: this.totals.totalEmails,
+                Call: this.totals.totalCalls,
+                Task: this.totals.totalTasks,
+                Event: this.totals.totalMeetings
+            };
+            return [
+                { key: 'Email', label: 'Emails', count: counts.Email, dotClass: 'dot dot-email' },
+                { key: 'Call', label: 'Calls', count: counts.Call, dotClass: 'dot dot-call' },
+                { key: 'Task', label: 'Tasks', count: counts.Task, dotClass: 'dot dot-task' },
+                { key: 'Event', label: 'Meetings', count: counts.Event, dotClass: 'dot dot-event' }
+            ];
+        }
+        counts = { Email: 0, Call: 0, Task: 0, Event: 0 };
+        this.filteredActivities.forEach((a) => {
             if (counts[a.type] !== undefined) {
                 counts[a.type] += 1;
             }
@@ -231,11 +262,20 @@ export default class OfficeActivityTimeline extends NavigationMixin(LightningEle
     }
 
     get officeCount() {
-        return new Set(this.activities.map((a) => a.officeName).filter(Boolean)).size;
+        return new Set(this.filteredActivities.map((a) => a.officeName).filter(Boolean)).size;
     }
 
     get summaryLabel() {
-        return `${this.activities.length} activities across ${this.officeCount} offices`;
+        const total =
+            !this.isFiltered && this.totals ? this.totals.totalAll : this.filteredActivities.length;
+        return `${total} activities across ${this.officeCount} offices`;
+    }
+
+    get cappedNote() {
+        if (!this.isFiltered && this.totals && this.totals.capped) {
+            return `Showing the ${this.activities.length} most recent of ${this.totals.totalAll} — filter to narrow.`;
+        }
+        return '';
     }
 
     get typeFilterButtons() {

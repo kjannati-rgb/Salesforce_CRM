@@ -15,11 +15,17 @@
 @isTest
 public class TestDataFactory {
 
-    /** Set the org-default automation bypass so data setup doesn't trip heavy automation. */
+    /**
+     * Set the org-default automation bypass so data setup doesn't trip heavy automation.
+     * Both flags matter: the flow bypass silences autolaunched flows; the validation-rule
+     * bypass silences VRs/before-save validations (e.g. the "Ultimate Account" requirement
+     * on Opportunity) that would otherwise block test-data inserts.
+     */
     public static void bypassAutomation() {
         upsert new Application_Settings__c(
             SetupOwnerId = UserInfo.getOrganizationId(),
-            Disable_Autolaunch_Lightning_Flow__c = true);
+            Disable_Autolaunch_Lightning_Flow__c = true,
+            Disable_Validation_Rules__c = true);
     }
 
     public static Account account() {

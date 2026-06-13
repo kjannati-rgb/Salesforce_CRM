@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Office Activity Timeline</masterLabel>
+    <description>Rolls up Tasks and Events from a Firm account, its Office accounts, and their contacts and opportunities into a colour-coded, filterable timeline with Overdue/Upcoming sections and a detail reading pane.</description>
+    <targets>
+        <target>lightning__RecordPage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <objects>
+                <object>Account</object>
+            </objects>
+            <property
+                name="monthsBack"
+                type="Integer"
+                label="History window (months)"
+                default="36"
+                min="1"
+                description="How many months of past activity to include. Overdue, upcoming, and open items are always shown regardless of this window."
+            />
+            <property
+                name="maxRecords"
+                type="Integer"
+                label="Max records per type"
+                default="1000"
+                min="1"
+                description="Safety cap on the number of Tasks and Events fetched (each)."
+            />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

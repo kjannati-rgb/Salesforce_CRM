@@ -1,0 +1,294 @@
+<template>
+    <div class="card">
+        <!-- Header -->
+        <div class="card-header">
+            <div class="header-title">
+                <span class="header-icon">
+                    <lightning-icon
+                        icon-name="utility:activity"
+                        size="small"
+                        variant="inverse"
+                        alternative-text="Activity"
+                    ></lightning-icon>
+                </span>
+                <div>
+                    <h2 class="header-heading">Office activities</h2>
+                    <p class="header-sub">{summaryLabel}</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <template if:true={hasActivities}>
+                    <div class="chips">
+                        <template for:each={summary} for:item="s">
+                            <span key={s.key} class="chip">
+                                <span class={s.dotClass}></span>
+                                <b>{s.count}</b>&nbsp;{s.label}
+                            </span>
+                        </template>
+                    </div>
+                </template>
+                <lightning-button-icon
+                    icon-name="utility:refresh"
+                    variant="border-filled"
+                    alternative-text="Refresh"
+                    title="Refresh activities"
+                    onclick={handleRefresh}
+                    disabled={isRefreshing}
+                    class="refresh-btn"
+                ></lightning-button-icon>
+            </div>
+        </div>
+
+        <!-- Toolbar -->
+        <template if:true={hasActivities}>
+            <div class="toolbar">
+                <div class="seg" role="group" aria-label="Filter by type">
+                    <template for:each={typeFilterButtons} for:item="b">
+                        <button
+                            key={b.key}
+                            data-type={b.key}
+                            class={b.buttonClass}
+                            onclick={handleTypeClick}
+                        >
+                            {b.label}
+                        </button>
+                    </template>
+                </div>
+                <div class="filters">
+                    <lightning-combobox
+                        class="filter-select"
+                        label="Office"
+                        variant="label-hidden"
+                        value={officeFilter}
+                        options={officeOptions}
+                        onchange={handleOfficeChange}
+                    ></lightning-combobox>
+                    <lightning-combobox
+                        class="filter-select"
+                        label="Owner"
+                        variant="label-hidden"
+                        value={ownerFilter}
+                        options={ownerOptions}
+                        onchange={handleOwnerChange}
+                    ></lightning-combobox>
+                    <lightning-combobox
+                        class="filter-select"
+                        label="Team"
+                        variant="label-hidden"
+                        value={teamFilter}
+                        options={teamOptions}
+                        onchange={handleTeamChange}
+                    ></lightning-combobox>
+                    <lightning-combobox
+                        class="filter-select"
+                        label="Legal entity"
+                        variant="label-hidden"
+                        value={legalEntityFilter}
+                        options={legalEntityOptions}
+                        onchange={handleLegalEntityChange}
+                    ></lightning-combobox>
+                    <lightning-input
+                        class="filter-search"
+                        type="search"
+                        label="Search"
+                        variant="label-hidden"
+                        placeholder="Search…"
+                        value={searchKey}
+                        onchange={handleSearch}
+                    ></lightning-input>
+                </div>
+            </div>
+        </template>
+
+        <!-- Body -->
+        <template if:true={isLoading}>
+            <div class="state">
+                <lightning-spinner alternative-text="Loading activities" size="small"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+            <template if:true={error}>
+                <div class="state state-error">
+                    <lightning-icon icon-name="utility:error" size="small" variant="error"></lightning-icon>
+                    <p>{error}</p>
+                </div>
+            </template>
+
+            <template if:false={error}>
+                <template if:false={hasActivities}>
+                    <div class="state">
+                        <lightning-icon icon-name="utility:checkin" size="small"></lightning-icon>
+                        <p>No activities have been logged against this firm, its offices, or their contacts and opportunities yet.</p>
+                    </div>
+                </template>
+
+                <template if:true={hasActivities}>
+                    <div class="split">
+                        <!-- Timeline -->
+                        <div class="timeline">
+                            <template if:false={hasResults}>
+                                <div class="state">
+                                    <lightning-icon icon-name="utility:search" size="small"></lightning-icon>
+                                    <p>No activities match these filters.</p>
+                                    <button class="link-btn" onclick={handleClear}>Clear filters</button>
+                                </div>
+                            </template>
+
+                            <template for:each={groups} for:item="group">
+                                <div key={group.key}>
+                                    <p class={group.labelClass}>{group.label}</p>
+                                    <template for:each={group.items} for:item="a">
+                                        <button
+                                            key={a.id}
+                                            data-id={a.id}
+                                            class={a.rowClass}
+                                            onclick={handleSelect}
+                                        >
+                                            <span class={a.typeClass}>
+                                                <lightning-icon
+                                                    icon-name={a.iconName}
+                                                    size="x-small"
+                                                    variant="inverse"
+                                                ></lightning-icon>
+                                            </span>
+                                            <span class="row-body">
+                                                <span class="row-subject">{a.subject}</span>
+                                                <span class="row-meta">
+                                                    <span class="office-pill">{a.officeName}</span>
+                                                    <span class="dot-sep">·</span>
+                                                    <span class="row-owner">{a.ownerName}</span>
+                                                    <template if:true={a.status}>
+                                                        <span class="dot-sep">·</span>
+                                                        <span class={a.statusClass}>{a.status}</span>
+                                                    </template>
+                                                </span>
+                                            </span>
+                                            <span class="row-time">{a.relativeTime}</span>
+                                        </button>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+
+                        <!-- Detail -->
+                        <div class="detail">
+                            <template if:true={selectedActivity}>
+                                <div class="detail-head">
+                                    <span class={selectedActivity.detailTypeClass}>
+                                        <lightning-icon
+                                            icon-name={selectedActivity.iconName}
+                                            size="small"
+                                            variant="inverse"
+                                        ></lightning-icon>
+                                    </span>
+                                    <div>
+                                        <p class="detail-type-label">{selectedActivity.typeLabel}</p>
+                                        <p class="detail-subject">{selectedActivity.subject}</p>
+                                    </div>
+                                </div>
+
+                                <div class="detail-grid">
+                                    <div class="field field_full">
+                                        <p class="field-label">Subject</p>
+                                        <p class="field-value">{selectedActivity.subject}</p>
+                                    </div>
+                                    <div class="field">
+                                        <p class="field-label">Office</p>
+                                        <p class="field-value">{selectedActivity.officeName}</p>
+                                    </div>
+                                    <div class="field">
+                                        <p class="field-label">Owner</p>
+                                        <p class="field-value">{selectedActivity.ownerName}</p>
+                                    </div>
+                                    <template if:true={selectedActivity.hasTeam}>
+                                        <div class="field">
+                                            <p class="field-label">Team</p>
+                                            <p class="field-value">{selectedActivity.ownerTeam}</p>
+                                        </div>
+                                    </template>
+                                    <template if:true={selectedActivity.hasLegalEntity}>
+                                        <div class="field">
+                                            <p class="field-label">Legal entity</p>
+                                            <p class="field-value">{selectedActivity.ownerLegalEntity}</p>
+                                        </div>
+                                    </template>
+                                    <template if:true={selectedActivity.hasRelatedTo}>
+                                        <div class="field">
+                                            <p class="field-label">Opportunity</p>
+                                            <p class="field-value">{selectedActivity.relatedToName}</p>
+                                        </div>
+                                    </template>
+                                    <template if:true={selectedActivity.hasWho}>
+                                        <div class="field">
+                                            <p class="field-label">Contact</p>
+                                            <p class="field-value">{selectedActivity.whoName}</p>
+                                        </div>
+                                    </template>
+                                    <template if:true={selectedActivity.hasStatus}>
+                                        <div class="field">
+                                            <p class="field-label">{selectedActivity.statusLabel}</p>
+                                            <p class="field-value">{selectedActivity.status}</p>
+                                        </div>
+                                    </template>
+                                    <template if:true={selectedActivity.hasPriority}>
+                                        <div class="field">
+                                            <p class="field-label">Priority</p>
+                                            <p class="field-value">{selectedActivity.priority}</p>
+                                        </div>
+                                    </template>
+                                    <div class="field">
+                                        <p class="field-label">Date</p>
+                                        <p class="field-value">
+                                            <lightning-formatted-date-time
+                                                value={selectedActivity.activityDateTime}
+                                                year="numeric"
+                                                month="short"
+                                                day="2-digit"
+                                                hour="2-digit"
+                                                minute="2-digit"
+                                            ></lightning-formatted-date-time>
+                                        </p>
+                                    </div>
+                                    <template if:true={selectedActivity.hasLocation}>
+                                        <div class="field">
+                                            <p class="field-label">Location</p>
+                                            <p class="field-value">{selectedActivity.location}</p>
+                                        </div>
+                                    </template>
+                                </div>
+
+                                <template if:true={selectedActivity.description}>
+                                    <div class="detail-desc">
+                                        <p class="field-label">Details</p>
+                                        <p class="desc-text">{selectedActivity.description}</p>
+                                    </div>
+                                </template>
+
+                                <div class="detail-actions">
+                                    <lightning-button
+                                        label="Open activity"
+                                        icon-name="utility:open"
+                                        onclick={openRecord}
+                                    ></lightning-button>
+                                    <lightning-button
+                                        label="View office"
+                                        icon-name="utility:company"
+                                        onclick={openOffice}
+                                    ></lightning-button>
+                                </div>
+                            </template>
+
+                            <template if:false={selectedActivity}>
+                                <div class="state state-detail">
+                                    <lightning-icon icon-name="utility:side_list" size="small"></lightning-icon>
+                                    <p>Select an activity to see its full detail.</p>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </template>
+        </template>
+    </div>
+</template>

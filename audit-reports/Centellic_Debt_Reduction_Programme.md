@@ -7,6 +7,26 @@ sequences the work by dependency — because doing it in the wrong order is unsa
 
 ---
 
+## 0. CRITICAL UPDATE (13 Jun): the "2% coverage" is largely an ILLUSION
+
+Running the full local Apex suite in the KJDEV sandbox revealed **true coverage of 68%**, not 2%.
+The prod "2%" is a **measurement artifact** — the suite has never been run cleanly in production, so
+prod's stored `ApexOrgWideCoverage` is empty/stale, and ~47 failing tests would block a full run.
+
+| | Prod (stored) | KJDEV (actual full run) |
+|---|---|---|
+| Org-wide Apex coverage | 2% | **68%** |
+| Local tests | (never run clean) | 197 ran, **150 pass (76%)**, 47 fail |
+
+**The tests already exist and mostly pass.** Almost every risk-ranked "0%" class has a passing test
+class in the org (OpportunityAnalyticsCreate_Test 8/8, LBRInteractionReparentService_Test 6/6,
+GenerateQuoteDocTest 4/4, …). So Phase B is **not "write 68 test classes" (months)** — it is:
+
+1. **Fix ~47 failing tests** — they cluster into a few root causes (the biggest: `OpportunityBillingEntityBatch_Test` ×8 failing on the contact-role validation rule — the *exact* data-bypass `TestDataFactory.bypassAutomation()` now solves; plus several `Ast_Renewal*` batch tests).
+2. **Run the suite in prod** to materialise the real ~68% and lift it past the 75% gate.
+
+**The org is ~7 points from world-class coverage, not ~73.** This is days–weeks, not a multi-quarter rescue.
+
 ## 1. The single most important finding: the debt is BOUNDED
 
 | Metric | Reality (measured) | Implication |
@@ -36,7 +56,18 @@ Make failures visible and stop new silent ones. *Delivered:*
 - Read-only diagnostic + findings register + automation standard + trigger framework.
 *Remaining:* purge the 1,098 stale errored interviews (housekeeping); roll the fault framework to prod.
 
-### 🔴 Phase B — Coverage foundation (THE GATE — do next)
+### 🔴 Phase B — Coverage foundation (THE GATE — do next) — REVISED per §0
+The org is already at ~68% (KJDEV). The work is **fix the ~47 failing tests, then run the suite in
+prod**, not write tests from scratch. Sequence:
+1. **Triage the 47 failures by root cause** (most share the contact-role/Ultimate-Account validation
+   rule — fix by routing their setup through `TestDataFactory.bypassAutomation()`).
+2. **Fix class by class**, re-run, confirm green.
+3. **Run the full suite in prod** under change control to materialise true coverage and pass 75%.
+4. **Add a CI gate** so it never regresses.
+Then (lower priority) write tests only for the genuinely uncovered classes (e.g. `ESignGlobalApiCallout`,
+which has no test). **Effort: days–weeks, not months.**
+
+#### Legacy detail (pre-§0 assumption — write-from-scratch list, now mostly moot)
 Bring custom Apex to ≥75% and add CI enforcement, so consolidation becomes safe.
 **Grounded, risk-ranked target list (largest 0%-covered first):**
 

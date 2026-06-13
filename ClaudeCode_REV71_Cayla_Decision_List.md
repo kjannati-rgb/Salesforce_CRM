@@ -7,6 +7,34 @@ line. It cannot see Salesforce's bundle structure (parent/child) — the code is
 grouping signal. One key fact drives several questions below: **in a real CPQ bundle, the
 money usually sits on the child lines, not the bundle header.**
 
+## Production evidence (read-only query of LBR_PROD, 13 Jun 2026)
+
+874 coded lines across **319 opportunities**. Distribution: 633×code 1, 57×code 2, 184×code 3.
+
+**What the live data CONFIRMS (the engine is built to match these):**
+- **One code per deal: 0 of 319 deals carry two different codes.** Rock solid.
+- **The code goes on every line regardless of product** — Law.com International (LWKM) lines
+  appear under code 1 (114×) and Law.com (LAWM) lines appear under code 3 (74×). So the
+  "losing" anchor's lines DO take the winning family's code. The engine does exactly this.
+- **Active real bundles never get a code** — Law.com Pro and Mid Market Pro Bundle: 0 coded
+  lines, ever. Strong support that a standalone-sellable bundle invoices on its own and is
+  NOT given a consolidation code (informs Q2/Q3).
+- **Bundle children are essentially never coded** — only 2 of 874 coded lines are CPQ children
+  (ParentID populated). Historically the code sits on standalone + bundle-PARENT lines. This
+  actually supports the current "exclude children" build, not the "code every child" change.
+
+**What the live data REVEALS as a problem (this reframes the backfill):**
+- The production codes are the **manual, inconsistent history REV-71 exists to replace** — they
+  validate the engine's *structure* but must NOT be treated as a clean oracle of "correct":
+  - **7 of 18 code-2 deals (39%) contain NO GLL product** — directly at odds with the spec's
+    "code 2 = GLL family / GLL-decisive" rule. Manual error or an unknown meaning — Cayla input needed.
+  - Real examples found: LAWM+LWKM coded **2** with no GLL present; an LRLM add-on coded **1**
+    alone; a deal with LAWM coded 3 while its LWKM sibling sits **blank** (partial coding).
+  - ~5% of lines on coded deals are blank (manual misses).
+- **Consequence for §7 backfill:** the audit must compare history against the engine's
+  *derived-correct* code and treat mismatches as candidate CORRECTIONS — not assume the
+  existing code is right. Expect a meaningful correction rate.
+
 ## Settled — built, tested, no discussion needed
 
 | Combination | What happens |

@@ -81,7 +81,7 @@ private class TriggerHandler_Test {
     static void opportunity_handler_instantiates() {
         // smoke: the reference handler compiles and constructs (Trigger vars null in test)
         Test.startTest();
-        OpportunityTriggerHandler oh = new OpportunityTriggerHandler();
+        OppTriggerHandlerReference oh = new OppTriggerHandlerReference();
         Test.stopTest();
         Assert.isNotNull(oh, 'reference handler constructs');
     }

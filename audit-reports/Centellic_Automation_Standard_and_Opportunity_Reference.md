@@ -35,7 +35,7 @@ Rule of thumb: **declarative for the simple and changeable; Apex for the bulk an
 - One `<Object>TriggerHandler` per object extends it; overrides only the contexts it needs.
 - One trigger per object: `trigger OpportunityTrigger on Opportunity (before insert, ...) { new OpportunityTriggerHandler().run(); }`
 - Bypass via CMDT (`Trigger_Setting__mdt`) and a static set, so any handler can be disabled per-env or in a data-load without a deploy.
-- Reference implementation: `TriggerHandler.cls`, `OpportunityTriggerHandler.cls`, `OpportunityDispatchTrigger.trigger`, `TriggerHandler_Test.cls` (this repo).
+- Reference implementation: `TriggerHandler.cls`, `OppTriggerHandlerReference.cls` (named *Reference to avoid colliding with the org's existing `OpportunityTriggerHandler`), `TriggerHandler_Test.cls`, plus `TestDataFactory.cls` (reusable test-data builders). NOTE: the org already has an `OpportunityTriggerHandler` — Phase C consolidates INTO it / replaces it under change control, it is not overwritten ad hoc.
 
 ## 4. Flow orchestrator pattern
 

@@ -92,4 +92,68 @@ public with sharing class AccountPlanController {
 
         return m;
     }
+
+    public class Stakeholder {
+        @AuraEnabled public Id id;
+        @AuraEnabled public String name;
+        @AuraEnabled public String role;
+        @AuraEnabled public String influence;
+        @AuraEnabled public String sentiment;
+        @AuraEnabled public String buyingCenter;
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<Stakeholder> getStakeholders(Id planId) {
+        List<Stakeholder> result = new List<Stakeholder>();
+        for (Plan_Stakeholder__c s : [
+            SELECT Id, Stakeholder_Name__c, Contact__r.Name, Role__c, Influence__c, Sentiment__c, Buying_Center__c
+            FROM Plan_Stakeholder__c
+            WHERE Account_Plan__c = :planId
+            ORDER BY Influence__c, Sentiment__c
+        ]) {
+            Stakeholder st = new Stakeholder();
+            st.id = s.Id;
+            st.name = String.isNotBlank(s.Stakeholder_Name__c) ? s.Stakeholder_Name__c : s.Contact__r.Name;
+            st.role = s.Role__c;
+            st.influence = s.Influence__c;
+            st.sentiment = s.Sentiment__c;
+            st.buyingCenter = s.Buying_Center__c;
+            result.add(st);
+        }
+        return result;
+    }
+
+    public class Objective {
+        @AuraEnabled public Id id;
+        @AuraEnabled public String title;
+        @AuraEnabled public String owner;
+        @AuraEnabled public Decimal targetAmount;
+        @AuraEnabled public Decimal progress;
+        @AuraEnabled public Date dueDate;
+        @AuraEnabled public String status;
+        @AuraEnabled public String linkedFamily;
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<Objective> getObjectives(Id planId) {
+        List<Objective> result = new List<Objective>();
+        for (Plan_Objective__c o : [
+            SELECT Id, Name, OwnerObj__r.Name, Target_Amount__c, Progress_Pct__c, Due_Date__c, Status__c, Linked_Family__r.Name
+            FROM Plan_Objective__c
+            WHERE Account_Plan__c = :planId
+            ORDER BY Due_Date__c NULLS LAST
+        ]) {
+            Objective ob = new Objective();
+            ob.id = o.Id;
+            ob.title = o.Name;
+            ob.owner = o.OwnerObj__r.Name;
+            ob.targetAmount = o.Target_Amount__c;
+            ob.progress = o.Progress_Pct__c;
+            ob.dueDate = o.Due_Date__c;
+            ob.status = o.Status__c;
+            ob.linkedFamily = o.Linked_Family__r.Name;
+            result.add(ob);
+        }
+        return result;
+    }
 }

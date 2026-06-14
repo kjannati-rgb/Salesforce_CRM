@@ -39,6 +39,20 @@
         <allowEdit>true</allowEdit>
         <allowRead>true</allowRead>
     </objectPermissions>
+    <objectPermissions>
+        <object>Plan_Stakeholder__c</object>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+    </objectPermissions>
+    <objectPermissions>
+        <object>Plan_Objective__c</object>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+    </objectPermissions>
 
     <recordTypeVisibilities>
         <recordType>Account_Plan__c.Law_Firm</recordType>
@@ -59,6 +73,14 @@
     </tabSettings>
     <tabSettings>
         <tab>Plan_Product_Family__c</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>Plan_Stakeholder__c</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>Plan_Objective__c</tab>
         <visibility>Visible</visibility>
     </tabSettings>
 
@@ -100,4 +122,19 @@
     <fieldPermissions><field>Whitespace_Cell__c.Next_Action__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
     <fieldPermissions><field>Whitespace_Cell__c.Next_Action_Date__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
     <fieldPermissions><field>Whitespace_Cell__c.External_Key__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+
+    <fieldPermissions><field>Plan_Stakeholder__c.Contact__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Stakeholder__c.Stakeholder_Name__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Stakeholder__c.Role__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Stakeholder__c.Influence__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Stakeholder__c.Sentiment__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Stakeholder__c.Reports_To__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Stakeholder__c.Buying_Center__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+
+    <fieldPermissions><field>Plan_Objective__c.OwnerObj__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Objective__c.Target_Amount__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Objective__c.Progress_Pct__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Objective__c.Due_Date__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Objective__c.Linked_Family__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Objective__c.Status__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
 </PermissionSet>

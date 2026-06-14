@@ -1,0 +1,30 @@
+<template>
+    <lightning-card icon-name="standard:goals">
+        <span slot="title">Objectives</span>
+        <div class="slds-p-horizontal_medium slds-p-bottom_small">
+            <template lwc:if={hasData}>
+                <template for:each={items} for:item="o">
+                    <div key={o.id} class="obj">
+                        <div class="top">
+                            <span class="title">{o.title}</span>
+                            <span class={o.statusClass}>{o.statusLabel}</span>
+                        </div>
+                        <div class="prog"><i style={o.barStyle}></i></div>
+                        <div class="meta">
+                            <span class="pct">{o.pctLabel}</span>
+                            <template lwc:if={o.linkedFamily}>
+                                <span> · {o.linkedFamily}</span>
+                            </template>
+                            <template lwc:if={o.owner}>
+                                <span> · {o.owner}</span>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </template>
+            <template lwc:else>
+                <p class="slds-p-around_medium slds-text-color_weak">No objectives yet.</p>
+            </template>
+        </div>
+    </lightning-card>
+</template>

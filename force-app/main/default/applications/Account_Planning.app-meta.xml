@@ -10,5 +10,7 @@
     <tabs>standard-Account</tabs>
     <tabs>Account_Plan__c</tabs>
     <tabs>Whitespace_Cell__c</tabs>
+    <tabs>Plan_Objective__c</tabs>
+    <tabs>Plan_Stakeholder__c</tabs>
     <tabs>Plan_Product_Family__c</tabs>
 </CustomApplication>

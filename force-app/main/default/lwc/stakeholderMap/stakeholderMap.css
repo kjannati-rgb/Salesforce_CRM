@@ -1,0 +1,76 @@
+.subtitle {
+    font-size: 0.75rem;
+    color: #5c5c5c;
+    font-weight: 600;
+}
+.scroller {
+    overflow-x: auto;
+}
+table.hmap {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    font-size: 0.72rem;
+    table-layout: fixed;
+}
+table.hmap th {
+    font-weight: 600;
+    color: #5c5c5c;
+    text-align: center;
+    padding: 0.4rem 0.25rem;
+    border-bottom: 1px solid #e5e5e5;
+}
+table.hmap th.corner {
+    text-align: left;
+    color: #032d60;
+    width: 6rem;
+}
+td.rowlabel {
+    font-weight: 700;
+    color: #032d60;
+    padding: 0.35rem 0.5rem;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+td.cellwrap {
+    padding: 0;
+}
+.hcell {
+    min-height: 3rem;
+    border-radius: 0.35rem;
+    margin: 0.2rem;
+    padding: 0.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem;
+    align-content: flex-start;
+}
+.hcell.empty {
+    background: #f7f7f7;
+    border: 1px dashed #e3e3e3;
+}
+.hcell.champion {
+    background: #ebf7ee;
+    border: 1px solid #2e844a;
+}
+.hcell.supporter {
+    background: #eef4ff;
+    border: 1px solid #0176d3;
+}
+.hcell.neutral {
+    background: #f3f3f3;
+    border: 1px solid #c9c9c9;
+}
+.hcell.detractor {
+    background: #fdeeee;
+    border: 1px solid #ba0517;
+}
+.chip {
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 0.7rem;
+    padding: 0.1rem 0.45rem;
+    font-size: 0.65rem;
+    color: #181818;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    white-space: nowrap;
+}

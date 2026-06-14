@@ -1,0 +1,62 @@
+.obj {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+.obj:last-child {
+    border-bottom: none;
+}
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+}
+.title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #181818;
+}
+.prog {
+    height: 0.45rem;
+    background: #eee;
+    border-radius: 0.25rem;
+    overflow: hidden;
+    margin-top: 0.4rem;
+}
+.prog > i {
+    display: block;
+    height: 100%;
+    background: #0176d3;
+}
+.meta {
+    font-size: 0.68rem;
+    color: #5c5c5c;
+    margin-top: 0.25rem;
+}
+.meta .pct {
+    font-weight: 700;
+    color: #032d60;
+}
+.badge {
+    font-size: 0.62rem;
+    font-weight: 700;
+    border-radius: 0.7rem;
+    padding: 0.1rem 0.5rem;
+    white-space: nowrap;
+}
+.st-ns {
+    background: #f3f3f3;
+    color: #5c5c5c;
+}
+.st-ip {
+    background: #eef4ff;
+    color: #0b5cab;
+}
+.st-risk {
+    background: #fff4e6;
+    color: #dd7a01;
+}
+.st-done {
+    background: #ebf7ee;
+    color: #2e844a;
+}

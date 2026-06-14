@@ -1,0 +1,41 @@
+<template>
+    <lightning-card icon-name="standard:relationship">
+        <span slot="title">Stakeholder Heat-Map</span>
+        <span slot="actions" class="subtitle">{coverage}</span>
+        <div class="slds-p-horizontal_small slds-p-bottom_small">
+            <template lwc:if={hasData}>
+                <div class="scroller">
+                    <table class="hmap">
+                        <thead>
+                            <tr>
+                                <th class="corner">Influence \ Sentiment</th>
+                                <template for:each={columns} for:item="col">
+                                    <th key={col}>{col}</th>
+                                </template>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={rows} for:item="row">
+                                <tr key={row.key}>
+                                    <td class="rowlabel">{row.label}</td>
+                                    <template for:each={row.cells} for:item="cell">
+                                        <td key={cell.key} class="cellwrap">
+                                            <div class={cell.cssClass}>
+                                                <template for:each={cell.people} for:item="p">
+                                                    <span key={p.id} class="chip">{p.label}</span>
+                                                </template>
+                                            </div>
+                                        </td>
+                                    </template>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </template>
+            <template lwc:else>
+                <p class="slds-p-around_medium slds-text-color_weak">No stakeholders mapped yet.</p>
+            </template>
+        </div>
+    </lightning-card>
+</template>

@@ -4,6 +4,8 @@
         <members>Account_Plan__c</members>
         <members>Whitespace_Cell__c</members>
         <members>Plan_Product_Family__c</members>
+        <members>Plan_Stakeholder__c</members>
+        <members>Plan_Objective__c</members>
         <name>CustomObject</name>
     </types>
     <types>
@@ -44,6 +46,21 @@
         <members>Plan_Product_Family__c.Relevant_Corporate__c</members>
         <members>Plan_Product_Family__c.CPQ_Family_Mapping__c</members>
         <members>Plan_Product_Family__c.Sort_Order__c</members>
+        <members>Plan_Stakeholder__c.Account_Plan__c</members>
+        <members>Plan_Stakeholder__c.Contact__c</members>
+        <members>Plan_Stakeholder__c.Stakeholder_Name__c</members>
+        <members>Plan_Stakeholder__c.Role__c</members>
+        <members>Plan_Stakeholder__c.Influence__c</members>
+        <members>Plan_Stakeholder__c.Sentiment__c</members>
+        <members>Plan_Stakeholder__c.Reports_To__c</members>
+        <members>Plan_Stakeholder__c.Buying_Center__c</members>
+        <members>Plan_Objective__c.Account_Plan__c</members>
+        <members>Plan_Objective__c.OwnerObj__c</members>
+        <members>Plan_Objective__c.Target_Amount__c</members>
+        <members>Plan_Objective__c.Progress_Pct__c</members>
+        <members>Plan_Objective__c.Due_Date__c</members>
+        <members>Plan_Objective__c.Linked_Family__c</members>
+        <members>Plan_Objective__c.Status__c</members>
         <name>CustomField</name>
     </types>
     <types>
@@ -55,12 +72,16 @@
         <members>Account_Plan__c.All</members>
         <members>Whitespace_Cell__c.All</members>
         <members>Plan_Product_Family__c.All</members>
+        <members>Plan_Stakeholder__c.All</members>
+        <members>Plan_Objective__c.All</members>
         <name>ListView</name>
     </types>
     <types>
         <members>Account_Plan__c</members>
         <members>Whitespace_Cell__c</members>
         <members>Plan_Product_Family__c</members>
+        <members>Plan_Stakeholder__c</members>
+        <members>Plan_Objective__c</members>
         <name>CustomTab</name>
     </types>
     <types>
@@ -74,6 +95,8 @@
     </types>
     <types>
         <members>whitespaceMatrix</members>
+        <members>stakeholderMap</members>
+        <members>objectivesPanel</members>
         <name>LightningComponentBundle</name>
     </types>
     <types>

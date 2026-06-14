@@ -1,0 +1,24 @@
+<template>
+    <lightning-card icon-name="utility:high_velocity_sales">
+        <span slot="title">Key Signals</span>
+        <div class="slds-p-horizontal_medium slds-p-bottom_small">
+            <template lwc:if={hasData}>
+                <template for:each={items} for:item="s">
+                    <div key={s.id} class="signal">
+                        <span class={s.dotClass}></span>
+                        <div class="content">
+                            <div class="summary">{s.summary}</div>
+                            <div class="meta">{s.meta}</div>
+                            <template lwc:if={s.recommendedAction}>
+                                <div class="action">▸ {s.recommendedAction}</div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </template>
+            <template lwc:else>
+                <p class="slds-p-around_medium slds-text-color_weak">No open signals.</p>
+            </template>
+        </div>
+    </lightning-card>
+</template>

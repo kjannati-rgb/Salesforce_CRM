@@ -13,6 +13,10 @@
         <apexClass>AccountPlanController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
+    <classAccesses>
+        <apexClass>PlanSharingService</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
 
     <objectPermissions>
         <object>Account_Plan__c</object>
@@ -53,6 +57,22 @@
         <allowEdit>true</allowEdit>
         <allowRead>true</allowRead>
     </objectPermissions>
+    <objectPermissions>
+        <object>Plan_Team_Member__c</object>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+    </objectPermissions>
+    <objectPermissions>
+        <object>Plan_Signal__c</object>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>true</modifyAllRecords>
+        <viewAllRecords>true</viewAllRecords>
+    </objectPermissions>
 
     <recordTypeVisibilities>
         <recordType>Account_Plan__c.Law_Firm</recordType>
@@ -81,6 +101,14 @@
     </tabSettings>
     <tabSettings>
         <tab>Plan_Objective__c</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>Plan_Signal__c</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>Plan_Team_Member__c</tab>
         <visibility>Visible</visibility>
     </tabSettings>
 
@@ -137,4 +165,21 @@
     <fieldPermissions><field>Plan_Objective__c.Due_Date__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
     <fieldPermissions><field>Plan_Objective__c.Linked_Family__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
     <fieldPermissions><field>Plan_Objective__c.Status__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+
+    <fieldPermissions><field>Plan_Signal__c.Account_Plan__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Signal__c.Account__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Signal__c.Signal_Type__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Signal__c.Source__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Signal__c.Severity__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Signal__c.Summary__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Signal__c.Recommended_Action__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Signal__c.OwnerSig__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Signal__c.Status__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Signal__c.Detected_Date__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Signal__c.Linked_Cell__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Signal__c.Linked_Stakeholder__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+
+    <fieldPermissions><field>Plan_Team_Member__c.User__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Team_Member__c.Plan_Role__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Team_Member__c.Product_Family__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
 </PermissionSet>

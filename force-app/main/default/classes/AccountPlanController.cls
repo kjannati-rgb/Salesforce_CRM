@@ -156,4 +156,65 @@ public with sharing class AccountPlanController {
         }
         return result;
     }
+
+    public class Signal {
+        @AuraEnabled public Id id;
+        @AuraEnabled public String signalType;
+        @AuraEnabled public String severity;
+        @AuraEnabled public String source;
+        @AuraEnabled public String summary;
+        @AuraEnabled public String recommendedAction;
+        @AuraEnabled public String status;
+        @AuraEnabled public Date detectedDate;
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<Signal> getSignals(Id planId) {
+        List<Signal> result = new List<Signal>();
+        for (Plan_Signal__c s : [
+            SELECT Id, Signal_Type__c, Severity__c, Source__c, Summary__c,
+                   Recommended_Action__c, Status__c, Detected_Date__c
+            FROM Plan_Signal__c
+            WHERE Account_Plan__c = :planId AND Status__c = 'Open'
+            ORDER BY Severity__c, Detected_Date__c DESC
+        ]) {
+            Signal sg = new Signal();
+            sg.id = s.Id;
+            sg.signalType = s.Signal_Type__c;
+            sg.severity = s.Severity__c;
+            sg.source = s.Source__c;
+            sg.summary = s.Summary__c;
+            sg.recommendedAction = s.Recommended_Action__c;
+            sg.status = s.Status__c;
+            sg.detectedDate = s.Detected_Date__c;
+            result.add(sg);
+        }
+        return result;
+    }
+
+    public class TeamMember {
+        @AuraEnabled public Id id;
+        @AuraEnabled public String name;
+        @AuraEnabled public String role;
+        @AuraEnabled public String lane;
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<TeamMember> getTeam(Id planId) {
+        List<TeamMember> result = new List<TeamMember>();
+        for (Plan_Team_Member__c tm : [
+            SELECT Id, User__r.Name, Plan_Role__c, Product_Family__r.Name
+            FROM Plan_Team_Member__c
+            WHERE Account_Plan__c = :planId
+            ORDER BY Plan_Role__c
+        ]) {
+            TeamMember t = new TeamMember();
+            t.id = tm.Id;
+            t.name = tm.User__r.Name;
+            t.role = tm.Plan_Role__c;
+            t.lane = tm.Product_Family__r.Name;
+            result.add(t);
+        }
+        return result;
+    }
 }

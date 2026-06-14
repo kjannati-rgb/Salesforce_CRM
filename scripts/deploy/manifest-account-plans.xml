@@ -6,6 +6,8 @@
         <members>Plan_Product_Family__c</members>
         <members>Plan_Stakeholder__c</members>
         <members>Plan_Objective__c</members>
+        <members>Plan_Signal__c</members>
+        <members>Plan_Team_Member__c</members>
         <name>CustomObject</name>
     </types>
     <types>
@@ -61,6 +63,22 @@
         <members>Plan_Objective__c.Due_Date__c</members>
         <members>Plan_Objective__c.Linked_Family__c</members>
         <members>Plan_Objective__c.Status__c</members>
+        <members>Plan_Signal__c.Account_Plan__c</members>
+        <members>Plan_Signal__c.Account__c</members>
+        <members>Plan_Signal__c.Signal_Type__c</members>
+        <members>Plan_Signal__c.Source__c</members>
+        <members>Plan_Signal__c.Severity__c</members>
+        <members>Plan_Signal__c.Summary__c</members>
+        <members>Plan_Signal__c.Recommended_Action__c</members>
+        <members>Plan_Signal__c.OwnerSig__c</members>
+        <members>Plan_Signal__c.Status__c</members>
+        <members>Plan_Signal__c.Detected_Date__c</members>
+        <members>Plan_Signal__c.Linked_Cell__c</members>
+        <members>Plan_Signal__c.Linked_Stakeholder__c</members>
+        <members>Plan_Team_Member__c.Account_Plan__c</members>
+        <members>Plan_Team_Member__c.User__c</members>
+        <members>Plan_Team_Member__c.Plan_Role__c</members>
+        <members>Plan_Team_Member__c.Product_Family__c</members>
         <name>CustomField</name>
     </types>
     <types>
@@ -74,6 +92,8 @@
         <members>Plan_Product_Family__c.All</members>
         <members>Plan_Stakeholder__c.All</members>
         <members>Plan_Objective__c.All</members>
+        <members>Plan_Signal__c.All</members>
+        <members>Plan_Team_Member__c.All</members>
         <name>ListView</name>
     </types>
     <types>
@@ -82,6 +102,8 @@
         <members>Plan_Product_Family__c</members>
         <members>Plan_Stakeholder__c</members>
         <members>Plan_Objective__c</members>
+        <members>Plan_Signal__c</members>
+        <members>Plan_Team_Member__c</members>
         <name>CustomTab</name>
     </types>
     <types>
@@ -91,12 +113,24 @@
     <types>
         <members>AccountPlanController</members>
         <members>AccountPlanControllerTest</members>
+        <members>PlanSharingService</members>
+        <members>PlanSharingServiceTest</members>
         <name>ApexClass</name>
+    </types>
+    <types>
+        <members>PlanTeamMemberTrigger</members>
+        <name>ApexTrigger</name>
+    </types>
+    <types>
+        <members>Account_Plan_Workspace</members>
+        <name>FlexiPage</name>
     </types>
     <types>
         <members>whitespaceMatrix</members>
         <members>stakeholderMap</members>
         <members>objectivesPanel</members>
+        <members>keySignals</members>
+        <members>planTeam</members>
         <name>LightningComponentBundle</name>
     </types>
     <types>

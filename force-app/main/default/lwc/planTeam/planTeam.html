@@ -1,0 +1,23 @@
+<template>
+    <lightning-card icon-name="standard:groups">
+        <span slot="title">Plan Team</span>
+        <div class="slds-p-horizontal_medium slds-p-bottom_small">
+            <template lwc:if={hasData}>
+                <template for:each={members} for:item="m">
+                    <div key={m.id} class="member">
+                        <div class="who">
+                            <span class="name">{m.name}</span>
+                            <template lwc:if={m.lane}>
+                                <span class="lanetext">{m.lane}</span>
+                            </template>
+                        </div>
+                        <span class={m.roleClass}>{m.roleLabel}</span>
+                    </div>
+                </template>
+            </template>
+            <template lwc:else>
+                <p class="slds-p-around_medium slds-text-color_weak">No team members yet.</p>
+            </template>
+        </div>
+    </lightning-card>
+</template>

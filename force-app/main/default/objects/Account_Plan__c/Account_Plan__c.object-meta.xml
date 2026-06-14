@@ -16,6 +16,10 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Account Plans</pluralLabel>
-    <sharingModel>ReadWrite</sharingModel>
+    <sharingModel>Read</sharingModel>
+    <sharingReasons>
+        <fullName>Plan_Team_Access__c</fullName>
+        <label>Plan Team Access</label>
+    </sharingReasons>
     <visibility>Public</visibility>
 </CustomObject>

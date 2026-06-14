@@ -1,0 +1,47 @@
+.member {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+.member:last-child {
+    border-bottom: none;
+}
+.who {
+    display: flex;
+    flex-direction: column;
+}
+.name {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #181818;
+}
+.lanetext {
+    font-size: 0.66rem;
+    color: #5c5c5c;
+}
+.badge {
+    font-size: 0.62rem;
+    font-weight: 700;
+    border-radius: 0.7rem;
+    padding: 0.1rem 0.5rem;
+    white-space: nowrap;
+}
+.lead {
+    background: #032d60;
+    color: #fff;
+}
+.badge.lane {
+    background: #eef4ff;
+    color: #0b5cab;
+}
+.sdr {
+    background: #fff4e6;
+    color: #dd7a01;
+}
+.contrib {
+    background: #f3f3f3;
+    color: #5c5c5c;
+}

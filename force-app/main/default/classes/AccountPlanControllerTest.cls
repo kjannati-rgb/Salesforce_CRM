@@ -27,11 +27,26 @@ private class AccountPlanControllerTest {
             Progress_Pct__c = 40, Target_Amount__c = 50000, Due_Date__c = Date.today().addDays(30),
             Linked_Family__c = famPro.Id);
 
+        insert new Plan_Signal__c(
+            Account_Plan__c = plan.Id, Signal_Type__c = 'Risk', Severity__c = 'High',
+            Source__c = 'CPQ', Summary__c = 'Renewal window', Status__c = 'Open',
+            Detected_Date__c = Date.today());
+
+        insert new Plan_Team_Member__c(
+            Account_Plan__c = plan.Id, User__c = UserInfo.getUserId(), Plan_Role__c = 'Plan_Lead');
+
         Test.startTest();
         AccountPlanController.PlanMatrix m = AccountPlanController.getMatrix(plan.Id);
         List<AccountPlanController.Stakeholder> stk = AccountPlanController.getStakeholders(plan.Id);
         List<AccountPlanController.Objective> objs = AccountPlanController.getObjectives(plan.Id);
+        List<AccountPlanController.Signal> sigs = AccountPlanController.getSignals(plan.Id);
+        List<AccountPlanController.TeamMember> team = AccountPlanController.getTeam(plan.Id);
         Test.stopTest();
+
+        System.assertEquals(1, sigs.size(), 'one open signal');
+        System.assertEquals('Risk', sigs[0].signalType, 'signal type');
+        System.assertEquals(1, team.size(), 'one team member');
+        System.assertEquals('Plan_Lead', team[0].role, 'team role');
 
         System.assertEquals('Test Plan', m.planName, 'plan name');
         System.assertEquals(1, m.cells.size(), 'one cell');

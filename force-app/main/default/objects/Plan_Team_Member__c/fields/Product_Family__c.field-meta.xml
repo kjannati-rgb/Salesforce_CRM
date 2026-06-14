@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Product_Family__c</fullName>
+    <label>Lane (Product Family)</label>
+    <description>Which lane this member owns.</description>
+    <type>Lookup</type>
+    <referenceTo>Plan_Product_Family__c</referenceTo>
+    <relationshipName>Team_Members</relationshipName>
+    <relationshipLabel>Team Members</relationshipLabel>
+    <required>false</required>
+    <deleteConstraint>SetNull</deleteConstraint>
+</CustomField>

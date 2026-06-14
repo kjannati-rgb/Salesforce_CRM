@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Headroom__c</fullName>
+    <label>Headroom</label>
+    <description>Roll-up of expected revenue (gap-to-benchmark) across the plan's gap cells.</description>
+    <type>Summary</type>
+    <summarizedField>Whitespace_Cell__c.Expected_Revenue__c</summarizedField>
+    <summaryForeignKey>Whitespace_Cell__c.Account_Plan__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+</CustomField>

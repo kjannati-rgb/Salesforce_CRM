@@ -1,0 +1,105 @@
+.subtitle {
+    font-size: 0.75rem;
+    color: #5c5c5c;
+    font-weight: 600;
+}
+.scroller {
+    overflow-x: auto;
+}
+table.ws {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    font-size: 0.72rem;
+}
+table.ws th {
+    font-weight: 600;
+    color: #5c5c5c;
+    text-align: center;
+    padding: 0.4rem 0.25rem;
+    border-bottom: 1px solid #e5e5e5;
+    line-height: 1.15;
+}
+table.ws th.rowhdr {
+    text-align: left;
+    color: #032d60;
+    width: 9rem;
+}
+td.rowlabel {
+    text-align: left;
+    font-weight: 600;
+    color: #2b2b2b;
+    padding: 0.35rem 0.5rem;
+    white-space: nowrap;
+}
+td.cellwrap {
+    padding: 0;
+    width: 6.5rem;
+}
+.cell {
+    height: 2.9rem;
+    border-radius: 0.35rem;
+    margin: 0.2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+.cell .amt {
+    font-weight: 700;
+    font-size: 0.75rem;
+}
+.cell .sub {
+    font-size: 0.6rem;
+    opacity: 0.92;
+}
+.c-owned {
+    background: #2e844a;
+}
+.c-renewal {
+    background: #dd7a01;
+}
+.c-winback {
+    background: #ba0517;
+}
+.c-white {
+    background: #fff;
+    border: 1.5px dashed #c4c4c4;
+    color: #8a8a8a;
+}
+.c-booked {
+    background: #0176d3;
+}
+.c-candidate {
+    background: #5867e8;
+}
+.c-noeng {
+    background: #eaeaea;
+    color: #9a9a9a;
+    border: 1px solid #dcdcdc;
+}
+.c-na {
+    background: #f7f7f7;
+    color: #c4c4c4;
+    border: 1px dashed #e3e3e3;
+}
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0.6rem 0.25rem 0;
+    font-size: 0.7rem;
+    color: #5c5c5c;
+}
+.lg {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+.sw {
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 0.2rem;
+    display: inline-block;
+}

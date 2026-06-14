@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Deal_Model__c</fullName>
+    <label>Deal Model</label>
+    <description>Controls how an empty cell is read and default ownership.</description>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value><fullName>Enterprise</fullName><default>true</default><label>Enterprise</label></value>
+            <value><fullName>Coordinated</fullName><default>false</default><label>Coordinated</label></value>
+            <value><fullName>Regional</fullName><default>false</default><label>Regional</label></value>
+            <value><fullName>Buying_Centre</fullName><default>false</default><label>Buying Centre</label></value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

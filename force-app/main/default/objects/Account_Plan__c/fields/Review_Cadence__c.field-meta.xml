@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Review_Cadence__c</fullName>
+    <label>Review Cadence</label>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value><fullName>Monthly</fullName><default>false</default><label>Monthly</label></value>
+            <value><fullName>Quarterly</fullName><default>true</default><label>Quarterly</label></value>
+            <value><fullName>Half_Yearly</fullName><default>false</default><label>Half-Yearly</label></value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

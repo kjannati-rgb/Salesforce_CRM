@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Node_Key__c</fullName>
+    <label>Node Key</label>
+    <description>Stable key of the row (region id, office id, function id).</description>
+    <type>Text</type>
+    <length>80</length>
+    <required>false</required>
+</CustomField>

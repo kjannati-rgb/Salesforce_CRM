@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_ARR__c</fullName>
+    <label>Total ARR</label>
+    <description>Roll-up of owned ARR across the plan's white-space cells.</description>
+    <type>Summary</type>
+    <summarizedField>Whitespace_Cell__c.ARR__c</summarizedField>
+    <summaryForeignKey>Whitespace_Cell__c.Account_Plan__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+</CustomField>

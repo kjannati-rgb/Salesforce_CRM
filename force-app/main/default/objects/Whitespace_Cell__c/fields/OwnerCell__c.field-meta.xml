@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>OwnerCell__c</fullName>
+    <label>Cell Owner</label>
+    <description>Cell owner / SDR hunter.</description>
+    <type>Lookup</type>
+    <referenceTo>User</referenceTo>
+    <relationshipName>Owned_Whitespace_Cells</relationshipName>
+    <relationshipLabel>White-Space Cells (Owned)</relationshipLabel>
+    <required>false</required>
+    <deleteConstraint>SetNull</deleteConstraint>
+</CustomField>

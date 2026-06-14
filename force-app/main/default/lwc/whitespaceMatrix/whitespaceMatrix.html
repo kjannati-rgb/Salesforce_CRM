@@ -1,0 +1,51 @@
+<template>
+    <lightning-card icon-name="custom:custom63">
+        <span slot="title">White-Space Matrix</span>
+        <span slot="actions" class="subtitle">{subtitle}</span>
+        <div class="slds-p-horizontal_small slds-p-bottom_small">
+            <template lwc:if={hasData}>
+                <div class="scroller">
+                    <table class="ws">
+                        <thead>
+                            <tr>
+                                <th class="rowhdr">Node</th>
+                                <template for:each={columns} for:item="col">
+                                    <th key={col.id}>{col.name}</th>
+                                </template>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={rows} for:item="row">
+                                <tr key={row.key}>
+                                    <td class="rowlabel">{row.label}</td>
+                                    <template for:each={row.cells} for:item="cell">
+                                        <td key={cell.key} class="cellwrap">
+                                            <div class={cell.cssClass}>
+                                                <span class="amt">{cell.amount}</span>
+                                                <span class="sub">{cell.sub}</span>
+                                            </div>
+                                        </td>
+                                    </template>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="legend">
+                    <span class="lg"><span class="sw c-owned"></span>Owned / Healthy</span>
+                    <span class="lg"><span class="sw c-renewal"></span>In Renewal</span>
+                    <span class="lg"><span class="sw c-winback"></span>Win-back</span>
+                    <span class="lg"><span class="sw c-white"></span>White Space</span>
+                    <span class="lg"><span class="sw c-booked"></span>Booked</span>
+                    <span class="lg"><span class="sw c-candidate"></span>Candidate</span>
+                    <span class="lg"><span class="sw c-noeng"></span>No Engagement</span>
+                </div>
+            </template>
+            <template lwc:else>
+                <p class="slds-p-around_medium slds-text-color_weak">
+                    No white-space cells yet. Run generation or seed cells for this plan.
+                </p>
+            </template>
+        </div>
+    </lightning-card>
+</template>

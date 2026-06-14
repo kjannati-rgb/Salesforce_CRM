@@ -23,7 +23,7 @@ changes a production runtime path on arrival.
 | `TriggerHandler` + `OppTriggerHandlerReference` + `TriggerHandler_Test` | Apex | net-new unmanaged; not wired to any trigger |
 | `TestDataFactory` + `TestDataFactory_Test` | Apex (`@isTest`) | never runs in a prod transaction |
 | `Opportunity_AfterSave_Orchestrator` | Flow (Draft) | inert reference; not active |
-| `REV71_ALM_Code_Faults` list view + report + folder | reports/UI | read-only |
+| `Platform_Fault_Log` list view (on `Flow_Log__c`) | UI | read-only; generic fault monitoring |
 | Fixed test classes (`OpportunityBillingEntityBatch_Test`, `TestALMSplitLineItemBatch`, etc.) | Apex `@isTest` | improvements; raise coverage |
 
 **Command (validate first):**
@@ -33,15 +33,15 @@ sf project deploy start \
   -m "CustomObject:Fault_Alert_Setting__mdt" -m "CustomMetadata:Fault_Alert_Setting.Default" \
   -m "ApexClass:TriggerHandler" -m "ApexClass:OppTriggerHandlerReference" -m "ApexClass:TriggerHandler_Test" \
   -m "ApexClass:TestDataFactory" -m "ApexClass:TestDataFactory_Test" \
-  -m "ListView:Flow_Log__c.REV71_ALM_Code_Faults" \
+  -m "ListView:Flow_Log__c.Platform_Fault_Log" \
   -o LBR_PROD --test-level RunSpecifiedTests \
   --tests TriggerHandler_Test --tests TestDataFactory_Test \
   --dry-run    # then re-run without --dry-run
 ```
 - [ ] Validation green (incl. the 2 named tests). **Use RunSpecifiedTests** — prod has pre-existing red tests; RunLocalTests would fail the deploy on unrelated failures.
 - [ ] FLS for the Fault_Alert_Setting fields if any profile needs read (admin only by default).
-- [ ] Deploy the Flow_Log report + folder separately (the report needs a one-time UI re-save of the `PFC_Flow_Logs` report type to bind — known metadata quirk).
 - [ ] After deploy: confirm `Platform_Fault_Logger` is Active and `Fault_Alert_Setting.Default.Alert_Enabled__c = false`.
+- [ ] (Optional) build a `Flow_Log__c` report on the generic `Platform_Fault_Log` view for trend/scheduling — its own artifact, not shared with any feature workstream.
 
 **Rollback:** these are additive — nothing to roll back; if needed, deactivate/delete the new components. No existing prod behaviour was touched.
 
@@ -73,7 +73,7 @@ so the save completes-and-logs instead of throwing an unhandled fault. **Deploym
    active" is OFF, so it lands **Draft** (no effect yet). Confirm the prior version (v27) is still the Active one.
 3. **Quiet-window activation:** in a low-traffic window, activate the new version (Setup → Flows). Keep the
    prior version handy.
-4. **Watch:** monitor `Flow_Log__c` (REV-71 list view) + Opportunity save success for ~1 day. Optionally enable
+4. **Watch:** monitor `Flow_Log__c` (the `Platform_Fault_Log` list view) + Opportunity save success for ~1 day. Optionally enable
    `Fault_Alert_Setting.Alert_Enabled__c` with an admin recipient during the soak.
 5. **Validate semantics:** confirm with finance that no required approval is being silently skipped (sample
    recent deals that hit the fault path in Flow_Log).

@@ -86,10 +86,10 @@ for (Id oppId : byOpp.keySet()) {
 
     if (derived == null && storedCode != null) {
         oppsNoAnchor++;
-        if (samples.size() < 25) samples.add(oppId + ' STORED=' + storedCode + ' DERIVED=none (no-anchor/single-product per current rules)');
+        if (samples.size() < 1000) samples.add(oppId + ' STORED=' + storedCode + ' DERIVED=none (no-anchor/single-product per current rules)');
     } else if (derived != null && storedCode != null && derived != storedCode) {
         oppsCodeMismatch++;
-        if (samples.size() < 25) samples.add(oppId + ' STORED=' + storedCode + ' DERIVED=' + derived
+        if (samples.size() < 1000) samples.add(oppId + ' STORED=' + storedCode + ' DERIVED=' + derived
             + ' GLL=' + hasGLL + ' LAWM=' + familyTotals.get('LAWM') + ' LWKM=' + familyTotals.get('LWKM'));
     } else {
         oppsMatch++;

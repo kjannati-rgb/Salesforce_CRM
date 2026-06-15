@@ -7,15 +7,15 @@
 
 Map<String, Id> plan = new Map<String, Id>();
 for (Account_Plan__c p : [SELECT Id, Name FROM Account_Plan__c
-                          WHERE Name IN ('Latham & Watkins LLP', 'Vodafone Group plc - Legal & Compliance')]) {
+                          WHERE Name IN ('Globex Legal (DEMO) - Account Plan', 'Demo Corp Alpha - Legal & Compliance')]) {
     plan.put(p.Name, p.Id);
 }
 if (plan.isEmpty()) {
     System.debug('No demo plans found - run seed_account_plans.apex first.');
     return;
 }
-Id law  = plan.get('Latham & Watkins LLP');
-Id corp = plan.get('Vodafone Group plc - Legal & Compliance');
+Id law  = plan.get('Globex Legal (DEMO) - Account Plan');
+Id corp = plan.get('Demo Corp Alpha - Legal & Compliance');
 
 Set<Id> planIds = new Set<Id>(plan.values());
 delete [SELECT Id FROM Plan_Stakeholder__c WHERE Account_Plan__c IN :planIds];
@@ -31,15 +31,15 @@ Map<Id, List<String>> stk = new Map<Id, List<String>>{
     law => new List<String>{
         'Alicia Reyes|General Counsel, London|High|Champion|London',
         'Tom Webb|Practice Head, Disputes|High|Supporter|London',
-        'S. Patel|Knowledge Lead, Frankfurt|Medium|Neutral|Frankfurt',
-        'M. Dubois|Procurement, Paris|Medium|Detractor|Paris',
+        'S. Patel|Knowledge Lead, Manchester|Medium|Neutral|Manchester',
+        'M. Dubois|Procurement, New York|Medium|Detractor|New York',
         'K. Olsen|Library Services|Low|Supporter|London'
     },
     corp => new List<String>{
         'Sarah Nweze|Group General Counsel|High|Neutral|Group Legal',
         'James Cole|Head of Commercial|High|Champion|Commercial & Disputes',
         'Priya Anand|Head of Regulatory|Medium|Supporter|Regulatory & Competition',
-        'Olaf Berg|Legal Ops, Germany|Medium|Detractor|Vodafone Germany',
+        'Olaf Berg|Legal Ops, EU|Medium|Detractor|Demo Corp EU',
         'Lena Fischer|Knowledge Manager|Low|Neutral|Group Legal'
     }
 };

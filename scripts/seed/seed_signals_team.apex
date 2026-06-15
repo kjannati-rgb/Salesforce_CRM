@@ -7,15 +7,15 @@
 
 Map<String, Id> plan = new Map<String, Id>();
 for (Account_Plan__c p : [SELECT Id, Name FROM Account_Plan__c
-                          WHERE Name IN ('Latham & Watkins LLP', 'Vodafone Group plc - Legal & Compliance')]) {
+                          WHERE Name IN ('Globex Legal (DEMO) - Account Plan', 'Demo Corp Alpha - Legal & Compliance')]) {
     plan.put(p.Name, p.Id);
 }
 if (plan.isEmpty()) {
     System.debug('No demo plans found - run seed_account_plans.apex first.');
     return;
 }
-Id law  = plan.get('Latham & Watkins LLP');
-Id corp = plan.get('Vodafone Group plc - Legal & Compliance');
+Id law  = plan.get('Globex Legal (DEMO) - Account Plan');
+Id corp = plan.get('Demo Corp Alpha - Legal & Compliance');
 Set<Id> planIds = new Set<Id>(plan.values());
 
 delete [SELECT Id FROM Plan_Signal__c WHERE Account_Plan__c IN :planIds];
@@ -25,7 +25,7 @@ delete [SELECT Id FROM Plan_Team_Member__c WHERE Account_Plan__c IN :planIds];
 Map<Id, List<String>> sig = new Map<Id, List<String>>{
     law => new List<String>{
         'Risk|High|CPQ|Renewal window - ALM Intelligence: GBP 420K ends in 74 days (London)|Open renewal play; assign AE',
-        'Relationship|Medium|Contact history|Champion job-change: S. Patel moved roles (Frankfurt)|Re-map Frankfurt relationships',
+        'Relationship|Medium|Contact history|Champion job-change: S. Patel moved roles (Manchester)|Re-map Manchester relationships',
         'Expansion|Medium|Whitespace_Cell|White-space threshold crossed: Lexology Intelligence gap GBP 140K|Draft opportunity',
         'Intent|Medium|ZoomInfo|Intent spike on "legal AI" (DC office)|Prioritise outbound'
     },

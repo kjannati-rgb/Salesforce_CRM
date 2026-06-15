@@ -1,7 +1,44 @@
 <template>
     <lightning-card icon-name="standard:goals">
         <span slot="title">Objectives</span>
+        <lightning-button
+            slot="actions"
+            label="New"
+            icon-name="utility:add"
+            onclick={handleNew}
+            disabled={showForm}
+        ></lightning-button>
         <div class="slds-p-horizontal_medium slds-p-bottom_small">
+            <template lwc:if={showForm}>
+                <div class="objform">
+                    <p class="formtitle">{formTitle}</p>
+                    <lightning-record-edit-form
+                        object-api-name="Plan_Objective__c"
+                        record-id={editId}
+                        onsubmit={handleSubmit}
+                        onsuccess={handleSuccess}
+                        onerror={handleError}
+                    >
+                        <lightning-input-field field-name="Name"></lightning-input-field>
+                        <lightning-input-field field-name="Status__c"></lightning-input-field>
+                        <lightning-input-field field-name="Progress_Pct__c"></lightning-input-field>
+                        <lightning-input-field field-name="Target_Amount__c"></lightning-input-field>
+                        <lightning-input-field field-name="Due_Date__c"></lightning-input-field>
+                        <lightning-input-field field-name="Linked_Family__c"></lightning-input-field>
+                        <div class="formbtns">
+                            <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+                            <lightning-button
+                                class="slds-p-left_x-small"
+                                variant="brand"
+                                type="submit"
+                                label="Save"
+                                disabled={saving}
+                            ></lightning-button>
+                        </div>
+                    </lightning-record-edit-form>
+                </div>
+            </template>
+
             <template lwc:if={hasData}>
                 <template for:each={items} for:item="o">
                     <div key={o.id} class="obj">
@@ -12,18 +49,34 @@
                         <div class="prog"><i style={o.barStyle}></i></div>
                         <div class="meta">
                             <span class="pct">{o.pctLabel}</span>
-                            <template lwc:if={o.linkedFamily}>
-                                <span> · {o.linkedFamily}</span>
-                            </template>
-                            <template lwc:if={o.owner}>
-                                <span> · {o.owner}</span>
-                            </template>
+                            <template lwc:if={o.linkedFamily}><span> · {o.linkedFamily}</span></template>
+                            <template lwc:if={o.owner}><span> · {o.owner}</span></template>
+                            <span class="rowbtns">
+                                <lightning-button-icon
+                                    icon-name="utility:edit"
+                                    alternative-text="Edit"
+                                    title="Edit"
+                                    variant="bare"
+                                    data-id={o.id}
+                                    onclick={handleEdit}
+                                ></lightning-button-icon>
+                                <template lwc:if={o.notDone}>
+                                    <lightning-button-icon
+                                        icon-name="utility:check"
+                                        alternative-text="Mark complete"
+                                        title="Mark complete"
+                                        variant="bare"
+                                        data-id={o.id}
+                                        onclick={handleComplete}
+                                    ></lightning-button-icon>
+                                </template>
+                            </span>
                         </div>
                     </div>
                 </template>
             </template>
             <template lwc:else>
-                <p class="slds-p-around_medium slds-text-color_weak">No objectives yet.</p>
+                <p class="slds-p-around_medium slds-text-color_weak">No objectives yet — click New to add one.</p>
             </template>
         </div>
     </lightning-card>

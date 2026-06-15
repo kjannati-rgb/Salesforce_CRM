@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Office Activity Timeline</label>
+    <description>Lets users run the Office Activity Timeline component on the Firm Account page: access to the OfficeActivityTimelineController Apex class plus read on the two User fields it surfaces (Team, LBR Legal Entity).</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <classAccesses>
+        <apexClass>OfficeActivityTimelineController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <fieldPermissions>
+        <field>User.Team__c</field>
+        <editable>false</editable>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>User.LBR_Legal_Entity__c</field>
+        <editable>false</editable>
+        <readable>true</readable>
+    </fieldPermissions>
+</PermissionSet>

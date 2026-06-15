@@ -45,3 +45,26 @@
     background: #f3f3f3;
     color: #5c5c5c;
 }
+.right {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex: none;
+}
+.tmform {
+    background: #fafafa;
+    border: 1px solid #e5e5e5;
+    border-radius: 0.35rem;
+    padding: 0.5rem 0.75rem 0.75rem;
+    margin-bottom: 0.75rem;
+}
+.tmform .formtitle {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #032d60;
+    margin-bottom: 0.25rem;
+}
+.formbtns {
+    margin-top: 0.75rem;
+    text-align: right;
+}

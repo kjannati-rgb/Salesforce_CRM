@@ -1,8 +1,34 @@
 <template>
     <lightning-card icon-name="standard:relationship">
         <span slot="title">Stakeholder Heat-Map</span>
-        <span slot="actions" class="subtitle">{coverage}</span>
+        <div slot="actions" class="hdr-actions">
+            <span class="subtitle">{coverage}</span>
+            <lightning-button label="New" icon-name="utility:add" onclick={handleNew} disabled={showForm}></lightning-button>
+        </div>
         <div class="slds-p-horizontal_small slds-p-bottom_small">
+            <template lwc:if={showForm}>
+                <div class="shform">
+                    <p class="formtitle">{formTitle}</p>
+                    <lightning-record-edit-form
+                        object-api-name="Plan_Stakeholder__c"
+                        record-id={editId}
+                        onsubmit={handleSubmit}
+                        onsuccess={handleSuccess}
+                        onerror={handleError}
+                    >
+                        <lightning-input-field field-name="Stakeholder_Name__c"></lightning-input-field>
+                        <lightning-input-field field-name="Role__c"></lightning-input-field>
+                        <lightning-input-field field-name="Influence__c"></lightning-input-field>
+                        <lightning-input-field field-name="Sentiment__c"></lightning-input-field>
+                        <lightning-input-field field-name="Buying_Center__c"></lightning-input-field>
+                        <div class="formbtns">
+                            <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+                            <lightning-button class="slds-p-left_x-small" variant="brand" type="submit" label="Save" disabled={saving}></lightning-button>
+                        </div>
+                    </lightning-record-edit-form>
+                </div>
+            </template>
+
             <template lwc:if={hasData}>
                 <div class="scroller">
                     <table class="hmap">
@@ -22,7 +48,19 @@
                                         <td key={cell.key} class="cellwrap">
                                             <div class={cell.cssClass}>
                                                 <template for:each={cell.people} for:item="p">
-                                                    <span key={p.id} class="chip">{p.label}</span>
+                                                    <span key={p.id} class="chip">
+                                                        <a class="chiplink" data-id={p.id} onclick={handleEdit}>{p.label}</a>
+                                                        <lightning-button-icon
+                                                            icon-name="utility:close"
+                                                            alternative-text="Remove"
+                                                            title="Remove"
+                                                            variant="bare"
+                                                            size="x-small"
+                                                            class="chipx"
+                                                            data-id={p.id}
+                                                            onclick={handleDelete}
+                                                        ></lightning-button-icon>
+                                                    </span>
                                                 </template>
                                             </div>
                                         </td>
@@ -34,7 +72,7 @@
                 </div>
             </template>
             <template lwc:else>
-                <p class="slds-p-around_medium slds-text-color_weak">No stakeholders mapped yet.</p>
+                <p class="slds-p-around_medium slds-text-color_weak">No stakeholders mapped yet — click New to add one.</p>
             </template>
         </div>
     </lightning-card>

@@ -1,4 +1,7 @@
 import { LightningElement, api, wire } from 'lwc';
+import { refreshApex } from '@salesforce/apex';
+import { deleteRecord } from 'lightning/uiRecordApi';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getStakeholders from '@salesforce/apex/AccountPlanController.getStakeholders';
 
 const INFLUENCE = ['High', 'Medium', 'Low'];
@@ -14,9 +17,15 @@ export default class StakeholderMap extends LightningElement {
     @api recordId;
     stakeholders = [];
     error;
+    wiredResult;
+    showForm = false;
+    editId;
+    saving = false;
 
     @wire(getStakeholders, { planId: '$recordId' })
-    wiredStakeholders({ data, error }) {
+    wiredStakeholders(result) {
+        this.wiredResult = result;
+        const { data, error } = result;
         if (data) {
             this.stakeholders = data;
             this.error = undefined;
@@ -28,6 +37,10 @@ export default class StakeholderMap extends LightningElement {
 
     get hasData() {
         return this.stakeholders && this.stakeholders.length > 0;
+    }
+
+    get formTitle() {
+        return this.editId ? 'Edit stakeholder' : 'New stakeholder';
     }
 
     get columns() {
@@ -59,13 +72,61 @@ export default class StakeholderMap extends LightningElement {
         return (
             this.stakeholders.length +
             ' mapped · ' +
-            champ +
-            ' champion' +
-            (champ === 1 ? '' : 's') +
+            champ + ' champion' + (champ === 1 ? '' : 's') +
             ' · ' +
-            detr +
-            ' detractor' +
-            (detr === 1 ? '' : 's')
+            detr + ' detractor' + (detr === 1 ? '' : 's')
         );
+    }
+
+    handleNew() {
+        this.editId = undefined;
+        this.showForm = true;
+    }
+
+    handleEdit(event) {
+        this.editId = event.currentTarget.dataset.id;
+        this.showForm = true;
+    }
+
+    handleCancel() {
+        this.showForm = false;
+        this.editId = undefined;
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+        const fields = { ...event.detail.fields };
+        if (!this.editId) {
+            fields.Account_Plan__c = this.recordId;
+        }
+        this.saving = true;
+        this.template.querySelector('lightning-record-edit-form').submit(fields);
+    }
+
+    async handleSuccess() {
+        this.saving = false;
+        this.showForm = false;
+        this.editId = undefined;
+        await refreshApex(this.wiredResult);
+        this.toast('Stakeholder saved', 'success');
+    }
+
+    handleError() {
+        this.saving = false;
+        this.toast('Could not save stakeholder — check required fields', 'error');
+    }
+
+    async handleDelete(event) {
+        try {
+            await deleteRecord(event.currentTarget.dataset.id);
+            await refreshApex(this.wiredResult);
+            this.toast('Stakeholder removed', 'success');
+        } catch (e) {
+            this.toast('Could not remove stakeholder', 'error');
+        }
+    }
+
+    toast(title, variant) {
+        this.dispatchEvent(new ShowToastEvent({ title, variant }));
     }
 }

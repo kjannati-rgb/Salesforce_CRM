@@ -41,3 +41,25 @@
     color: #0b5cab;
     margin-top: 0.2rem;
 }
+.sigbtns {
+    flex: none;
+    display: flex;
+    align-items: flex-start;
+}
+.sigform {
+    background: #fafafa;
+    border: 1px solid #e5e5e5;
+    border-radius: 0.35rem;
+    padding: 0.5rem 0.75rem 0.75rem;
+    margin-bottom: 0.75rem;
+}
+.sigform .formtitle {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #032d60;
+    margin-bottom: 0.25rem;
+}
+.formbtns {
+    margin-top: 0.75rem;
+    text-align: right;
+}

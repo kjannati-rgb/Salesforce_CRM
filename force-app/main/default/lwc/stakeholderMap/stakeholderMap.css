@@ -68,9 +68,44 @@ td.cellwrap {
 .chip {
     background: rgba(255, 255, 255, 0.85);
     border-radius: 0.7rem;
-    padding: 0.1rem 0.45rem;
+    padding: 0.1rem 0.2rem 0.1rem 0.45rem;
     font-size: 0.65rem;
     color: #181818;
     border: 1px solid rgba(0, 0, 0, 0.08);
     white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.1rem;
+}
+.chiplink {
+    cursor: pointer;
+    color: #181818;
+}
+.chiplink:hover {
+    text-decoration: underline;
+}
+.chipx {
+    --slds-c-icon-color-foreground-default: #8a8a8a;
+}
+.hdr-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+.shform {
+    background: #fafafa;
+    border: 1px solid #e5e5e5;
+    border-radius: 0.35rem;
+    padding: 0.5rem 0.75rem 0.75rem;
+    margin-bottom: 0.75rem;
+}
+.shform .formtitle {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #032d60;
+    margin-bottom: 0.25rem;
+}
+.formbtns {
+    margin-top: 0.75rem;
+    text-align: right;
 }

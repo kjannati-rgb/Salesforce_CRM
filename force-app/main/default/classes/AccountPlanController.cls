@@ -241,4 +241,35 @@ public with sharing class AccountPlanController {
             throw new AuraHandledException(e.getMessage());
         }
     }
+
+    public class TrendPoint {
+        @AuraEnabled public Date snapshotDate;
+        @AuraEnabled public Decimal totalArr;
+        @AuraEnabled public Decimal headroom;
+        @AuraEnabled public Decimal coverage;
+    }
+
+    /**
+     * Headroom/ARR/coverage history for a plan from Plan_Snapshot__c, oldest-first, for the
+     * QBR trend chart (architecture §10).
+     */
+    @AuraEnabled(cacheable=true)
+    public static List<TrendPoint> getTrend(Id planId) {
+        List<TrendPoint> result = new List<TrendPoint>();
+        for (Plan_Snapshot__c s : [
+            SELECT Snapshot_Date__c, Total_ARR__c, Headroom__c, Family_Coverage_Pct__c
+            FROM Plan_Snapshot__c
+            WHERE Account_Plan__c = :planId
+            ORDER BY Snapshot_Date__c ASC
+            LIMIT 50
+        ]) {
+            TrendPoint t = new TrendPoint();
+            t.snapshotDate = s.Snapshot_Date__c;
+            t.totalArr = s.Total_ARR__c;
+            t.headroom = s.Headroom__c;
+            t.coverage = s.Family_Coverage_Pct__c;
+            result.add(t);
+        }
+        return result;
+    }
 }

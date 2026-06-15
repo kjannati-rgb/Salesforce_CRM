@@ -175,10 +175,16 @@ London / Manchester / New York); the plan itself is anchored to the firm via `Ac
 - **Penetration is split** into `Family_Coverage_Pct__c` vs `Seat_Penetration_Pct__c` on purpose
   (resolves the naming collision flagged against §2.1/§3). The engine recomputes `Family_Coverage_Pct__c`;
   `Seat_Penetration_Pct__c` is left to a future seat-count source.
+- **Snapshots / QBR trend (§10) — shipped.** `Plan_Snapshot__c` captures point-in-time headroom
+  metrics (Total ARR, Headroom, coverage, cell counts); `PlanSnapshotService.capture()` /
+  `captureAllActive()` write one snapshot per plan per day (idempotent upsert), driven by
+  `PlanSnapshotSchedule` (schedule weekly/monthly). The `planTrend` LWC charts headroom over time on
+  the plan page (`AccountPlanController.getTrend`); `scripts/seed/seed_snapshots.apex` backfills demo
+  history. Schedule it: `System.schedule('Account Plan Snapshots','0 0 2 ? * MON', new PlanSnapshotSchedule());`
 - Objectives (§2.4), stakeholders (§2.5), signals (§9), team-based sharing (§2.6/§8), the
-  gap-to-benchmark allocation (§3/§5), the CRMA portfolio heat map (§9) and the first generation
-  service (§4) are now included. **Snapshots / QBR trend (§10)** is the remaining slice, plus
-  extending the §4 owned union to CPQ subscriptions + contracts when a CPQ-seeded sandbox is available.
+  gap-to-benchmark allocation (§3/§5), the CRMA portfolio heat map (§9), the first generation
+  service (§4) and snapshots/QBR trend (§10) are now included. The remaining work is extending the
+  §4 owned union to CPQ subscriptions + contracts when a CPQ-seeded sandbox is available.
 - **FlexiPage caveat:** `Account_Plan_Workspace` now contains **only the custom LWCs** (matrix +
   sidebar panels) so it deploys cleanly. KJDEV refused the design-time info for the standard
   `flexipage:highlightsPanel` / `flexipage:recordDetail` components on deploy, so those were dropped;

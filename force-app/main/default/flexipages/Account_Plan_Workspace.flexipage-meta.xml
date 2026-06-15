@@ -9,6 +9,12 @@
                 <identifier>whitespaceMatrix_main</identifier>
             </componentInstance>
         </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>c:planTrend</componentName>
+                <identifier>planTrend_main</identifier>
+            </componentInstance>
+        </itemInstances>
     </flexiPageRegions>
     <flexiPageRegions>
         <name>sidebar</name>

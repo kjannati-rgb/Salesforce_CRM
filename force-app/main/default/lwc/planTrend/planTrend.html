@@ -1,0 +1,26 @@
+<template>
+    <lightning-card icon-name="utility:trending">
+        <span slot="title">Headroom Trend</span>
+        <div class="slds-p-horizontal_small slds-p-bottom_small">
+            <template lwc:if={hasData}>
+                <div class="delta-row">
+                    <span class={deltaClass}>{deltaLabel}</span>
+                </div>
+                <div class="chart">
+                    <template for:each={bars} for:item="b">
+                        <div key={b.key} class="barcol" title={b.amount}>
+                            <span class="amt">{b.amount}</span>
+                            <div class="bar" style={b.barStyle}></div>
+                            <span class="blabel">{b.label}</span>
+                        </div>
+                    </template>
+                </div>
+            </template>
+            <template lwc:else>
+                <p class="slds-p-around_medium slds-text-color_weak">
+                    No snapshots yet. Capture some via PlanSnapshotService (or schedule PlanSnapshotSchedule).
+                </p>
+            </template>
+        </div>
+    </lightning-card>
+</template>

@@ -9,6 +9,7 @@
         <members>Plan_Signal__c</members>
         <members>Plan_Team_Member__c</members>
         <members>Plan_Benchmark_Setting__mdt</members>
+        <members>Plan_Snapshot__c</members>
         <name>CustomObject</name>
     </types>
     <types>
@@ -84,6 +85,16 @@
         <members>Plan_Team_Member__c.User__c</members>
         <members>Plan_Team_Member__c.Plan_Role__c</members>
         <members>Plan_Team_Member__c.Product_Family__c</members>
+        <members>Plan_Snapshot__c.Account_Plan__c</members>
+        <members>Plan_Snapshot__c.Snapshot_Date__c</members>
+        <members>Plan_Snapshot__c.Total_ARR__c</members>
+        <members>Plan_Snapshot__c.Headroom__c</members>
+        <members>Plan_Snapshot__c.Family_Coverage_Pct__c</members>
+        <members>Plan_Snapshot__c.Owned_ARR_Cells__c</members>
+        <members>Plan_Snapshot__c.Whitespace_Cells__c</members>
+        <members>Plan_Snapshot__c.Plan_Tier__c</members>
+        <members>Plan_Snapshot__c.Segment__c</members>
+        <members>Plan_Snapshot__c.External_Key__c</members>
         <name>CustomField</name>
     </types>
     <types>
@@ -124,6 +135,9 @@
         <members>WhitespaceAllocationServiceTest</members>
         <members>WhitespaceGenerationService</members>
         <members>WhitespaceGenerationServiceTest</members>
+        <members>PlanSnapshotService</members>
+        <members>PlanSnapshotSchedule</members>
+        <members>PlanSnapshotServiceTest</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -146,6 +160,7 @@
         <members>objectivesPanel</members>
         <members>keySignals</members>
         <members>planTeam</members>
+        <members>planTrend</members>
         <name>LightningComponentBundle</name>
     </types>
     <types>

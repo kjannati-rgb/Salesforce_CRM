@@ -21,6 +21,18 @@
         <apexClass>WhitespaceAllocationService</apexClass>
         <enabled>true</enabled>
     </classAccesses>
+    <classAccesses>
+        <apexClass>WhitespaceGenerationService</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PlanSnapshotService</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PlanSnapshotSchedule</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
 
     <objectPermissions>
         <object>Account_Plan__c</object>
@@ -42,6 +54,13 @@
     </objectPermissions>
     <objectPermissions>
         <object>Whitespace_Cell__c</object>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+    </objectPermissions>
+    <objectPermissions>
+        <object>Plan_Snapshot__c</object>
         <allowCreate>true</allowCreate>
         <allowDelete>true</allowDelete>
         <allowEdit>true</allowEdit>
@@ -145,6 +164,14 @@
 
     <fieldPermissions><field>Whitespace_Cell__c.Product_Family__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
     <fieldPermissions><field>Whitespace_Cell__c.Office_Account__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Snapshot__c.Total_ARR__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Snapshot__c.Headroom__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Snapshot__c.Family_Coverage_Pct__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Snapshot__c.Owned_ARR_Cells__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Snapshot__c.Whitespace_Cells__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Snapshot__c.Plan_Tier__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Snapshot__c.Segment__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Snapshot__c.External_Key__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
     <fieldPermissions><field>Whitespace_Cell__c.Node_Type__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
     <fieldPermissions><field>Whitespace_Cell__c.Node_Key__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
     <fieldPermissions><field>Whitespace_Cell__c.Node_Label__c</field><readable>true</readable><editable>true</editable></fieldPermissions>

@@ -138,6 +138,8 @@
         <members>PlanSnapshotService</members>
         <members>PlanSnapshotSchedule</members>
         <members>PlanSnapshotServiceTest</members>
+        <members>ObjectiveSuggestionService</members>
+        <members>ObjectiveSuggestionServiceTest</members>
         <name>ApexClass</name>
     </types>
     <types>

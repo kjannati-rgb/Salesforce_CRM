@@ -3,6 +3,8 @@ import { refreshApex } from '@salesforce/apex';
 import { updateRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getObjectives from '@salesforce/apex/AccountPlanController.getObjectives';
+import getSuggestions from '@salesforce/apex/ObjectiveSuggestionService.suggest';
+import acceptSuggestion from '@salesforce/apex/ObjectiveSuggestionService.accept';
 
 const STATUS_CLASS = {
     Not_Started: 'badge st-ns',
@@ -39,8 +41,35 @@ export default class ObjectivesPanel extends LightningElement {
         }
     }
 
+    suggestions = [];
+    wiredSuggestions;
+
+    @wire(getSuggestions, { planId: '$recordId' })
+    wiredSug(result) {
+        this.wiredSuggestions = result;
+        if (result.data) {
+            this.suggestions = result.data;
+        } else if (result.error) {
+            this.suggestions = [];
+        }
+    }
+
     get hasData() {
         return this.objectives && this.objectives.length > 0;
+    }
+
+    get hasSuggestions() {
+        return this.suggestions && this.suggestions.length > 0;
+    }
+
+    get suggestionItems() {
+        return this.suggestions.map((s) => ({
+            key: s.key,
+            title: s.title,
+            rationale: s.rationale,
+            sourceClass: s.source === 'Headroom' ? 'sbadge hr' : 'sbadge sig',
+            source: s.source
+        }));
     }
 
     get formTitle() {
@@ -110,6 +139,23 @@ export default class ObjectivesPanel extends LightningElement {
             this.toast('Objective completed', 'success');
         } catch (e) {
             this.toast('Could not complete objective', 'error');
+        }
+    }
+
+    async handleCreate(event) {
+        const sug = this.suggestions.find((s) => s.key === event.currentTarget.dataset.key);
+        if (!sug) return;
+        try {
+            await acceptSuggestion({
+                planId: this.recordId,
+                title: sug.title,
+                targetAmount: sug.targetAmount,
+                linkedFamilyId: sug.linkedFamilyId
+            });
+            await Promise.all([refreshApex(this.wiredResult), refreshApex(this.wiredSuggestions)]);
+            this.toast('Objective created from suggestion', 'success');
+        } catch (e) {
+            this.toast('Could not create objective', 'error');
         }
     }
 

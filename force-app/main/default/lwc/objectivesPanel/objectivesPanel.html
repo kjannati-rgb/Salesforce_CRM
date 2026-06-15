@@ -39,6 +39,29 @@
                 </div>
             </template>
 
+            <template lwc:if={hasSuggestions}>
+                <div class="suggblock">
+                    <p class="suggtitle">Suggested — from headroom &amp; open signals</p>
+                    <template for:each={suggestionItems} for:item="s">
+                        <div key={s.key} class="sugg">
+                            <div class="suggmain">
+                                <span class="suggttl">{s.title}</span>
+                                <div class="suggmeta">
+                                    <span class={s.sourceClass}>{s.source}</span>
+                                    <span class="suggrat">{s.rationale}</span>
+                                </div>
+                            </div>
+                            <lightning-button
+                                label="Create"
+                                variant="brand-outline"
+                                data-key={s.key}
+                                onclick={handleCreate}
+                            ></lightning-button>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
             <template lwc:if={hasData}>
                 <template for:each={items} for:item="o">
                     <div key={o.id} class="obj">

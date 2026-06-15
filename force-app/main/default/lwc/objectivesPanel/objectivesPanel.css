@@ -80,3 +80,61 @@
 .rowbtns {
     float: right;
 }
+.suggblock {
+    background: #f6f9ff;
+    border: 1px solid #d8e3f8;
+    border-radius: 0.35rem;
+    padding: 0.4rem 0.6rem 0.5rem;
+    margin-bottom: 0.75rem;
+}
+.suggtitle {
+    font-size: 0.66rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #0b5cab;
+    margin-bottom: 0.35rem;
+}
+.sugg {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.35rem 0;
+    border-top: 1px solid #e6eefc;
+}
+.sugg:first-of-type {
+    border-top: none;
+}
+.suggmain {
+    flex: 1;
+    min-width: 0;
+}
+.suggttl {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: #181818;
+}
+.suggmeta {
+    font-size: 0.66rem;
+    color: #5c5c5c;
+    margin-top: 0.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+.sbadge {
+    font-size: 0.58rem;
+    font-weight: 700;
+    border-radius: 0.6rem;
+    padding: 0.05rem 0.4rem;
+    white-space: nowrap;
+}
+.sbadge.hr {
+    background: #ebf7ee;
+    color: #2e844a;
+}
+.sbadge.sig {
+    background: #fff4e6;
+    color: #dd7a01;
+}

@@ -141,21 +141,31 @@ private class REV71_ALMCodeFlow_Test {
     }
 
     @isTest
-    static void internationalDecisiveOverLawCom() {
-        // CLEAN-HIERARCHY rule (Brady, ALM Sales Ops, 1 Aug 2025): a deal containing
-        // Law.com International (LWKM) that isn't a GLL bundle is ALWAYS code 3 — the
-        // primary product, not price, decides 1 vs 3, and Premium (1) can't contain LWKM.
-        // Here LAWM is the PRICIER line, yet the deal must still be 3.
+    static void varRuleFollowsHighestRevenueAnchor() {
+        // RULE (Brady, ALM Sales Ops, 14 Aug 2025): on a deal with both Law.com (LAWM)
+        // and Law.com International (LWKM) — and no GLL — the PRIMARY product is whichever
+        // has the MOST REVENUE: LAWM primary -> code 1 (Premium); LWKM primary -> code 3
+        // (International). Self-calibrating: the engine compares summed SBQQ__NetTotal__c,
+        // whose population on an uncalculated test quote is package-defined, so derive the
+        // expectation from the lines' actual stored basis (equal totals -> tie -> 1).
         Map<String, Product2> p = prods(); Map<String, Id> e = pbes();
-        Opportunity o = makeOpp('REV71T intl');
+        Opportunity o = makeOpp('REV71T var');
         SBQQ__Quote__c q = makeQuote(o, false);
         insert new List<SBQQ__QuoteLine__c>{
-            line(q.Id, p.get('LAWM'), e.get('LAWM'), 8000, 1),  // pricier — must NOT win
-            line(q.Id, p.get('LWKM'), e.get('LWKM'), 2000, 2)
+            line(q.Id, p.get('LAWM'), e.get('LAWM'), 4000, 1),
+            line(q.Id, p.get('LWKM'), e.get('LWKM'), 8000, 2)
         };
         fireEngine(q.Id);
+        Decimal lawm = 0, lwkm = 0;
+        for (SBQQ__QuoteLine__c l : [SELECT SBQQ__NetTotal__c, SBQQ__Product__r.ProductCode
+                FROM SBQQ__QuoteLine__c WHERE SBQQ__Quote__c = :q.Id]) {
+            Decimal t = l.SBQQ__NetTotal__c == null ? 0 : l.SBQQ__NetTotal__c;
+            if (l.SBQQ__Product__r.ProductCode == 'LAWM') lawm += t; else lwkm += t;
+        }
+        Decimal expected = lawm >= lwkm ? 1 : 3; // tie -> Law.com (1) per documented assumption
         for (Decimal v : qlCodes(q.Id).values()) {
-            Assert.areEqual(3, v, 'LWKM present (no GLL) -> code 3 regardless of price (Intl decisive)');
+            Assert.areEqual(expected, v, 'highest-revenue anchor family wins '
+                + '(LAWM total=' + lawm + ', LWKM total=' + lwkm + ')');
         }
     }
 

@@ -1,9 +1,39 @@
 <template>
     <lightning-card icon-name="custom:custom63">
         <span slot="title">White-Space Matrix</span>
-        <span slot="actions" class="subtitle">{subtitle}</span>
+        <div slot="actions" class="hdr-actions">
+            <span class="subtitle">{subtitle}</span>
+            <lightning-button
+                label="Recalculate headroom"
+                icon-name="utility:refresh"
+                variant="brand-outline"
+                onclick={handleRecalc}
+                disabled={recalculating}
+            ></lightning-button>
+        </div>
         <div class="slds-p-horizontal_small slds-p-bottom_small">
             <template lwc:if={hasData}>
+                <div class="summary">
+                    <div class="stat">
+                        <span class="k">Total ARR</span>
+                        <span class="v">{totalArr}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="k">Headroom (gap-to-benchmark)</span>
+                        <span class="v v-gap">{headroom}</span>
+                    </div>
+                </div>
+                <div class="famrow">
+                    <template for:each={familySummary} for:item="f">
+                        <span key={f.key} class="famchip">
+                            <span class="fn">{f.name}</span>
+                            <span class="fo">{f.owned}</span>
+                            <template lwc:if={f.hasHeadroom}>
+                                <span class="fg">+{f.headroom}</span>
+                            </template>
+                        </span>
+                    </template>
+                </div>
                 <div class="scroller">
                     <table class="ws">
                         <thead>
@@ -17,7 +47,12 @@
                         <tbody>
                             <template for:each={rows} for:item="row">
                                 <tr key={row.key}>
-                                    <td class="rowlabel">{row.label}</td>
+                                    <td class="rowlabel">
+                                        <template lwc:if={row.officeUrl}>
+                                            <a href={row.officeUrl} target="_top">{row.label}</a>
+                                        </template>
+                                        <template lwc:else>{row.label}</template>
+                                    </td>
                                     <template for:each={row.cells} for:item="cell">
                                         <td key={cell.key} class="cellwrap">
                                             <div class={cell.cssClass}>

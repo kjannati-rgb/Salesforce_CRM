@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Benchmark_ARR_Per_Seat_Law_Firm__c</fullName>
+    <label>Benchmark ARR / Seat (Law Firm)</label>
+    <description>Fully-penetrated benchmark ARR per attorney for this family on a Law Firm plan. Gap-to-benchmark input: benchmark = this x SoW_Denominator x tier multiplier.</description>
+    <inlineHelpText>Expected ARR per attorney when this family is fully adopted at a peer law firm. Leave blank if not benchmarked.</inlineHelpText>
+    <type>Currency</type>
+    <precision>16</precision>
+    <scale>2</scale>
+    <required>false</required>
+</CustomField>

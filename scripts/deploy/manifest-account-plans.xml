@@ -8,6 +8,7 @@
         <members>Plan_Objective__c</members>
         <members>Plan_Signal__c</members>
         <members>Plan_Team_Member__c</members>
+        <members>Plan_Benchmark_Setting__mdt</members>
         <name>CustomObject</name>
     </types>
     <types>
@@ -43,11 +44,15 @@
         <members>Whitespace_Cell__c.Next_Action__c</members>
         <members>Whitespace_Cell__c.Next_Action_Date__c</members>
         <members>Whitespace_Cell__c.External_Key__c</members>
+        <members>Whitespace_Cell__c.Office_Account__c</members>
         <members>Plan_Product_Family__c.Family_Type__c</members>
         <members>Plan_Product_Family__c.Relevant_Law_Firm__c</members>
         <members>Plan_Product_Family__c.Relevant_Corporate__c</members>
         <members>Plan_Product_Family__c.CPQ_Family_Mapping__c</members>
         <members>Plan_Product_Family__c.Sort_Order__c</members>
+        <members>Plan_Product_Family__c.Benchmark_ARR_Per_Seat_Law_Firm__c</members>
+        <members>Plan_Product_Family__c.Benchmark_ARR_Per_Seat_Corporate__c</members>
+        <members>Plan_Benchmark_Setting__mdt.Tier_Multiplier__c</members>
         <members>Plan_Stakeholder__c.Account_Plan__c</members>
         <members>Plan_Stakeholder__c.Contact__c</members>
         <members>Plan_Stakeholder__c.Stakeholder_Name__c</members>
@@ -115,7 +120,17 @@
         <members>AccountPlanControllerTest</members>
         <members>PlanSharingService</members>
         <members>PlanSharingServiceTest</members>
+        <members>WhitespaceAllocationService</members>
+        <members>WhitespaceAllocationServiceTest</members>
+        <members>WhitespaceGenerationService</members>
+        <members>WhitespaceGenerationServiceTest</members>
         <name>ApexClass</name>
+    </types>
+    <types>
+        <members>Plan_Benchmark_Setting.T1</members>
+        <members>Plan_Benchmark_Setting.T2</members>
+        <members>Plan_Benchmark_Setting.T3</members>
+        <name>CustomMetadata</name>
     </types>
     <types>
         <members>PlanTeamMemberTrigger</members>

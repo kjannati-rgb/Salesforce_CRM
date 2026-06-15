@@ -61,4 +61,33 @@ private class AccountPlanControllerTest {
         System.assertEquals('Land Intelligence', objs[0].title, 'objective title');
         System.assertEquals(40, objs[0].progress, 'objective progress');
     }
+
+    @isTest
+    static void recalcHeadroomDelegatesToEngine() {
+        System.assertEquals(0, AccountPlanController.recalcHeadroom(null), 'null plan is a no-op');
+
+        Plan_Product_Family__c fam = new Plan_Product_Family__c(
+            Name = 'Lexology PRO', Relevant_Law_Firm__c = true, Sort_Order__c = 1,
+            Benchmark_ARR_Per_Seat_Law_Firm__c = 1000);
+        insert fam;
+
+        Account_Plan__c plan = new Account_Plan__c(
+            Name = 'Recalc Plan', Plan_Tier__c = 'T1', SoW_Denominator__c = 50);
+        insert plan;
+
+        insert new Whitespace_Cell__c(
+            Account_Plan__c = plan.Id, Product_Family__c = fam.Id,
+            Node_Type__c = 'Office_Subsidiary', Node_Key__c = 'london', Node_Label__c = 'London',
+            State__c = 'White_Space', ARR__c = 0, External_Key__c = plan.Id + '|pro|london');
+
+        Test.startTest();
+        Integer changed = AccountPlanController.recalcHeadroom(plan.Id);
+        Test.stopTest();
+
+        System.assertEquals(1, changed, 'one white-space cell allocated');
+        Whitespace_Cell__c c = [
+            SELECT Expected_Revenue__c FROM Whitespace_Cell__c
+            WHERE Account_Plan__c = :plan.Id LIMIT 1];
+        System.assert(c.Expected_Revenue__c > 0, 'headroom allocated to the gap cell');
+    }
 }

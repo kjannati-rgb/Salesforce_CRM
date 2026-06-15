@@ -22,10 +22,13 @@ public with sharing class AccountPlanController {
         @AuraEnabled public Decimal expectedRevenue;
         @AuraEnabled public Decimal seatPenetration;
         @AuraEnabled public String nextAction;
+        @AuraEnabled public Id officeAccountId;
+        @AuraEnabled public String officeAccountName;
     }
 
     public class PlanMatrix {
         @AuraEnabled public String planName;
+        @AuraEnabled public String accountName;
         @AuraEnabled public String segment;
         @AuraEnabled public String tier;
         @AuraEnabled public String dealModel;
@@ -40,12 +43,13 @@ public with sharing class AccountPlanController {
         PlanMatrix m = new PlanMatrix();
 
         Account_Plan__c p = [
-            SELECT Id, Name, Segment__c, Plan_Tier__c, Deal_Model__c, Total_ARR__c, Headroom__c
+            SELECT Id, Name, Account__r.Name, Segment__c, Plan_Tier__c, Deal_Model__c, Total_ARR__c, Headroom__c
             FROM Account_Plan__c
             WHERE Id = :planId
             LIMIT 1
         ];
         m.planName = p.Name;
+        m.accountName = p.Account__r.Name;
         m.segment = p.Segment__c;
         m.tier = p.Plan_Tier__c;
         m.dealModel = p.Deal_Model__c;
@@ -71,7 +75,8 @@ public with sharing class AccountPlanController {
 
         for (Whitespace_Cell__c c : [
             SELECT Id, Product_Family__c, Product_Family__r.Name, Node_Key__c, Node_Label__c,
-                   State__c, ARR__c, Expected_Revenue__c, Seat_Penetration_Pct__c, Next_Action__c
+                   State__c, ARR__c, Expected_Revenue__c, Seat_Penetration_Pct__c, Next_Action__c,
+                   Office_Account__c, Office_Account__r.Name
             FROM Whitespace_Cell__c
             WHERE Account_Plan__c = :planId
             ORDER BY Node_Label__c
@@ -87,6 +92,8 @@ public with sharing class AccountPlanController {
             cell.expectedRevenue = c.Expected_Revenue__c;
             cell.seatPenetration = c.Seat_Penetration_Pct__c;
             cell.nextAction = c.Next_Action__c;
+            cell.officeAccountId = c.Office_Account__c;
+            cell.officeAccountName = c.Office_Account__r.Name;
             m.cells.add(cell);
         }
 
@@ -216,5 +223,22 @@ public with sharing class AccountPlanController {
             result.add(t);
         }
         return result;
+    }
+
+    /**
+     * Recompute gap-to-benchmark headroom for one plan and return the number of
+     * white-space cells updated. UI hook for the "Recalculate headroom" action on the
+     * White-Space Matrix; delegates to WhitespaceAllocationService (architecture §3 / §5).
+     */
+    @AuraEnabled
+    public static Integer recalcHeadroom(Id planId) {
+        if (planId == null) {
+            return 0;
+        }
+        try {
+            return WhitespaceAllocationService.allocate(new Set<Id>{ planId });
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
     }
 }

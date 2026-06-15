@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WaveDashboard xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <content xsi:nil="true"/>
+    <application>Account_Plans_Whitespace</application>
+    <dateVersion>1</dateVersion>
+    <description>Portfolio white-space headroom heat map: gap-to-benchmark by firm and product family.</description>
+    <masterLabel>White-Space Headroom Heat Map</masterLabel>
+</WaveDashboard>

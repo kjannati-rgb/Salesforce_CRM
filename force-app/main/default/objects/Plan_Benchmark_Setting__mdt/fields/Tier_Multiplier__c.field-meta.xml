@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Tier_Multiplier__c</fullName>
+    <label>Tier Multiplier</label>
+    <description>Scales the gap-to-benchmark ceiling for plans of this tier. Record DeveloperName must match the Plan_Tier__c value (e.g. T1). Falls back to a code default if no record exists.</description>
+    <type>Number</type>
+    <precision>4</precision>
+    <scale>2</scale>
+    <required>false</required>
+    <unique>false</unique>
+</CustomField>

@@ -17,6 +17,10 @@
         <apexClass>PlanSharingService</apexClass>
         <enabled>true</enabled>
     </classAccesses>
+    <classAccesses>
+        <apexClass>WhitespaceAllocationService</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
 
     <objectPermissions>
         <object>Account_Plan__c</object>
@@ -136,8 +140,11 @@
     <fieldPermissions><field>Plan_Product_Family__c.Relevant_Corporate__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
     <fieldPermissions><field>Plan_Product_Family__c.CPQ_Family_Mapping__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
     <fieldPermissions><field>Plan_Product_Family__c.Sort_Order__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Product_Family__c.Benchmark_ARR_Per_Seat_Law_Firm__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Product_Family__c.Benchmark_ARR_Per_Seat_Corporate__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
 
     <fieldPermissions><field>Whitespace_Cell__c.Product_Family__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Whitespace_Cell__c.Office_Account__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
     <fieldPermissions><field>Whitespace_Cell__c.Node_Type__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
     <fieldPermissions><field>Whitespace_Cell__c.Node_Key__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
     <fieldPermissions><field>Whitespace_Cell__c.Node_Label__c</field><readable>true</readable><editable>true</editable></fieldPermissions>

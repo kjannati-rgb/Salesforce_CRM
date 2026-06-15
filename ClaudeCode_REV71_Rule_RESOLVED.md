@@ -28,8 +28,10 @@ but International is the primary product (most revenue) — could be coded TCV 3
 
 ## Engine status
 `Quote_ALM_Code_Stamp` + `Opp_ALM_Code_AfterSave` use the revenue rule (highest-revenue anchor among
-LAWM/LWKM; GLBM→2). `Use_Net_Total_Price` CMDT toggle is live again (chooses net vs list basis). Tie
-(equal revenue) → 1, documented assumption. KJDEV: REV71_ALMCodeFlow_Test 11/11 green.
+LAWM/LWKM; GLBM→2). `Use_Net_Total_Price` CMDT toggle is live again (chooses net vs list basis).
+**Tie-break: exactly-equal LAWM vs LWKM revenue → code 1 (Law.com Premium) — CONFIRMED by Brady, 14 Aug 2025.**
+The engine already implements this (the VAR formula uses `vFam1Total >= vFam3Total`, so a tie resolves to 1).
+KJDEV: REV71_ALMCodeFlow_Test 11/11 green.
 
 ## Backfill (§7) — the REAL clean-up, by the revenue rule
 Read-only audit of production (`scripts/rev71_backfill_audit.apex`): **320 coded opps — 171 match,
@@ -40,7 +42,8 @@ Read-only audit of production (`scripts/rev71_backfill_audit.apex`): **320 coded
 - Remediate only with explicit approval + Integra confirmation that retro code changes are safe (spec §8-Q6).
 
 ## Remaining
-- **Open a tie-break note to Brady (low priority):** exact-equal LAWM vs LWKM revenue → we use 1; confirm.
-- Rewrite the REV-71 ticket description to this bundle-family/revenue model (title "auto-assign sequence
-  numbers" is the misleading framing).
-- REV-71 is otherwise **rule-complete and engine-green** — ready for the demo → §10 sign-off → prod deploy.
+- ~~Open a tie-break note to Brady~~ **CLOSED 15 Jun 2026 — Brady confirmed exact-equal revenue → code 1.**
+  Engine already implements this; no change needed.
+- ~~Rewrite the REV-71 ticket description~~ **DONE** — description now carries this bundle-family/revenue model.
+- REV-71 is **rule-complete, every edge case confirmed, engine-green** — ready for the demo → §10 sign-off → prod deploy.
+  No remaining rule questions.

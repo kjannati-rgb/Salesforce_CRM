@@ -147,7 +147,8 @@ private class REV71_ALMCodeFlow_Test {
         // has the MOST REVENUE: LAWM primary -> code 1 (Premium); LWKM primary -> code 3
         // (International). Self-calibrating: the engine compares summed SBQQ__NetTotal__c,
         // whose population on an uncalculated test quote is package-defined, so derive the
-        // expectation from the lines' actual stored basis (equal totals -> tie -> 1).
+        // expectation from the lines' actual stored basis (equal totals -> tie -> 1,
+        // confirmed by Brady 15 Jun 2026).
         Map<String, Product2> p = prods(); Map<String, Id> e = pbes();
         Opportunity o = makeOpp('REV71T var');
         SBQQ__Quote__c q = makeQuote(o, false);
@@ -162,7 +163,7 @@ private class REV71_ALMCodeFlow_Test {
             Decimal t = l.SBQQ__NetTotal__c == null ? 0 : l.SBQQ__NetTotal__c;
             if (l.SBQQ__Product__r.ProductCode == 'LAWM') lawm += t; else lwkm += t;
         }
-        Decimal expected = lawm >= lwkm ? 1 : 3; // tie -> Law.com (1) per documented assumption
+        Decimal expected = lawm >= lwkm ? 1 : 3; // tie -> Law.com (1), confirmed by Brady 15 Jun 2026
         for (Decimal v : qlCodes(q.Id).values()) {
             Assert.areEqual(expected, v, 'highest-revenue anchor family wins '
                 + '(LAWM total=' + lawm + ', LWKM total=' + lwkm + ')');

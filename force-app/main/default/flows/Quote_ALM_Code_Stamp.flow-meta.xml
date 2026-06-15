@@ -664,15 +664,8 @@
             <label>GLL present — decisive</label>
         </rules>
         <rules>
-            <name>r_VAR</name>
+            <name>r_OnlyFam3</name>
             <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>vHasFam1</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
             <conditions>
                 <leftValueReference>vHasFam3</leftValueReference>
                 <operator>EqualTo</operator>
@@ -681,9 +674,9 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>A_DeriveVAR</targetReference>
+                <targetReference>A_Derive3</targetReference>
             </connector>
-            <label>Both 1 and 3 — VAR rule</label>
+            <label>Int'l (LWKM) present — decisive over Law.com (Brady, ALM Sales Ops, 1 Aug 2025)</label>
         </rules>
         <rules>
             <name>r_OnlyFam1</name>
@@ -698,22 +691,7 @@
             <connector>
                 <targetReference>A_Derive1</targetReference>
             </connector>
-            <label>Family 1 only</label>
-        </rules>
-        <rules>
-            <name>r_OnlyFam3</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>vHasFam3</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>A_Derive3</targetReference>
-            </connector>
-            <label>Family 3 only</label>
+            <label>Law.com (LAWM), no Int'l — Premium (code 1)</label>
         </rules>
     </decisions>
     <decisions>

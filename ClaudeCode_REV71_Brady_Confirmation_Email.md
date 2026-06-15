@@ -28,20 +28,33 @@ appears under International (code 3) or GLL (code 2). So our automation uses thi
 
 In other words: **any deal containing Law.com International, that isn't a GLL bundle, is coded 3.**
 
-The catch: in the historical data, **68 deals contain Law.com International (LWKM) but are coded 1**
-(not 3). So either:
+The catch: in the historical data, **73 deals contain Law.com International (LWKM) but are coded 1**
+(not 3). A clear example to look at:
 
-1. those 68 were **mis-coded** and should be **3** — in which case our automation is right and we'll
-   correct them as part of the clean-up; **or**
+> **Opportunity:** *New Princeton University Law.com-NJU* — Princeton University Library — **Closed Won**
+> https://lawbusinessresearch.my.salesforce.com/006Px00000LkQ35IAF
+>
+> | Product | TCV code | Value |
+> |---|---|---|
+> | Law.com (LAWM) | **1** | £10,000 |
+> | Law.com International (LWKM) | **1** | £5,000 |
+>
+> This deal has Law.com International on it but is coded **1**. By the rules, with International present
+> and no GLL, it should be **3**.
+
+So either:
+
+1. those 73 were **mis-coded** and should be **3** — in which case our automation is right and we'll
+   correct them as part of the clean-up (full list attached: *REV71_code1_with_International_to_review.csv*); **or**
 2. they're **legitimately 1** (Law.com was the primary product and International was a secondary line) —
    in which case "which product is primary" genuinely matters and we'll need the rep to flag the
    primary product on the bundle.
 
 **Could you confirm:** for a deal that contains Law.com International but is *not* a GLL bundle — is it
-**always coded 3**? And specifically, are those 68 historical "code 1 with International present" deals
-mis-codings, or correct?
+**always coded 3**? And specifically, is the Princeton deal above (and the 73 like it) a **mis-coding**
+we should correct to 3?
 
-Your answer is the last thing standing between us and turning this on. Happy to walk through examples
+Your answer is the last thing standing between us and turning this on. Happy to walk through the example
 on a quick call if easier.
 
 Thanks again,

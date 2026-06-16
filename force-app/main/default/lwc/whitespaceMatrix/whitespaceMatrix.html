@@ -66,6 +66,9 @@
                                         <template lwc:if={b.collapsed}>
                                             <span class="bandcount">({b.count})</span>
                                         </template>
+                                        <template lwc:if={b.hasSubtotal}>
+                                            <span class="bandsub">{b.subtotal}</span>
+                                        </template>
                                     </th>
                                 </template>
                             </tr>

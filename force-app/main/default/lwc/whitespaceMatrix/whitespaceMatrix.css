@@ -68,6 +68,11 @@
     font-weight: 400;
     margin-left: 0.2rem;
 }
+.band .bandsub {
+    color: #2e844a;
+    font-weight: 700;
+    margin-left: 0.35rem;
+}
 .cell.c-collapsed {
     background: #f0f3f9;
     color: #b0b8c4;

@@ -110,6 +110,10 @@ export default class WhitespaceMatrix extends LightningElement {
     // Ordered group bands (families arrive group-ordered from the controller).
     get bands() {
         if (!this.matrix) return [];
+        const gap = {};
+        this.familySummary.forEach((f) => {
+            gap[f.key] = f.headroomNum;
+        });
         const out = [];
         let cur = null;
         this.matrix.families.forEach((f) => {
@@ -122,6 +126,7 @@ export default class WhitespaceMatrix extends LightningElement {
         });
         return out.map((b) => {
             const isCollapsed = b.isGroup && this.collapsed.includes(b.key);
+            const groupGap = b.fams.reduce((sum, f) => sum + (gap[f.id] || 0), 0);
             return {
                 key: b.key,
                 label: b.label,
@@ -130,7 +135,9 @@ export default class WhitespaceMatrix extends LightningElement {
                 count: b.fams.length,
                 colspan: isCollapsed ? 1 : b.fams.length,
                 toggleIcon: isCollapsed ? 'utility:chevronright' : 'utility:chevrondown',
-                showToggle: b.isGroup
+                showToggle: b.isGroup,
+                subtotal: groupGap > 0 ? '+' + this.fmt(groupGap) : '',
+                hasSubtotal: groupGap > 0
             };
         });
     }

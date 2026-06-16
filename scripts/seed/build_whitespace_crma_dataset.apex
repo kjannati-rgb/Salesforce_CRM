@@ -8,17 +8,18 @@
 
 List<Whitespace_Cell__c> cells = [
     SELECT Account_Plan__c, Account_Plan__r.Account__r.Name, Account_Plan__r.Name, Account_Plan__r.Segment__c,
-           Account_Plan__r.Plan_Tier__c, Product_Family__r.Name, Node_Label__c, State__c,
-           ARR__c, Expected_Revenue__c
+           Account_Plan__r.Plan_Tier__c, Product_Family__r.Name, Product_Family__r.Product_Group__r.Name,
+           Node_Label__c, State__c, ARR__c, Expected_Revenue__c
     FROM Whitespace_Cell__c
 ];
 
 // CSV: quoted text columns, raw numeric columns.
-String csv = '"Firm","Plan","PlanId","Segment","Tier","Family","Node","State","ARR","Headroom"\n';
+String csv = '"Firm","Plan","PlanId","Segment","Tier","Family","Group","Node","State","ARR","Headroom"\n';
 for (Whitespace_Cell__c c : cells) {
     List<String> txt = new List<String>{
         c.Account_Plan__r.Account__r.Name, c.Account_Plan__r.Name, String.valueOf(c.Account_Plan__c),
         c.Account_Plan__r.Segment__c, c.Account_Plan__r.Plan_Tier__c, c.Product_Family__r.Name,
+        (c.Product_Family__r.Product_Group__r.Name == null ? 'Ungrouped' : c.Product_Family__r.Product_Group__r.Name),
         c.Node_Label__c, c.State__c
     };
     String line = '';
@@ -45,6 +46,7 @@ Map<String, Object> meta = new Map<String, Object>{
                 new Map<String, Object>{ 'name' => 'Segment', 'fullyQualifiedName' => 'Segment', 'label' => 'Segment', 'type' => 'Text' },
                 new Map<String, Object>{ 'name' => 'Tier',    'fullyQualifiedName' => 'Tier',    'label' => 'Tier',    'type' => 'Text' },
                 new Map<String, Object>{ 'name' => 'Family',  'fullyQualifiedName' => 'Family',  'label' => 'Family',  'type' => 'Text' },
+                new Map<String, Object>{ 'name' => 'Group',   'fullyQualifiedName' => 'Group',   'label' => 'Product Group', 'type' => 'Text' },
                 new Map<String, Object>{ 'name' => 'Node',    'fullyQualifiedName' => 'Node',    'label' => 'Node',    'type' => 'Text' },
                 new Map<String, Object>{ 'name' => 'State',   'fullyQualifiedName' => 'State',   'label' => 'State',   'type' => 'Text' },
                 new Map<String, Object>{ 'name' => 'ARR',      'fullyQualifiedName' => 'ARR',      'label' => 'ARR',      'type' => 'Numeric', 'precision' => 18, 'scale' => 2, 'defaultValue' => '0', 'format' => '0.00' },

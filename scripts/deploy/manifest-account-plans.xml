@@ -10,6 +10,7 @@
         <members>Plan_Team_Member__c</members>
         <members>Plan_Benchmark_Setting__mdt</members>
         <members>Plan_Snapshot__c</members>
+        <members>Plan_Product_Group__c</members>
         <name>CustomObject</name>
     </types>
     <types>
@@ -53,6 +54,10 @@
         <members>Plan_Product_Family__c.Sort_Order__c</members>
         <members>Plan_Product_Family__c.Benchmark_ARR_Per_Seat_Law_Firm__c</members>
         <members>Plan_Product_Family__c.Benchmark_ARR_Per_Seat_Corporate__c</members>
+        <members>Plan_Product_Family__c.Active__c</members>
+        <members>Plan_Product_Family__c.Product_Group__c</members>
+        <members>Plan_Product_Group__c.Sort_Order__c</members>
+        <members>Plan_Product_Group__c.Active__c</members>
         <members>Plan_Benchmark_Setting__mdt.Tier_Multiplier__c</members>
         <members>Plan_Stakeholder__c.Account_Plan__c</members>
         <members>Plan_Stakeholder__c.Contact__c</members>
@@ -169,6 +174,7 @@
         <members>keySignals</members>
         <members>planTeam</members>
         <members>planTrend</members>
+        <members>whitespaceColumns</members>
         <name>LightningComponentBundle</name>
     </types>
     <types>

@@ -61,6 +61,15 @@
         <viewAllRecords>true</viewAllRecords>
     </objectPermissions>
     <objectPermissions>
+        <object>Plan_Product_Group__c</object>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>true</modifyAllRecords>
+        <viewAllRecords>true</viewAllRecords>
+    </objectPermissions>
+    <objectPermissions>
         <object>Whitespace_Cell__c</object>
         <allowCreate>true</allowCreate>
         <allowDelete>true</allowDelete>
@@ -169,6 +178,10 @@
     <fieldPermissions><field>Plan_Product_Family__c.Sort_Order__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
     <fieldPermissions><field>Plan_Product_Family__c.Benchmark_ARR_Per_Seat_Law_Firm__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
     <fieldPermissions><field>Plan_Product_Family__c.Benchmark_ARR_Per_Seat_Corporate__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Product_Family__c.Active__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Product_Family__c.Product_Group__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Product_Group__c.Sort_Order__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Plan_Product_Group__c.Active__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
 
     <fieldPermissions><field>Whitespace_Cell__c.Product_Family__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
     <fieldPermissions><field>Whitespace_Cell__c.Office_Account__c</field><readable>true</readable><editable>true</editable></fieldPermissions>

@@ -47,10 +47,32 @@
                 <div class="scroller">
                     <table class="ws">
                         <thead>
+                            <tr class="bandrow">
+                                <th class="rowhdr"></th>
+                                <template for:each={bands} for:item="b">
+                                    <th key={b.key} colspan={b.colspan} class="band">
+                                        <template lwc:if={b.showToggle}>
+                                            <lightning-button-icon
+                                                icon-name={b.toggleIcon}
+                                                alternative-text="Collapse group"
+                                                title="Collapse / expand group"
+                                                variant="bare"
+                                                size="x-small"
+                                                data-key={b.key}
+                                                onclick={handleToggleGroup}
+                                            ></lightning-button-icon>
+                                        </template>
+                                        <span class="bandlbl">{b.label}</span>
+                                        <template lwc:if={b.collapsed}>
+                                            <span class="bandcount">({b.count})</span>
+                                        </template>
+                                    </th>
+                                </template>
+                            </tr>
                             <tr>
                                 <th class="rowhdr">Node</th>
-                                <template for:each={columns} for:item="col">
-                                    <th key={col.id}>{col.name}</th>
+                                <template for:each={visibleColumns} for:item="col">
+                                    <th key={col.key}>{col.name}</th>
                                 </template>
                             </tr>
                         </thead>

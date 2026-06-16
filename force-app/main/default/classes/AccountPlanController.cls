@@ -9,6 +9,8 @@ public with sharing class AccountPlanController {
         @AuraEnabled public Id id;
         @AuraEnabled public String name;
         @AuraEnabled public Decimal sortOrder;
+        @AuraEnabled public Id groupId;
+        @AuraEnabled public String groupName;
     }
 
     public class Cell {
@@ -59,16 +61,21 @@ public with sharing class AccountPlanController {
         Boolean isCorporate = (p.Segment__c == 'Corporate');
 
         for (Plan_Product_Family__c f : [
-            SELECT Id, Name, Sort_Order__c, Relevant_Law_Firm__c, Relevant_Corporate__c
+            SELECT Id, Name, Sort_Order__c, Relevant_Law_Firm__c, Relevant_Corporate__c, Active__c,
+                   Product_Group__c, Product_Group__r.Name, Product_Group__r.Sort_Order__c, Product_Group__r.Active__c
             FROM Plan_Product_Family__c
-            ORDER BY Sort_Order__c NULLS LAST, Name
+            WHERE Active__c = true
+            ORDER BY Product_Group__r.Sort_Order__c NULLS FIRST, Sort_Order__c NULLS LAST, Name
         ]) {
             Boolean relevant = isCorporate ? f.Relevant_Corporate__c : f.Relevant_Law_Firm__c;
-            if (relevant) {
+            Boolean groupActive = (f.Product_Group__c == null) || (f.Product_Group__r.Active__c == true);
+            if (relevant && groupActive) {
                 Family fam = new Family();
                 fam.id = f.Id;
                 fam.name = f.Name;
                 fam.sortOrder = f.Sort_Order__c;
+                fam.groupId = f.Product_Group__c;
+                fam.groupName = f.Product_Group__r.Name;
                 m.families.add(fam);
             }
         }
@@ -269,6 +276,41 @@ public with sharing class AccountPlanController {
             t.headroom = s.Headroom__c;
             t.coverage = s.Family_Coverage_Pct__c;
             result.add(t);
+        }
+        return result;
+    }
+
+    public class FamilyConfig {
+        @AuraEnabled public Id id;
+        @AuraEnabled public String name;
+        @AuraEnabled public Boolean active;
+        @AuraEnabled public Id groupId;
+        @AuraEnabled public String groupName;
+        @AuraEnabled public Decimal sortOrder;
+        @AuraEnabled public Boolean relevantLawFirm;
+        @AuraEnabled public Boolean relevantCorporate;
+    }
+
+    /** All product families (active and inactive) with grouping — drives the Manage Columns panel. */
+    @AuraEnabled(cacheable=true)
+    public static List<FamilyConfig> getColumnConfig() {
+        List<FamilyConfig> result = new List<FamilyConfig>();
+        for (Plan_Product_Family__c f : [
+            SELECT Id, Name, Active__c, Sort_Order__c, Relevant_Law_Firm__c, Relevant_Corporate__c,
+                   Product_Group__c, Product_Group__r.Name
+            FROM Plan_Product_Family__c
+            ORDER BY Product_Group__r.Sort_Order__c NULLS FIRST, Sort_Order__c NULLS LAST, Name
+        ]) {
+            FamilyConfig fc = new FamilyConfig();
+            fc.id = f.Id;
+            fc.name = f.Name;
+            fc.active = f.Active__c;
+            fc.groupId = f.Product_Group__c;
+            fc.groupName = f.Product_Group__r.Name;
+            fc.sortOrder = f.Sort_Order__c;
+            fc.relevantLawFirm = f.Relevant_Law_Firm__c;
+            fc.relevantCorporate = f.Relevant_Corporate__c;
+            result.add(fc);
         }
         return result;
     }

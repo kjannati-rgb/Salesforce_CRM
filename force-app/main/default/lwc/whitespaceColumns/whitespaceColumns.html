@@ -1,0 +1,81 @@
+<template>
+    <lightning-card icon-name="utility:layout_tile">
+        <span slot="title">Manage Columns</span>
+        <div slot="actions" class="hdr-actions">
+            <lightning-button label="New product" icon-name="utility:add" onclick={handleNewProduct} disabled={showFamilyForm}></lightning-button>
+            <lightning-button label="New group" icon-name="utility:add" onclick={handleNewGroup} disabled={showGroupForm}></lightning-button>
+        </div>
+        <div class="slds-p-horizontal_medium slds-p-bottom_small">
+            <template lwc:if={showFamilyForm}>
+                <div class="cform">
+                    <p class="formtitle">{familyFormTitle}</p>
+                    <lightning-record-edit-form
+                        object-api-name="Plan_Product_Family__c"
+                        record-id={editId}
+                        onsubmit={handleSubmit}
+                        onsuccess={handleSuccess}
+                        onerror={handleError}
+                    >
+                        <lightning-input-field field-name="Name"></lightning-input-field>
+                        <lightning-input-field field-name="Product_Group__c"></lightning-input-field>
+                        <lightning-input-field field-name="Active__c"></lightning-input-field>
+                        <lightning-input-field field-name="Sort_Order__c"></lightning-input-field>
+                        <lightning-input-field field-name="Relevant_Law_Firm__c"></lightning-input-field>
+                        <lightning-input-field field-name="Relevant_Corporate__c"></lightning-input-field>
+                        <div class="formbtns">
+                            <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+                            <lightning-button class="slds-p-left_x-small" variant="brand" type="submit" label="Save" disabled={saving}></lightning-button>
+                        </div>
+                    </lightning-record-edit-form>
+                </div>
+            </template>
+
+            <template lwc:if={showGroupForm}>
+                <div class="cform">
+                    <p class="formtitle">New group</p>
+                    <lightning-record-edit-form
+                        object-api-name="Plan_Product_Group__c"
+                        onsubmit={handleSubmit}
+                        onsuccess={handleSuccess}
+                        onerror={handleError}
+                    >
+                        <lightning-input-field field-name="Name"></lightning-input-field>
+                        <lightning-input-field field-name="Sort_Order__c"></lightning-input-field>
+                        <lightning-input-field field-name="Active__c"></lightning-input-field>
+                        <div class="formbtns">
+                            <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+                            <lightning-button class="slds-p-left_x-small" variant="brand" type="submit" label="Save" disabled={saving}></lightning-button>
+                        </div>
+                    </lightning-record-edit-form>
+                </div>
+            </template>
+
+            <table class="cols">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Group</th>
+                        <th>Segments</th>
+                        <th class="ta-r">In matrix</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={items} for:item="c">
+                        <tr key={c.id} class={c.rowClass}>
+                            <td class="pname">{c.name}</td>
+                            <td>{c.group}</td>
+                            <td>{c.relevance}</td>
+                            <td class="ta-r">
+                                <lightning-button-icon icon-name={c.toggleIcon} alternative-text={c.toggleTitle} title={c.toggleTitle} variant="bare" data-id={c.id} onclick={handleToggleActive}></lightning-button-icon>
+                            </td>
+                            <td class="ta-r">
+                                <lightning-button-icon icon-name="utility:edit" alternative-text="Edit" title="Edit" variant="bare" data-id={c.id} onclick={handleEdit}></lightning-button-icon>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+    </lightning-card>
+</template>

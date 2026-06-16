@@ -15,6 +15,12 @@
                 <identifier>planTrend_main</identifier>
             </componentInstance>
         </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>c:whitespaceColumns</componentName>
+                <identifier>whitespaceColumns_main</identifier>
+            </componentInstance>
+        </itemInstances>
     </flexiPageRegions>
     <flexiPageRegions>
         <name>sidebar</name>

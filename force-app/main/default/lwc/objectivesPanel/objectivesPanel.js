@@ -2,6 +2,8 @@ import { LightningElement, api, wire } from 'lwc';
 import { refreshApex } from '@salesforce/apex';
 import { updateRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { subscribe, unsubscribe, MessageContext } from 'lightning/messageService';
+import REFRESH_CHANNEL from '@salesforce/messageChannel/AccountPlanRefresh__c';
 import getObjectives from '@salesforce/apex/AccountPlanController.getObjectives';
 import getSuggestions from '@salesforce/apex/ObjectiveSuggestionService.suggest';
 import acceptSuggestion from '@salesforce/apex/ObjectiveSuggestionService.accept';
@@ -27,6 +29,24 @@ export default class ObjectivesPanel extends LightningElement {
     showForm = false;
     editId; // undefined = create, otherwise the objective being edited
     saving = false;
+    subscription;
+
+    @wire(MessageContext)
+    messageContext;
+
+    connectedCallback() {
+        this.subscription = subscribe(this.messageContext, REFRESH_CHANNEL, (msg) => {
+            if (!msg || msg.planId === this.recordId) {
+                refreshApex(this.wiredResult);
+                refreshApex(this.wiredSuggestions);
+            }
+        });
+    }
+
+    disconnectedCallback() {
+        unsubscribe(this.subscription);
+        this.subscription = null;
+    }
 
     @wire(getObjectives, { planId: '$recordId' })
     wiredObjectives(result) {

@@ -30,6 +30,16 @@
                             <span class="fo">{f.owned}</span>
                             <template lwc:if={f.hasHeadroom}>
                                 <span class="fg">+{f.headroom}</span>
+                                <lightning-button-icon
+                                    icon-name="utility:add"
+                                    alternative-text="Create objective"
+                                    title="Create objective for this gap"
+                                    variant="bare"
+                                    size="x-small"
+                                    class="famadd"
+                                    data-id={f.key}
+                                    onclick={handleCreateObjective}
+                                ></lightning-button-icon>
                             </template>
                         </span>
                     </template>

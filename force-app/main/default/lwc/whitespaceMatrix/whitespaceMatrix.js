@@ -1,8 +1,11 @@
 import { LightningElement, api, wire } from 'lwc';
 import { refreshApex } from '@salesforce/apex';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { publish, MessageContext } from 'lightning/messageService';
+import REFRESH_CHANNEL from '@salesforce/messageChannel/AccountPlanRefresh__c';
 import getMatrix from '@salesforce/apex/AccountPlanController.getMatrix';
 import recalcHeadroom from '@salesforce/apex/AccountPlanController.recalcHeadroom';
+import acceptSuggestion from '@salesforce/apex/ObjectiveSuggestionService.accept';
 
 const STATE_CLASS = {
     Owned_Healthy: 'cell c-owned',
@@ -32,6 +35,9 @@ export default class WhitespaceMatrix extends LightningElement {
     error;
     recalculating = false;
     wiredResult;
+
+    @wire(MessageContext)
+    messageContext;
 
     @wire(getMatrix, { planId: '$recordId' })
     wiredMatrix(result) {
@@ -85,6 +91,7 @@ export default class WhitespaceMatrix extends LightningElement {
                 name: f.name,
                 owned: this.fmt(owned.get(f.id) || 0),
                 headroom: this.fmt(g),
+                headroomNum: g,
                 hasHeadroom: g > 0
             };
         });
@@ -159,6 +166,33 @@ export default class WhitespaceMatrix extends LightningElement {
             );
         } finally {
             this.recalculating = false;
+        }
+    }
+
+    async handleCreateObjective(event) {
+        const familyId = event.currentTarget.dataset.id;
+        const fam = this.familySummary.find((f) => f.key === familyId);
+        if (!fam || !fam.hasHeadroom) return;
+        try {
+            await acceptSuggestion({
+                planId: this.recordId,
+                title: `Convert ${fam.headroom} ${fam.name} white space`,
+                targetAmount: fam.headroomNum,
+                linkedFamilyId: familyId
+            });
+            publish(this.messageContext, REFRESH_CHANNEL, { planId: this.recordId });
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Objective created',
+                    message: `${fam.name} — ${fam.headroom}`,
+                    variant: 'success'
+                })
+            );
+        } catch (e) {
+            const message = e && e.body && e.body.message ? e.body.message : 'Unknown error';
+            this.dispatchEvent(
+                new ShowToastEvent({ title: 'Could not create objective', message, variant: 'error' })
+            );
         }
     }
 

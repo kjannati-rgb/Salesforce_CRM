@@ -140,7 +140,13 @@
         <members>PlanSnapshotServiceTest</members>
         <members>ObjectiveSuggestionService</members>
         <members>ObjectiveSuggestionServiceTest</members>
+        <members>AccountPlanAgentService</members>
+        <members>AccountPlanAgentServiceTest</members>
         <name>ApexClass</name>
+    </types>
+    <types>
+        <members>AccountPlanRefresh</members>
+        <name>LightningMessageChannel</name>
     </types>
     <types>
         <members>Plan_Benchmark_Setting.T1</members>

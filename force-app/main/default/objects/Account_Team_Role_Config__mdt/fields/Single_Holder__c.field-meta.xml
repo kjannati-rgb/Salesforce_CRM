@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Single_Holder__c</fullName>
+    <label>Single Holder</label>
+    <type>Checkbox</type>
+    <defaultValue>false</defaultValue>
+    <description>When checked, only one active member may hold this role per account. The controller blocks any change that would leave a second holder.</description>
+</CustomField>

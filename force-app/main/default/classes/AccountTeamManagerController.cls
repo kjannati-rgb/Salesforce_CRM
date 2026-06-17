@@ -26,7 +26,8 @@ public without sharing class AccountTeamManagerController {
         List<RoleOption> options = new List<RoleOption>();
         for (Account_Team_Role_Config__mdt cfg : [
                 SELECT MasterLabel, Team_Role__c, Default_Account_Access__c,
-                       Badge_Background__c, Badge_Text_Color__c, Sort_Order__c
+                       Badge_Background__c, Badge_Text_Color__c, Sort_Order__c,
+                       Single_Holder__c
                 FROM Account_Team_Role_Config__mdt
                 WHERE Active__c = true
                 ORDER BY Sort_Order__c ASC, MasterLabel ASC]) {
@@ -54,12 +55,27 @@ public without sharing class AccountTeamManagerController {
         ChangeSet changes = (ChangeSet) JSON.deserialize(
             String.isBlank(changesJson) ? '{}' : changesJson, ChangeSet.class);
 
+        // Snapshot the current team once - drives both the single-holder guardrail
+        // (resulting-state check) and the audit trail (old values on remove/re-role).
+        Map<Id, AccountTeamMember> currentById = new Map<Id, AccountTeamMember>([
+            SELECT Id, UserId, TeamMemberRole, User.Name
+            FROM AccountTeamMember WHERE AccountId = :accountId]);
+
+        // Guardrail runs BEFORE any DML so a violation aborts cleanly with no rollback.
+        enforceSingleHolder(accountId, currentById, changes);
+
         Savepoint sp = Database.setSavepoint();
+        List<Account_Team_Change__c> audit = new List<Account_Team_Change__c>();
         try {
             // 1. Removals (scoped to this account)
             if (changes.removeIds != null && !changes.removeIds.isEmpty()) {
-                delete [SELECT Id FROM AccountTeamMember
-                        WHERE Id IN :changes.removeIds AND AccountId = :accountId];
+                List<AccountTeamMember> toDelete = [
+                    SELECT Id, UserId, TeamMemberRole FROM AccountTeamMember
+                    WHERE Id IN :changes.removeIds AND AccountId = :accountId];
+                for (AccountTeamMember m : toDelete) {
+                    audit.add(changeRow(accountId, m.UserId, 'Remove', m.TeamMemberRole, null, null));
+                }
+                delete toDelete;
             }
 
             // 2. Role changes
@@ -69,10 +85,12 @@ public without sharing class AccountTeamManagerController {
                     roleById.put(rc.memberId, rc.teamRole);
                 }
                 List<AccountTeamMember> toUpdate = [
-                    SELECT Id FROM AccountTeamMember
+                    SELECT Id, UserId, TeamMemberRole FROM AccountTeamMember
                     WHERE Id IN :roleById.keySet() AND AccountId = :accountId];
                 for (AccountTeamMember m : toUpdate) {
+                    String oldRole = m.TeamMemberRole;
                     m.TeamMemberRole = roleById.get(m.Id);
+                    audit.add(changeRow(accountId, m.UserId, 'Role Change', oldRole, m.TeamMemberRole, null));
                 }
                 if (!toUpdate.isEmpty()) {
                     update toUpdate;
@@ -83,15 +101,21 @@ public without sharing class AccountTeamManagerController {
             if (changes.adds != null && !changes.adds.isEmpty()) {
                 List<AccountTeamMember> toInsert = new List<AccountTeamMember>();
                 for (NewMember nm : changes.adds) {
+                    String access = normaliseAccess(nm.accountAccess);
                     toInsert.add(new AccountTeamMember(
                         AccountId              = accountId,
                         UserId                 = nm.userId,
                         TeamMemberRole         = nm.teamRole,
-                        AccountAccessLevel     = normaliseAccess(nm.accountAccess),
+                        AccountAccessLevel     = access,
                         OpportunityAccessLevel = 'None',
                         CaseAccessLevel        = 'None'));
+                    audit.add(changeRow(accountId, nm.userId, 'Add', null, nm.teamRole, access));
                 }
                 insert toInsert;
+            }
+
+            if (!audit.isEmpty()) {
+                insert audit;
             }
         } catch (Exception e) {
             Database.rollback(sp);
@@ -99,6 +123,90 @@ public without sharing class AccountTeamManagerController {
         }
 
         return queryTeam(accountId);
+    }
+
+    /**
+     * Blocks any change that would leave more than one active member holding a
+     * role flagged Single_Holder__c on this account. Evaluates the RESULTING
+     * membership (current - removals, role changes applied, additions added), so a
+     * swap (remove A, add B into the same role) is allowed while a genuine second
+     * holder is not. Runs before DML; throws AuraHandledException on violation.
+     */
+    private static void enforceSingleHolder(Id accountId,
+            Map<Id, AccountTeamMember> currentById, ChangeSet changes) {
+        Set<String> singleRoles = new Set<String>();
+        for (Account_Team_Role_Config__mdt cfg : [
+                SELECT Team_Role__c FROM Account_Team_Role_Config__mdt
+                WHERE Active__c = true AND Single_Holder__c = true]) {
+            singleRoles.add(cfg.Team_Role__c);
+        }
+        if (singleRoles.isEmpty()) {
+            return;
+        }
+
+        Set<Id> removeIds = (changes.removeIds == null)
+            ? new Set<Id>() : new Set<Id>(changes.removeIds);
+        Map<Id, String> newRoleByMember = new Map<Id, String>();
+        if (changes.roleChanges != null) {
+            for (RoleChange rc : changes.roleChanges) {
+                newRoleByMember.put(rc.memberId, rc.teamRole);
+            }
+        }
+
+        // role -> holder display names in the resulting state
+        Map<String, List<String>> holders = new Map<String, List<String>>();
+        for (AccountTeamMember m : currentById.values()) {
+            if (removeIds.contains(m.Id)) {
+                continue;
+            }
+            String role = newRoleByMember.containsKey(m.Id)
+                ? newRoleByMember.get(m.Id) : m.TeamMemberRole;
+            addHolder(holders, role, m.User != null ? m.User.Name : null);
+        }
+        if (changes.adds != null && !changes.adds.isEmpty()) {
+            Set<Id> addUserIds = new Set<Id>();
+            for (NewMember nm : changes.adds) {
+                addUserIds.add(nm.userId);
+            }
+            Map<Id, String> nameById = new Map<Id, String>();
+            for (User u : [SELECT Id, Name FROM User WHERE Id IN :addUserIds]) {
+                nameById.put(u.Id, u.Name);
+            }
+            for (NewMember nm : changes.adds) {
+                addHolder(holders, nm.teamRole, nameById.get(nm.userId));
+            }
+        }
+
+        for (String role : singleRoles) {
+            List<String> hs = holders.get(role);
+            if (hs != null && hs.size() > 1) {
+                throw new AuraHandledException(
+                    'Only one "' + role + '" is allowed per account, but this change would '
+                    + 'leave ' + hs.size() + ': ' + String.join(hs, ', ')
+                    + '. Remove or re-role the current holder first.');
+            }
+        }
+    }
+
+    private static void addHolder(Map<String, List<String>> holders, String role, String name) {
+        if (String.isBlank(role)) {
+            return;
+        }
+        if (!holders.containsKey(role)) {
+            holders.put(role, new List<String>());
+        }
+        holders.get(role).add(String.isBlank(name) ? 'Unknown user' : name);
+    }
+
+    private static Account_Team_Change__c changeRow(Id accountId, Id userId,
+            String changeType, String oldRole, String newRole, String access) {
+        return new Account_Team_Change__c(
+            Account__c       = accountId,
+            Team_Member__c   = userId,
+            Change_Type__c   = changeType,
+            Previous_Role__c = oldRole,
+            New_Role__c      = newRole,
+            Account_Access__c = access);
     }
 
     // -------------------- helpers --------------------
@@ -159,12 +267,14 @@ public without sharing class AccountTeamManagerController {
         @AuraEnabled public String accountAccess;
         @AuraEnabled public String background;
         @AuraEnabled public String textColor;
+        @AuraEnabled public Boolean singleHolder;
         public RoleOption(Account_Team_Role_Config__mdt cfg) {
             this.label         = cfg.MasterLabel;
             this.teamRole      = cfg.Team_Role__c;
             this.accountAccess = cfg.Default_Account_Access__c;
             this.background    = cfg.Badge_Background__c;
             this.textColor     = cfg.Badge_Text_Color__c;
+            this.singleHolder  = cfg.Single_Holder__c == true;
         }
     }
 

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Change_Type__c</fullName>
+    <label>Change Type</label>
+    <type>Picklist</type>
+    <required>true</required>
+    <description>Add, Remove, or Role Change.</description>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Add</fullName>
+                <default>false</default>
+                <label>Add</label>
+            </value>
+            <value>
+                <fullName>Remove</fullName>
+                <default>false</default>
+                <label>Remove</label>
+            </value>
+            <value>
+                <fullName>Role Change</fullName>
+                <default>false</default>
+                <label>Role Change</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

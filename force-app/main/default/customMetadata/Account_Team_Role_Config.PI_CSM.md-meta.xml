@@ -8,4 +8,5 @@
     <values><field>Badge_Text_Color__c</field><value xsi:type="xsd:string">#085041</value></values>
     <values><field>Sort_Order__c</field><value xsi:type="xsd:double">20.0</value></values>
     <values><field>Active__c</field><value xsi:type="xsd:boolean">true</value></values>
+    <values><field>Single_Holder__c</field><value xsi:type="xsd:boolean">true</value></values>
 </CustomMetadata>

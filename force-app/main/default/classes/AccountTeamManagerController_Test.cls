@@ -108,6 +108,17 @@ private class AccountTeamManagerController_Test {
             System.assertEquals(0, afterRemove.size(), 'Member should be removed');
         }
         Test.stopTest();
+
+        // Each operation should have left an audit row (actor/timestamp via CreatedBy/Date).
+        List<Account_Team_Change__c> log = [
+            SELECT Change_Type__c FROM Account_Team_Change__c WHERE Account__c = :acct.Id];
+        System.assertEquals(3, log.size(), 'Expected Add + Role Change + Remove audit rows');
+        Set<String> types = new Set<String>();
+        for (Account_Team_Change__c c : log) {
+            types.add(c.Change_Type__c);
+        }
+        System.assertEquals(new Set<String>{ 'Add', 'Role Change', 'Remove' }, types,
+            'Audit should record each change type');
     }
 
     @IsTest
@@ -120,5 +131,56 @@ private class AccountTeamManagerController_Test {
         Test.stopTest();
         System.assertNotEquals(null, roles, 'Role config should not be null');
         System.assertEquals(0, team.size(), 'New account has no team members');
+    }
+
+    @IsTest
+    static void single_holder_blocks_second() {
+        List<Account_Team_Role_Config__mdt> singles = [
+            SELECT Team_Role__c FROM Account_Team_Role_Config__mdt
+            WHERE Single_Holder__c = true AND Active__c = true LIMIT 1];
+        if (singles.isEmpty()) {
+            return; // no single-holder role configured in this org; nothing to assert
+        }
+        String soloRole = singles[0].Team_Role__c;
+
+        List<User> pool = pickStandardUsers(2);
+        System.assertEquals(2, pool.size(), 'Need two standard users for the guardrail test');
+        User runner = pool[0];
+        User second = pool[1];
+
+        System.runAs(new User(Id = UserInfo.getUserId())) {
+            grantManagePermission(runner.Id);
+        }
+
+        Account acct = new Account(Name = 'Single Holder Co');
+        insert acct;
+
+        Test.startTest();
+        Boolean blocked = false;
+        System.runAs(runner) {
+            // First holder of the single-holder role - allowed.
+            AccountTeamManagerController.applyChanges(acct.Id, JSON.serialize(new Map<String, Object>{
+                'adds' => new List<Object>{
+                    new Map<String, Object>{ 'userId' => runner.Id, 'teamRole' => soloRole, 'accountAccess' => 'Edit' }
+                }
+            }));
+            // Second holder of the SAME single-holder role - must be blocked.
+            try {
+                AccountTeamManagerController.applyChanges(acct.Id, JSON.serialize(new Map<String, Object>{
+                    'adds' => new List<Object>{
+                        new Map<String, Object>{ 'userId' => second.Id, 'teamRole' => soloRole, 'accountAccess' => 'Edit' }
+                    }
+                }));
+            } catch (Exception e) {
+                blocked = true;
+            }
+        }
+        Test.stopTest();
+
+        System.assertEquals(true, blocked,
+            'A second holder of a single-holder role should be blocked');
+        List<AccountTeamMember> remaining = [SELECT Id FROM AccountTeamMember WHERE AccountId = :acct.Id];
+        System.assertEquals(1, remaining.size(),
+            'Only the first holder should remain after the block');
     }
 }

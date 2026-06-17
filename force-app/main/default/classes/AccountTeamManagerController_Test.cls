@@ -1,21 +1,22 @@
 @IsTest
 private class AccountTeamManagerController_Test {
 
-    private static User makeStandardUser() {
-        Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User' LIMIT 1];
-        String uniq = String.valueOf(DateTime.now().getTime()) + Math.abs(Crypto.getRandomInteger());
-        return new User(
-            FirstName        = 'ATM',
-            LastName         = 'Tester',
-            Alias            = 'atmt',
-            Email            = 'atm.tester@example.com.invalid',
-            Username         = 'atm.tester.' + uniq + '@example.com.invalid',
-            ProfileId        = p.Id,
-            TimeZoneSidKey   = 'Europe/London',
-            LocaleSidKey     = 'en_GB',
-            EmailEncodingKey = 'UTF-8',
-            LanguageLocaleKey= 'en_US'
-        );
+    // Returns existing active standard users that lack Modify All. We deliberately
+    // do NOT insert new User records: this org has an after-save flow
+    // ("User: Create Contact from User") that fires on every User insert, has no
+    // bypass, and references a hard-coded Account - so a User insert blows up inside
+    // a data-isolated test. Querying existing users sidesteps that entirely (User is
+    // visible in tests without SeeAllData), and "no Modify All" keeps the
+    // system-context assertion below honest - none of these users is the account
+    // owner, above the owner in the hierarchy, or holds Modify All.
+    private static List<User> pickStandardUsers(Integer count) {
+        return [
+            SELECT Id FROM User
+            WHERE IsActive = true
+              AND UserType = 'Standard'
+              AND Profile.PermissionsModifyAllData = false
+              AND Id != :UserInfo.getUserId()
+            LIMIT :count];
     }
 
     private static void grantManagePermission(Id userId) {
@@ -61,11 +62,15 @@ private class AccountTeamManagerController_Test {
         String roleB = roleAt(1) == null ? roleA : roleAt(1);
         System.assertNotEquals(null, roleA, 'Org has no active Team Role picklist values');
 
-        User runner = makeStandardUser();
-        User member = makeStandardUser();
+        List<User> pool = pickStandardUsers(2);
+        System.assertEquals(2, pool.size(),
+            'Need two existing active standard users (no Modify All) to run this test');
+        User runner = pool[0];
+        User member = pool[1];
+
+        // Grant the manage permission to runner. Permission-set DML is setup-object
+        // DML, so isolate it in runAs to avoid MIXED_DML with the Account insert below.
         System.runAs(new User(Id = UserInfo.getUserId())) {
-            insert runner;
-            insert member;
             grantManagePermission(runner.Id);
         }
 

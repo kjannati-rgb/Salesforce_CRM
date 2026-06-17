@@ -21,6 +21,21 @@
         <modifyAllRecords>false</modifyAllRecords>
     </objectPermissions>
     <fieldPermissions>
+        <field>Account.ALM_CSM__c</field>
+        <readable>true</readable>
+        <editable>false</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>Account.PI_CSM__c</field>
+        <readable>true</readable>
+        <editable>false</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>Account.EI_CSM__c</field>
+        <readable>true</readable>
+        <editable>false</editable>
+    </fieldPermissions>
+    <fieldPermissions>
         <field>Account_Team_Change__c.Account__c</field>
         <readable>true</readable>
         <editable>false</editable>

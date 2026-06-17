@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Mirror_To_Account_Field__c</fullName>
+    <label>Mirror To Account Field</label>
+    <type>Text</type>
+    <length>80</length>
+    <required>false</required>
+    <unique>false</unique>
+    <externalId>false</externalId>
+    <description>API name of an Account User-lookup field that should mirror the active holder of this role (e.g. ALM_CSM__c). Maintained by AccountTeamMemberTrigger so account-team composition is reportable. Leave blank for roles that should not be mirrored. Only meaningful for Single_Holder roles.</description>
+</CustomField>

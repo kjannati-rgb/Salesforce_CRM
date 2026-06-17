@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ALM_CSM__c</fullName>
+    <label>ALM CSM</label>
+    <type>Lookup</type>
+    <referenceTo>User</referenceTo>
+    <relationshipLabel>Accounts (ALM CSM)</relationshipLabel>
+    <relationshipName>ALM_CSM_Accounts</relationshipName>
+    <required>false</required>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Reportable mirror of the active "ALM CSM" account-team member, maintained by AccountTeamMemberTrigger. Read-only projection - AccountTeamMember remains the source of truth ChurnZero reads. Do not edit directly.</description>
+</CustomField>

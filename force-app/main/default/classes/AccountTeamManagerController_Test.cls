@@ -183,4 +183,73 @@ private class AccountTeamManagerController_Test {
         System.assertEquals(1, remaining.size(),
             'Only the first holder should remain after the block');
     }
+
+    // ----- data-layer (trigger) tests: prove the invariants hold via DIRECT DML,
+    //       i.e. independent of the LWC controller (data loader / native UI / API). -----
+
+    @IsTest
+    static void trigger_mirrors_csm_to_account() {
+        List<Account_Team_Role_Config__mdt> cfg = [
+            SELECT Team_Role__c, Mirror_To_Account_Field__c FROM Account_Team_Role_Config__mdt
+            WHERE Single_Holder__c = true AND Mirror_To_Account_Field__c != null
+              AND Active__c = true LIMIT 1];
+        if (cfg.isEmpty()) {
+            return; // no mirrored role configured; nothing to assert
+        }
+        String role = cfg[0].Team_Role__c;
+        String fld = cfg[0].Mirror_To_Account_Field__c;
+
+        List<User> pool = pickStandardUsers(1);
+        System.assertEquals(1, pool.size(), 'Need one standard user');
+        User holder = pool[0];
+
+        Account acct = new Account(Name = 'Mirror Co');
+        insert acct;
+        Id acctId = acct.Id;
+
+        Test.startTest();
+        AccountTeamMember atm = new AccountTeamMember(
+            AccountId = acctId, UserId = holder.Id, TeamMemberRole = role, AccountAccessLevel = 'Edit');
+        insert atm;
+        List<Account> afterAdd = Database.query('SELECT ' + fld + ' FROM Account WHERE Id = :acctId');
+        System.assertEquals(holder.Id, afterAdd[0].get(fld),
+            'Mirror field should point at the active holder after a direct insert');
+
+        delete atm;
+        List<Account> afterRemove = Database.query('SELECT ' + fld + ' FROM Account WHERE Id = :acctId');
+        System.assertEquals(null, afterRemove[0].get(fld),
+            'Mirror field should clear when the holder is removed');
+        Test.stopTest();
+    }
+
+    @IsTest
+    static void trigger_blocks_duplicate_single_holder_direct_dml() {
+        List<Account_Team_Role_Config__mdt> singles = [
+            SELECT Team_Role__c FROM Account_Team_Role_Config__mdt
+            WHERE Single_Holder__c = true AND Active__c = true LIMIT 1];
+        if (singles.isEmpty()) {
+            return;
+        }
+        String role = singles[0].Team_Role__c;
+
+        List<User> pool = pickStandardUsers(2);
+        System.assertEquals(2, pool.size(), 'Need two standard users');
+
+        Account acct = new Account(Name = 'Dup Co');
+        insert acct;
+        insert new AccountTeamMember(
+            AccountId = acct.Id, UserId = pool[0].Id, TeamMemberRole = role, AccountAccessLevel = 'Edit');
+
+        Test.startTest();
+        Boolean blocked = false;
+        try {
+            insert new AccountTeamMember(
+                AccountId = acct.Id, UserId = pool[1].Id, TeamMemberRole = role, AccountAccessLevel = 'Edit');
+        } catch (DmlException e) {
+            blocked = true;
+        }
+        Test.stopTest();
+        System.assertEquals(true, blocked,
+            'The trigger should block a second single-holder member even via direct DML');
+    }
 }

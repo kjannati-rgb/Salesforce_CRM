@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <label>E&amp;I CSM</label>
+    <protected>false</protected>
+    <values><field>Team_Role__c</field><value xsi:type="xsd:string">E&amp;I CSM</value></values>
+    <values><field>Default_Account_Access__c</field><value xsi:type="xsd:string">Read</value></values>
+    <values><field>Badge_Background__c</field><value xsi:type="xsd:string">#EEEDFE</value></values>
+    <values><field>Badge_Text_Color__c</field><value xsi:type="xsd:string">#3C3489</value></values>
+    <values><field>Sort_Order__c</field><value xsi:type="xsd:double">30.0</value></values>
+    <values><field>Active__c</field><value xsi:type="xsd:boolean">true</value></values>
+</CustomMetadata>

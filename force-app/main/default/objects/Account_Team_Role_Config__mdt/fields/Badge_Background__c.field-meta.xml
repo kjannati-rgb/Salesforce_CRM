@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Badge_Background__c</fullName>
+    <label>Badge Background</label>
+    <type>Text</type>
+    <length>20</length>
+    <required>false</required>
+    <unique>false</unique>
+    <externalId>false</externalId>
+    <description>Hex colour for the role badge background, e.g. #E6F1FB.</description>
+</CustomField>

@@ -1,0 +1,146 @@
+.atm-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.atm-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 0;
+    border-top: 1px solid #e5e5e5;
+}
+.atm-row:first-child {
+    border-top: none;
+}
+.atm-row_removing {
+    opacity: 0.5;
+}
+.atm-main {
+    flex: 1;
+    min-width: 0;
+}
+.atm-name {
+    display: block;
+    font-weight: 500;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.atm-sub {
+    display: block;
+    font-size: 0.8rem;
+    color: #706e6b;
+}
+.atm-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+.atm-badge {
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.15rem 0.55rem;
+    border-radius: 0.5rem;
+    white-space: nowrap;
+}
+.atm-pill {
+    font-size: 0.7rem;
+    color: #706e6b;
+    background: #f3f3f3;
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.5rem;
+    white-space: nowrap;
+}
+.atm-tag {
+    font-size: 0.68rem;
+    font-weight: 500;
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.5rem;
+    white-space: nowrap;
+}
+.atm-tag_remove { color: #ba0517; background: #fdecea; }
+.atm-tag_change { color: #8c4b02; background: #fef5e7; }
+.atm-tag_add    { color: #2e7d32; background: #ebf7ec; }
+.atm-rolepick {
+    min-width: 11rem;
+}
+.atm-addbtn {
+    margin-top: 0.75rem;
+}
+.atm-addform {
+    margin-top: 0.85rem;
+    padding: 0.9rem;
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 0.5rem;
+}
+.atm-selected {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 0.6rem;
+    padding: 0.4rem 0.6rem;
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 0.5rem;
+}
+.atm-addrow {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+}
+.atm-grow {
+    flex: 1;
+    min-width: 11rem;
+}
+.atm-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.85rem;
+}
+.atm-pending {
+    margin-top: 1rem;
+    padding: 0.9rem;
+    border: 1px solid #d8d8d8;
+    border-radius: 0.75rem;
+}
+.atm-pending_head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+}
+.atm-pending_title {
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+.atm-pending_note {
+    font-size: 0.75rem;
+    color: #706e6b;
+    white-space: nowrap;
+}
+.atm-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    margin-bottom: 0.4rem;
+}
+.atm-chip_add    { color: #2e7d32; background: #ebf7ec; }
+.atm-chip_remove { color: #ba0517; background: #fdecea; }
+.atm-chip_change { color: #8c4b02; background: #fef5e7; }
+.atm-count {
+    font-size: 0.85rem;
+    color: #706e6b;
+}
+.atm-footer {
+    font-size: 0.72rem;
+    color: #969492;
+}

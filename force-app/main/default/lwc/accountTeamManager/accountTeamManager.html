@@ -1,0 +1,222 @@
+<template>
+    <lightning-card title="Account team" icon-name="standard:account">
+        <span slot="actions" class="atm-count">{memberCount}</span>
+
+        <div class="slds-var-p-horizontal_medium">
+
+            <template lwc:if={isEmpty}>
+                <p class="slds-text-color_weak slds-var-p-vertical_small">No team members yet.</p>
+            </template>
+
+            <ul class="atm-list">
+                <template for:each={displayMembers} for:item="m">
+                    <li key={m.memberId} class={m.rowClass}>
+                        <lightning-avatar
+                            src={m.photoUrl}
+                            initials={m.initials}
+                            fallback-icon-name="standard:user"
+                            alternative-text={m.name}
+                            size="medium"
+                            class="atm-avatar">
+                        </lightning-avatar>
+
+                        <div class="atm-main">
+                            <span class="atm-name">{m.name}</span>
+                            <template lwc:if={m.hasRoleChange}>
+                                <span class="atm-sub">was {m.teamRole}</span>
+                            </template>
+                            <template lwc:elseif={m.title}>
+                                <span class="atm-sub">{m.title}</span>
+                            </template>
+                        </div>
+
+                        <div class="atm-right">
+                            <template lwc:if={m.isRemoving}>
+                                <span class="atm-tag atm-tag_remove">Removing</span>
+                            </template>
+                            <template lwc:elseif={m.hasRoleChange}>
+                                <span class="atm-tag atm-tag_change">Role change</span>
+                            </template>
+
+                            <template lwc:if={m.isEditing}>
+                                <lightning-combobox
+                                    variant="label-hidden"
+                                    data-id={m.memberId}
+                                    value={m.displayRole}
+                                    options={roleComboOptions}
+                                    onchange={changeRole}
+                                    class="atm-rolepick">
+                                </lightning-combobox>
+                            </template>
+                            <template lwc:else>
+                                <span class="atm-badge" style={m.roleStyle}>{m.roleLabel}</span>
+                                <template lwc:if={canManage}>
+                                    <lightning-button-icon
+                                        icon-name="utility:edit"
+                                        variant="border-filled"
+                                        size="small"
+                                        alternative-text="Change role"
+                                        data-id={m.memberId}
+                                        onclick={editRole}>
+                                    </lightning-button-icon>
+                                </template>
+                            </template>
+
+                            <span class="atm-pill">{m.accessLabel}</span>
+
+                            <template lwc:if={canManage}>
+                                <template lwc:if={m.isRemoving}>
+                                    <lightning-button-icon
+                                        icon-name="utility:undo"
+                                        variant="border-filled"
+                                        size="small"
+                                        alternative-text="Undo remove"
+                                        data-id={m.memberId}
+                                        onclick={undoRemove}>
+                                    </lightning-button-icon>
+                                </template>
+                                <template lwc:else>
+                                    <lightning-button-icon
+                                        icon-name="utility:delete"
+                                        variant="border-filled"
+                                        size="small"
+                                        alternative-text="Remove member"
+                                        data-id={m.memberId}
+                                        onclick={stageRemove}>
+                                    </lightning-button-icon>
+                                </template>
+                            </template>
+                        </div>
+                    </li>
+                </template>
+
+                <template for:each={displayAdds} for:item="a">
+                    <li key={a.key} class="atm-row">
+                        <lightning-avatar
+                            src={a.photoUrl}
+                            initials={a.initials}
+                            fallback-icon-name="standard:user"
+                            alternative-text={a.name}
+                            size="medium"
+                            class="atm-avatar">
+                        </lightning-avatar>
+                        <div class="atm-main">
+                            <span class="atm-name">{a.name}</span>
+                        </div>
+                        <div class="atm-right">
+                            <span class="atm-tag atm-tag_add">New</span>
+                            <span class="atm-badge" style={a.roleStyle}>{a.roleLabel}</span>
+                            <span class="atm-pill">{a.accessLabel}</span>
+                            <lightning-button-icon
+                                icon-name="utility:close"
+                                variant="border-filled"
+                                size="small"
+                                alternative-text="Remove staged add"
+                                data-key={a.key}
+                                onclick={removeAdd}>
+                            </lightning-button-icon>
+                        </div>
+                    </li>
+                </template>
+            </ul>
+
+            <template lwc:if={canManage}>
+                <template lwc:if={addOpen}>
+                    <div class="atm-addform">
+                        <lightning-record-picker
+                            label="User"
+                            placeholder="Search users..."
+                            object-api-name="User"
+                            filter={userFilter}
+                            onchange={handleUserPick}>
+                        </lightning-record-picker>
+
+                        <template lwc:if={showSelectedPreview}>
+                            <div class="atm-selected">
+                                <lightning-avatar
+                                    src={selectedUserPhoto}
+                                    initials={selectedPreviewInitials}
+                                    fallback-icon-name="standard:user"
+                                    size="small"
+                                    alternative-text={selectedUserName}>
+                                </lightning-avatar>
+                                <span class="atm-name">{selectedUserName}</span>
+                            </div>
+                        </template>
+
+                        <div class="atm-addrow">
+                            <lightning-combobox
+                                label="Role"
+                                value={addRole}
+                                options={roleComboOptions}
+                                onchange={handleAddRole}
+                                class="atm-grow">
+                            </lightning-combobox>
+                            <lightning-combobox
+                                label="Account access"
+                                value={addAccess}
+                                options={accessOptions}
+                                onchange={handleAddAccess}
+                                class="atm-grow">
+                            </lightning-combobox>
+                        </div>
+
+                        <div class="atm-actions">
+                            <lightning-button
+                                label="Add to changes"
+                                variant="brand"
+                                disabled={stageDisabled}
+                                onclick={stageAdd}>
+                            </lightning-button>
+                            <lightning-button label="Cancel" onclick={cancelAdd}></lightning-button>
+                        </div>
+                    </div>
+                </template>
+                <template lwc:else>
+                    <lightning-button
+                        label="Add team member"
+                        icon-name="utility:add"
+                        class="atm-addbtn"
+                        onclick={openAdd}>
+                    </lightning-button>
+                </template>
+            </template>
+
+            <template lwc:if={hasPending}>
+                <div class="atm-pending">
+                    <div class="atm-pending_head">
+                        <span class="atm-pending_title">Pending changes ({pendingCount})</span>
+                        <span class="atm-pending_note">
+                            <lightning-icon icon-name="utility:flow" size="xx-small"></lightning-icon>
+                            Runs in system context
+                        </span>
+                    </div>
+                    <template for:each={pendingItems} for:item="i">
+                        <div key={i.key} class={i.css}>
+                            <lightning-icon icon-name={i.icon} size="xx-small" class="atm-chip_icon"></lightning-icon>
+                            <span>{i.text}</span>
+                        </div>
+                    </template>
+                    <div class="atm-actions">
+                        <lightning-button
+                            label={applyLabel}
+                            variant="brand"
+                            disabled={busy}
+                            onclick={handleApply}>
+                        </lightning-button>
+                        <lightning-button label="Discard" disabled={busy} onclick={discard}></lightning-button>
+                    </div>
+                </div>
+            </template>
+
+            <template lwc:if={busy}>
+                <lightning-spinner alternative-text="Applying..." size="small"></lightning-spinner>
+            </template>
+
+        </div>
+
+        <p slot="footer" class="atm-footer">
+            Roles &amp; colours are configured in the Account Team Role Config custom metadata &middot; photos come from each user's profile
+        </p>
+    </lightning-card>
+</template>

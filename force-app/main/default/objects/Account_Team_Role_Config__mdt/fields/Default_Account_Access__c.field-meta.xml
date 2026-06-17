@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Default_Account_Access__c</fullName>
+    <label>Default Account Access</label>
+    <type>Text</type>
+    <length>10</length>
+    <required>false</required>
+    <unique>false</unique>
+    <externalId>false</externalId>
+    <description>One of None, Read or Edit. Cannot be lower than the org-wide default for Account.</description>
+</CustomField>

@@ -40,16 +40,44 @@ private class AccountTeamManagerController_Test {
         return null;
     }
 
+    // A standard user guaranteed NOT to hold Manage_Account_CSMs (i.e. not assigned
+    // the Account_Team_Manager permission set). Keeps the gate test deterministic no
+    // matter what the test-executing user happens to be assigned.
+    private static User userWithoutManagePerm() {
+        Set<Id> assignees = new Set<Id>();
+        for (PermissionSetAssignment psa : [
+                SELECT AssigneeId FROM PermissionSetAssignment
+                WHERE PermissionSet.Name = 'Account_Team_Manager']) {
+            assignees.add(psa.AssigneeId);
+        }
+        for (User u : [SELECT Id FROM User
+                WHERE IsActive = true AND UserType = 'Standard'
+                  AND Profile.PermissionsModifyAllData = false
+                  AND Id != :UserInfo.getUserId()]) {
+            if (!assignees.contains(u.Id)) {
+                return u;
+            }
+        }
+        return null;
+    }
+
     @IsTest
     static void blocks_without_permission() {
+        User noPerm = userWithoutManagePerm();
+        System.assertNotEquals(null, noPerm,
+            'Need a standard user without the manage permission to run this test');
+
         Account a = new Account(Name = 'No-Perm Co');
         insert a;
+
         Boolean threw = false;
         Test.startTest();
-        try {
-            AccountTeamManagerController.applyChanges(a.Id, '{}');
-        } catch (Exception e) {
-            threw = true;
+        System.runAs(noPerm) {
+            try {
+                AccountTeamManagerController.applyChanges(a.Id, '{}');
+            } catch (Exception e) {
+                threw = true;
+            }
         }
         Test.stopTest();
         System.assertEquals(true, threw,

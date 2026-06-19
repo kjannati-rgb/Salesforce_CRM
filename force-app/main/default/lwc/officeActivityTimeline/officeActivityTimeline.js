@@ -34,17 +34,21 @@ export default class OfficeActivityTimeline extends NavigationMixin(LightningEle
 
     activities = [];
     totals;
+    options; // full filter-option lists (offices/owners/teams/legalEntities) from the unfiltered load
+    firmTotal = 0; // the firm's overall activity count, captured on the unfiltered load
     error;
     isLoading = true;
     isRefreshing = false;
 
     selectedId;
-    activeType = 'All';
-    officeFilter = 'All';
-    ownerFilter = 'All';
+    activeType = 'All'; // client-side view filter (the others are applied server-side)
+    officeFilter = 'All'; // holds an office Id
+    ownerFilter = 'All'; // holds an owner (User) Id
     teamFilter = 'All';
     legalEntityFilter = 'All';
     searchKey = '';
+
+    _searchTimer;
 
     // Load imperatively on mount. A @wire on getOfficeActivities left the timeline blank on a
     // record-page tab until the user pressed Refresh; connectedCallback fires once recordId and
@@ -53,6 +57,9 @@ export default class OfficeActivityTimeline extends NavigationMixin(LightningEle
         this.loadActivities();
     }
 
+    // The structured filters are sent to the server so they reach activity beyond the row cap; only
+    // the type tab is applied client-side. The server returns the full filter-option lists (and the
+    // firm-level total) on the unfiltered load, which we cache so dropdowns stay complete.
     async loadActivities() {
         if (!this.recordId) {
             return;
@@ -61,13 +68,23 @@ export default class OfficeActivityTimeline extends NavigationMixin(LightningEle
             const data = await getOfficeActivities({
                 accountId: this.recordId,
                 monthsBack: this.monthsBack,
-                maxRecords: this.maxRecords
+                maxRecords: this.maxRecords,
+                officeId: this.officeFilter === 'All' ? null : this.officeFilter,
+                ownerId: this.ownerFilter === 'All' ? null : this.ownerFilter,
+                team: this.teamFilter === 'All' ? null : this.teamFilter,
+                legalEntity: this.legalEntityFilter === 'All' ? null : this.legalEntityFilter,
+                searchTerm: this.searchKey.trim() ? this.searchKey.trim() : null
             });
             this.activities = (data && data.activities) || [];
             this.totals = data || null;
+            if (data && data.filterOptions) {
+                this.options = data.filterOptions;
+                this.firmTotal = data.totalAll;
+            }
             this.error = undefined;
-            if (this.activities.length && !this.selectedId) {
-                this.selectedId = this.activities[0].id;
+            const ids = new Set(this.activities.map((a) => a.id));
+            if (!this.selectedId || !ids.has(this.selectedId)) {
+                this.selectedId = this.activities.length ? this.activities[0].id : undefined;
             }
         } catch (e) {
             this.error = this.reduceError(e);
@@ -78,46 +95,18 @@ export default class OfficeActivityTimeline extends NavigationMixin(LightningEle
         }
     }
 
+    reload() {
+        return this.loadActivities();
+    }
+
     // ---- Derived data ---------------------------------------------------
 
+    // Only the type tab is applied here; office/owner/team/legal/search were applied server-side.
     get filteredActivities() {
-        const q = this.searchKey.trim().toLowerCase();
-        return this.activities.filter((a) => {
-            if (this.activeType !== 'All' && a.type !== this.activeType) {
-                return false;
-            }
-            if (this.officeFilter !== 'All' && a.officeName !== this.officeFilter) {
-                return false;
-            }
-            if (this.ownerFilter !== 'All' && a.ownerName !== this.ownerFilter) {
-                return false;
-            }
-            if (this.teamFilter !== 'All' && a.ownerTeam !== this.teamFilter) {
-                return false;
-            }
-            if (this.legalEntityFilter !== 'All' && a.ownerLegalEntity !== this.legalEntityFilter) {
-                return false;
-            }
-            if (q) {
-                const haystack = [
-                    a.subject,
-                    a.description,
-                    a.ownerName,
-                    a.officeName,
-                    a.whoName,
-                    a.relatedToName,
-                    a.ownerTeam,
-                    a.ownerLegalEntity
-                ]
-                    .filter(Boolean)
-                    .join(' ')
-                    .toLowerCase();
-                if (!haystack.includes(q)) {
-                    return false;
-                }
-            }
-            return true;
-        });
+        if (this.activeType === 'All') {
+            return this.activities;
+        }
+        return this.activities.filter((a) => a.type === this.activeType);
     }
 
     get groups() {
@@ -218,46 +207,15 @@ export default class OfficeActivityTimeline extends NavigationMixin(LightningEle
         };
     }
 
-    // With no filters applied, the headline shows the true server-side totals (accurate even when
-    // the list is capped at maxRecords). Once any filter is on, it reflects the loaded filtered set.
-    get isFiltered() {
-        return (
-            this.activeType !== 'All' ||
-            this.officeFilter !== 'All' ||
-            this.ownerFilter !== 'All' ||
-            this.teamFilter !== 'All' ||
-            this.legalEntityFilter !== 'All' ||
-            this.searchKey.trim() !== ''
-        );
-    }
-
+    // The headline counts come from the server totals, which already reflect the active structured
+    // filters (and are uncapped). The type tab only focuses the list below, not these numbers.
     get summary() {
-        let counts;
-        if (!this.isFiltered && this.totals) {
-            counts = {
-                Email: this.totals.totalEmails,
-                Call: this.totals.totalCalls,
-                Task: this.totals.totalTasks,
-                Event: this.totals.totalMeetings
-            };
-            return [
-                { key: 'Email', label: 'Emails', count: counts.Email, dotClass: 'dot dot-email' },
-                { key: 'Call', label: 'Calls', count: counts.Call, dotClass: 'dot dot-call' },
-                { key: 'Task', label: 'Tasks', count: counts.Task, dotClass: 'dot dot-task' },
-                { key: 'Event', label: 'Meetings', count: counts.Event, dotClass: 'dot dot-event' }
-            ];
-        }
-        counts = { Email: 0, Call: 0, Task: 0, Event: 0 };
-        this.filteredActivities.forEach((a) => {
-            if (counts[a.type] !== undefined) {
-                counts[a.type] += 1;
-            }
-        });
+        const t = this.totals || { totalEmails: 0, totalCalls: 0, totalTasks: 0, totalMeetings: 0 };
         return [
-            { key: 'Email', label: 'Emails', count: counts.Email, dotClass: 'dot dot-email' },
-            { key: 'Call', label: 'Calls', count: counts.Call, dotClass: 'dot dot-call' },
-            { key: 'Task', label: 'Tasks', count: counts.Task, dotClass: 'dot dot-task' },
-            { key: 'Event', label: 'Meetings', count: counts.Event, dotClass: 'dot dot-event' }
+            { key: 'Email', label: 'Emails', count: t.totalEmails, dotClass: 'dot dot-email' },
+            { key: 'Call', label: 'Calls', count: t.totalCalls, dotClass: 'dot dot-call' },
+            { key: 'Task', label: 'Tasks', count: t.totalTasks, dotClass: 'dot dot-task' },
+            { key: 'Event', label: 'Meetings', count: t.totalMeetings, dotClass: 'dot dot-event' }
         ];
     }
 
@@ -266,14 +224,13 @@ export default class OfficeActivityTimeline extends NavigationMixin(LightningEle
     }
 
     get summaryLabel() {
-        const total =
-            !this.isFiltered && this.totals ? this.totals.totalAll : this.filteredActivities.length;
+        const total = this.totals ? this.totals.totalAll : 0;
         return `${total} activities across ${this.officeCount} offices`;
     }
 
     get cappedNote() {
-        if (!this.isFiltered && this.totals && this.totals.capped) {
-            return `Showing the ${this.activities.length} most recent of ${this.totals.totalAll} — filter to narrow.`;
+        if (this.totals && this.totals.capped) {
+            return `Showing the ${this.activities.length} most recent of ${this.totals.totalAll} — narrow with the filters to find specific items.`;
         }
         return '';
     }
@@ -285,29 +242,32 @@ export default class OfficeActivityTimeline extends NavigationMixin(LightningEle
         }));
     }
 
+    // Dropdowns are built from the server's full option lists (every owner/office across the firm),
+    // so an owner whose activity is all older than the cap is still selectable.
     get officeOptions() {
-        return this.buildOptions('officeName', 'All offices');
+        const opts = (this.options && this.options.offices) || [];
+        return [{ label: 'All offices', value: 'All' }, ...opts.map((o) => ({ label: o.label, value: o.value }))];
     }
 
     get ownerOptions() {
-        return this.buildOptions('ownerName', 'All owners');
+        const opts = (this.options && this.options.owners) || [];
+        return [{ label: 'All owners', value: 'All' }, ...opts.map((o) => ({ label: o.label, value: o.value }))];
     }
 
     get teamOptions() {
-        return this.buildOptions('ownerTeam', 'All teams');
+        const opts = (this.options && this.options.teams) || [];
+        return [{ label: 'All teams', value: 'All' }, ...opts.map((v) => ({ label: v, value: v }))];
     }
 
     get legalEntityOptions() {
-        return this.buildOptions('ownerLegalEntity', 'All legal entities');
+        const opts = (this.options && this.options.legalEntities) || [];
+        return [{ label: 'All legal entities', value: 'All' }, ...opts.map((v) => ({ label: v, value: v }))];
     }
 
-    buildOptions(key, allLabel) {
-        const values = [...new Set(this.activities.map((a) => a[key]).filter(Boolean))].sort();
-        return [{ label: allLabel, value: 'All' }, ...values.map((v) => ({ label: v, value: v }))];
-    }
-
+    // Firm-level: does the firm have any activity at all (so we keep the toolbar/filters visible even
+    // when the current filter matches nothing)?
     get hasActivities() {
-        return this.activities.length > 0;
+        return this.firmTotal > 0;
     }
 
     get hasResults() {
@@ -326,22 +286,33 @@ export default class OfficeActivityTimeline extends NavigationMixin(LightningEle
 
     handleOfficeChange(event) {
         this.officeFilter = event.detail.value;
+        this.reload();
     }
 
     handleOwnerChange(event) {
         this.ownerFilter = event.detail.value;
+        this.reload();
     }
 
     handleTeamChange(event) {
         this.teamFilter = event.detail.value;
+        this.reload();
     }
 
     handleLegalEntityChange(event) {
         this.legalEntityFilter = event.detail.value;
+        this.reload();
     }
 
     handleSearch(event) {
         this.searchKey = event.target.value;
+        // Debounce so we query once the user pauses, not on every keystroke.
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
+        window.clearTimeout(this._searchTimer);
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
+        this._searchTimer = window.setTimeout(() => {
+            this.loadActivities();
+        }, 400);
     }
 
     handleClear() {
@@ -351,6 +322,7 @@ export default class OfficeActivityTimeline extends NavigationMixin(LightningEle
         this.teamFilter = 'All';
         this.legalEntityFilter = 'All';
         this.searchKey = '';
+        this.reload();
     }
 
     handleRefresh() {

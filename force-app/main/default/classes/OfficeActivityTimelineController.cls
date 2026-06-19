@@ -1,15 +1,21 @@
 public with sharing class OfficeActivityTimelineController {
     // Rolls up Tasks and Events for a Firm account and every Office account beneath it,
     // INCLUDING activities logged against the contacts and opportunities under those offices.
-    // One call; the LWC does all grouping, filtering, and selection client-side. Not cacheable:
-    // the component loads imperatively on mount and the Refresh button must return fresh activity,
-    // not a client-cached copy.
+    // Not cacheable: the component loads imperatively on mount and Refresh must return fresh data.
     //
-    // monthsBack : how far back to include PAST activity (default 36). Open/overdue and
-    //              upcoming activities are always returned regardless of this window.
+    // The structured filters (officeId / ownerId / team / legalEntity / searchTerm) are applied
+    // SERVER-SIDE in the SOQL, so they reach activity beyond the maxRecords row cap — e.g. filtering
+    // a 3,000-task firm by one owner returns all of that owner's activity even if it's old. The LWC's
+    // type tabs stay client-side. Pass them all null/blank for the default (unfiltered) load.
+    //
+    // monthsBack : how far back to include PAST activity (default 36). Open/overdue and upcoming
+    //              activities are always returned regardless of this window.
     // maxRecords : safety cap applied to Tasks and to Events (each), default 1000.
     @AuraEnabled(cacheable=false)
-    public static TimelineResult getOfficeActivities(Id accountId, Integer monthsBack, Integer maxRecords) {
+    public static TimelineResult getOfficeActivities(
+        Id accountId, Integer monthsBack, Integer maxRecords,
+        Id officeId, Id ownerId, String team, String legalEntity, String searchTerm
+    ) {
         TimelineResult out = new TimelineResult();
         List<ActivityWrapper> results = out.activities;
         if (accountId == null) {
@@ -35,23 +41,13 @@ public with sharing class OfficeActivityTimelineController {
 
         // 2. Contacts under those offices -> remember which office each belongs to.
         Map<Id, Id> contactToAccount = new Map<Id, Id>();
-        for (Contact c : [
-            SELECT Id, AccountId
-            FROM Contact
-            WHERE AccountId IN :accountIds
-            WITH USER_MODE
-        ]) {
+        for (Contact c : [SELECT Id, AccountId FROM Contact WHERE AccountId IN :accountIds WITH USER_MODE]) {
             contactToAccount.put(c.Id, c.AccountId);
         }
 
         // 3. Opportunities under those offices -> remember which office each belongs to.
         Map<Id, Id> oppToAccount = new Map<Id, Id>();
-        for (Opportunity o : [
-            SELECT Id, AccountId
-            FROM Opportunity
-            WHERE AccountId IN :accountIds
-            WITH USER_MODE
-        ]) {
+        for (Opportunity o : [SELECT Id, AccountId FROM Opportunity WHERE AccountId IN :accountIds WITH USER_MODE]) {
             oppToAccount.put(o.Id, o.AccountId);
         }
 
@@ -59,7 +55,6 @@ public with sharing class OfficeActivityTimelineController {
         Set<Id> whatScope = new Set<Id>(accountIds);
         whatScope.addAll(oppToAccount.keySet());
         Set<Id> whoScope = contactToAccount.keySet();
-
         if (whatScope.isEmpty() && whoScope.isEmpty()) {
             return out;
         }
@@ -70,22 +65,85 @@ public with sharing class OfficeActivityTimelineController {
             closedStatuses.add(ts.MasterLabel);
         }
 
+        // ---- Resolve the optional filters into bind values + dynamic WHERE fragments. ----
+        Boolean hasFilter = false;
+
+        // Office: narrow to one office plus its own opportunities/contacts.
+        Set<Id> officeWhat = new Set<Id>();
+        Set<Id> officeWho = new Set<Id>();
+        Boolean officeFilter = (officeId != null && accountNameById.containsKey(officeId));
+        if (officeFilter) {
+            hasFilter = true;
+            officeWhat.add(officeId);
+            for (Id oId : oppToAccount.keySet()) {
+                if (oppToAccount.get(oId) == officeId) { officeWhat.add(oId); }
+            }
+            for (Id cId : contactToAccount.keySet()) {
+                if (contactToAccount.get(cId) == officeId) { officeWho.add(cId); }
+            }
+        }
+
+        // Team / Legal entity: resolve to the owning users.
+        Set<Id> teamOwnerIds = new Set<Id>();
+        if (String.isNotBlank(team)) {
+            hasFilter = true;
+            for (User u : [SELECT Id FROM User WHERE Team__c = :team WITH USER_MODE]) { teamOwnerIds.add(u.Id); }
+        }
+        Set<Id> legalOwnerIds = new Set<Id>();
+        if (String.isNotBlank(legalEntity)) {
+            hasFilter = true;
+            for (User u : [SELECT Id FROM User WHERE LBR_Legal_Entity__c = :legalEntity WITH USER_MODE]) { legalOwnerIds.add(u.Id); }
+        }
+        if (ownerId != null) {
+            hasFilter = true;
+        }
+        String likeTerm;
+        if (String.isNotBlank(searchTerm)) {
+            hasFilter = true;
+            likeTerm = '%' + searchTerm + '%';
+        }
+
+        List<String> taskConds = new List<String>{
+            '(WhatId IN :whatScope OR WhoId IN :whoScope)',
+            '(ActivityDate >= :sinceDate OR ActivityDate = null OR Status NOT IN :closedStatuses)'
+        };
+        List<String> eventConds = new List<String>{
+            '(WhatId IN :whatScope OR WhoId IN :whoScope)',
+            '(ActivityDate >= :sinceDate OR ActivityDate = null)'
+        };
+        if (officeFilter) {
+            taskConds.add('(WhatId IN :officeWhat OR WhoId IN :officeWho)');
+            eventConds.add('(WhatId IN :officeWhat OR WhoId IN :officeWho)');
+        }
+        if (ownerId != null) {
+            taskConds.add('OwnerId = :ownerId');
+            eventConds.add('OwnerId = :ownerId');
+        }
+        if (!teamOwnerIds.isEmpty()) {
+            taskConds.add('OwnerId IN :teamOwnerIds');
+            eventConds.add('OwnerId IN :teamOwnerIds');
+        }
+        if (!legalOwnerIds.isEmpty()) {
+            taskConds.add('OwnerId IN :legalOwnerIds');
+            eventConds.add('OwnerId IN :legalOwnerIds');
+        }
+        if (likeTerm != null) {
+            // Description is a long-text area and isn't filterable in SOQL, so search Subject
+            // (and Location for events) — both filterable.
+            taskConds.add('Subject LIKE :likeTerm');
+            eventConds.add('(Subject LIKE :likeTerm OR Location LIKE :likeTerm)');
+        }
+        String taskWhere = String.join(taskConds, ' AND ');
+        String eventWhere = String.join(eventConds, ' AND ');
+
         Set<Id> ownerIds = new Set<Id>();
 
-        // 4. Tasks in scope, within the window OR still open (so overdue/upcoming never get truncated).
-        for (Task t : [
-            SELECT Id, Subject, TaskSubtype, Type, ActivityDate, Status, Priority,
-                   Description, LastModifiedDate,
-                   OwnerId, Owner.Name,
-                   WhatId, What.Name,
-                   WhoId, Who.Name
-            FROM Task
-            WHERE (WhatId IN :whatScope OR WhoId IN :whoScope)
-              AND (ActivityDate >= :sinceDate OR ActivityDate = null OR Status NOT IN :closedStatuses)
-            WITH USER_MODE
-            ORDER BY ActivityDate DESC NULLS LAST
-            LIMIT :rowCap
-        ]) {
+        // 4. Task rows (filtered, capped to the most-recent rowCap).
+        String taskQuery =
+            'SELECT Id, Subject, TaskSubtype, Type, ActivityDate, Status, Priority, Description, ' +
+            'LastModifiedDate, OwnerId, Owner.Name, WhatId, What.Name, WhoId, Who.Name ' +
+            'FROM Task WHERE ' + taskWhere + ' ORDER BY ActivityDate DESC NULLS LAST LIMIT :rowCap';
+        for (Task t : (List<Task>) Database.query(taskQuery, AccessLevel.USER_MODE)) {
             ActivityWrapper w = new ActivityWrapper();
             w.id = t.Id;
             w.objectApiName = 'Task';
@@ -110,20 +168,12 @@ public with sharing class OfficeActivityTimelineController {
             results.add(w);
         }
 
-        // 5. Events in scope, within the window (future events fall in naturally for "Upcoming").
-        for (Event e : [
-            SELECT Id, Subject, EventSubtype, ActivityDate, StartDateTime, EndDateTime,
-                   Location, Meeting_Status__c, Description, LastModifiedDate,
-                   OwnerId, Owner.Name,
-                   WhatId, What.Name,
-                   WhoId, Who.Name
-            FROM Event
-            WHERE (WhatId IN :whatScope OR WhoId IN :whoScope)
-              AND (ActivityDate >= :sinceDate OR ActivityDate = null)
-            WITH USER_MODE
-            ORDER BY StartDateTime DESC NULLS LAST
-            LIMIT :rowCap
-        ]) {
+        // 5. Event rows (filtered, capped).
+        String eventQuery =
+            'SELECT Id, Subject, EventSubtype, ActivityDate, StartDateTime, EndDateTime, Location, ' +
+            'Meeting_Status__c, Description, LastModifiedDate, OwnerId, Owner.Name, WhatId, What.Name, WhoId, Who.Name ' +
+            'FROM Event WHERE ' + eventWhere + ' ORDER BY StartDateTime DESC NULLS LAST LIMIT :rowCap';
+        for (Event e : (List<Event>) Database.query(eventQuery, AccessLevel.USER_MODE)) {
             ActivityWrapper w = new ActivityWrapper();
             w.id = e.Id;
             w.objectApiName = 'Event';
@@ -157,10 +207,7 @@ public with sharing class OfficeActivityTimelineController {
         // 6. Owner is polymorphic, so resolve the owning User's Team / LBR Legal Entity separately.
         if (!ownerIds.isEmpty()) {
             Map<Id, User> ownersById = new Map<Id, User>([
-                SELECT Id, Team__c, LBR_Legal_Entity__c
-                FROM User
-                WHERE Id IN :ownerIds
-                WITH USER_MODE
+                SELECT Id, Team__c, LBR_Legal_Entity__c FROM User WHERE Id IN :ownerIds WITH USER_MODE
             ]);
             for (ActivityWrapper w : results) {
                 User u = (w.ownerId != null) ? ownersById.get((Id) w.ownerId) : null;
@@ -173,41 +220,81 @@ public with sharing class OfficeActivityTimelineController {
 
         results.sort();
 
-        // True per-type totals across the whole scope, UNCAPPED — so the headline counts stay
-        // accurate even when the list above is truncated to maxRecords. Aggregate COUNT queries
-        // return one row per group (not per record), so they don't hit the row cap and scale to
-        // firms with far more than maxRecords activities.
-        for (AggregateResult ar : [
-            SELECT Type tp, TaskSubtype st, COUNT(Id) cnt
-            FROM Task
-            WHERE (WhatId IN :whatScope OR WhoId IN :whoScope)
-              AND (ActivityDate >= :sinceDate OR ActivityDate = null OR Status NOT IN :closedStatuses)
-            WITH USER_MODE
-            GROUP BY Type, TaskSubtype
-        ]) {
+        // True per-type totals for the CURRENT filter set (uncapped aggregate — one row per group,
+        // so it isn't limited by the row cap and stays accurate for any firm size or filter).
+        String taskAgg = 'SELECT Type tp, TaskSubtype st, COUNT(Id) cnt FROM Task WHERE ' + taskWhere + ' GROUP BY Type, TaskSubtype';
+        for (AggregateResult ar : (List<AggregateResult>) Database.query(taskAgg, AccessLevel.USER_MODE)) {
             Integer cnt = (Integer) ar.get('cnt');
             switch on mapTaskType((String) ar.get('st'), (String) ar.get('tp')) {
-                when 'Email' {
-                    out.totalEmails += cnt;
-                }
-                when 'Call' {
-                    out.totalCalls += cnt;
-                }
-                when else {
-                    out.totalTasks += cnt;
-                }
+                when 'Email' { out.totalEmails += cnt; }
+                when 'Call' { out.totalCalls += cnt; }
+                when else { out.totalTasks += cnt; }
             }
         }
-        out.totalMeetings = [
-            SELECT COUNT()
-            FROM Event
-            WHERE (WhatId IN :whatScope OR WhoId IN :whoScope)
-              AND (ActivityDate >= :sinceDate OR ActivityDate = null)
-            WITH USER_MODE
-        ];
+        String eventAgg = 'SELECT COUNT(Id) cnt FROM Event WHERE ' + eventWhere;
+        for (AggregateResult ar : (List<AggregateResult>) Database.query(eventAgg, AccessLevel.USER_MODE)) {
+            out.totalMeetings = (Integer) ar.get('cnt');
+        }
         out.totalAll = out.totalEmails + out.totalCalls + out.totalTasks + out.totalMeetings;
         out.capped = out.totalAll > results.size();
+
+        // Filter dropdown options — the FULL lists across the whole firm (so an owner whose activity
+        // is entirely beyond the cap is still selectable). Only needed on the unfiltered load.
+        if (!hasFilter) {
+            out.filterOptions = buildFilterOptions(accountNameById, accountId, whatScope, whoScope, sinceDate, closedStatuses);
+        }
         return out;
+    }
+
+    // Distinct filter values across the WHOLE firm scope (not row-capped), for the LWC dropdowns.
+    private static FilterOptions buildFilterOptions(
+        Map<Id, String> accountNameById, Id firmId,
+        Set<Id> whatScope, Set<Id> whoScope, Date sinceDate, Set<String> closedStatuses
+    ) {
+        FilterOptions opts = new FilterOptions();
+
+        // Offices: every office in the firm hierarchy (exclude the firm account itself), by name.
+        for (Id aId : accountNameById.keySet()) {
+            if (aId != firmId) {
+                opts.offices.add(new Opt(accountNameById.get(aId), aId));
+            }
+        }
+        opts.offices.sort();
+
+        // Owners: everyone who owns in-scope activity (distinct, via aggregate — not row-capped).
+        Set<Id> ownerIdSet = new Set<Id>();
+        for (AggregateResult ar : [
+            SELECT OwnerId oid FROM Task
+            WHERE (WhatId IN :whatScope OR WhoId IN :whoScope)
+              AND (ActivityDate >= :sinceDate OR ActivityDate = null OR Status NOT IN :closedStatuses)
+            WITH USER_MODE GROUP BY OwnerId
+        ]) {
+            ownerIdSet.add((Id) ar.get('oid'));
+        }
+        for (AggregateResult ar : [
+            SELECT OwnerId oid FROM Event
+            WHERE (WhatId IN :whatScope OR WhoId IN :whoScope)
+              AND (ActivityDate >= :sinceDate OR ActivityDate = null)
+            WITH USER_MODE GROUP BY OwnerId
+        ]) {
+            ownerIdSet.add((Id) ar.get('oid'));
+        }
+        if (!ownerIdSet.isEmpty()) {
+            Set<String> teamSet = new Set<String>();
+            Set<String> legalSet = new Set<String>();
+            for (User u : [
+                SELECT Id, Name, Team__c, LBR_Legal_Entity__c FROM User WHERE Id IN :ownerIdSet WITH USER_MODE ORDER BY Name
+            ]) {
+                opts.owners.add(new Opt(u.Name, u.Id));
+                if (String.isNotBlank(u.Team__c)) { teamSet.add(u.Team__c); }
+                if (String.isNotBlank(u.LBR_Legal_Entity__c)) { legalSet.add(u.LBR_Legal_Entity__c); }
+            }
+            opts.teams = new List<String>(teamSet);
+            opts.teams.sort();
+            opts.legalEntities = new List<String>(legalSet);
+            opts.legalEntities.sort();
+        }
+        return opts;
     }
 
     // Office attribution: prefer the WhatId account/opportunity, else fall back to the WhoId contact.
@@ -280,6 +367,30 @@ public with sharing class OfficeActivityTimelineController {
         @AuraEnabled public Integer totalMeetings = 0;
         @AuraEnabled public Integer totalAll = 0;
         @AuraEnabled public Boolean capped = false;
+        @AuraEnabled public FilterOptions filterOptions;
+    }
+
+    public class FilterOptions {
+        @AuraEnabled public List<Opt> offices = new List<Opt>();
+        @AuraEnabled public List<Opt> owners = new List<Opt>();
+        @AuraEnabled public List<String> teams = new List<String>();
+        @AuraEnabled public List<String> legalEntities = new List<String>();
+    }
+
+    public class Opt implements Comparable {
+        @AuraEnabled public String label;
+        @AuraEnabled public String value;
+        public Opt(String labelIn, String valueIn) {
+            this.label = labelIn;
+            this.value = valueIn;
+        }
+        public Integer compareTo(Object other) {
+            Opt o = (Opt) other;
+            if (this.label == o.label) { return 0; }
+            if (this.label == null) { return -1; }
+            if (o.label == null) { return 1; }
+            return this.label.compareTo(o.label);
+        }
     }
 
     public class ActivityWrapper implements Comparable {

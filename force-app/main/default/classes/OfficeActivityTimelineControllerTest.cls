@@ -64,7 +64,7 @@ private class OfficeActivityTimelineControllerTest {
 
         Test.startTest();
         OfficeActivityTimelineController.TimelineResult result =
-            OfficeActivityTimelineController.getOfficeActivities(firm.Id, 36, 1000);
+            OfficeActivityTimelineController.getOfficeActivities(firm.Id, 36, 1000, null, null, null, null, null);
         List<OfficeActivityTimelineController.ActivityWrapper> rows = result.activities;
         Test.stopTest();
 
@@ -95,7 +95,7 @@ private class OfficeActivityTimelineControllerTest {
     static void handlesNullId() {
         Test.startTest();
         OfficeActivityTimelineController.TimelineResult result =
-            OfficeActivityTimelineController.getOfficeActivities(null, 36, 1000);
+            OfficeActivityTimelineController.getOfficeActivities(null, 36, 1000, null, null, null, null, null);
         List<OfficeActivityTimelineController.ActivityWrapper> rows = result.activities;
         Test.stopTest();
 
@@ -113,7 +113,7 @@ private class OfficeActivityTimelineControllerTest {
 
         Test.startTest();
         OfficeActivityTimelineController.TimelineResult result =
-            OfficeActivityTimelineController.getOfficeActivities(firm.Id, 36, 1000);
+            OfficeActivityTimelineController.getOfficeActivities(firm.Id, 36, 1000, null, null, null, null, null);
         List<OfficeActivityTimelineController.ActivityWrapper> rows = result.activities;
         Test.stopTest();
 
@@ -142,7 +142,7 @@ private class OfficeActivityTimelineControllerTest {
 
         Test.startTest();
         OfficeActivityTimelineController.TimelineResult result =
-            OfficeActivityTimelineController.getOfficeActivities(firm.Id, 36, 1000);
+            OfficeActivityTimelineController.getOfficeActivities(firm.Id, 36, 1000, null, null, null, null, null);
         List<OfficeActivityTimelineController.ActivityWrapper> rows = result.activities;
         Test.stopTest();
 
@@ -155,5 +155,35 @@ private class OfficeActivityTimelineControllerTest {
             }
         }
         System.assert(checked, 'The meeting should appear in the rollup');
+    }
+
+    @isTest
+    static void filtersServerSide() {
+        // The structured filters are applied in SOQL so they reach activity beyond the row cap.
+        Account firm = [SELECT Id FROM Account WHERE Name = 'Test Firm' LIMIT 1];
+        Account office = [SELECT Id FROM Account WHERE Name = 'Office via ParentId' LIMIT 1];
+
+        Test.startTest();
+        // Search: only the proposal task matches.
+        OfficeActivityTimelineController.TimelineResult bySearch =
+            OfficeActivityTimelineController.getOfficeActivities(firm.Id, 36, 1000, null, null, null, null, 'proposal');
+        // Owner: the running user owns all the test activity.
+        OfficeActivityTimelineController.TimelineResult byOwner =
+            OfficeActivityTimelineController.getOfficeActivities(firm.Id, 36, 1000, null, UserInfo.getUserId(), null, null, null);
+        // Office: only the ParentId office's activity.
+        OfficeActivityTimelineController.TimelineResult byOffice =
+            OfficeActivityTimelineController.getOfficeActivities(firm.Id, 36, 1000, office.Id, null, null, null, null);
+        Test.stopTest();
+
+        System.assertEquals(1, bySearch.activities.size(), 'Search should return only the matching task');
+        System.assertEquals('Re: proposal', bySearch.activities[0].subject);
+        System.assertEquals(1, bySearch.totalAll, 'Filtered totals should reflect the search');
+
+        System.assertEquals(5, byOwner.activities.size(), 'Owner = current user returns all test activity');
+
+        System.assert(!byOffice.activities.isEmpty(), 'Office filter should return that office\'s activity');
+        for (OfficeActivityTimelineController.ActivityWrapper w : byOffice.activities) {
+            System.assertEquals('Office via ParentId', w.officeName, 'Office filter should only return that office');
+        }
     }
 }

@@ -38,16 +38,16 @@
             IF(
                 ISPICKVAL(Industry_ALM__c, &quot;Law Firm&quot;),
                 IF(
-                    ISBLANK(of_Attorneys__c),
+                    ISBLANK(Number_of_Attorneys__c),
                     NULL,
                     IF(
-                        of_Attorneys__c &gt;= 151,
+                        Number_of_Attorneys__c &gt;= 151,
                         &quot;L&quot;,
                         IF(
-                            of_Attorneys__c &gt;= 71,
+                            Number_of_Attorneys__c &gt;= 71,
                             &quot;M&quot;,
                             IF(
-                                of_Attorneys__c &gt;= 6,
+                                Number_of_Attorneys__c &gt;= 6,
                                 &quot;S&quot;,
                                 &quot;Z&quot;
                             )

@@ -8,13 +8,13 @@
     IF(
         ISPICKVAL(Industry_ALM__c, &quot;Law Firm&quot;),
         IF(
-            of_Attorneys__c &gt;= 151, &quot;Large Law&quot;,
+            Number_of_Attorneys__c &gt;= 151, &quot;Large Law&quot;,
             IF(
-                of_Attorneys__c &gt;= 71, &quot;Mid-Market Law&quot;,
+                Number_of_Attorneys__c &gt;= 71, &quot;Mid-Market Law&quot;,
                 IF(
-                    of_Attorneys__c &gt;= 6, &quot;SMB Law&quot;,
+                    Number_of_Attorneys__c &gt;= 6, &quot;SMB Law&quot;,
                     IF(
-                        of_Attorneys__c &lt;= 5, &quot;Solo Practitioner Law&quot;,
+                        Number_of_Attorneys__c &lt;= 5, &quot;Solo Practitioner Law&quot;,
                         &quot;Law Firm - Other&quot;
                     )
                 )

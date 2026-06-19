@@ -772,7 +772,7 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>false</editable>
+        <editable>true</editable>
         <field>Account.Number_of_Attorneys__c</field>
         <readable>true</readable>
     </fieldPermissions>

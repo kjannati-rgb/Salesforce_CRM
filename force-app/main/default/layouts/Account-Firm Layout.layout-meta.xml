@@ -382,7 +382,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>of_Attorneys__c</field>
+                <field>Number_of_Attorneys__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>

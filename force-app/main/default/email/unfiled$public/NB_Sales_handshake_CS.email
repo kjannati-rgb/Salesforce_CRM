@@ -1,0 +1,73 @@
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#e8eae6;mso-table-lspace:0;mso-table-rspace:0"><tr><td align="center" style="padding:24px 12px;font-family:'Helvetica Neue',Arial,sans-serif">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" align="center" style="width:600px;max-width:100%;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e1e0d9;border-collapse:separate;mso-table-lspace:0;mso-table-rspace:0;font-family:'Helvetica Neue',Arial,sans-serif;color:#003340">
+
+<tr><td style="background:#003340;padding:30px 40px 24px;text-align:center;font-family:'Helvetica Neue',Arial,sans-serif">
+<div style="font-family:'Helvetica Neue',Arial,sans-serif;font-weight:bold;font-size:28px;line-height:1;letter-spacing:.14em;color:#ffffff">CE<span style="color:#00c8a7">N</span>TELLIC</div>
+<div style="font-family:'Helvetica Neue',Arial,sans-serif;margin-top:9px;font-size:11px;letter-spacing:.32em;color:#80ffff;text-transform:uppercase">Intelligence &amp; information services</div>
+</td></tr>
+<tr><td style="height:4px;background:#00c8a7;font-size:0;line-height:0">&nbsp;</td></tr>
+
+<tr><td style="background:#ffffff;padding:34px 40px 8px;font-family:'Helvetica Neue',Arial,sans-serif">
+<div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;font-weight:bold;letter-spacing:.2em;color:#008ca6;text-transform:uppercase">Sales handshake &middot; Content subscriptions</div>
+<div style="font-family:'Helvetica Neue',Arial,sans-serif;margin:12px 0 6px;font-weight:bold;font-size:26px;line-height:1.25;color:#003340">New business win &mdash; {!Customer_Journey__c.Account_name__c}</div>
+<div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:15px;line-height:1.6;color:#5c6b6e">A new Sales Handshake has been created. Here's everything you need to pick this account up and run with it.</div>
+</td></tr>
+
+<tr><td style="background:#ffffff;padding:22px 40px 6px;font-family:'Helvetica Neue',Arial,sans-serif">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate"><tr>
+<td width="33%" valign="top" style="padding:6px"><div style="background:#e8f6f2;border-radius:12px;padding:16px 10px;text-align:center">
+<div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:.08em;color:#008ca6;text-transform:uppercase">Annual value</div>
+<div style="font-family:'Helvetica Neue',Arial,sans-serif;margin-top:6px;font-weight:bold;font-size:18px;line-height:1.2;color:#003340">{!Customer_Journey__c.Amount__c}</div></div></td>
+<td width="33%" valign="top" style="padding:6px"><div style="background:#e8f6f2;border-radius:12px;padding:16px 10px;text-align:center">
+<div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:.08em;color:#008ca6;text-transform:uppercase">Goal licences</div>
+<div style="font-family:'Helvetica Neue',Arial,sans-serif;margin-top:6px;font-weight:bold;font-size:18px;line-height:1.2;color:#003340">{!Customer_Journey__c.Goal_Licenses__c}</div></div></td>
+<td width="33%" valign="top" style="padding:6px"><div style="background:#e8f6f2;border-radius:12px;padding:16px 10px;text-align:center">
+<div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:.08em;color:#008ca6;text-transform:uppercase">Seat banding</div>
+<div style="font-family:'Helvetica Neue',Arial,sans-serif;margin-top:6px;font-weight:bold;font-size:18px;line-height:1.2;color:#003340">{!Customer_Journey__c.Seat_Banding_Content_Subs__c}</div></div></td>
+</tr></table></td></tr>
+
+<tr><td style="background:#ffffff;padding:14px 40px 0;font-family:'Helvetica Neue',Arial,sans-serif">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="border-left:3px solid #00c8a7;background:#f6f5f1;padding:14px 16px;font-family:'Helvetica Neue',Arial,sans-serif">
+<div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;font-weight:bold;letter-spacing:.12em;color:#008ca6;text-transform:uppercase">Opportunity</div>
+<div style="font-family:'Helvetica Neue',Arial,sans-serif;margin-top:5px;font-size:14px;line-height:1.5;color:#003340">{!Customer_Journey__c.Opportunity__c}</div>
+</td></tr></table></td></tr>
+
+<tr><td style="background:#ffffff;padding:24px 40px 4px;font-family:'Helvetica Neue',Arial,sans-serif">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px">
+<tr><td style="font-family:'Helvetica Neue',Arial,sans-serif;padding:9px 0;color:#5c6b6e;border-bottom:1px solid #efeee8;width:46%">Sector / industry</td><td style="font-family:'Helvetica Neue',Arial,sans-serif;padding:9px 0;color:#003340;font-weight:bold;border-bottom:1px solid #efeee8;text-align:right">{!Customer_Journey__c.Sector_Industry__c}</td></tr>
+<tr><td style="font-family:'Helvetica Neue',Arial,sans-serif;padding:9px 0;color:#5c6b6e;border-bottom:1px solid #efeee8">Organisation type</td><td style="font-family:'Helvetica Neue',Arial,sans-serif;padding:9px 0;color:#003340;font-weight:bold;border-bottom:1px solid #efeee8;text-align:right">{!Customer_Journey__c.Organisation_type__c}</td></tr>
+<tr><td style="font-family:'Helvetica Neue',Arial,sans-serif;padding:9px 0;color:#5c6b6e;border-bottom:1px solid #efeee8">Product purchased</td><td style="font-family:'Helvetica Neue',Arial,sans-serif;padding:9px 0;color:#003340;font-weight:bold;border-bottom:1px solid #efeee8;text-align:right">{!Customer_Journey__c.Product_Purchased__c}</td></tr>
+<tr><td style="font-family:'Helvetica Neue',Arial,sans-serif;padding:9px 0;color:#5c6b6e">Work areas &amp; jurisdictions</td><td style="font-family:'Helvetica Neue',Arial,sans-serif;padding:9px 0;color:#003340;font-weight:bold;text-align:right">{!Customer_Journey__c.Work_areas_Jurisdictions__c}</td></tr>
+</table></td></tr>
+
+<tr><td style="background:#ffffff;padding:22px 40px 0;font-family:'Helvetica Neue',Arial,sans-serif">
+<div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;font-weight:bold;letter-spacing:.14em;color:#008ca6;text-transform:uppercase;margin-bottom:10px">Main contact</div>
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%"><tr><td style="background:#f6f5f1;border-radius:12px;padding:14px 16px;font-family:'Helvetica Neue',Arial,sans-serif">
+<div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:15px;font-weight:bold;color:#003340">{!Customer_Journey__c.Main_Contact_name__c}</div>
+<div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;color:#5c6b6e">{!Customer_Journey__c.Main_Contact_Job_title__c}</div>
+<div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;color:#008ca6">{!Customer_Journey__c.Main_Contact_Email__c}</div>
+</td></tr></table></td></tr>
+
+<tr><td style="background:#ffffff;padding:18px 40px 0;font-family:'Helvetica Neue',Arial,sans-serif">
+<div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;font-weight:bold;letter-spacing:.14em;color:#008ca6;text-transform:uppercase;margin-bottom:6px">Other licence contacts</div>
+<div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;line-height:1.6;color:#003340">{!Customer_Journey__c.Other_Licence_contacts__c}</div></td></tr>
+
+<tr><td style="background:#ffffff;padding:22px 40px 0;font-family:'Helvetica Neue',Arial,sans-serif">
+<div style="margin-bottom:14px"><div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;font-weight:bold;letter-spacing:.14em;color:#008ca6;text-transform:uppercase">Primary use case / challenge</div><div style="font-family:'Helvetica Neue',Arial,sans-serif;margin-top:4px;font-size:14px;line-height:1.55;color:#003340">{!Customer_Journey__c.Primary_Use_Case_Challenge__c}</div></div>
+<div style="margin-bottom:14px"><div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;font-weight:bold;letter-spacing:.14em;color:#008ca6;text-transform:uppercase">Features discussed</div><div style="font-family:'Helvetica Neue',Arial,sans-serif;margin-top:4px;font-size:14px;line-height:1.55;color:#003340">{!Customer_Journey__c.Features_discussed__c}</div></div>
+<div style="margin-bottom:14px"><div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;font-weight:bold;letter-spacing:.14em;color:#008ca6;text-transform:uppercase">Risk / expansion / avoid</div><div style="font-family:'Helvetica Neue',Arial,sans-serif;margin-top:4px;font-size:14px;line-height:1.55;color:#003340">{!Customer_Journey__c.Risk_Expansion_Avoid__c}</div></div>
+<div><div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;font-weight:bold;letter-spacing:.14em;color:#008ca6;text-transform:uppercase">Set-up instructions</div><div style="font-family:'Helvetica Neue',Arial,sans-serif;margin-top:4px;font-size:14px;line-height:1.55;color:#003340">{!Customer_Journey__c.Set_Up_Instructions__c}</div></div>
+</td></tr>
+
+<tr><td style="background:#ffffff;padding:28px 40px 30px;text-align:center;font-family:'Helvetica Neue',Arial,sans-serif">
+<a href="{!MID(Customer_Journey__c.Link, 1, LEN(Customer_Journey__c.Link)-15)}{!Customer_Journey__c.Id}" style="font-family:'Helvetica Neue',Arial,sans-serif;display:inline-block;background:#00c8a7;color:#003340;font-weight:bold;font-size:15px;text-decoration:none;padding:15px 34px;border-radius:8px;letter-spacing:.02em">View customer journey &rarr;</a>
+</td></tr>
+
+<tr><td style="background:#003340;padding:26px 40px;font-family:'Helvetica Neue',Arial,sans-serif">
+<div style="font-family:'Helvetica Neue',Arial,sans-serif;font-weight:bold;font-size:18px;line-height:1;letter-spacing:.12em;color:#ffffff">CE<span style="color:#00c8a7">N</span>TELLIC</div>
+<div style="font-family:'Helvetica Neue',Arial,sans-serif;margin-top:10px;font-size:12px;line-height:1.6;color:#9fc7c6">Global intelligence and information services, setting the standard for how critical business decisions are made.</div>
+<div style="font-family:'Helvetica Neue',Arial,sans-serif;margin-top:14px;padding-top:14px;border-top:1px solid #0c4a55;font-size:11px;line-height:1.6;color:#6f9a9b">Opportunity owner: {!Customer_Journey__c.OwnerFullName} &nbsp;&middot;&nbsp; Sent automatically from Salesforce on the closed-won handshake.</div>
+</td></tr>
+
+</table>
+</td></tr></table>

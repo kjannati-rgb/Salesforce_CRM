@@ -18,7 +18,7 @@
 | Metadata refs (dep graph) | 2 formulas (`Industry_Category__c`, `ALM_Industry_Category_Code__c`) + 2 layouts (`Firm Layout`, `Office Layout - Data Team`) |
 | **Delete blockers (dry-run destructive validate)** | **Only the 2 formula fields.** No FlexiPages block (prod record pages already use the survivor). Layouts auto-detach on delete. |
 | CPQ rules / quote templates | Verified clean earlier (0 attorney-field refs across ~15.3k rule + ~10k template records) |
-| Data scope | RETIRE populated 29,684; **migrate 731** = 109 survivor-blank + 622 conflicts; rest already match |
+| Data scope | **As of 2026-06-19 the ALM team re-synced both fields**: 17,927 accounts populated, **both fields identical, 0 conflicts, 0 one-sided gaps** → **migration is a no-op**. (Was 29,684/29,779 earlier; ALM full refresh dropped ~12k stale records — confirmed intentional.) |
 | FLS | **35 parents** (2 perm sets + 33 profiles) have edit on retire but not survivor — incl. **System Administrator** |
 
 > ⚠️ **Two dependency-graph blind spots confirmed this project** (both invisible to "Where is this used?" too): **CPQ rule/template data records** and **FlexiPage field references**. Prod is clean on both, but the dry-run destructive validate (Step 5 pre-check) is the safety net that proves it.
@@ -27,8 +27,8 @@
 
 ## Pre-flight sign-offs & manual checks (before any write)
 
-1. **Conflict tie-break = RETIRE-wins** (overwrite survivor on the 622 conflicts). Needs **ALM data-team sign-off** (changes 622 values; keeps the formula repoint behavior-neutral).
-2. **Go-forward owner:** ALM data team commits to maintaining `Number_of_Attorneys__c`; remap any Data Loader/ETL job to the survivor.
+1. ~~**Conflict tie-break**~~ **RESOLVED** — ALM team re-synced both fields in prod (2026-06-19); 0 conflicts remain, so no tie-break decision needed.
+2. **Go-forward owner:** ALM data team commits to maintaining `Number_of_Attorneys__c`; **repoint the ALM refresh/load job to write the survivor** (it currently writes `of_Attorneys__c`, which is being retired).
 3. **Reports/dashboards:** run Setup → Object Manager → Account → Fields → **of_Attorneys__c → "Where is this used?"** (covers reports, which the dep graph doesn't fully). Repoint/flag any report filter/column. *(6,424 reports — too many to grep; this Setup tool is the check.)*
 4. **Lead conversion map:** Setup → Object Manager → **Lead → Map Lead Fields** — confirm `ALM_of_Attorneys__c` does **not** map to `Account.of_Attorneys__c`; if it does, remap to `Number_of_Attorneys__c`.
 5. **Data Cloud:** confirm no data stream/DLO ingests `of_Attorneys__c`; if so, remap to survivor.
@@ -65,11 +65,15 @@ sf data query -q "SELECT Id, of_Attorneys__c, Number_of_Attorneys__c FROM Accoun
   --target-org LBR_PROD --result-format csv > attorney_PROD_backup_YYYYMMDD.csv   # ~29,684 rows
 ```
 
-### Step 3 — Data migration: `Number_of_Attorneys__c := of_Attorneys__c` (731 records, RETIRE-wins)
-**Recommended (small volume): Data Loader** — from the backup, compute rows where survivor ≠ retire (incl. blank) → update `Id, Number_of_Attorneys__c`. ~731 rows. Requires Step-1 FLS.
-**Alternative (no FLS needed): Batch Apex** `AttorneyCountMigrationBatch` (in this branch; system mode; proven on 14,064 rows in FULLUAT). Deploy needs a test class (≥75%) — the field exists in prod so a dynamic-access test will pass; can't be pre-validated in sandboxes (field deleted there).
-**Migrate at the Ultimate Account (Firm) grain** — generated quotes read the survivor via `Quote.Number_of_Attorneys__c → Account.Ultimate_Account__r.Number_of_Attorneys__c`.
-**Verify:** re-pull the populated set → expect 0 survivor-blank, 0 conflicts.
+### Step 3 — Data migration — **NO-OP (already done by ALM refresh 2026-06-19)**
+The two fields are already identical on all 17,927 populated accounts (0 conflicts, 0 one-sided gaps), so no migration/Data-Loader/batch run is needed, and Step 1 FLS is no longer required *for migration* (only for go-forward editing).
+**Just verify before proceeding** (cheap, read-only):
+```bash
+sf data query -q "SELECT Id, of_Attorneys__c, Number_of_Attorneys__c FROM Account WHERE of_Attorneys__c != null OR Number_of_Attorneys__c != null" --target-org LBR_PROD --json
+# compute client-side: expect 0 where the two differ, 0 where only one is populated
+```
+Because the fields are equal everywhere, the Step 4 formula repoint is inherently behavior-neutral.
+*(`AttorneyCountMigrationBatch` remains in the branch as a safety tool but is not needed for prod.)*
 
 ### Step 4 — Repoint formulas + swap layouts (deploy)
 Natively edit the PROD-retrieved files: in `Industry_Category__c` and `ALM_Industry_Category_Code__c`, swap every `of_Attorneys__c` → `Number_of_Attorneys__c`; swap the field item on both layouts.

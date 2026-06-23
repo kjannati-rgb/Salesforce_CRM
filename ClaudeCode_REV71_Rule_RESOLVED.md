@@ -13,7 +13,7 @@ The Total Contract Value code is set by the **PRIMARY product of the bundle = th
 | LAWM only (no LWKM) | **1** | Premium |
 | LWKM only (no LAWM) | **3** | International |
 | 2+ standalone, no anchor | *(no code)* | — |
-| Single product / lone real bundle | *(no code)* | — |
+| Single product / lone real bundle | *(no code)* | **CONFIRMED correct (Cayla, 18 Jun 2026)** — even a standalone Law.com International gets no code; one line has nothing to consolidate |
 
 Brady's words: *"Law.com is the primary product for it to be TCV 1 (i.e. the most revenue)… Same products
 but International is the primary product (most revenue) — could be coded TCV 3."* And the correction:

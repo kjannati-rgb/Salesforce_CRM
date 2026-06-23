@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity_Owner_Division__c</fullName>
+    <label>Opportunity Owner:Division</label>
+    <type>Text</type>
+    <formula>Owner.Division</formula>
+    <formulaTreatBlanksAs>BlankAsBlank</formulaTreatBlanksAs>
+    <description>Division of the Opportunity Owner, sourced from the owning User standard Division field. Mirrors the existing Opportunity Owner:Team field (Opportunity_Owner_Team__c). Created to send to ChurnZero for higher-level (division) segmentation of opportunities. Requested by Chris.</description>
+    <inlineHelpText>The wider division of the Opportunity Owner, taken from the owner User record. Used for higher-level segmentation in ChurnZero (sits above the owner team).</inlineHelpText>
+</CustomField>

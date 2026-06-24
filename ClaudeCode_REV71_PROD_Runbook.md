@@ -38,8 +38,17 @@ deployed + regression-green in FULLUAT (10/10) and verified firing on live data.
   version = **0 removals / 45 additions** (the REV-71 hook only). Deploy is purely additive.
 - ℹ️ **923** coded OLI lines live (was ~872 at audit).
 
-**Package: `manifest/rev71_prod.xml`** — CMDT + twin field + 3 flows (`Quote_ALM_Code_Stamp`,
-`Opp_ALM_Code_AfterSave`, `Quote_AfterSave_MasterFlow`) + `REV71_ALMCodeFlow_Test`. **`PFC_Log_Fault` excluded.**
+**Package: `manifest/rev71_prod_engine.xml`** (engine-only) — CMDT + twin field + 3 flows
+(`Quote_ALM_Code_Stamp`, `Opp_ALM_Code_AfterSave`, `Quote_AfterSave_MasterFlow`).
+**`PFC_Log_Fault` excluded** (already in prod) and **`REV71_ALMCodeFlow_Test` excluded** (see below).
+
+> **⚠️ Validation finding (24 Jun, check-only vs PROD):** the original single-package validation
+> (incl. the test class) FAILED — but **not a REV-71 defect**: (1) prod deploys flows as Draft, so
+> during the bundled test run the engine is inactive → 8 behaviour asserts returned `null`; and
+> (2) a pre-existing prod flow `Quote_BeforeSave_UpdateQuoteFields` faults on the test's quote insert.
+> **Fix:** deploy the **engine-only** package (no Apex → no test gate; re-validated **23/23, 0 errors,
+> 0 tests** = clean), activate the flows, then deploy the test class separately (§1b). The engine
+> deploy is unaffected — the test class only matters for regression and can only pass post-activation.
 
 **Still required before pressing deploy:**
 - [ ] **Integra-owner confirmation** of which field Integra consumes — `Full_Contract_Value__c`
@@ -88,12 +97,15 @@ sf project retrieve start -m "Flow:Quote_AfterSave_MasterFlow" -o LBR_PROD --tar
 One deploy, everything except nothing — flows arrive Draft so nothing behaves differently yet:
 
 ```bash
-# Validate first (check-only) — PFC_Log_Fault is NOT in this manifest (already in prod):
-sf project deploy start -x manifest/rev71_prod.xml -o LBR_PROD \
-  --test-level RunSpecifiedTests --tests REV71_ALMCodeFlow_Test --dry-run
-# then the REAL deploy (identical command, drop --dry-run):
-sf project deploy start -x manifest/rev71_prod.xml -o LBR_PROD \
-  --test-level RunSpecifiedTests --tests REV71_ALMCodeFlow_Test
+# ENGINE-ONLY package (no Apex). Deploys with NO test run — REV-71's engine is flows, no
+# production Apex needs coverage. The test class is deployed SEPARATELY after activation
+# (§1b) because it asserts LIVE engine behaviour and can only pass once the flows are active.
+# (Validated check-only against PROD 24 Jun: 23/23 components, 0 errors, 0 tests.)
+
+# Validate first (check-only):
+sf project deploy start -x manifest/rev71_prod_engine.xml -o LBR_PROD --dry-run
+# then the REAL deploy (drop --dry-run):
+sf project deploy start -x manifest/rev71_prod_engine.xml -o LBR_PROD
 ```
 - [ ] Validation green (incl. 11/11 tests), then real deploy green.
 - [ ] Confirm flows arrived **Draft**: new `Quote_ALM_Code_Stamp` + `Opp_ALM_Code_AfterSave`

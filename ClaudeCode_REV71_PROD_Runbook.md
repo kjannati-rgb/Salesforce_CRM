@@ -19,6 +19,41 @@ a new version of `Quote_AfterSave_MasterFlow` (3-element hook); `Opp_ALM_Code_Af
 
 ---
 
+## Readiness snapshot — validated against PROD 24 Jun 2026 (read-only)
+
+**UAT: PASS.** Cayla Vichot ran 7 scenarios in FULLUAT (REV-71 ticket, 24 Jun):
+S1 Int'l-higher → **3** ✅ · S2 reprice-flips → **1** ✅ · S3 GLL → **2** ✅ · S4 2-yr-all → **2** ✅ ·
+S5 Law.com+NYLJ → **1** ✅ · S7 Law.com Pro bundle → **1** ✅. S6 (Mid Market Pro Bundle) could
+not be tested — the bundle required Verdict Search to be selectable; Cayla confirmed this is a
+**CPQ bundle-config issue, not the ALM-code logic, and not a deployment blocker.** Engine also
+deployed + regression-green in FULLUAT (10/10) and verified firing on live data.
+
+**Pre-flight (run 24 Jun, read-only against LBR_PROD):**
+- ✅ Production confirmed (Law Business Research Ltd, IsSandbox=false).
+- ✅ **`PFC_Log_Fault` EXISTS + active in prod → EXCLUDED from the package** (do NOT redeploy).
+  FULLUAT lacked it and needed it shipped; prod does not — hence the prod manifest differs.
+- ✅ `Flow_Log__c` exists; `ALM_Code_Setting__mdt` absent; OLI `Full_Contract_Value__c` exists;
+  QL twin absent — all as expected.
+- ✅ **MASTER-FLOW DRIFT CLEAN:** prod's live `Quote_AfterSave_MasterFlow` vs the repo's hooked
+  version = **0 removals / 45 additions** (the REV-71 hook only). Deploy is purely additive.
+- ℹ️ **923** coded OLI lines live (was ~872 at audit).
+
+**Package: `manifest/rev71_prod.xml`** — CMDT + twin field + 3 flows (`Quote_ALM_Code_Stamp`,
+`Opp_ALM_Code_AfterSave`, `Quote_AfterSave_MasterFlow`) + `REV71_ALMCodeFlow_Test`. **`PFC_Log_Fault` excluded.**
+
+**Still required before pressing deploy:**
+- [ ] **Integra-owner confirmation** of which field Integra consumes — `Full_Contract_Value__c`
+  (Number; where the engine writes and where the 923 codes already sit) vs the never-populated
+  `ALM_Total_Contract_Value__c` (Text). Raised in REV-71 comment 640503; **still unconfirmed.**
+- [ ] Sign-off acknowledges the VAR-tie → 1 (Brady) and single-product → blank (Cayla) rules.
+
+**Separate prod change (NOT in this metadata package):** the CPQ Product Rule **"LBR - Finance
+Code Required"** ALM exemption — advanced condition `1 AND 2 AND 3 AND 5` → `1 AND 2 AND 3 AND 4 AND 5`
+(condition 4 = Quote Line `Division__c` ≠ `ALM`) — was applied in FULLUAT per Kam's 23 Jun decision.
+Prod needs the **same manual edit** (Setup → CPQ → Product Rules; it's a data/config change, not metadata).
+
+---
+
 ## 0. Pre-flight (read-only, re-run at deploy time)
 
 ```bash
@@ -53,25 +88,12 @@ sf project retrieve start -m "Flow:Quote_AfterSave_MasterFlow" -o LBR_PROD --tar
 One deploy, everything except nothing — flows arrive Draft so nothing behaves differently yet:
 
 ```bash
-sf project deploy start \
-  -m "CustomField:SBQQ__QuoteLine__c.Full_Contract_Value__c" \
-  -m "CustomObject:ALM_Code_Setting__mdt" \
-  -m "CustomMetadata:ALM_Code_Setting.Control" \
-  -m "CustomMetadata:ALM_Code_Setting.Family_Law_com_Premium" \
-  -m "CustomMetadata:ALM_Code_Setting.Family_GLL" \
-  -m "CustomMetadata:ALM_Code_Setting.Family_Law_com_International" \
-  -m "CustomMetadata:ALM_Code_Setting.Parent_Law_com_Pro" \
-  -m "CustomMetadata:ALM_Code_Setting.Parent_Mid_Market_Pro" \
-  -m "CustomMetadata:ALM_Code_Setting.Parent_GLBM" \
-  -m "CustomMetadata:ALM_Code_Setting.Parent_Law_com_Intl_Bundle" \
-  -m "CustomMetadata:ALM_Code_Setting.Parent_Law_com_Radar" \
-  -m "CustomMetadata:ALM_Code_Setting.Parent_Law_com_VerdictSearch" \
-  -m "CustomMetadata:ALM_Code_Setting.Parent_Law_com_Premium" \
-  -m "Flow:Quote_ALM_Code_Stamp" -m "Flow:Opp_ALM_Code_AfterSave" \
-  -m "Flow:Quote_AfterSave_MasterFlow" \
-  -m "ApexClass:REV71_ALMCodeFlow_Test" \
-  -o LBR_PROD --test-level RunSpecifiedTests --tests REV71_ALMCodeFlow_Test --dry-run   # validate first
-# then re-run WITHOUT --dry-run
+# Validate first (check-only) — PFC_Log_Fault is NOT in this manifest (already in prod):
+sf project deploy start -x manifest/rev71_prod.xml -o LBR_PROD \
+  --test-level RunSpecifiedTests --tests REV71_ALMCodeFlow_Test --dry-run
+# then the REAL deploy (identical command, drop --dry-run):
+sf project deploy start -x manifest/rev71_prod.xml -o LBR_PROD \
+  --test-level RunSpecifiedTests --tests REV71_ALMCodeFlow_Test
 ```
 - [ ] Validation green (incl. 11/11 tests), then real deploy green.
 - [ ] Confirm flows arrived **Draft**: new `Quote_ALM_Code_Stamp` + `Opp_ALM_Code_AfterSave`

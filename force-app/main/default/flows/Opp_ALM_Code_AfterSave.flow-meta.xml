@@ -947,12 +947,30 @@
     <start>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <connector>
-            <targetReference>D_Bypass</targetReference>
-        </connector>
-        <filterFormula>OR(ISNEW(), ISCHANGED({!$Record.Amount}), ISCHANGED({!$Record.HasOpportunityLineItem}))</filterFormula>
+        <filterLogic>1 OR 2</filterLogic>
+        <filters>
+            <field>Amount</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>HasOpportunityLineItem</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
         <object>Opportunity</object>
-        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <recordTriggerType>Update</recordTriggerType>
+        <scheduledPaths>
+            <name>Run_Asynchronously</name>
+            <connector>
+                <targetReference>D_Bypass</targetReference>
+            </connector>
+            <pathType>AsyncAfterCommit</pathType>
+        </scheduledPaths>
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>

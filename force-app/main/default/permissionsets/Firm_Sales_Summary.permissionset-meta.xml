@@ -76,28 +76,9 @@
         <field>Account.Firm_Won_Value_T12M_USD__c</field>
         <readable>true</readable>
     </fieldPermissions>
-    <objectPermissions>
-        <allowCreate>true</allowCreate>
-        <allowDelete>true</allowDelete>
-        <allowEdit>true</allowEdit>
-        <allowRead>true</allowRead>
-        <modifyAllRecords>false</modifyAllRecords>
-        <object>Firm_Product_Group_Rollup_USD__c</object>
-        <viewAllRecords>true</viewAllRecords>
-    </objectPermissions>
     <fieldPermissions>
         <editable>true</editable>
         <field>Firm_Product_Group_Rollup_USD__c.Commercial_Group__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Firm_Product_Group_Rollup_USD__c.Firm_Group_Key__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Firm_Product_Group_Rollup_USD__c.Firm__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -145,4 +126,13 @@
         <field>Firm_Product_Group_Rollup_USD__c.Won_Value_T12M_USD__c</field>
         <readable>true</readable>
     </fieldPermissions>
+    <objectPermissions>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>Firm_Product_Group_Rollup_USD__c</object>
+        <viewAllRecords>true</viewAllRecords>
+    </objectPermissions>
 </PermissionSet>

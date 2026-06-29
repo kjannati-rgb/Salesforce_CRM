@@ -12,6 +12,6 @@
     </values>
     <values>
         <field>Commercial_Group__c</field>
-        <value xsi:type="xsd:string">Law.com / ALM</value>
+        <value xsi:type="xsd:string">Docket Navigator</value>
     </values>
 </CustomMetadata>

@@ -5,6 +5,7 @@ import getSummary from '@salesforce/apex/FirmSalesSummaryController.getSummary';
 import getGroupBreakdown from '@salesforce/apex/FirmSalesSummaryController.getGroupBreakdown';
 import getOfficeBreakdown from '@salesforce/apex/FirmSalesSummaryController.getOfficeBreakdown';
 import getOpportunities from '@salesforce/apex/FirmSalesSummaryController.getOpportunities';
+import getBusinessView from '@salesforce/apex/FirmSalesSummaryController.getBusinessView';
 import refreshFirm from '@salesforce/apex/FirmSalesSummaryController.refreshFirm';
 
 const PAGE = 10;
@@ -18,6 +19,7 @@ export default class FirmSalesSummary extends LightningElement {
     summary;
     groups = [];
     offices = [];
+    businessView;          // live headline+groups when business !== 'all'; undefined for all-business
     drill;                 // { type, id, name, label, total, rows, offset, loading }
     refreshing = false;
     error;
@@ -55,29 +57,41 @@ export default class FirmSalesSummary extends LightningElement {
     get fxBasis() { return this.summary ? this.summary.fxBasis : 'Dated'; }
     get hasData() { return this.summary && this.summary.periods && this.summary.periods.length > 0; }
 
+    // active period set: live business-lens view when New/Renewal is selected, else persisted summary
+    get activePeriods() {
+        if (this.businessView && this.businessView.periods) return this.businessView.periods;
+        return this.summary ? this.summary.periods : null;
+    }
+
     get currentPeriod() {
-        if (!this.hasData) return null;
-        return this.summary.periods.find((p) => p.key === this.period) || this.summary.periods[0];
+        const ps = this.activePeriods;
+        if (!ps || !ps.length) return null;
+        return ps.find((p) => p.key === this.period) || ps[0];
     }
 
     get kpis() {
         const p = this.currentPeriod;
-        if (!p) return [];
+        if (!p || !this.summary) return [];
         const s = this.summary;
+        const bv = this.businessView;
+        const cancelVal = bv ? bv.cancelValue : s.cancelValue;
+        const cancelCnt = bv ? bv.cancelCount : s.cancelCount;
+        const lens = this.business === 'all' ? '' : (this.business === 'new' ? ' · new business' : ' · renewals');
         const card = (key, label, value, sub, neg) => ({ key, label, value, sub, valClass: neg ? 'k-val neg' : 'k-val' });
         return [
-            card('net', 'Net Won Value (USD)', this.fmtUSD(p.netValue), 'net of cancellations', p.netValue < 0),
-            card('won', 'Won Opportunities', this.fmtInt(p.wonCount), 'stage Closed Won', false),
-            card('canc', 'Cancellations', this.fmtUSD(s.cancelValue), this.fmtInt(s.cancelCount) + ' deals · all-time · already netted', s.cancelValue < 0),
+            card('net', 'Net Won Value (USD)', this.fmtUSD(p.netValue), 'net of cancellations' + lens, p.netValue < 0),
+            card('won', 'Won Opportunities', this.fmtInt(p.wonCount), 'stage Closed Won' + lens, false),
+            card('canc', 'Cancellations', this.fmtUSD(cancelVal), this.fmtInt(cancelCnt) + ' deals · all-time · already netted', cancelVal < 0),
             card('subs', 'Active Subscriptions', this.fmtInt(s.activeSubs), this.fmtUSD(s.activeSubValue) + ' active', false)
         ];
     }
 
     // ---------- YoY ----------
     get yoy() {
-        if (!this.hasData) return null;
-        const cfy = (this.summary.periods.find((p) => p.key === 'cfy') || {}).netValue || 0;
-        const pfy = (this.summary.periods.find((p) => p.key === 'pfy') || {}).netValue || 0;
+        const ps = this.activePeriods;
+        if (!ps || !ps.length) return null;
+        const cfy = (ps.find((p) => p.key === 'cfy') || {}).netValue || 0;
+        const pfy = (ps.find((p) => p.key === 'pfy') || {}).netValue || 0;
         const max = Math.max(Math.abs(cfy), Math.abs(pfy)) || 1;
         const delta = pfy ? ((cfy - pfy) / Math.abs(pfy)) * 100 : 0;
         const up = delta >= 0;
@@ -90,11 +104,13 @@ export default class FirmSalesSummary extends LightningElement {
         };
     }
 
-    // ---------- group rows (persisted; period picks the bucket) ----------
+    // ---------- group rows (persisted by period; live flat value/items in a business lens) ----------
     get groupRows() {
-        const rows = (this.groups || []).map((g) => {
-            const v = this.valFor(g, 'Value');
-            const items = this.valFor(g, 'Items');
+        const live = this.businessView && this.businessView.groups;
+        const src = live ? this.businessView.groups : (this.groups || []);
+        const rows = src.map((g) => {
+            const v = live ? (g.value || 0) : this.valFor(g, 'Value');
+            const items = live ? (g.items || 0) : this.valFor(g, 'Items');
             return { key: g.name, name: g.name, rawVal: v, value: this.fmtUSD(v), items: this.fmtInt(items), itemsCount: items };
         }).filter((r) => r.rawVal !== 0 || r.itemsCount !== 0);
         const total = rows.reduce((a, r) => a + Math.abs(r.rawVal), 0) || 1;
@@ -110,6 +126,7 @@ export default class FirmSalesSummary extends LightningElement {
     get officeRows() {
         const rows = (this.offices || []).map((o) => ({
             key: o.officeId, id: o.officeId, name: o.officeName || '(no office)',
+            location: [o.city, o.country].filter(Boolean).join(', ') || '—',
             rawVal: o.value, value: this.fmtUSD(o.value), won: this.fmtInt(o.wonCount), subs: o.subs,
             selected: this.drill && this.drill.type === 'office' && this.drill.id === o.officeId
         }));
@@ -134,11 +151,21 @@ export default class FirmSalesSummary extends LightningElement {
         this.period = e.currentTarget.dataset.key;
         if (this.drill) { this.drill.offset = 0; this.loadDrill(); }
         this.loadOffices();
+        this.loadBusinessView();
     }
     handleBusiness(e) {
         this.business = e.currentTarget.dataset.key;
         if (this.drill) { this.drill.offset = 0; this.loadDrill(); }
         this.loadOffices();
+        this.loadBusinessView();
+    }
+
+    // live recompute of headline + groups for the New/Renewal lens (all-business uses persisted)
+    loadBusinessView() {
+        if (!this.recordId || this.business === 'all') { this.businessView = undefined; return; }
+        getBusinessView({ firmId: this.recordId, period: this.period, businessType: this.business })
+            .then((bv) => { this.businessView = bv; })
+            .catch((e) => { this.error = this.msg(e); });
     }
 
     // ---------- drill ----------

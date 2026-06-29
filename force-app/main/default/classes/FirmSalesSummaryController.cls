@@ -15,11 +15,21 @@ public with sharing class FirmSalesSummaryController {
     static Integer fyStartMonth;
 
     /** SOQL fragment for the business lens. Expects a local `renewalTypes` bind var in scope. */
-    static String businessClause(String businessType) {
+    static String businessClause(String businessType) { return businessClause(businessType, ''); }
+    static String businessClause(String businessType, String prefix) {
         String bt = (businessType == null) ? 'all' : businessType.toLowerCase();
-        if (bt == 'new') return ' AND Type = \'New Business\'';
-        if (bt == 'renewal') return ' AND Type IN :renewalTypes';
+        if (bt == 'new') return ' AND ' + prefix + 'Type = \'New Business\'';
+        if (bt == 'renewal') return ' AND ' + prefix + 'Type IN :renewalTypes';
         return '';
+    }
+
+    static Integer fiscalYearOf(Integer yr, Integer mo) {
+        if (yr == null) return null;
+        if (fyStartMonth == null) {
+            fyStartMonth = [SELECT FiscalYearStartMonth FROM Organization LIMIT 1].FiscalYearStartMonth;
+        }
+        if (fyStartMonth == 1) return yr;
+        return (mo >= fyStartMonth) ? yr : yr - 1;
     }
 
     // ---------- headline (persisted, cacheable) ----------
@@ -81,6 +91,95 @@ public with sharing class FirmSalesSummaryController {
         return out;
     }
 
+    // ---------- live business-lens view (New / Renewal) ----------
+    // Persisted rollups are all-business; when the user picks New or Renewal we compute headline +
+    // groups live, filtered by Opportunity.Type, so the KPIs/YoY/group panel respond to the toggle.
+    @AuraEnabled
+    public static BusinessViewDTO getBusinessView(Id firmId, String period, String businessType) {
+        List<String> renewalTypes = RENEWAL_TYPES;
+        Date today = Date.today();
+        Integer currentFY = fiscalYearOf(today.year(), today.month());
+        Integer priorFY = currentFY - 1;
+        Date t12mStart = today.addMonths(-12);
+        String bc = businessClause(businessType);
+
+        Map<String, Decimal> v = new Map<String, Decimal>{ 'alltime' => 0, 'cfy' => 0, 'pfy' => 0, 't12m' => 0 };
+        Map<String, Integer> w = new Map<String, Integer>{ 'alltime' => 0, 'cfy' => 0, 'pfy' => 0, 't12m' => 0 };
+        Decimal cancelVal = 0; Integer cancelCnt = 0;
+
+        for (AggregateResult ar : Database.query(
+                'SELECT StageName st, CurrencyIsoCode iso, CALENDAR_YEAR(CloseDate) yr, CALENDAR_MONTH(CloseDate) mo, ' +
+                'SUM(Amount) amt, COUNT(Id) c FROM Opportunity ' +
+                'WHERE Ultimate_Account__c = :firmId AND StageName IN (:WON, :CANC)' + bc +
+                ' GROUP BY StageName, CurrencyIsoCode, CALENDAR_YEAR(CloseDate), CALENDAR_MONTH(CloseDate)')) {
+            String st = (String) ar.get('st');
+            Integer yr = (Integer) ar.get('yr'); Integer mo = (Integer) ar.get('mo');
+            Decimal usd = CurrencyConvUSD.toUSD((Decimal) ar.get('amt'), (String) ar.get('iso'),
+                              (yr == null) ? today : Date.newInstance(yr, (mo == null ? 1 : mo), 1));
+            Integer c = (Integer) ar.get('c');
+            Boolean isWon = WON.equals(st);  // NB: not `won` — case-insensitive bind would clash with :WON
+            v.put('alltime', v.get('alltime') + usd);
+            if (isWon) w.put('alltime', w.get('alltime') + c);
+            if (CANC.equals(st)) { cancelVal += usd; cancelCnt += c; }
+            Integer fy = (yr == null) ? null : fiscalYearOf(yr, (mo == null ? 1 : mo));
+            if (fy == currentFY) { v.put('cfy', v.get('cfy') + usd); if (isWon) w.put('cfy', w.get('cfy') + c); }
+            else if (fy == priorFY) { v.put('pfy', v.get('pfy') + usd); if (isWon) w.put('pfy', w.get('pfy') + c); }
+        }
+        for (AggregateResult ar : Database.query(
+                'SELECT StageName st, CurrencyIsoCode iso, CALENDAR_YEAR(CloseDate) yr, CALENDAR_MONTH(CloseDate) mo, ' +
+                'SUM(Amount) amt, COUNT(Id) c FROM Opportunity ' +
+                'WHERE Ultimate_Account__c = :firmId AND StageName IN (:WON, :CANC) AND CloseDate >= :t12mStart' + bc +
+                ' GROUP BY StageName, CurrencyIsoCode, CALENDAR_YEAR(CloseDate), CALENDAR_MONTH(CloseDate)')) {
+            Integer yr = (Integer) ar.get('yr'); Integer mo = (Integer) ar.get('mo');
+            Decimal usd = CurrencyConvUSD.toUSD((Decimal) ar.get('amt'), (String) ar.get('iso'),
+                              (yr == null) ? today : Date.newInstance(yr, (mo == null ? 1 : mo), 1));
+            v.put('t12m', v.get('t12m') + usd);
+            if (WON.equals((String) ar.get('st'))) w.put('t12m', w.get('t12m') + (Integer) ar.get('c'));
+        }
+
+        BusinessViewDTO out = new BusinessViewDTO();
+        out.periods = new List<PeriodDTO>{
+            period('alltime', 'All-time', v.get('alltime'), w.get('alltime')),
+            period('cfy', 'This FY', v.get('cfy'), w.get('cfy')),
+            period('pfy', 'Last FY', v.get('pfy'), w.get('pfy')),
+            period('t12m', 'Last 12 mo', v.get('t12m'), w.get('t12m'))
+        };
+        out.cancelValue = cancelVal.setScale(2);
+        out.cancelCount = cancelCnt;
+        out.groups = groupsLive(firmId, period, businessType);
+        return out;
+    }
+
+    /** Live group breakdown for one period, filtered by business type. */
+    static List<GroupDTO> groupsLive(Id firmId, String period, String businessType) {
+        PeriodBounds b = boundsFor(period);
+        Date startD = b.startDate, endD = b.endDate;
+        List<String> renewalTypes = RENEWAL_TYPES;
+        String dateClause = b.unbounded ? '' : ' AND Opportunity.CloseDate >= :startD AND Opportunity.CloseDate <= :endD';
+        String soql =
+            'SELECT Product2.Family fam, Product2.Product_Type__c pt, CurrencyIsoCode iso, Opportunity.StageName st, ' +
+            'CALENDAR_YEAR(Opportunity.CloseDate) yr, SUM(TotalPrice) v, COUNT(Id) items FROM OpportunityLineItem ' +
+            'WHERE Opportunity.Ultimate_Account__c = :firmId AND Opportunity.StageName IN (:WON, :CANC)' +
+            dateClause + businessClause(businessType, 'Opportunity.') +
+            ' GROUP BY Product2.Family, Product2.Product_Type__c, CurrencyIsoCode, Opportunity.StageName, CALENDAR_YEAR(Opportunity.CloseDate)';
+        Map<String, GroupDTO> acc = new Map<String, GroupDTO>();
+        for (AggregateResult ar : Database.query(soql)) {
+            String grp = FirmRollupService.resolveGroup((String) ar.get('fam'), (String) ar.get('pt'));
+            Integer yr = (Integer) ar.get('yr');
+            Date asOf = (yr == null) ? Date.today() : Date.newInstance(yr, 7, 1);
+            Decimal usd = CurrencyConvUSD.toUSD((Decimal) ar.get('v'), (String) ar.get('iso'), asOf);
+            if (CANC.equals((String) ar.get('st')) && usd > 0) usd = -usd;
+            GroupDTO g = acc.get(grp);
+            if (g == null) { g = new GroupDTO(); g.name = grp; g.value = 0; g.items = 0; acc.put(grp, g); }
+            g.value += usd; g.items += (Integer) ar.get('items');
+        }
+        List<GroupDTO> out = new List<GroupDTO>();
+        for (GroupDTO g : acc.values()) {
+            if (g.value != 0 || g.items != 0) { g.value = g.value.setScale(2); out.add(g); }
+        }
+        return out;
+    }
+
     // ---------- office breakdown (live) ----------
     @AuraEnabled
     public static List<OfficeDTO> getOfficeBreakdown(Id firmId, String period, String businessType) {
@@ -118,10 +217,13 @@ public with sharing class FirmSalesSummaryController {
             if (off == null) continue;
             office(byOffice, off).subs += (Integer) ar.get('c');
         }
-        // resolve names
+        // resolve names + location
         Set<Id> offIds = byOffice.keySet();
-        for (Account a : [SELECT Id, Name FROM Account WHERE Id IN :offIds]) {
-            byOffice.get(a.Id).officeName = a.Name;
+        for (Account a : [SELECT Id, Name, BillingCity, BillingCountry FROM Account WHERE Id IN :offIds]) {
+            OfficeDTO o = byOffice.get(a.Id);
+            o.officeName = a.Name;
+            o.city = a.BillingCity;
+            o.country = a.BillingCountry;
         }
         List<OfficeDTO> out = byOffice.values();
         out.sort();
@@ -263,10 +365,20 @@ public with sharing class FirmSalesSummaryController {
         @AuraEnabled public Decimal cfyValue;     @AuraEnabled public Integer cfyItems;
         @AuraEnabled public Decimal pfyValue;     @AuraEnabled public Integer pfyItems;
         @AuraEnabled public Decimal t12mValue;    @AuraEnabled public Integer t12mItems;
+        // flat, period-resolved value/items — populated by the live business-lens path only
+        @AuraEnabled public Decimal value;        @AuraEnabled public Integer items;
+    }
+    public class BusinessViewDTO {
+        @AuraEnabled public List<PeriodDTO> periods;
+        @AuraEnabled public Decimal cancelValue;
+        @AuraEnabled public Integer cancelCount;
+        @AuraEnabled public List<GroupDTO> groups;
     }
     public class OfficeDTO implements Comparable {
         @AuraEnabled public Id officeId;
         @AuraEnabled public String officeName;
+        @AuraEnabled public String city;
+        @AuraEnabled public String country;
         @AuraEnabled public Decimal value = 0;
         @AuraEnabled public Integer wonCount = 0;
         @AuraEnabled public Integer subs = 0;

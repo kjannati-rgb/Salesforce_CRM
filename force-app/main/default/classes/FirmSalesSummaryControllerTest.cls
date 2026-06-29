@@ -94,6 +94,30 @@ private class FirmSalesSummaryControllerTest {
     }
 
     @isTest(SeeAllData=true)
+    static void businessLensView() {
+        assignPermSet();
+        Ctx c = build();   // opp1 = New Business (Law.com line), opp2 = Renewal (Events Sponsorship line)
+        Test.startTest();
+        FirmSalesSummaryController.BusinessViewDTO newV = FirmSalesSummaryController.getBusinessView(c.firm.Id, 'alltime', 'new');
+        FirmSalesSummaryController.BusinessViewDTO renV = FirmSalesSummaryController.getBusinessView(c.firm.Id, 'alltime', 'renewal');
+        Test.stopTest();
+
+        FirmSalesSummaryController.PeriodDTO np, rp;
+        for (FirmSalesSummaryController.PeriodDTO p : newV.periods) if (p.key == 'alltime') np = p;
+        for (FirmSalesSummaryController.PeriodDTO p : renV.periods) if (p.key == 'alltime') rp = p;
+        System.assert(np.netValue == 400, 'new lens net = 200×2 =' + np.netValue);
+        System.assertEquals(1, np.wonCount, 'new lens won count');
+        System.assert(rp.netValue == 200, 'renewal lens net = 100×2 =' + rp.netValue);
+        System.assertEquals(1, rp.wonCount, 'renewal lens won count');
+
+        Boolean newHasLaw = false, renHasEvents = false;
+        for (FirmSalesSummaryController.GroupDTO g : newV.groups) if (g.name == 'Law.com / ALM') newHasLaw = true;
+        for (FirmSalesSummaryController.GroupDTO g : renV.groups) if (g.name == 'Events - Sponsorship') renHasEvents = true;
+        System.assert(newHasLaw, 'new lens groups include Law.com / ALM');
+        System.assert(renHasEvents, 'renewal lens groups include Events - Sponsorship');
+    }
+
+    @isTest(SeeAllData=true)
     static void refreshEnqueues() {
         assignPermSet();
         Ctx c = build();

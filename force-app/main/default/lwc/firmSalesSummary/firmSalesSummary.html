@@ -81,7 +81,7 @@
         <!-- breakdowns -->
         <div class="panels">
             <div class="panel">
-                <div class="panel-hd"><h2>By commercial group</h2><span class="hint">persisted · all business · click to drill</span></div>
+                <div class="panel-hd"><h2>By commercial group</h2><span class="hint">click to drill</span></div>
                 <table>
                     <thead><tr><th>Group</th><th class="num">Value (USD)</th><th class="num">Items</th></tr></thead>
                     <tbody>
@@ -106,19 +106,20 @@
             <div class="panel">
                 <div class="panel-hd"><h2>By office</h2><span class="hint">live · click to drill</span></div>
                 <table>
-                    <thead><tr><th>Office</th><th class="num">Value (USD)</th><th class="num">Won</th><th class="num">Subs</th></tr></thead>
+                    <thead><tr><th>Office</th><th>Location</th><th class="num">Value (USD)</th><th class="num">Won</th><th class="num">Subs</th></tr></thead>
                     <tbody>
                         <template for:each={officeRows} for:item="r">
                             <tr key={r.key} class="row" tabindex="0" role="button" aria-selected={r.selected}
                                 data-type="office" data-id={r.id} data-name={r.name} onclick={handleRowClick} onkeydown={handleRowKey}>
                                 <td><span class="grp-name">{r.name}</span></td>
+                                <td><span class="sub">{r.location}</span></td>
                                 <td class="num">{r.value}</td>
                                 <td class="num">{r.won}</td>
                                 <td class="num">{r.subs} <span class="caret">›</span></td>
                             </tr>
                         </template>
                         <template if:false={officeRows.length}>
-                            <tr><td colspan="4" class="empty">No offices with activity in this period.</td></tr>
+                            <tr><td colspan="5" class="empty">No offices with activity in this period.</td></tr>
                         </template>
                     </tbody>
                 </table>

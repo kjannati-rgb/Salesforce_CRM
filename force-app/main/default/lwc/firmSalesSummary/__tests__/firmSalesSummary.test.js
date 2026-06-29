@@ -20,6 +20,11 @@ jest.mock(
     () => ({ default: jest.fn(() => Promise.resolve()) }),
     { virtual: true }
 );
+jest.mock(
+    '@salesforce/apex/FirmSalesSummaryController.getBusinessView',
+    () => ({ default: jest.fn(() => Promise.resolve({ periods: [], cancelValue: 0, cancelCount: 0, groups: [] })) }),
+    { virtual: true }
+);
 
 const SUMMARY = {
     firmId: '001x', firmName: 'Sterling Hartwell LLP', targetCurrency: 'USD', fxBasis: 'Dated',

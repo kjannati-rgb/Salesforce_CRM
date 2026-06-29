@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Firm_Won_Value_AllTime_USD__c</fullName>
+    <description>FSS rollup: sum USD(Amount) where Stage IN (Closed Won, Closed Won - Cancellation), all time. Net of cancellations. Number not Currency (USD in a GBP-record org).</description>
+    <externalId>false</externalId>
+    <label>Firm Won Value AllTime (USD)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

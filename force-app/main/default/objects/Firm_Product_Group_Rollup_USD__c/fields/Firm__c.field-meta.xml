@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Firm__c</fullName>
+    <deleteConstraint>Cascade</deleteConstraint>
+    <description>FSS: the Firm (Account, Firm record type) this group rollup belongs to.</description>
+    <externalId>false</externalId>
+    <label>Firm</label>
+    <referenceTo>Account</referenceTo>
+    <relationshipLabel>Firm Product Group Rollups</relationshipLabel>
+    <relationshipName>Firm_Product_Group_Rollups</relationshipName>
+    <required>true</required>
+    <type>Lookup</type>
+</CustomField>

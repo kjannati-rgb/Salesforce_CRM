@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>FSS 6: maps Product2.Family (+ optional Product Type 1) to a Commercial Group. resolveGroup: exact (Family,PT1) then (Family,blank) family-default then Other / POS / Reports.</description>
+    <label>Product Family Group</label>
+    <pluralLabel>Product Family Groups</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>

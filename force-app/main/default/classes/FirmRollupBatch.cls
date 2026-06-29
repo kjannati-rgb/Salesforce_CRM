@@ -6,8 +6,17 @@
 public class FirmRollupBatch implements Database.Batchable<SObject>, Schedulable {
 
     public Database.QueryLocator start(Database.BatchableContext bc) {
+        // Scope to firms with won/cancelled opportunities — a Firm with none has null headline +
+        // group rollups with nothing to recompute, so scanning the whole Account table (300k+ Firm
+        // records in prod/full-copy) is wasted work. A single top-level semi-join is the only form
+        // the platform allows (semi-joins can't be OR'd). Sub-only firms (active subs but no won
+        // opp — a small set) are maintained in real time by the Subscription trigger; re-parents
+        // and deletes are likewise trigger-handled.
         return Database.getQueryLocator([
-            SELECT Id FROM Account WHERE RecordType.DeveloperName = 'Firm'
+            SELECT Id FROM Account
+            WHERE RecordType.DeveloperName = 'Firm'
+              AND Id IN (SELECT Ultimate_Account__c FROM Opportunity
+                         WHERE StageName IN (:FirmRollupService.STAGE_WON, :FirmRollupService.STAGE_CANC))
         ]);
     }
 

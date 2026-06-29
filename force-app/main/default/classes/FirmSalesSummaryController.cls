@@ -8,7 +8,19 @@ public with sharing class FirmSalesSummaryController {
 
     static final String WON = FirmRollupService.STAGE_WON;
     static final String CANC = FirmRollupService.STAGE_CANC;
+    // Renewal-family Opportunity.Type values for the New/Renewal business lens (mockup toggle).
+    static final List<String> RENEWAL_TYPES = new List<String>{
+        'Renewal', 'Auto-Renewal', 'Repeat Business', 'Auto-Repeat Business'
+    };
     static Integer fyStartMonth;
+
+    /** SOQL fragment for the business lens. Expects a local `renewalTypes` bind var in scope. */
+    static String businessClause(String businessType) {
+        String bt = (businessType == null) ? 'all' : businessType.toLowerCase();
+        if (bt == 'new') return ' AND Type = \'New Business\'';
+        if (bt == 'renewal') return ' AND Type IN :renewalTypes';
+        return '';
+    }
 
     // ---------- headline (persisted, cacheable) ----------
     @AuraEnabled(cacheable=true)
@@ -71,9 +83,10 @@ public with sharing class FirmSalesSummaryController {
 
     // ---------- office breakdown (live) ----------
     @AuraEnabled
-    public static List<OfficeDTO> getOfficeBreakdown(Id firmId, String period) {
+    public static List<OfficeDTO> getOfficeBreakdown(Id firmId, String period, String businessType) {
         PeriodBounds b = boundsFor(period);
         Date startD = b.startDate, endD = b.endDate, today = Date.today();
+        List<String> renewalTypes = RENEWAL_TYPES;
         Map<Id, OfficeDTO> byOffice = new Map<Id, OfficeDTO>();
 
         String dateClause = b.unbounded ? '' : ' AND CloseDate >= :startD AND CloseDate <= :endD';
@@ -81,6 +94,7 @@ public with sharing class FirmSalesSummaryController {
             'SELECT AccountId off, CurrencyIsoCode iso, StageName st, ' +
             'CALENDAR_YEAR(CloseDate) yr, CALENDAR_MONTH(CloseDate) mo, SUM(Amount) v, COUNT(Id) c ' +
             'FROM Opportunity WHERE Ultimate_Account__c = :firmId AND StageName IN (:WON, :CANC)' + dateClause +
+            businessClause(businessType) +
             ' GROUP BY AccountId, CurrencyIsoCode, StageName, CALENDAR_YEAR(CloseDate), CALENDAR_MONTH(CloseDate)';
         for (AggregateResult ar : Database.query(soql)) {
             Id off = (Id) ar.get('off');
@@ -117,15 +131,18 @@ public with sharing class FirmSalesSummaryController {
     // ---------- opportunity drill (live, paginated) ----------
     @AuraEnabled
     public static OppPageDTO getOpportunities(Id firmId, Id officeId, String commercialGroup,
-                                              String period, Integer pageSize, Integer offset) {
+                                              String period, String businessType,
+                                              Integer pageSize, Integer offset) {
         Integer lim = (pageSize == null || pageSize <= 0) ? 10 : Math.min(pageSize, 200);
         Integer off = (offset == null || offset < 0) ? 0 : Math.min(offset, 2000); // SOQL OFFSET cap
         PeriodBounds b = boundsFor(period);
         Date startD = b.startDate, endD = b.endDate;
+        List<String> renewalTypes = RENEWAL_TYPES;
 
         String whereClause = 'Ultimate_Account__c = :firmId AND StageName IN (:WON, :CANC)';
         if (officeId != null) whereClause += ' AND AccountId = :officeId';
         if (!b.unbounded) whereClause += ' AND CloseDate >= :startD AND CloseDate <= :endD';
+        whereClause += businessClause(businessType);
 
         // group filter via CMDT-resolved family/Product-Type-1 semi-join on line items
         List<String> nonEventFamilies = new List<String>();

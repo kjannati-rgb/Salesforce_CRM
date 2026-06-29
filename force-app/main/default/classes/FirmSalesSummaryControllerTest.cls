@@ -22,21 +22,19 @@ private class FirmSalesSummaryControllerTest {
         c.firm = FirmRollupTestData.firm('CF');
         c.o1 = FirmRollupTestData.office('CO1');
         c.o2 = FirmRollupTestData.office('CO2');
-        Product2 pLaw = FirmRollupTestData.product('Subs - Law.com', null);
-        Product2 pSpon = FirmRollupTestData.product('Events', 'Sponsorship');
-
         Opportunity opp1 = FirmRollupTestData.newOpp(c.firm.Id, c.o1.Id, 'Closed Won', 'New Business', 200, 'GBP', Date.today());
         Opportunity opp2 = FirmRollupTestData.newOpp(c.firm.Id, c.o2.Id, 'Closed Won', 'Renewal', 100, 'GBP', Date.today());
         insert new List<Opportunity>{ opp1, opp2 };
         insert new List<OpportunityLineItem>{
-            FirmRollupTestData.line(opp1.Id, pLaw.Id, 200, 'GBP'),
-            FirmRollupTestData.line(opp2.Id, pSpon.Id, 100, 'GBP')
+            FirmRollupTestData.lineFromPbe(opp1.Id, FirmRollupTestData.pbeFor('Subs - Law.com', null, 'GBP'), 200),
+            FirmRollupTestData.lineFromPbe(opp2.Id, FirmRollupTestData.pbeFor('Events', 'Sponsorship', 'GBP'), 100)
         };
         FirmRollupService.recalculateFirm(c.firm.Id);
         return c;
     }
 
-    @isTest static void summaryAndGroups() {
+    @isTest(SeeAllData=true)
+    static void summaryAndGroups() {
         assignPermSet();
         Ctx c = build();
         Test.startTest();
@@ -57,7 +55,8 @@ private class FirmSalesSummaryControllerTest {
         System.assert(gv.get('Events - Sponsorship') == 200, 'sponsorship group value');
     }
 
-    @isTest static void officeBreakdownPeriods() {
+    @isTest(SeeAllData=true)
+    static void officeBreakdownPeriods() {
         assignPermSet();
         Ctx c = build();
         Test.startTest();
@@ -74,7 +73,8 @@ private class FirmSalesSummaryControllerTest {
         System.assertEquals(2, t12.size(), 'both offices in T12M');
     }
 
-    @isTest static void opportunityDrillFiltersAndPaging() {
+    @isTest(SeeAllData=true)
+    static void opportunityDrillFiltersAndPaging() {
         assignPermSet();
         Ctx c = build();
         Test.startTest();
@@ -93,7 +93,8 @@ private class FirmSalesSummaryControllerTest {
         System.assert(allOpps.rows[0].amountUSD != null, 'amount converted to USD');
     }
 
-    @isTest static void refreshEnqueues() {
+    @isTest(SeeAllData=true)
+    static void refreshEnqueues() {
         assignPermSet();
         Ctx c = build();
         Test.startTest();

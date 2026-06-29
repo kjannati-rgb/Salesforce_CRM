@@ -3,19 +3,23 @@ private class FirmRollupTriggerTest {
 
     @isTest static void opportunityTriggerInsertUpdateDeleteUndelete() {
         OpportunityAnalyticsCreate.activeOverride = false; // keep existing update-handler quiet
+        FirmRollupTestData.bypassOrgAutomation();
         Account firm = FirmRollupTestData.firm('TF');
         Account off = FirmRollupTestData.office('TO');
 
         Test.startTest();
-        Opportunity opp = FirmRollupTestData.newOpp(firm.Id, off.Id, 'Closed Won', 'New Business', 100, 'GBP', Date.today());
-        insert opp;                       // insert branch -> enqueue
-        opp.Amount = 200; update opp;     // update branch (relevant change) -> enqueue
-        delete opp;                       // delete branch -> enqueue
-        Database.undelete(opp.Id, true);  // undelete branch -> enqueue
-        Test.stopTest();                  // all enqueued queueables run; final state: opp present
+        Opportunity won = FirmRollupTestData.newOpp(firm.Id, off.Id, 'Closed Won', 'New Business', 100, 'GBP', Date.today());
+        insert won;                       // insert branch -> enqueue
+        won.Amount = 200; update won;     // update branch (relevant change) -> enqueue
+        // delete/undelete on a non-won opp (Closed Won opps are delete-protected in this org)
+        Opportunity open = FirmRollupTestData.newOpp(firm.Id, off.Id, 'Qualify', 'New Business', 50, 'GBP', Date.today());
+        insert open;
+        delete open;                      // delete branch -> enqueue
+        Database.undelete(open.Id, true); // undelete branch -> enqueue
+        Test.stopTest();
 
         Account r = [SELECT Firm_Won_Count_AllTime__c FROM Account WHERE Id = :firm.Id];
-        System.assertEquals(1, r.Firm_Won_Count_AllTime__c.intValue(), 'trigger path recomputed firm (count FX-independent)');
+        System.assertEquals(1, r.Firm_Won_Count_AllTime__c.intValue(), 'one Closed Won counted (Qualify excluded)');
     }
 
     @isTest static void subscriptionTriggerEnqueues() {
@@ -24,11 +28,15 @@ private class FirmRollupTriggerTest {
         Date t = Date.today();
 
         Test.startTest();
-        insert FirmRollupTestData.sub(firm.Id, off.Id, t.addDays(-5), t.addDays(5), 100, 'GBP', null);
+        SBQQ__Subscription__c s = FirmRollupTestData.sub(firm.Id, off.Id, t.addDays(-5), t.addDays(5), 100, 'GBP', null);
+        insert s;                              // insert branch
+        s.SBQQ__NetPrice__c = 200; update s;   // update branch (relevant change)
+        delete s;                              // delete branch
+        Database.undelete(s.Id, true);         // undelete branch
         Test.stopTest();
 
         Account r = [SELECT Firm_Active_Subscriptions__c FROM Account WHERE Id = :firm.Id];
-        System.assertEquals(1, r.Firm_Active_Subscriptions__c.intValue(), 'subscription trigger recomputed firm');
+        System.assertEquals(1, r.Firm_Active_Subscriptions__c.intValue(), 'subscription trigger recomputed firm across ins/upd/del/undel');
     }
 
     @isTest static void recursionGuardAndBypass() {
@@ -51,6 +59,7 @@ private class FirmRollupTriggerTest {
 
     @isTest static void queueableChunking() {
         FirmRollupTriggerGuard.bypass = true;
+        FirmRollupTestData.bypassOrgAutomation();
         List<Id> firmIds = new List<Id>();
         Account off = FirmRollupTestData.office('QO');
         for (Integer i = 0; i < 3; i++) {

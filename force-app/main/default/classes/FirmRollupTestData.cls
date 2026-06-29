@@ -16,6 +16,22 @@ public class FirmRollupTestData {
         Map<String, Decimal> stat = new Map<String, Decimal>{ 'GBP' => 1, 'USD' => 2, 'EUR' => 4 };
         CurrencyConvUSD.loadForTest(stat, new Map<String, List<CurrencyConvUSD.DatedRate>>(), 'USD', 'Dated');
         FirmRollupService.setConfigForTest(1, stdGroupMap());
+        bypassOrgAutomation();
+    }
+
+    /** Disable the org's validation rules + autolaunch flows + process builders for the RUNNING
+     *  USER (user-level custom setting takes precedence over org/profile defaults) so Closed-Won
+     *  opps can be seeded without the contact-role gate or Ultimate_Account__c re-stamping. */
+    public static void bypassOrgAutomation() {
+        List<Application_Settings__c> existing =
+            [SELECT Id FROM Application_Settings__c WHERE SetupOwnerId = :UserInfo.getUserId()];
+        Application_Settings__c s = existing.isEmpty()
+            ? new Application_Settings__c(SetupOwnerId = UserInfo.getUserId())
+            : existing[0];
+        s.Disable_Validation_Rules__c = true;
+        s.Disable_Autolaunch_Lightning_Flow__c = true;
+        s.Disable_Process_Builders__c = true;
+        upsert s;
     }
 
     public static Map<String, String> stdGroupMap() {
@@ -38,22 +54,27 @@ public class FirmRollupTestData {
         insert a; return a;
     }
 
-    public static Product2 product(String family, String ptype) {
-        Product2 p = new Product2(Name = (family + '-' + (ptype == null ? 'def' : ptype)),
-                                  Family = family, Product_Type__c = ptype, IsActive = true);
-        insert p; return p;
+    static Map<String, Id> pbeCache = new Map<String, Id>();
+    /**
+     * Existing standard PricebookEntry for (Family, Product Type 1, currency). Reuses the live
+     * product catalog so tests don't have to satisfy Product2's required, Family-dependent
+     * Reporting_Stream__c picklist. REQUIRES the calling test method to be @isTest(SeeAllData=true).
+     */
+    public static Id pbeFor(String family, String ptype, String iso) {
+        String key = family + '|' + ptype + '|' + iso;
+        if (pbeCache.containsKey(key)) return pbeCache.get(key);
+        String soql = 'SELECT Id FROM PricebookEntry WHERE Pricebook2.IsStandard = true AND IsActive = true '
+            + 'AND CurrencyIsoCode = :iso AND Product2.Family = :family '
+            + (ptype == null ? 'AND Product2.Product_Type__c = null ' : 'AND Product2.Product_Type__c = :ptype ')
+            + 'LIMIT 1';
+        List<PricebookEntry> pbes = Database.query(soql);
+        Id id = pbes.isEmpty() ? null : pbes[0].Id;
+        pbeCache.put(key, id);
+        return id;
     }
 
-    static Map<String, Id> pbeCache = new Map<String, Id>();
-    /** Standard PricebookEntry for product×currency (created once). */
-    public static Id pbe(Id productId, String iso) {
-        String key = productId + '|' + iso;
-        if (pbeCache.containsKey(key)) return pbeCache.get(key);
-        PricebookEntry e = new PricebookEntry(Pricebook2Id = Test.getStandardPricebookId(),
-            Product2Id = productId, UnitPrice = 1, IsActive = true, CurrencyIsoCode = iso);
-        insert e;
-        pbeCache.put(key, e.Id);
-        return e.Id;
+    public static OpportunityLineItem lineFromPbe(Id oppId, Id pbeId, Decimal total) {
+        return new OpportunityLineItem(OpportunityId = oppId, PricebookEntryId = pbeId, Quantity = 1, UnitPrice = total);
     }
 
     public static Opportunity newOpp(Id firmId, Id officeId, String stage, String type,
@@ -61,13 +82,6 @@ public class FirmRollupTestData {
         return new Opportunity(Name = 'OPP ' + stage, StageName = stage, CloseDate = close,
             Amount = amount, Type = type, Ultimate_Account__c = firmId, AccountId = officeId,
             CurrencyIsoCode = iso, Pricebook2Id = Test.getStandardPricebookId());
-    }
-
-    public static OpportunityLineItem line(Id oppId, Id productId, Decimal total, String iso) {
-        // OLI CurrencyIsoCode is inherited from the parent Opportunity (not writeable);
-        // currency is honoured via the matching-currency PricebookEntry.
-        return new OpportunityLineItem(OpportunityId = oppId, PricebookEntryId = pbe(productId, iso),
-            Quantity = 1, UnitPrice = total);
     }
 
     public static SBQQ__Subscription__c sub(Id firmId, Id officeId, Date startD, Date endD,

@@ -12,7 +12,7 @@
     <sections>
         <columns>
             <checkedByDefault>true</checkedByDefault>
-            <field>NAME</field>
+            <field>Name</field>
             <table>Account</table>
         </columns>
         <columns>
@@ -36,32 +36,32 @@
         <columns>
             <checkedByDefault>true</checkedByDefault>
             <field>Commercial_Group__c</field>
-            <table>Firm_Product_Group_Rollups__r</table>
+            <table>Account.Firm_Product_Group_Rollups__r</table>
         </columns>
         <columns>
             <checkedByDefault>true</checkedByDefault>
             <field>Won_Value_AllTime_USD__c</field>
-            <table>Firm_Product_Group_Rollups__r</table>
+            <table>Account.Firm_Product_Group_Rollups__r</table>
         </columns>
         <columns>
             <checkedByDefault>true</checkedByDefault>
             <field>Won_Items_AllTime__c</field>
-            <table>Firm_Product_Group_Rollups__r</table>
+            <table>Account.Firm_Product_Group_Rollups__r</table>
         </columns>
         <columns>
             <checkedByDefault>true</checkedByDefault>
             <field>Won_Value_CFY_USD__c</field>
-            <table>Firm_Product_Group_Rollups__r</table>
+            <table>Account.Firm_Product_Group_Rollups__r</table>
         </columns>
         <columns>
             <checkedByDefault>true</checkedByDefault>
             <field>Won_Items_CFY__c</field>
-            <table>Firm_Product_Group_Rollups__r</table>
+            <table>Account.Firm_Product_Group_Rollups__r</table>
         </columns>
         <columns>
             <checkedByDefault>true</checkedByDefault>
             <field>Last_Refreshed__c</field>
-            <table>Firm_Product_Group_Rollups__r</table>
+            <table>Account.Firm_Product_Group_Rollups__r</table>
         </columns>
         <masterLabel>Firm Product Group Rollups (USD)</masterLabel>
     </sections>

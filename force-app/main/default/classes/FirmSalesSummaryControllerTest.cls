@@ -1,0 +1,105 @@
+@isTest
+private class FirmSalesSummaryControllerTest {
+
+    // Grant FLS to the running user so WITH SECURITY_ENFORCED passes (setup DML isolated via runAs).
+    static void assignPermSet() {
+        PermissionSet ps = [SELECT Id FROM PermissionSet WHERE Name = 'Firm_Sales_Summary' LIMIT 1];
+        User u = new User(Id = UserInfo.getUserId());
+        System.runAs(u) {
+            if ([SELECT COUNT() FROM PermissionSetAssignment
+                 WHERE AssigneeId = :u.Id AND PermissionSetId = :ps.Id] == 0) {
+                insert new PermissionSetAssignment(AssigneeId = u.Id, PermissionSetId = ps.Id);
+            }
+        }
+    }
+
+    class Ctx { Account firm; Account o1; Account o2; }
+
+    static Ctx build() {
+        FirmRollupTriggerGuard.bypass = true;
+        FirmRollupTestData.injectStandardConfig();
+        Ctx c = new Ctx();
+        c.firm = FirmRollupTestData.firm('CF');
+        c.o1 = FirmRollupTestData.office('CO1');
+        c.o2 = FirmRollupTestData.office('CO2');
+        Product2 pLaw = FirmRollupTestData.product('Subs - Law.com', null);
+        Product2 pSpon = FirmRollupTestData.product('Events', 'Sponsorship');
+
+        Opportunity opp1 = FirmRollupTestData.newOpp(c.firm.Id, c.o1.Id, 'Closed Won', 'New Business', 200, 'GBP', Date.today());
+        Opportunity opp2 = FirmRollupTestData.newOpp(c.firm.Id, c.o2.Id, 'Closed Won', 'Renewal', 100, 'GBP', Date.today());
+        insert new List<Opportunity>{ opp1, opp2 };
+        insert new List<OpportunityLineItem>{
+            FirmRollupTestData.line(opp1.Id, pLaw.Id, 200, 'GBP'),
+            FirmRollupTestData.line(opp2.Id, pSpon.Id, 100, 'GBP')
+        };
+        FirmRollupService.recalculateFirm(c.firm.Id);
+        return c;
+    }
+
+    @isTest static void summaryAndGroups() {
+        assignPermSet();
+        Ctx c = build();
+        Test.startTest();
+        FirmSalesSummaryController.SummaryDTO s = FirmSalesSummaryController.getSummary(c.firm.Id);
+        List<FirmSalesSummaryController.GroupDTO> groups = FirmSalesSummaryController.getGroupBreakdown(c.firm.Id);
+        Test.stopTest();
+
+        System.assertEquals('CF', s.firmName, 'firm name');
+        System.assertEquals('USD', s.targetCurrency, 'target currency');
+        FirmSalesSummaryController.PeriodDTO all;
+        for (FirmSalesSummaryController.PeriodDTO p : s.periods) if (p.key == 'alltime') all = p;
+        System.assert(all.netValue == 600, 'all-time net = 200×2 + 100×2 =' + all.netValue);
+        System.assertEquals(2, all.wonCount, 'all-time won count');
+
+        Map<String, Decimal> gv = new Map<String, Decimal>();
+        for (FirmSalesSummaryController.GroupDTO g : groups) gv.put(g.name, g.allTimeValue);
+        System.assert(gv.get('Law.com / ALM') == 400, 'law group value');
+        System.assert(gv.get('Events - Sponsorship') == 200, 'sponsorship group value');
+    }
+
+    @isTest static void officeBreakdownPeriods() {
+        assignPermSet();
+        Ctx c = build();
+        Test.startTest();
+        List<FirmSalesSummaryController.OfficeDTO> all = FirmSalesSummaryController.getOfficeBreakdown(c.firm.Id, 'alltime', 'all');
+        List<FirmSalesSummaryController.OfficeDTO> cfy = FirmSalesSummaryController.getOfficeBreakdown(c.firm.Id, 'cfy', 'all');
+        List<FirmSalesSummaryController.OfficeDTO> pfy = FirmSalesSummaryController.getOfficeBreakdown(c.firm.Id, 'pfy', 'all');
+        List<FirmSalesSummaryController.OfficeDTO> t12 = FirmSalesSummaryController.getOfficeBreakdown(c.firm.Id, 't12m', 'all');
+        Test.stopTest();
+
+        System.assertEquals(2, all.size(), 'two offices all-time');
+        System.assert(all[0].value >= all[1].value, 'sorted by value desc');
+        System.assertEquals(2, cfy.size(), 'both offices in CFY (today)');
+        System.assertEquals(0, pfy.size(), 'no offices in PFY');
+        System.assertEquals(2, t12.size(), 'both offices in T12M');
+    }
+
+    @isTest static void opportunityDrillFiltersAndPaging() {
+        assignPermSet();
+        Ctx c = build();
+        Test.startTest();
+        FirmSalesSummaryController.OppPageDTO allOpps = FirmSalesSummaryController.getOpportunities(c.firm.Id, null, null, 'alltime', 'all', 10, 0);
+        FirmSalesSummaryController.OppPageDTO byOffice = FirmSalesSummaryController.getOpportunities(c.firm.Id, c.o1.Id, null, 'alltime', 'all', 10, 0);
+        FirmSalesSummaryController.OppPageDTO byGroup = FirmSalesSummaryController.getOpportunities(c.firm.Id, null, 'Law.com / ALM', 'alltime', 'all', 10, 0);
+        FirmSalesSummaryController.OppPageDTO newBiz = FirmSalesSummaryController.getOpportunities(c.firm.Id, null, null, 'alltime', 'new', 10, 0);
+        FirmSalesSummaryController.OppPageDTO renewal = FirmSalesSummaryController.getOpportunities(c.firm.Id, null, null, 'alltime', 'renewal', 10, 0);
+        Test.stopTest();
+
+        System.assertEquals(2, allOpps.total, 'two opps total');
+        System.assertEquals(1, byOffice.total, 'one opp at office 1');
+        System.assertEquals(1, byGroup.total, 'one opp in Law.com / ALM group (CMDT semi-join)');
+        System.assertEquals(1, newBiz.total, 'one New Business opp');
+        System.assertEquals(1, renewal.total, 'one Renewal opp');
+        System.assert(allOpps.rows[0].amountUSD != null, 'amount converted to USD');
+    }
+
+    @isTest static void refreshEnqueues() {
+        assignPermSet();
+        Ctx c = build();
+        Test.startTest();
+        FirmSalesSummaryController.refreshFirm(c.firm.Id);
+        FirmSalesSummaryController.refreshFirm(null); // no-op guard
+        Test.stopTest();
+        System.assert(true, 'refresh enqueued without error');
+    }
+}

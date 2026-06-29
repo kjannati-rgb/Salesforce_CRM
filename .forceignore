@@ -1,0 +1,7 @@
+# LWC Jest tests and tooling are not deployable metadata
+**/__tests__/**
+**/*.test.js
+**/jsconfig.json
+package.json
+jest.config.js
+node_modules

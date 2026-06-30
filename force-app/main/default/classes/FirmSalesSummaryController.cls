@@ -163,7 +163,9 @@ public with sharing class FirmSalesSummaryController {
                 'SELECT SUM(SBQQ__NetPrice__c) sv, COUNT(Id) sc, CurrencyIsoCode iso FROM SBQQ__Subscription__c ' +
                 'WHERE Ultimate_Parent__c = :firmId AND SBQQ__StartDate__c <= :today AND SBQQ__EndDate__c >= :today' +
                 ' AND SBQQ__TerminatedDate__c = null AND SBQQ__Bundled__c = false' +
-                ((officeId != null) ? ' AND SBQQ__Account__c = :officeId' : '') + ' GROUP BY CurrencyIsoCode')) {
+                ((officeId != null) ? ' AND SBQQ__Account__c = :officeId' : '') +
+                subGroupClause(String.isNotBlank(commercialGroup), nef, ept, inclOther[0]) +
+                ' GROUP BY CurrencyIsoCode')) {
             subCnt += (Integer) ar.get('sc');
             subVal += CurrencyConvUSD.toUSD((Decimal) ar.get('sv'), (String) ar.get('iso'), today);
         }
@@ -213,6 +215,17 @@ public with sharing class FirmSalesSummaryController {
             if (g.value != 0 || g.items != 0 || g.acv != 0) { g.value = g.value.setScale(2); g.acv = g.acv.setScale(2); out.add(g); }
         }
         return out;
+    }
+
+    /** Subscription group filter — direct on the subscription's product family/type (reuses already-
+     *  populated nef/ept from oppGroupFilter; expects those bind vars in the caller's scope). */
+    static String subGroupClause(Boolean groupFiltered, List<String> nef, List<String> ept, Boolean inclOther) {
+        if (!groupFiltered) return '';
+        List<String> ors = new List<String>();
+        if (!nef.isEmpty()) ors.add('SBQQ__Product__r.Family IN :nef');
+        if (!ept.isEmpty()) ors.add('(SBQQ__Product__r.Family = \'Events\' AND SBQQ__Product__r.Product_Type__c IN :ept)');
+        if (inclOther) ors.add('(SBQQ__Product__r.Family = \'Events\' AND (SBQQ__Product__r.Product_Type__c = null OR (SBQQ__Product__r.Product_Type__c != \'Sponsorship\' AND SBQQ__Product__r.Product_Type__c != \'Ticket\')))');
+        return ors.isEmpty() ? ' AND Id = null' : ' AND (' + String.join(ors, ' OR ') + ')';
     }
 
     /** Opportunity-level commercial-group semi-join clause; populates the bind lists (nef/ept). */
@@ -268,14 +281,13 @@ public with sharing class FirmSalesSummaryController {
             o.value += usd;
             if (WON.equals((String) ar.get('st'))) o.wonCount += (Integer) ar.get('c');
         }
-        // active subs per office
-        for (AggregateResult ar : [
-                SELECT SBQQ__Account__c off, COUNT(Id) c
-                FROM SBQQ__Subscription__c
-                WHERE Ultimate_Parent__c = :firmId
-                  AND SBQQ__StartDate__c <= :today AND SBQQ__EndDate__c >= :today
-                  AND SBQQ__TerminatedDate__c = null AND SBQQ__Bundled__c = false
-                GROUP BY SBQQ__Account__c]) {
+        // active subs per office (group-filtered via the subscription's product family, when set)
+        for (AggregateResult ar : Database.query(
+                'SELECT SBQQ__Account__c off, COUNT(Id) c FROM SBQQ__Subscription__c ' +
+                'WHERE Ultimate_Parent__c = :firmId AND SBQQ__StartDate__c <= :today AND SBQQ__EndDate__c >= :today ' +
+                'AND SBQQ__TerminatedDate__c = null AND SBQQ__Bundled__c = false' +
+                subGroupClause(groupFiltered, nef, ept, inclOther[0]) +
+                ' GROUP BY SBQQ__Account__c')) {
             Id off = (Id) ar.get('off');
             if (off == null) continue;
             // when group-filtered, only annotate offices that already have group activity

@@ -42,6 +42,8 @@ public with sharing class FirmSalesSummaryController {
                    Firm_Won_Value_CFY_USD__c, Firm_Won_Count_CFY__c,
                    Firm_Won_Value_PFY_USD__c, Firm_Won_Count_PFY__c,
                    Firm_Won_Value_T12M_USD__c, Firm_Won_Count_T12M__c,
+                   Firm_Won_ACV_AllTime_USD__c, Firm_Won_ACV_CFY_USD__c,
+                   Firm_Won_ACV_PFY_USD__c, Firm_Won_ACV_T12M_USD__c,
                    Firm_Active_Subscriptions__c, Firm_Active_Sub_Value_USD__c,
                    Firm_Rollup_Last_Refreshed__c
             FROM Account WHERE Id = :firmId WITH SECURITY_ENFORCED LIMIT 1];
@@ -64,6 +66,10 @@ public with sharing class FirmSalesSummaryController {
             period('pfy', 'Last FY', a.Firm_Won_Value_PFY_USD__c, a.Firm_Won_Count_PFY__c),
             period('t12m', 'Last 12 mo', a.Firm_Won_Value_T12M_USD__c, a.Firm_Won_Count_T12M__c)
         };
+        s.periods[0].acv = nzd(a.Firm_Won_ACV_AllTime_USD__c);
+        s.periods[1].acv = nzd(a.Firm_Won_ACV_CFY_USD__c);
+        s.periods[2].acv = nzd(a.Firm_Won_ACV_PFY_USD__c);
+        s.periods[3].acv = nzd(a.Firm_Won_ACV_T12M_USD__c);
         return s;
     }
 
@@ -73,19 +79,19 @@ public with sharing class FirmSalesSummaryController {
         List<GroupDTO> out = new List<GroupDTO>();
         for (Firm_Product_Group_Rollup_USD__c r : [
                 SELECT Commercial_Group__c,
-                       Won_Value_AllTime_USD__c, Won_Items_AllTime__c,
-                       Won_Value_CFY_USD__c, Won_Items_CFY__c,
-                       Won_Value_PFY_USD__c, Won_Items_PFY__c,
-                       Won_Value_T12M_USD__c, Won_Items_T12M__c
+                       Won_Value_AllTime_USD__c, Won_Items_AllTime__c, Won_ACV_AllTime_USD__c,
+                       Won_Value_CFY_USD__c, Won_Items_CFY__c, Won_ACV_CFY_USD__c,
+                       Won_Value_PFY_USD__c, Won_Items_PFY__c, Won_ACV_PFY_USD__c,
+                       Won_Value_T12M_USD__c, Won_Items_T12M__c, Won_ACV_T12M_USD__c
                 FROM Firm_Product_Group_Rollup_USD__c
                 WHERE Firm__c = :firmId WITH SECURITY_ENFORCED
                 ORDER BY Won_Value_AllTime_USD__c DESC NULLS LAST]) {
             GroupDTO g = new GroupDTO();
             g.name = r.Commercial_Group__c;
-            g.allTimeValue = nzd(r.Won_Value_AllTime_USD__c); g.allTimeItems = nz(r.Won_Items_AllTime__c);
-            g.cfyValue = nzd(r.Won_Value_CFY_USD__c);         g.cfyItems = nz(r.Won_Items_CFY__c);
-            g.pfyValue = nzd(r.Won_Value_PFY_USD__c);         g.pfyItems = nz(r.Won_Items_PFY__c);
-            g.t12mValue = nzd(r.Won_Value_T12M_USD__c);       g.t12mItems = nz(r.Won_Items_T12M__c);
+            g.allTimeValue = nzd(r.Won_Value_AllTime_USD__c); g.allTimeItems = nz(r.Won_Items_AllTime__c); g.allTimeAcv = nzd(r.Won_ACV_AllTime_USD__c);
+            g.cfyValue = nzd(r.Won_Value_CFY_USD__c);         g.cfyItems = nz(r.Won_Items_CFY__c);         g.cfyAcv = nzd(r.Won_ACV_CFY_USD__c);
+            g.pfyValue = nzd(r.Won_Value_PFY_USD__c);         g.pfyItems = nz(r.Won_Items_PFY__c);         g.pfyAcv = nzd(r.Won_ACV_PFY_USD__c);
+            g.t12mValue = nzd(r.Won_Value_T12M_USD__c);       g.t12mItems = nz(r.Won_Items_T12M__c);       g.t12mAcv = nzd(r.Won_ACV_T12M_USD__c);
             out.add(g);
         }
         return out;
@@ -165,6 +171,15 @@ public with sharing class FirmSalesSummaryController {
         out.activeSubValue = subVal.setScale(2);
         out.groups = groupsLive(firmId, period, businessType, officeId);            // group panel: office filter
         out.offices = getOfficeBreakdown(firmId, period, businessType, commercialGroup); // office panel: group filter
+
+        // headline ACV (line-grain) for the selected period: the chosen group's ACV when a group is
+        // filtered, else Σ of all groups' ACV (for the active office/business). Other periods' acv
+        // stay null — the LWC re-queries per period and only renders the selected period.
+        Decimal acvSel = 0;
+        for (GroupDTO g : out.groups) {
+            if (String.isBlank(commercialGroup) || g.name == commercialGroup) acvSel += (g.acv == null ? 0 : g.acv);
+        }
+        for (PeriodDTO p : out.periods) if (p.key == period) p.acv = acvSel.setScale(2);
         return out;
     }
 
@@ -177,7 +192,7 @@ public with sharing class FirmSalesSummaryController {
         String officeClause = (officeId != null) ? ' AND Opportunity.AccountId = :officeId' : '';
         String soql =
             'SELECT Product2.Family fam, Product2.Product_Type__c pt, CurrencyIsoCode iso, Opportunity.StageName st, ' +
-            'CALENDAR_YEAR(Opportunity.CloseDate) yr, SUM(TotalPrice) v, COUNT(Id) items FROM OpportunityLineItem ' +
+            'CALENDAR_YEAR(Opportunity.CloseDate) yr, SUM(TotalPrice) v, SUM(Annual_Contract_Value__c) acv, COUNT(Id) items FROM OpportunityLineItem ' +
             'WHERE Opportunity.Ultimate_Account__c = :firmId AND Opportunity.StageName IN (:WON, :CANC)' +
             dateClause + officeClause + businessClause(businessType, 'Opportunity.') +
             ' GROUP BY Product2.Family, Product2.Product_Type__c, CurrencyIsoCode, Opportunity.StageName, CALENDAR_YEAR(Opportunity.CloseDate)';
@@ -187,14 +202,15 @@ public with sharing class FirmSalesSummaryController {
             Integer yr = (Integer) ar.get('yr');
             Date asOf = (yr == null) ? Date.today() : Date.newInstance(yr, 7, 1);
             Decimal usd = CurrencyConvUSD.toUSD((Decimal) ar.get('v'), (String) ar.get('iso'), asOf);
-            if (CANC.equals((String) ar.get('st')) && usd > 0) usd = -usd;
+            Decimal acvUsd = CurrencyConvUSD.toUSD((Decimal) ar.get('acv'), (String) ar.get('iso'), asOf);
+            if (CANC.equals((String) ar.get('st'))) { if (usd > 0) usd = -usd; if (acvUsd > 0) acvUsd = -acvUsd; }
             GroupDTO g = acc.get(grp);
-            if (g == null) { g = new GroupDTO(); g.name = grp; g.value = 0; g.items = 0; acc.put(grp, g); }
-            g.value += usd; g.items += (Integer) ar.get('items');
+            if (g == null) { g = new GroupDTO(); g.name = grp; g.value = 0; g.items = 0; g.acv = 0; acc.put(grp, g); }
+            g.value += usd; g.items += (Integer) ar.get('items'); g.acv += acvUsd;
         }
         List<GroupDTO> out = new List<GroupDTO>();
         for (GroupDTO g : acc.values()) {
-            if (g.value != 0 || g.items != 0) { g.value = g.value.setScale(2); out.add(g); }
+            if (g.value != 0 || g.items != 0 || g.acv != 0) { g.value = g.value.setScale(2); g.acv = g.acv.setScale(2); out.add(g); }
         }
         return out;
     }
@@ -407,15 +423,16 @@ public with sharing class FirmSalesSummaryController {
         @AuraEnabled public String label;
         @AuraEnabled public Decimal netValue;
         @AuraEnabled public Integer wonCount;
+        @AuraEnabled public Decimal acv;       // net Won ACV (USD) for the period
     }
     public class GroupDTO {
         @AuraEnabled public String name;
-        @AuraEnabled public Decimal allTimeValue; @AuraEnabled public Integer allTimeItems;
-        @AuraEnabled public Decimal cfyValue;     @AuraEnabled public Integer cfyItems;
-        @AuraEnabled public Decimal pfyValue;     @AuraEnabled public Integer pfyItems;
-        @AuraEnabled public Decimal t12mValue;    @AuraEnabled public Integer t12mItems;
-        // flat, period-resolved value/items — populated by the live business-lens path only
-        @AuraEnabled public Decimal value;        @AuraEnabled public Integer items;
+        @AuraEnabled public Decimal allTimeValue; @AuraEnabled public Integer allTimeItems; @AuraEnabled public Decimal allTimeAcv;
+        @AuraEnabled public Decimal cfyValue;     @AuraEnabled public Integer cfyItems;     @AuraEnabled public Decimal cfyAcv;
+        @AuraEnabled public Decimal pfyValue;     @AuraEnabled public Integer pfyItems;     @AuraEnabled public Decimal pfyAcv;
+        @AuraEnabled public Decimal t12mValue;    @AuraEnabled public Integer t12mItems;    @AuraEnabled public Decimal t12mAcv;
+        // flat, period-resolved value/items/acv — populated by the live cross-filter path only
+        @AuraEnabled public Decimal value;        @AuraEnabled public Integer items;        @AuraEnabled public Decimal acv;
     }
     public class ViewDTO {
         @AuraEnabled public List<PeriodDTO> periods;

@@ -31,9 +31,10 @@
 .tog:hover{background:#f4f8ff}
 .tog.on{background:var(--brand);color:#fff}
 
-.kpis{display:grid;grid-template-columns:repeat(4,1fr)}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr)}
 .kpi{padding:16px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
-.kpi:nth-child(4){border-right:0}
+.kpi:nth-child(5){border-right:0}
+.kpi .k-val{font-size:24px}
 .k-label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--label)}
 .k-val{font-size:27px;font-weight:700;color:var(--ink);margin-top:7px;font-variant-numeric:tabular-nums}
 .k-val.neg{color:var(--red)}

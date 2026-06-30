@@ -50,9 +50,12 @@ private class FirmSalesSummaryControllerTest {
         System.assertEquals(2, all.wonCount, 'all-time won count');
 
         Map<String, Decimal> gv = new Map<String, Decimal>();
-        for (FirmSalesSummaryController.GroupDTO g : groups) gv.put(g.name, g.allTimeValue);
+        Decimal sumGroupAcv = 0;
+        for (FirmSalesSummaryController.GroupDTO g : groups) { gv.put(g.name, g.allTimeValue); sumGroupAcv += g.allTimeAcv; }
         System.assert(gv.get('Law.com / ALM') == 400, 'law group value');
         System.assert(gv.get('Events - Sponsorship') == 200, 'sponsorship group value');
+        // ACV invariant: headline ACV == Σ group ACV (magnitude verified on real data in FULLUAT)
+        System.assert(all.acv == sumGroupAcv.setScale(2), 'headline ACV(' + all.acv + ') = Σ group ACV(' + sumGroupAcv + ')');
     }
 
     @isTest(SeeAllData=true)
@@ -120,8 +123,16 @@ private class FirmSalesSummaryControllerTest {
         for (FirmSalesSummaryController.GroupDTO g : offV.groups) if (g.name == 'Law.com / ALM') offHasLaw = true;
         System.assert(offHasLaw, 'office filter group panel shows Law.com / ALM (opp1)');
 
+        // ACV invariant: new-lens headline ACV == Σ of that lens's group ACV
+        Decimal newAcvSum = 0;
+        for (FirmSalesSummaryController.GroupDTO g : newV.groups) newAcvSum += (g.acv == null ? 0 : g.acv);
+        System.assert(allTime(newV).acv == newAcvSum.setScale(2), 'new lens headline ACV = Σ group ACV');
+
         // group filter (Law.com / ALM is only on opp1 @CO1)
         System.assert(allTime(grpV).netValue == 400, 'group Law.com net = opp1 =' + allTime(grpV).netValue);
+        Decimal lawAcv = 0;
+        for (FirmSalesSummaryController.GroupDTO g : grpV.groups) if (g.name == 'Law.com / ALM') lawAcv = (g.acv == null ? 0 : g.acv);
+        System.assert(allTime(grpV).acv == lawAcv.setScale(2), 'group-filter headline ACV = that group ACV');
         System.assertEquals(1, grpV.offices.size(), 'group filter office panel shows only CO1');
         System.assertEquals(c.o1.Id, grpV.offices[0].officeId, 'that office is CO1');
     }

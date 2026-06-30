@@ -38,6 +38,26 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Account.Firm_Won_ACV_AllTime_USD__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Account.Firm_Won_ACV_CFY_USD__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Account.Firm_Won_ACV_PFY_USD__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Account.Firm_Won_ACV_T12M_USD__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Account.Firm_Won_Count_AllTime__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -84,6 +104,26 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Firm_Product_Group_Rollup_USD__c.Last_Refreshed__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Firm_Product_Group_Rollup_USD__c.Won_ACV_AllTime_USD__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Firm_Product_Group_Rollup_USD__c.Won_ACV_CFY_USD__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Firm_Product_Group_Rollup_USD__c.Won_ACV_PFY_USD__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Firm_Product_Group_Rollup_USD__c.Won_ACV_T12M_USD__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

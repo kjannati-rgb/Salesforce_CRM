@@ -100,7 +100,8 @@ export default class FirmSalesSummary extends LightningElement {
         const subVal = this.view ? this.view.activeSubValue : this.summary.activeSubValue;
         const card = (key, label, value, sub, neg) => ({ key, label, value, sub, valClass: neg ? 'k-val neg' : 'k-val' });
         return [
-            card('net', 'Net Won Value (USD)', this.fmtUSD(p.netValue), 'net of cancellations' + this.lensNote, p.netValue < 0),
+            card('net', 'Net Won Value (USD)', this.fmtUSD(p.netValue), 'total contract value' + this.lensNote, p.netValue < 0),
+            card('acv', 'Won ACV (USD)', this.fmtUSD(p.acv), 'annual run-rate' + this.lensNote, (p.acv || 0) < 0),
             card('won', 'Won Opportunities', this.fmtInt(p.wonCount), 'stage Closed Won' + this.lensNote, false),
             card('canc', 'Cancellations', this.fmtUSD(cancelVal), this.fmtInt(cancelCnt) + ' deals · all-time · already netted', cancelVal < 0),
             card('subs', 'Active Subscriptions', this.fmtInt(subs), this.fmtUSD(subVal) + ' active', false)
@@ -131,7 +132,8 @@ export default class FirmSalesSummary extends LightningElement {
         const rows = src.map((g) => {
             const v = live ? (g.value || 0) : this.valFor(g, 'Value');
             const items = live ? (g.items || 0) : this.valFor(g, 'Items');
-            return { key: g.name, name: g.name, rawVal: v, value: this.fmtUSD(v), items: this.fmtInt(items), itemsCount: items };
+            const acv = live ? (g.acv || 0) : this.valFor(g, 'Acv');
+            return { key: g.name, name: g.name, rawVal: v, value: this.fmtUSD(v), acv: this.fmtUSD(acv), items: this.fmtInt(items), itemsCount: items };
         }).filter((r) => r.rawVal !== 0 || r.itemsCount !== 0);
         const total = rows.reduce((a, r) => a + Math.abs(r.rawVal), 0) || 1;
         rows.forEach((r) => {

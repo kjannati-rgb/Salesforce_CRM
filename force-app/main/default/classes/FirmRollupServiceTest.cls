@@ -5,7 +5,8 @@ private class FirmRollupServiceTest {
         Map<String, Firm_Product_Group_Rollup_USD__c> m = new Map<String, Firm_Product_Group_Rollup_USD__c>();
         for (Firm_Product_Group_Rollup_USD__c g : [
                 SELECT Commercial_Group__c, Won_Value_AllTime_USD__c, Won_Items_AllTime__c,
-                       Won_Value_CFY_USD__c, Won_Items_CFY__c, Won_Value_T12M_USD__c, Won_Items_T12M__c
+                       Won_Value_CFY_USD__c, Won_Items_CFY__c, Won_Value_T12M_USD__c, Won_Items_T12M__c,
+                       Won_ACV_AllTime_USD__c, Won_ACV_CFY_USD__c, Won_ACV_PFY_USD__c, Won_ACV_T12M_USD__c
                 FROM Firm_Product_Group_Rollup_USD__c WHERE Firm__c = :firmId]) {
             m.put(g.Commercial_Group__c, g);
         }
@@ -98,10 +99,18 @@ private class FirmRollupServiceTest {
             expGroupSum += CurrencyConvUSD.toUSD(li.TotalPrice, li.CurrencyIsoCode,
                                Date.newInstance(li.Opportunity.CloseDate.year(), 7, 1));
         }
-        Decimal sumGroups = 0;
-        for (Firm_Product_Group_Rollup_USD__c row : g.values()) sumGroups += row.Won_Value_AllTime_USD__c;
+        Decimal sumGroups = 0, sumGroupsAcv = 0;
+        for (Firm_Product_Group_Rollup_USD__c row : g.values()) {
+            sumGroups += row.Won_Value_AllTime_USD__c;
+            sumGroupsAcv += row.Won_ACV_AllTime_USD__c;
+        }
         System.assert(sumGroups == expGroupSum.setScale(2), 'Σgroups=' + sumGroups + ' expFromLines=' + expGroupSum);
         System.assert(sumGroups > 0, 'group value populated');
+        // ACV design invariant: firm ACV field == Σ group ACV (line-ACV magnitude depends on the
+        // org's service-date formula; magnitude is verified against real data in FULLUAT).
+        Account fr = [SELECT Firm_Won_ACV_AllTime_USD__c FROM Account WHERE Id = :firm.Id];
+        System.assert(fr.Firm_Won_ACV_AllTime_USD__c == sumGroupsAcv.setScale(2),
+            'firm ACV(' + fr.Firm_Won_ACV_AllTime_USD__c + ') = Σ group ACV(' + sumGroupsAcv + ')');
     }
 
     @isTest(SeeAllData=true)

@@ -144,7 +144,7 @@ public without sharing class FirmRollupService {
         String soql =
             'SELECT Opportunity.Ultimate_Account__c fid, Product2.Family fam, Product2.Product_Type__c pt, ' +
             'CurrencyIsoCode iso, Opportunity.StageName st, CALENDAR_YEAR(Opportunity.CloseDate) yr, ' +
-            'SUM(TotalPrice) v, COUNT(Id) items ' +
+            'SUM(TotalPrice) v, SUM(Annual_Contract_Value__c) acv, COUNT(Id) items ' +
             'FROM OpportunityLineItem ' +
             'WHERE Opportunity.Ultimate_Account__c IN :firmIds ' +
             'AND Opportunity.StageName IN (:STAGE_WON, :STAGE_CANC) ' +
@@ -159,20 +159,24 @@ public without sharing class FirmRollupService {
             Integer yr = toInt(ar.get('yr'));
             Date asOf = (yr == null) ? Date.today() : Date.newInstance(yr, 7, 1); // mid-year dated rate
             Decimal usd = CurrencyConvUSD.toUSD((Decimal) ar.get('v'), (String) ar.get('iso'), asOf);
+            Decimal acvUsd = CurrencyConvUSD.toUSD((Decimal) ar.get('acv'), (String) ar.get('iso'), asOf);
             // net: a cancellation line must reduce the total even if stored positive (§4a guard)
-            if (STAGE_CANC.equals((String) ar.get('st')) && usd > 0) usd = -usd;
+            if (STAGE_CANC.equals((String) ar.get('st'))) {
+                if (usd > 0) usd = -usd;
+                if (acvUsd > 0) acvUsd = -acvUsd;
+            }
             Integer items = toInt(ar.get('items'));
 
             GroupAcc g = gm.get(grp);
             if (g == null) { g = new GroupAcc(); gm.put(grp, g); }
 
             if (t12mStart != null) {
-                g.t12mValue += usd; g.t12mItems += items;
+                g.t12mValue += usd; g.t12mItems += items; g.t12mAcv += acvUsd;
             } else {
-                g.allTimeValue += usd; g.allTimeItems += items;
+                g.allTimeValue += usd; g.allTimeItems += items; g.allTimeAcv += acvUsd;
                 Integer fy = (yr == null) ? null : fiscalYearOf(yr, 7);
-                if (fy == currentFY) { g.cfyValue += usd; g.cfyItems += items; }
-                else if (fy == priorFY) { g.pfyValue += usd; g.pfyItems += items; }
+                if (fy == currentFY) { g.cfyValue += usd; g.cfyItems += items; g.cfyAcv += acvUsd; }
+                else if (fy == priorFY) { g.pfyValue += usd; g.pfyItems += items; g.pfyAcv += acvUsd; }
             }
         }
     }
@@ -184,6 +188,11 @@ public without sharing class FirmRollupService {
         List<Account> accts = new List<Account>();
         for (Id fid : firmIds) {
             Headline h = headlines.get(fid);
+            // firm ACV per period = Σ group ACV (line-grain), so headline = Σ groups by construction
+            Decimal acvAll = 0, acvCfy = 0, acvPfy = 0, acvT12m = 0;
+            for (GroupAcc g : groupsByFirm.get(fid).values()) {
+                acvAll += g.allTimeAcv; acvCfy += g.cfyAcv; acvPfy += g.pfyAcv; acvT12m += g.t12mAcv;
+            }
             accts.add(new Account(
                 Id = fid,
                 Firm_Won_Value_AllTime_USD__c = round2(h.allTimeValue),
@@ -196,6 +205,10 @@ public without sharing class FirmRollupService {
                 Firm_Won_Count_PFY__c = h.pfyWonCount,
                 Firm_Won_Value_T12M_USD__c = round2(h.t12mValue),
                 Firm_Won_Count_T12M__c = h.t12mWonCount,
+                Firm_Won_ACV_AllTime_USD__c = round2(acvAll),
+                Firm_Won_ACV_CFY_USD__c = round2(acvCfy),
+                Firm_Won_ACV_PFY_USD__c = round2(acvPfy),
+                Firm_Won_ACV_T12M_USD__c = round2(acvT12m),
                 Firm_Active_Subscriptions__c = h.activeSubCount,
                 Firm_Active_Sub_Value_USD__c = round2(h.activeSubValue),
                 Firm_Rollup_Last_Refreshed__c = now
@@ -227,6 +240,10 @@ public without sharing class FirmRollupService {
                     Won_Items_PFY__c = g.pfyItems,
                     Won_Value_T12M_USD__c = round2(g.t12mValue),
                     Won_Items_T12M__c = g.t12mItems,
+                    Won_ACV_AllTime_USD__c = round2(g.allTimeAcv),
+                    Won_ACV_CFY_USD__c = round2(g.cfyAcv),
+                    Won_ACV_PFY_USD__c = round2(g.pfyAcv),
+                    Won_ACV_T12M_USD__c = round2(g.t12mAcv),
                     Last_Refreshed__c = now
                 ));
             }
@@ -303,10 +320,10 @@ public without sharing class FirmRollupService {
         public Integer activeSubCount = 0; public Decimal activeSubValue = 0;
     }
     public class GroupAcc {
-        public Decimal allTimeValue = 0; public Integer allTimeItems = 0;
-        public Decimal cfyValue = 0;     public Integer cfyItems = 0;
-        public Decimal pfyValue = 0;     public Integer pfyItems = 0;
-        public Decimal t12mValue = 0;    public Integer t12mItems = 0;
+        public Decimal allTimeValue = 0; public Integer allTimeItems = 0; public Decimal allTimeAcv = 0;
+        public Decimal cfyValue = 0;     public Integer cfyItems = 0;     public Decimal cfyAcv = 0;
+        public Decimal pfyValue = 0;     public Integer pfyItems = 0;     public Decimal pfyAcv = 0;
+        public Decimal t12mValue = 0;    public Integer t12mItems = 0;    public Decimal t12mAcv = 0;
         public Boolean hasData() {
             return allTimeItems != 0 || cfyItems != 0 || pfyItems != 0 || t12mItems != 0
                 || allTimeValue != 0 || cfyValue != 0 || pfyValue != 0 || t12mValue != 0;

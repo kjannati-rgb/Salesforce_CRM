@@ -31,10 +31,10 @@ const SUMMARY = {
     lastRefreshed: '2026-06-29T00:00:00.000Z', activeSubs: 96, activeSubValue: 1340000,
     cancelCount: 37, cancelValue: -214000,
     periods: [
-        { key: 'alltime', label: 'All-time', netValue: 4820000, wonCount: 1284 },
-        { key: 'cfy', label: 'This FY', netValue: 910000, wonCount: 247 },
-        { key: 'pfy', label: 'Last FY', netValue: 1120000, wonCount: 298 },
-        { key: 't12m', label: 'Last 12 mo', netValue: 1050000, wonCount: 271 }
+        { key: 'alltime', label: 'All-time', netValue: 4820000, wonCount: 1284, acv: 3200000 },
+        { key: 'cfy', label: 'This FY', netValue: 910000, wonCount: 247, acv: 610000 },
+        { key: 'pfy', label: 'Last FY', netValue: 1120000, wonCount: 298, acv: 740000 },
+        { key: 't12m', label: 'Last 12 mo', netValue: 1050000, wonCount: 271, acv: 690000 }
     ]
 };
 const GROUPS = [
@@ -66,9 +66,10 @@ describe('c-firm-sales-summary', () => {
         getGroupBreakdown.emit(GROUPS);
         await flush();
         const kpiVals = el.shadowRoot.querySelectorAll('.k-val');
-        expect(kpiVals.length).toBe(4);
-        expect(kpiVals[0].textContent).toBe('$4.82M');   // net won value, all-time
-        expect(kpiVals[1].textContent).toBe('1,284');     // won count
+        expect(kpiVals.length).toBe(5);
+        expect(kpiVals[0].textContent).toBe('$4.82M');   // net won value (TCV), all-time
+        expect(kpiVals[1].textContent).toBe('$3.20M');   // won ACV, all-time
+        expect(kpiVals[2].textContent).toBe('1,284');     // won count
     });
 
     it('reacts to the period toggle', async () => {
@@ -80,7 +81,7 @@ describe('c-firm-sales-summary', () => {
         cfyBtn.click();
         await flush();
         const netVal = el.shadowRoot.querySelector('.k-val');
-        expect(netVal.textContent).toBe('$910K');
+        expect(netVal.textContent).toBe('$910K');         // net (TCV) for CFY
     });
 
     it('renders persisted commercial-group rows sorted by value', async () => {

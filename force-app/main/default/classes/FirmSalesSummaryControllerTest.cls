@@ -93,28 +93,37 @@ private class FirmSalesSummaryControllerTest {
         System.assert(allOpps.rows[0].amountUSD != null, 'amount converted to USD');
     }
 
+    static FirmSalesSummaryController.PeriodDTO allTime(FirmSalesSummaryController.ViewDTO v) {
+        for (FirmSalesSummaryController.PeriodDTO p : v.periods) if (p.key == 'alltime') return p;
+        return null;
+    }
+
     @isTest(SeeAllData=true)
-    static void businessLensView() {
+    static void crossFilterView() {
         assignPermSet();
-        Ctx c = build();   // opp1 = New Business (Law.com line), opp2 = Renewal (Events Sponsorship line)
+        Ctx c = build();   // opp1 @CO1 = New Business (Law.com line 200), opp2 @CO2 = Renewal (Events Sponsorship line 100)
         Test.startTest();
-        FirmSalesSummaryController.BusinessViewDTO newV = FirmSalesSummaryController.getBusinessView(c.firm.Id, 'alltime', 'new');
-        FirmSalesSummaryController.BusinessViewDTO renV = FirmSalesSummaryController.getBusinessView(c.firm.Id, 'alltime', 'renewal');
+        FirmSalesSummaryController.ViewDTO newV = FirmSalesSummaryController.getView(c.firm.Id, 'alltime', 'new', null, null);
+        FirmSalesSummaryController.ViewDTO renV = FirmSalesSummaryController.getView(c.firm.Id, 'alltime', 'renewal', null, null);
+        FirmSalesSummaryController.ViewDTO offV = FirmSalesSummaryController.getView(c.firm.Id, 'alltime', 'all', c.o1.Id, null);
+        FirmSalesSummaryController.ViewDTO grpV = FirmSalesSummaryController.getView(c.firm.Id, 'alltime', 'all', null, 'Law.com / ALM');
         Test.stopTest();
 
-        FirmSalesSummaryController.PeriodDTO np, rp;
-        for (FirmSalesSummaryController.PeriodDTO p : newV.periods) if (p.key == 'alltime') np = p;
-        for (FirmSalesSummaryController.PeriodDTO p : renV.periods) if (p.key == 'alltime') rp = p;
-        System.assert(np.netValue == 400, 'new lens net = 200×2 =' + np.netValue);
-        System.assertEquals(1, np.wonCount, 'new lens won count');
-        System.assert(rp.netValue == 200, 'renewal lens net = 100×2 =' + rp.netValue);
-        System.assertEquals(1, rp.wonCount, 'renewal lens won count');
+        // business lens
+        System.assert(allTime(newV).netValue == 400, 'new lens net = 200×2 =' + allTime(newV).netValue);
+        System.assertEquals(1, allTime(newV).wonCount, 'new lens won count');
+        System.assert(allTime(renV).netValue == 200, 'renewal lens net = 100×2 =' + allTime(renV).netValue);
 
-        Boolean newHasLaw = false, renHasEvents = false;
-        for (FirmSalesSummaryController.GroupDTO g : newV.groups) if (g.name == 'Law.com / ALM') newHasLaw = true;
-        for (FirmSalesSummaryController.GroupDTO g : renV.groups) if (g.name == 'Events - Sponsorship') renHasEvents = true;
-        System.assert(newHasLaw, 'new lens groups include Law.com / ALM');
-        System.assert(renHasEvents, 'renewal lens groups include Events - Sponsorship');
+        // office filter (CO1 holds only opp1)
+        System.assert(allTime(offV).netValue == 400, 'office CO1 net = opp1 =' + allTime(offV).netValue);
+        Boolean offHasLaw = false;
+        for (FirmSalesSummaryController.GroupDTO g : offV.groups) if (g.name == 'Law.com / ALM') offHasLaw = true;
+        System.assert(offHasLaw, 'office filter group panel shows Law.com / ALM (opp1)');
+
+        // group filter (Law.com / ALM is only on opp1 @CO1)
+        System.assert(allTime(grpV).netValue == 400, 'group Law.com net = opp1 =' + allTime(grpV).netValue);
+        System.assertEquals(1, grpV.offices.size(), 'group filter office panel shows only CO1');
+        System.assertEquals(c.o1.Id, grpV.offices[0].officeId, 'that office is CO1');
     }
 
     @isTest(SeeAllData=true)

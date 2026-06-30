@@ -21,8 +21,8 @@ jest.mock(
     { virtual: true }
 );
 jest.mock(
-    '@salesforce/apex/FirmSalesSummaryController.getBusinessView',
-    () => ({ default: jest.fn(() => Promise.resolve({ periods: [], cancelValue: 0, cancelCount: 0, groups: [] })) }),
+    '@salesforce/apex/FirmSalesSummaryController.getView',
+    () => ({ default: jest.fn(() => Promise.resolve({ periods: [], cancelValue: 0, cancelCount: 0, activeSubs: 0, activeSubValue: 0, groups: [], offices: [] })) }),
     { virtual: true }
 );
 

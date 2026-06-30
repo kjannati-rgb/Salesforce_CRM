@@ -91,17 +91,22 @@ public with sharing class FirmSalesSummaryController {
         return out;
     }
 
-    // ---------- live business-lens view (New / Renewal) ----------
-    // Persisted rollups are all-business; when the user picks New or Renewal we compute headline +
-    // groups live, filtered by Opportunity.Type, so the KPIs/YoY/group panel respond to the toggle.
+    // ---------- unified live cross-filter view (linked widgets) ----------
+    // Click an office -> headline + group panel filter to that office. Click a group -> headline +
+    // office panel filter to that group. Both can stack; period + business apply throughout.
+    // Group filter is opp-grain (won opps that include a line in the group). The default no-filter,
+    // all-business view still uses the instant persisted reads in the LWC.
     @AuraEnabled
-    public static BusinessViewDTO getBusinessView(Id firmId, String period, String businessType) {
+    public static ViewDTO getView(Id firmId, String period, String businessType, Id officeId, String commercialGroup) {
         List<String> renewalTypes = RENEWAL_TYPES;
         Date today = Date.today();
         Integer currentFY = fiscalYearOf(today.year(), today.month());
         Integer priorFY = currentFY - 1;
         Date t12mStart = today.addMonths(-12);
         String bc = businessClause(businessType);
+        String officeClause = (officeId != null) ? ' AND AccountId = :officeId' : '';
+        List<String> nef = new List<String>(); List<String> ept = new List<String>(); Boolean[] inclOther = new Boolean[]{ false };
+        String groupClause = oppGroupFilter(commercialGroup, nef, ept, inclOther);
 
         Map<String, Decimal> v = new Map<String, Decimal>{ 'alltime' => 0, 'cfy' => 0, 'pfy' => 0, 't12m' => 0 };
         Map<String, Integer> w = new Map<String, Integer>{ 'alltime' => 0, 'cfy' => 0, 'pfy' => 0, 't12m' => 0 };
@@ -110,7 +115,7 @@ public with sharing class FirmSalesSummaryController {
         for (AggregateResult ar : Database.query(
                 'SELECT StageName st, CurrencyIsoCode iso, CALENDAR_YEAR(CloseDate) yr, CALENDAR_MONTH(CloseDate) mo, ' +
                 'SUM(Amount) amt, COUNT(Id) c FROM Opportunity ' +
-                'WHERE Ultimate_Account__c = :firmId AND StageName IN (:WON, :CANC)' + bc +
+                'WHERE Ultimate_Account__c = :firmId AND StageName IN (:WON, :CANC)' + officeClause + groupClause + bc +
                 ' GROUP BY StageName, CurrencyIsoCode, CALENDAR_YEAR(CloseDate), CALENDAR_MONTH(CloseDate)')) {
             String st = (String) ar.get('st');
             Integer yr = (Integer) ar.get('yr'); Integer mo = (Integer) ar.get('mo');
@@ -128,7 +133,7 @@ public with sharing class FirmSalesSummaryController {
         for (AggregateResult ar : Database.query(
                 'SELECT StageName st, CurrencyIsoCode iso, CALENDAR_YEAR(CloseDate) yr, CALENDAR_MONTH(CloseDate) mo, ' +
                 'SUM(Amount) amt, COUNT(Id) c FROM Opportunity ' +
-                'WHERE Ultimate_Account__c = :firmId AND StageName IN (:WON, :CANC) AND CloseDate >= :t12mStart' + bc +
+                'WHERE Ultimate_Account__c = :firmId AND StageName IN (:WON, :CANC) AND CloseDate >= :t12mStart' + officeClause + groupClause + bc +
                 ' GROUP BY StageName, CurrencyIsoCode, CALENDAR_YEAR(CloseDate), CALENDAR_MONTH(CloseDate)')) {
             Integer yr = (Integer) ar.get('yr'); Integer mo = (Integer) ar.get('mo');
             Decimal usd = CurrencyConvUSD.toUSD((Decimal) ar.get('amt'), (String) ar.get('iso'),
@@ -137,7 +142,7 @@ public with sharing class FirmSalesSummaryController {
             if (WON.equals((String) ar.get('st'))) w.put('t12m', w.get('t12m') + (Integer) ar.get('c'));
         }
 
-        BusinessViewDTO out = new BusinessViewDTO();
+        ViewDTO out = new ViewDTO();
         out.periods = new List<PeriodDTO>{
             period('alltime', 'All-time', v.get('alltime'), w.get('alltime')),
             period('cfy', 'This FY', v.get('cfy'), w.get('cfy')),
@@ -146,21 +151,34 @@ public with sharing class FirmSalesSummaryController {
         };
         out.cancelValue = cancelVal.setScale(2);
         out.cancelCount = cancelCnt;
-        out.groups = groupsLive(firmId, period, businessType);
+        // active subs — filtered by office only (subs have no group/business dimension)
+        Integer subCnt = 0; Decimal subVal = 0;
+        for (AggregateResult ar : Database.query(
+                'SELECT SUM(SBQQ__NetPrice__c) sv, COUNT(Id) sc, CurrencyIsoCode iso FROM SBQQ__Subscription__c ' +
+                'WHERE Ultimate_Parent__c = :firmId AND SBQQ__StartDate__c <= :today AND SBQQ__EndDate__c >= :today' +
+                ((officeId != null) ? ' AND SBQQ__Account__c = :officeId' : '') + ' GROUP BY CurrencyIsoCode')) {
+            subCnt += (Integer) ar.get('sc');
+            subVal += CurrencyConvUSD.toUSD((Decimal) ar.get('sv'), (String) ar.get('iso'), today);
+        }
+        out.activeSubs = subCnt;
+        out.activeSubValue = subVal.setScale(2);
+        out.groups = groupsLive(firmId, period, businessType, officeId);            // group panel: office filter
+        out.offices = getOfficeBreakdown(firmId, period, businessType, commercialGroup); // office panel: group filter
         return out;
     }
 
-    /** Live group breakdown for one period, filtered by business type. */
-    static List<GroupDTO> groupsLive(Id firmId, String period, String businessType) {
+    /** Live group breakdown for one period, optionally filtered to one office. */
+    static List<GroupDTO> groupsLive(Id firmId, String period, String businessType, Id officeId) {
         PeriodBounds b = boundsFor(period);
         Date startD = b.startDate, endD = b.endDate;
         List<String> renewalTypes = RENEWAL_TYPES;
         String dateClause = b.unbounded ? '' : ' AND Opportunity.CloseDate >= :startD AND Opportunity.CloseDate <= :endD';
+        String officeClause = (officeId != null) ? ' AND Opportunity.AccountId = :officeId' : '';
         String soql =
             'SELECT Product2.Family fam, Product2.Product_Type__c pt, CurrencyIsoCode iso, Opportunity.StageName st, ' +
             'CALENDAR_YEAR(Opportunity.CloseDate) yr, SUM(TotalPrice) v, COUNT(Id) items FROM OpportunityLineItem ' +
             'WHERE Opportunity.Ultimate_Account__c = :firmId AND Opportunity.StageName IN (:WON, :CANC)' +
-            dateClause + businessClause(businessType, 'Opportunity.') +
+            dateClause + officeClause + businessClause(businessType, 'Opportunity.') +
             ' GROUP BY Product2.Family, Product2.Product_Type__c, CurrencyIsoCode, Opportunity.StageName, CALENDAR_YEAR(Opportunity.CloseDate)';
         Map<String, GroupDTO> acc = new Map<String, GroupDTO>();
         for (AggregateResult ar : Database.query(soql)) {
@@ -180,19 +198,46 @@ public with sharing class FirmSalesSummaryController {
         return out;
     }
 
+    /** Opportunity-level commercial-group semi-join clause; populates the bind lists (nef/ept). */
+    static String oppGroupFilter(String commercialGroup, List<String> nef, List<String> ept, Boolean[] inclOther) {
+        if (String.isBlank(commercialGroup)) return '';
+        for (Product_Family_Group__mdt m : Product_Family_Group__mdt.getAll().values()) {
+            if (m.Commercial_Group__c != commercialGroup) continue;
+            if ('Events'.equals(m.Family__c)) {
+                if (String.isBlank(m.Product_Type_1__c)) inclOther[0] = true; else ept.add(m.Product_Type_1__c);
+            } else {
+                nef.add(m.Family__c);
+            }
+        }
+        List<String> ors = new List<String>();
+        if (!nef.isEmpty()) ors.add('Product2.Family IN :nef');
+        if (!ept.isEmpty()) ors.add('(Product2.Family = \'Events\' AND Product2.Product_Type__c IN :ept)');
+        if (inclOther[0]) ors.add('(Product2.Family = \'Events\' AND (Product2.Product_Type__c = null OR (Product2.Product_Type__c != \'Sponsorship\' AND Product2.Product_Type__c != \'Ticket\')))');
+        String sub = ors.isEmpty() ? 'SELECT OpportunityId FROM OpportunityLineItem WHERE Id = null'
+                                   : 'SELECT OpportunityId FROM OpportunityLineItem WHERE ' + String.join(ors, ' OR ');
+        return ' AND Id IN (' + sub + ')';
+    }
+
     // ---------- office breakdown (live) ----------
     @AuraEnabled
     public static List<OfficeDTO> getOfficeBreakdown(Id firmId, String period, String businessType) {
+        return getOfficeBreakdown(firmId, period, businessType, null);
+    }
+    /** Office breakdown, optionally filtered to one commercial group (opp-grain semi-join). */
+    public static List<OfficeDTO> getOfficeBreakdown(Id firmId, String period, String businessType, String commercialGroup) {
         PeriodBounds b = boundsFor(period);
         Date startD = b.startDate, endD = b.endDate, today = Date.today();
         List<String> renewalTypes = RENEWAL_TYPES;
+        List<String> nef = new List<String>(); List<String> ept = new List<String>(); Boolean[] inclOther = new Boolean[]{ false };
+        String groupClause = oppGroupFilter(commercialGroup, nef, ept, inclOther);
+        Boolean groupFiltered = String.isNotBlank(commercialGroup);
         Map<Id, OfficeDTO> byOffice = new Map<Id, OfficeDTO>();
 
         String dateClause = b.unbounded ? '' : ' AND CloseDate >= :startD AND CloseDate <= :endD';
         String soql =
             'SELECT AccountId off, CurrencyIsoCode iso, StageName st, ' +
             'CALENDAR_YEAR(CloseDate) yr, CALENDAR_MONTH(CloseDate) mo, SUM(Amount) v, COUNT(Id) c ' +
-            'FROM Opportunity WHERE Ultimate_Account__c = :firmId AND StageName IN (:WON, :CANC)' + dateClause +
+            'FROM Opportunity WHERE Ultimate_Account__c = :firmId AND StageName IN (:WON, :CANC)' + dateClause + groupClause +
             businessClause(businessType) +
             ' GROUP BY AccountId, CurrencyIsoCode, StageName, CALENDAR_YEAR(CloseDate), CALENDAR_MONTH(CloseDate)';
         for (AggregateResult ar : Database.query(soql)) {
@@ -215,6 +260,8 @@ public with sharing class FirmSalesSummaryController {
                 GROUP BY SBQQ__Account__c]) {
             Id off = (Id) ar.get('off');
             if (off == null) continue;
+            // when group-filtered, only annotate offices that already have group activity
+            if (groupFiltered && !byOffice.containsKey(off)) continue;
             office(byOffice, off).subs += (Integer) ar.get('c');
         }
         // resolve names + location
@@ -368,11 +415,14 @@ public with sharing class FirmSalesSummaryController {
         // flat, period-resolved value/items — populated by the live business-lens path only
         @AuraEnabled public Decimal value;        @AuraEnabled public Integer items;
     }
-    public class BusinessViewDTO {
+    public class ViewDTO {
         @AuraEnabled public List<PeriodDTO> periods;
         @AuraEnabled public Decimal cancelValue;
         @AuraEnabled public Integer cancelCount;
+        @AuraEnabled public Integer activeSubs;
+        @AuraEnabled public Decimal activeSubValue;
         @AuraEnabled public List<GroupDTO> groups;
+        @AuraEnabled public List<OfficeDTO> offices;
     }
     public class OfficeDTO implements Comparable {
         @AuraEnabled public Id officeId;

@@ -19,6 +19,63 @@ a new version of `Quote_AfterSave_MasterFlow` (3-element hook); `Opp_ALM_Code_Af
 
 ---
 
+## ★ UPDATE — Law.com Pro / Mid Market exemption (built 30 Jun 2026)
+
+**Ruling (Brady Blevins, 30 Jun 2026):** Law.com Pro and Mid Market Pro bundles do **not**
+carry a TCV code — they must be **blank**. Signals (existing fields, populated manually
+today, REV-60-automated later): **Law.com Pro → `Dispatch_Method_Code__c = 'OL'`**;
+**Mid Market Pro → `Promo_Code__c` ends in `Z`**.
+
+**What changed:** a deal-level exemption was added to **both** engine flows
+(`Quote_ALM_Code_Stamp` Layer 1, `Opp_ALM_Code_AfterSave` Layer 2): a `Get_ExemptLines`
+lookup (`filterLogic 1 AND (2 OR 3)`: record-match AND (Dispatch=OL OR Promo EndsWith Z))
+feeds a new `D_ProExempt` decision that, when any exempt line exists, routes to the existing
+clear-mode path → **all lines blank + any stale code cleared**. Checked *before* the
+single-product / family-derivation logic, so it overrides derivation. The master flow is
+**unchanged** (the hook still calls `Quote_ALM_Code_Stamp` by name → picks up the new active
+version automatically). **No CMDT/field/master changes** — only the two flow versions + test.
+
+**Validated:** KJDEV `REV71_ALMCodeFlow_Test` **14/14** (4 new exemption methods incl. flat
+LAWM+LWKM+OL → blank, promo-Z → blank, exempt-clears-stale-code) + FULLUAT redeploy. The
+`EndsWith` operator, `1 AND (2 OR 3)` filter logic and `IsNull`-on-Get decision are all
+accepted metadata (deployed clean to KJDEV + FULLUAT).
+
+**Prod deploy (engine flows arrive Draft → activate; test class separate):**
+```bash
+# A. Pre-flight (read-only): confirm the two signal fields exist on BOTH objects in prod
+sf data query -o LBR_PROD -q "SELECT QualifiedApiName, EntityDefinition.QualifiedApiName FROM FieldDefinition WHERE QualifiedApiName IN ('Dispatch_Method_Code__c','Promo_Code__c') AND EntityDefinition.QualifiedApiName IN ('SBQQ__QuoteLine__c','OpportunityLineItem')" -t
+# note the CURRENT active versions (rollback target):
+sf data query -o LBR_PROD -q "SELECT ApiName, ActiveVersionId FROM FlowDefinitionView WHERE ApiName IN ('Quote_ALM_Code_Stamp','Opp_ALM_Code_AfterSave')"
+
+# B. Validate then deploy the two updated flows (NO Apex → no test gate; arrive Draft):
+sf project deploy start -x manifest/rev71_prod_exemption_engine.xml -o LBR_PROD --dry-run
+sf project deploy start -x manifest/rev71_prod_exemption_engine.xml -o LBR_PROD
+
+# C. Activate the new versions — Quote_ALM_Code_Stamp FIRST (subflow), then Opp_ALM_Code_AfterSave
+#    (Setup → Flows → Activate the newly deployed version, or via FlowDefinition metadata).
+
+# D. Deploy the test class separately (post-activation; runs only REV-71 tests):
+sf project deploy start -d force-app/main/default/classes/REV71_ALMCodeFlow_Test.cls \
+  -l RunSpecifiedTests -t REV71_ALMCodeFlow_Test -o LBR_PROD
+```
+- [ ] Pre-flight: both signal fields present on QuoteLine + OLI (confirmed read-only 30 Jun).
+- [ ] Flows deployed Draft; prior versions still active.
+- [ ] New `Quote_ALM_Code_Stamp` activated, then `Opp_ALM_Code_AfterSave` activated.
+- [ ] Test class redeploy green (14/14).
+- [ ] Smoke: a real Law.com Pro (OL) deal saves with **blank** TCV; a normal multi-product
+      deal still codes. Skadden (Q-197826) already corrected to blank.
+
+**Rollback:** re-activate the prior versions captured in step A (instant), or flip the CMDT
+`Layer 1/2 Active` switches off. No field/CMDT/master change to unwind.
+
+> The exemption uses Brady's **signal** (dispatch/promo), not product mix — so it cannot
+> distinguish a Law.com Pro package from a normal multi-product deal by SKUs (Willie's point,
+> 30 Jun). A future dedicated bundle flag/parent is the cleaner long-term identifier; until
+> then the signal is what's present on real flat-structured deals, and REV-60 will make it
+> system-set.
+
+---
+
 ## Readiness snapshot — validated against PROD 24 Jun 2026 (read-only)
 
 **UAT: PASS.** Cayla Vichot ran 7 scenarios in FULLUAT (REV-71 ticket, 24 Jun):

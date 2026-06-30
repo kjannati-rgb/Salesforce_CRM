@@ -344,6 +344,31 @@
         </connector>
     </assignments>
     <decisions>
+        <name>D_ProExempt</name>
+        <label>Law.com Pro / Mid Market exempt?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>D_Scope</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Not exempt</defaultConnectorLabel>
+        <rules>
+            <name>r_Exempt</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_ExemptLines</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>A_SetClearMode</targetReference>
+            </connector>
+            <label>Exempt — blank TCV</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>D_Bypass</name>
         <label>Org Automation Bypass?</label>
         <locationX>0</locationX>
@@ -850,7 +875,7 @@
             <targetReference>D_IsChild</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
-            <targetReference>D_Scope</targetReference>
+            <targetReference>Get_ExemptLines</targetReference>
         </noMoreValuesConnector>
     </loops>
     <loops>
@@ -930,6 +955,44 @@
             </value>
         </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>OpportunityLineItem</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_ExemptLines</name>
+        <label>Get Pro-Bundle Exempt Lines (Dispatch OL / Promo Z)</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>D_ProExempt</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>SF_LogFault</targetReference>
+        </faultConnector>
+        <filterLogic>1 AND (2 OR 3)</filterLogic>
+        <filters>
+            <field>OpportunityId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Dispatch_Method_Code__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>OL</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Promo_Code__c</field>
+            <operator>EndsWith</operator>
+            <value>
+                <stringValue>Z</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>OpportunityLineItem</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>

@@ -313,4 +313,73 @@ private class REV71_ALMCodeFlow_Test {
         Assert.areEqual(2, [SELECT COUNT() FROM OpportunityLineItem WHERE OpportunityId = :o.Id],
             'save + touch must succeed without a blocking fault from Layer 2');
     }
+
+    // ---- Pro-bundle exemption (Brady, 30 Jun 2026): Law.com Pro (Dispatch=OL) and
+    //      Mid Market Pro (Promo ends 'Z') carry NO TCV code, even when their product
+    //      mix would otherwise derive one. Signal-based, not product-mix-based. ----
+
+    @isTest
+    static void proBundleDispatchOLExemptStaysBlank() {
+        // LAWM+LWKM with no GLL would derive a code (1 or 3). The OL dispatch tag marks
+        // it a Law.com Pro bundle -> exempt -> every line must stay blank.
+        Map<String, Product2> p = prods(); Map<String, Id> e = pbes();
+        Opportunity o = makeOpp('REV71T exemptOL');
+        SBQQ__Quote__c q = makeQuote(o, false);
+        SBQQ__QuoteLine__c l1 = line(q.Id, p.get('LAWM'), e.get('LAWM'), 5000, 1);
+        l1.Dispatch_Method_Code__c = 'OL';
+        SBQQ__QuoteLine__c l2 = line(q.Id, p.get('LWKM'), e.get('LWKM'), 3000, 2);
+        insert new List<SBQQ__QuoteLine__c>{ l1, l2 };
+        fireEngine(q.Id);
+        for (Decimal v : qlCodes(q.Id).values()) {
+            Assert.isNull(v, 'Law.com Pro (Dispatch=OL) is exempt: no TCV code on any line');
+        }
+    }
+
+    @isTest
+    static void midMarketPromoZExemptStaysBlank() {
+        // Promo code ending in 'Z' marks a Mid Market Pro bundle -> exempt.
+        Map<String, Product2> p = prods(); Map<String, Id> e = pbes();
+        Opportunity o = makeOpp('REV71T exemptZ');
+        SBQQ__Quote__c q = makeQuote(o, false);
+        SBQQ__QuoteLine__c l1 = line(q.Id, p.get('LAWM'), e.get('LAWM'), 5000, 1);
+        l1.Promo_Code__c = '!AMMM1Z'; // ends in Z
+        SBQQ__QuoteLine__c l2 = line(q.Id, p.get('LNVM'), e.get('LNVM'), 1000, 2);
+        insert new List<SBQQ__QuoteLine__c>{ l1, l2 };
+        fireEngine(q.Id);
+        for (Decimal v : qlCodes(q.Id).values()) {
+            Assert.isNull(v, 'Mid Market Pro (Promo ends Z) is exempt: no TCV code on any line');
+        }
+    }
+
+    @isTest
+    static void exemptDealClearsStaleCode() {
+        // An exempt deal that already carries a (wrong) TCV code must have it CLEARED.
+        Map<String, Product2> p = prods(); Map<String, Id> e = pbes();
+        Opportunity o = makeOpp('REV71T exemptClear');
+        SBQQ__Quote__c q = makeQuote(o, false);
+        SBQQ__QuoteLine__c l1 = line(q.Id, p.get('LAWM'), e.get('LAWM'), 5000, 1);
+        l1.Dispatch_Method_Code__c = 'OL';
+        l1.Full_Contract_Value__c = 3; // stale code to be cleaned up
+        SBQQ__QuoteLine__c l2 = line(q.Id, p.get('LWKM'), e.get('LWKM'), 3000, 2);
+        l2.Full_Contract_Value__c = 3;
+        insert new List<SBQQ__QuoteLine__c>{ l1, l2 };
+        fireEngine(q.Id);
+        for (Decimal v : qlCodes(q.Id).values()) {
+            Assert.isNull(v, 'Exempt deal: a stale TCV code must be cleared to blank');
+        }
+    }
+
+    @isTest
+    static void layerTwoExemptOliSaveDoesNotBlock() {
+        // Layer 2 (async) carries the same exemption lookup on the OLI path. Async
+        // stamping isn't synchronously assertable; assert the OL-tagged manual OLI save
+        // completes with no blocking fault from the new Get_ExemptLines lookup.
+        Map<String, Id> e = pbes();
+        Opportunity o = makeOpp('REV71T l2exempt');
+        OpportunityLineItem a = oli(o.Id, e.get('LAWM'), 5000);
+        a.Dispatch_Method_Code__c = 'OL';
+        insert new List<OpportunityLineItem>{ a, oli(o.Id, e.get('LWKM'), 3000) };
+        Assert.areEqual(2, [SELECT COUNT() FROM OpportunityLineItem WHERE OpportunityId = :o.Id],
+            'OL-tagged OLI save must succeed without a blocking fault from Layer 2 exemption lookup');
+    }
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- REV-71 Law.com Pro / Mid Market exemption — ENGINE-ONLY (no Apex, no test gate).
+     Updates the two live engine flows with the deal-level exemption (Dispatch=OL or
+     Promo ends Z -> blank). Flows arrive Draft in PROD; activate per runbook §E.
+     Test class (REV71_ALMCodeFlow_Test) deploys SEPARATELY after activation. -->
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>Quote_ALM_Code_Stamp</members>
+        <members>Opp_ALM_Code_AfterSave</members>
+        <name>Flow</name>
+    </types>
+    <version>62.0</version>
+</Package>

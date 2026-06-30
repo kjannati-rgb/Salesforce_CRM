@@ -12,6 +12,6 @@
     </values>
     <values>
         <field>Commercial_Group__c</field>
-        <value xsi:type="xsd:string">Lexology PRO &amp; Intelligence</value>
+        <value xsi:type="xsd:string">Lexology PRO</value>
     </values>
 </CustomMetadata>

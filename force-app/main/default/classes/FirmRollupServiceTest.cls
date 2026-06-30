@@ -136,11 +136,14 @@ private class FirmRollupServiceTest {
         Account firm = FirmRollupTestData.firm('F4');
         Account off = FirmRollupTestData.office('O4');
         Date t = Date.today();
+        SBQQ__Subscription__c bundled = FirmRollupTestData.sub(firm.Id, off.Id, t.addDays(-10), t.addDays(10), 100, 'GBP', null);
+        bundled.SBQQ__Bundled__c = true;   // bundle component ($0 child line) -> excluded
         insert new List<SBQQ__Subscription__c>{
-            FirmRollupTestData.sub(firm.Id, off.Id, t.addDays(-10), t.addDays(10), 100, 'GBP', null),   // active
-            FirmRollupTestData.sub(firm.Id, off.Id, t.addDays(-30), t.addDays(-5), 100, 'GBP', null),    // expired
-            FirmRollupTestData.sub(firm.Id, off.Id, t.addDays(5), t.addDays(40), 100, 'GBP', null),      // future
-            FirmRollupTestData.sub(firm.Id, off.Id, t.addDays(-10), t.addDays(10), 100, 'GBP', t.addDays(-1)) // terminated, in-window
+            FirmRollupTestData.sub(firm.Id, off.Id, t.addDays(-10), t.addDays(10), 100, 'GBP', null),   // active -> counts
+            FirmRollupTestData.sub(firm.Id, off.Id, t.addDays(-30), t.addDays(-5), 100, 'GBP', null),    // expired -> excluded
+            FirmRollupTestData.sub(firm.Id, off.Id, t.addDays(5), t.addDays(40), 100, 'GBP', null),      // future -> excluded
+            FirmRollupTestData.sub(firm.Id, off.Id, t.addDays(-10), t.addDays(10), 100, 'GBP', t.addDays(-1)), // terminated -> excluded
+            bundled
         };
 
         Test.startTest();
@@ -148,9 +151,9 @@ private class FirmRollupServiceTest {
         Test.stopTest();
 
         Account r = [SELECT Firm_Active_Subscriptions__c, Firm_Active_Sub_Value_USD__c FROM Account WHERE Id = :firm.Id];
-        // locked definition omits terminated filter -> 2 in-window (active + terminated)
-        System.assertEquals(2, r.Firm_Active_Subscriptions__c.intValue(), 'active subs (in-window)');
-        System.assert(r.Firm_Active_Sub_Value_USD__c == 400, 'active sub value=2×100×2 =' + r.Firm_Active_Sub_Value_USD__c);
+        // only the one plain active sub counts (terminated + bundle-component + expired + future excluded)
+        System.assertEquals(1, r.Firm_Active_Subscriptions__c.intValue(), 'active subs = 1 (terminated/bundled/expired/future excluded)');
+        System.assert(r.Firm_Active_Sub_Value_USD__c == 200, 'active sub value = 100×2 =' + r.Firm_Active_Sub_Value_USD__c);
     }
 
     @isTest static void zeroFirmAndNullFirmOpp() {

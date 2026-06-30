@@ -156,6 +156,7 @@ public with sharing class FirmSalesSummaryController {
         for (AggregateResult ar : Database.query(
                 'SELECT SUM(SBQQ__NetPrice__c) sv, COUNT(Id) sc, CurrencyIsoCode iso FROM SBQQ__Subscription__c ' +
                 'WHERE Ultimate_Parent__c = :firmId AND SBQQ__StartDate__c <= :today AND SBQQ__EndDate__c >= :today' +
+                ' AND SBQQ__TerminatedDate__c = null AND SBQQ__Bundled__c = false' +
                 ((officeId != null) ? ' AND SBQQ__Account__c = :officeId' : '') + ' GROUP BY CurrencyIsoCode')) {
             subCnt += (Integer) ar.get('sc');
             subVal += CurrencyConvUSD.toUSD((Decimal) ar.get('sv'), (String) ar.get('iso'), today);
@@ -257,6 +258,7 @@ public with sharing class FirmSalesSummaryController {
                 FROM SBQQ__Subscription__c
                 WHERE Ultimate_Parent__c = :firmId
                   AND SBQQ__StartDate__c <= :today AND SBQQ__EndDate__c >= :today
+                  AND SBQQ__TerminatedDate__c = null AND SBQQ__Bundled__c = false
                 GROUP BY SBQQ__Account__c]) {
             Id off = (Id) ar.get('off');
             if (off == null) continue;

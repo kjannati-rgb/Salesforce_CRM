@@ -118,14 +118,16 @@ public without sharing class FirmRollupService {
     }
 
     static void computeSubs(Set<Id> firmIds, Map<Id, Headline> headlines, Date today) {
-        // Active-sub definition (§2, locked): start<=today, end>=today, parent!=null.
-        // Terminated exclusion is an open question — omitted to match the 17,039 reference figure.
+        // Active = start<=today, end>=today, parent!=null, NOT terminated (amended-away originals stay
+        // in-window) and NOT a bundle component (those are $0 child lines; the bundle parent carries
+        // the value). So the count = currently-active, non-terminated, distinct subscriptions.
         for (AggregateResult ar : [
                 SELECT Ultimate_Parent__c fid, CurrencyIsoCode iso,
                        SUM(SBQQ__NetPrice__c) v, COUNT(Id) c
                 FROM SBQQ__Subscription__c
                 WHERE Ultimate_Parent__c IN :firmIds
                   AND SBQQ__StartDate__c <= :today AND SBQQ__EndDate__c >= :today
+                  AND SBQQ__TerminatedDate__c = null AND SBQQ__Bundled__c = false
                 GROUP BY Ultimate_Parent__c, CurrencyIsoCode]) {
             Id fid = (Id) ar.get('fid');
             Headline h = headlines.get(fid);

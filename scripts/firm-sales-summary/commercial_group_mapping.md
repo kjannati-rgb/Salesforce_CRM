@@ -3,12 +3,13 @@
 Source of truth = the 37 `Product_Family_Group__mdt` records. `resolveGroup(Family, Product Type 1)`:
 exact `(Family, PT1)` → `(Family, blank)` family-default → `Other / POS / Reports`.
 
-**Deviation from brief §6:** `Subs - Docket Navigator` is its **own group `Docket Navigator`** (was
-folded into `Law.com / ALM`). Changed 2026-06-29 at the user's request; 972 FULLUAT firms recomputed.
+**Deviations from brief §6** (both at the user's request, 2026-06-29):
+- `Subs - Docket Navigator` is its **own group `Docket Navigator`** (was folded into `Law.com / ALM`); 972 FULLUAT firms recomputed.
+- Group `Lexology PRO & Intelligence` **renamed to `Lexology PRO`** — it only ever held `Subs - Lexology Pro`; Lexology Intelligence is already its own group, so "& Intelligence" was vestigial; 1,606 FULLUAT firms recomputed.
 
 | Commercial Group | Product2.Family (Product Type 1) |
 |---|---|
-| Lexology PRO & Intelligence | Subs - Lexology Pro |
+| Lexology PRO | Subs - Lexology Pro |
 | Lexology Intelligence | Subs - Lexology Intelligence |
 | Lexology Insight | Subs - Lexology Insight |
 | Lexology Compete | Subs - Lexology Compete |

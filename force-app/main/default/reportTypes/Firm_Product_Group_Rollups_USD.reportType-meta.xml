@@ -22,6 +22,11 @@
         </columns>
         <columns>
             <checkedByDefault>true</checkedByDefault>
+            <field>Firm_Won_ACV_AllTime_USD__c</field>
+            <table>Account</table>
+        </columns>
+        <columns>
+            <checkedByDefault>true</checkedByDefault>
             <field>Firm_Active_Subscriptions__c</field>
             <table>Account</table>
         </columns>
@@ -45,12 +50,22 @@
         </columns>
         <columns>
             <checkedByDefault>true</checkedByDefault>
+            <field>Won_ACV_AllTime_USD__c</field>
+            <table>Account.Firm_Product_Group_Rollups__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>true</checkedByDefault>
             <field>Won_Items_AllTime__c</field>
             <table>Account.Firm_Product_Group_Rollups__r</table>
         </columns>
         <columns>
             <checkedByDefault>true</checkedByDefault>
             <field>Won_Value_CFY_USD__c</field>
+            <table>Account.Firm_Product_Group_Rollups__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>true</checkedByDefault>
+            <field>Won_ACV_CFY_USD__c</field>
             <table>Account.Firm_Product_Group_Rollups__r</table>
         </columns>
         <columns>

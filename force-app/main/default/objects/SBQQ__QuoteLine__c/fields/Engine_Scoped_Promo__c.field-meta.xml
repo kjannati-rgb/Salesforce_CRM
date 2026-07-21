@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Engine_Scoped_Promo__c</fullName>
+    <description>REV-60: TRUE when this line&apos;s product is managed by the ALM Promo/Dispatch engine (ALMPromoDispatchEngine), i.e. its ProductCode is one of the codes in ALM_Code_Engine_Settings__mdt.Control.ALM_Product_Codes__c. Used ONLY by the CPQ product rule &quot;Promo Code Required - Non bundle products&quot; so that rule fires on Division=ALM products OUTSIDE engine scope (TXOM/DRGM/CCAM/DBRM/DDEM/NLOM/CTOM/LARM/BAOM/MLOM...) and never re-collides with the engine on in-scope codes (the engine auto-fills those AFTER save, so a save-time rule would block them). KEEP IN SYNC with ALM_Product_Codes__c — a formula cannot read Custom Metadata, so this list is a deliberate mirror. Adding a product to the engine WITHOUT adding it here would make the rule block saves on a code the engine fills.</description>
+    <externalId>false</externalId>
+    <formula>OR(
+  SBQQ__ProductCode__c = &quot;LAWM&quot;,
+  SBQQ__ProductCode__c = &quot;LWKM&quot;,
+  SBQQ__ProductCode__c = &quot;GLBM&quot;,
+  SBQQ__ProductCode__c = &quot;GLBM - Team Membership&quot;,
+  SBQQ__ProductCode__c = &quot;GLBM - Individual Membership&quot;,
+  SBQQ__ProductCode__c = &quot;NYLM&quot;,
+  SBQQ__ProductCode__c = &quot;NYOM&quot;,
+  SBQQ__ProductCode__c = &quot;Law.com Pro&quot;,
+  SBQQ__ProductCode__c = &quot;PCEM&quot;,
+  SBQQ__ProductCode__c = &quot;LNVM&quot;,
+  SBQQ__ProductCode__c = &quot;LGCM&quot;,
+  SBQQ__ProductCode__c = &quot;LGLM&quot;,
+  SBQQ__ProductCode__c = &quot;LRCM&quot;,
+  SBQQ__ProductCode__c = &quot;VSCM&quot;,
+  SBQQ__ProductCode__c = &quot;WEB&quot;,
+  SBQQ__ProductCode__c = &quot;TIOM&quot;,
+  SBQQ__ProductCode__c = &quot;DROM&quot;,
+  SBQQ__ProductCode__c = &quot;RCOM&quot;,
+  SBQQ__ProductCode__c = &quot;TALM&quot;,
+  SBQQ__ProductCode__c = &quot;ALLM&quot;,
+  SBQQ__ProductCode__c = &quot;CHLM&quot;,
+  SBQQ__ProductCode__c = &quot;DBOM&quot;,
+  SBQQ__ProductCode__c = &quot;NJOM&quot;,
+  SBQQ__ProductCode__c = &quot;NJLM&quot;
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Engine Scoped Promo</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

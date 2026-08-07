@@ -742,7 +742,7 @@ ISCHANGED({!$Record.Type}),true,false)</expression>
                 <targetReference>Check_if_Automation_is_Disabled_for_Running_User2</targetReference>
             </connector>
             <label>Async Path</label>
-            <maxBatchSize>5</maxBatchSize>
+            <maxBatchSize>50</maxBatchSize>
             <offsetNumber>2</offsetNumber>
             <offsetUnit>Minutes</offsetUnit>
             <recordField>LastModifiedDate</recordField>

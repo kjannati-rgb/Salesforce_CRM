@@ -182,16 +182,63 @@ count — 134 = 134 — and zero non-location/non-expected diff lines), plus the
 state**, a genuine UAT mirror again, not carrying an unreviewed feature the real target environment
 doesn't have.
 
-**Final state, both orgs:**
+**State as of this point:**
 
 | Org | Opportunity master flow active version | Groove subflow | Platform_Fault_Logger |
 |---|---|---|---|
 | PROD | 31 (v29 baseline + `maxBatchSize` only) | v2 (retry-gate fix) | Installed, dormant |
 | FULLUAT | 34 (v32 baseline + `maxBatchSize` only) | active (retry-gate fix, §6) | Installed (from §6) |
 
-Neither org runs the Centellic fault-handling bundle or the `Create_OA_record` removal.
+Neither org ran the Centellic fault-handling bundle or `Legal_Vertical_tasks`/`Opp_SB_CustomerJourney2`
+at this point — see §8 for what changed once sign-off was given.
 
-## 8. Open items
+## 8. Centellic sign-off given — full bundle activated (2026-08-07)
+
+Business approval given for the 2026-06-13 Centellic fault-handling change. Rather than rebuild from
+scratch, activated the bundled draft (v30) already sitting inert in PROD from §7 — it already contains
+`maxBatchSize` + Centellic fault-handling + one more piece surfaced during review: a
+`Legal_Vertical_tasks` element calling `Opp_SB_CustomerJourney2`, present in git's baseline (predates
+even the Centellic commit) but never wired into PROD's live master flow.
+
+**Correction on an earlier claim:** this runbook's PROD validation step recalled a "no active version"
+warning for `Opp_SB_CustomerJourney2` and initially treated it as a PROD fault risk. That warning was
+actually from the FULLUAT deploy report, not PROD's — confirmed via direct query that
+`Opp_SB_CustomerJourney2` **is** active in PROD (v6). Activating v30 there does not fault.
+
+**PROD:** activated v30 directly (Deploy ID confirms `ActiveVersionId` = v30's Flow Id). Both the
+approved Centellic behavior and `Legal_Vertical_tasks` are now live.
+
+**FULLUAT — genuine parity gap found:** `Opp_SB_CustomerJourney2` was sitting at **version 9 in Draft**
+there since 2026-06-20, unlike PROD's active v6 — meaning `Legal_Vertical_tasks` genuinely would have
+faulted in FULLUAT specifically (the PROD concern above, misattributed at the time, turned out to be
+real for this org). Activated `Opp_SB_CustomerJourney2` v9 first, then diffed it against PROD's active
+v6: only a cosmetic description-text change (no functional difference), so no re-authoring was needed.
+Then activated the equivalent Opportunity bundle (v33) in FULLUAT.
+
+**Final state, both orgs — full parity:**
+
+| Org | Opportunity master flow | `Opp_SB_CustomerJourney2` | Groove subflow | Platform_Fault_Logger |
+|---|---|---|---|---|
+| PROD | v30 (full bundle, approved) | v6, active | v2 | Installed |
+| FULLUAT | v33 (full bundle, approved) | v9, active (content-equivalent to PROD's v6) | active | Installed |
+
+## 9. Branch reconciliation (2026-08-07)
+
+Separately from the flow work: `create-contact-from-user-v4` (where all of this session's commits
+landed — it was simply the checked-out branch when the session started, not a deliberate choice) had
+drifted ~50 commits ahead of `salesforce-opp-automation` (the designated main/PR branch), holding
+real, already-deployed work — FSS, REV-71, attorney-field-consolidation, Centellic emails, ChurnZero,
+and this fix — none of it ever merged back. Meanwhile `origin/salesforce-opp-automation` had 2 commits
+of its own (`Opportunity_Team_Member_Stamp_Role_Fields` / CED-SDR stamp work) that
+`create-contact-from-user-v4` never had.
+
+Verified zero file overlap between the two histories before merging (confirmed via 3-way merge-base
+diff, not just branch names). Merged both into `salesforce-opp-automation` via an isolated git
+worktree — the session's own uncommitted WIP on `create-contact-from-user-v4` was never touched — and
+pushed to origin as a clean fast-forward (no force, no conflicts). `salesforce-opp-automation` now
+reflects deployed reality.
+
+## 10. Open items
 
 - The exact mechanism forcing the Account-row lock during `Update_Opp_with_PCR_Task_Data` (an
   Opportunity-only DML) was not directly observed in a trace — the sibling-interview /

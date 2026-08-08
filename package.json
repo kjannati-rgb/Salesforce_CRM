@@ -1,0 +1,13 @@
+{
+  "name": "kjdev-lwc-tests",
+  "private": true,
+  "version": "1.0.0",
+  "description": "LWC Jest tests for the kjdev SFDX project (Firm Sales Summary and future components).",
+  "scripts": {
+    "test:unit": "sfdx-lwc-jest",
+    "test:unit:watch": "sfdx-lwc-jest --watch"
+  },
+  "devDependencies": {
+    "@salesforce/sfdx-lwc-jest": "^5.1.0"
+  }
+}

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>FSS 4a: one row per Firm x Commercial Group. Persisted, reportable family/group rollups in USD. Maintained by FirmRollupService (upsert by Firm_Group_Key__c, delete-on-zero).</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>false</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <label>Firm Product Group Rollup (USD)</label>
+    <nameField>
+        <displayFormat>FPGR-{00000000}</displayFormat>
+        <label>Rollup Name</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Firm Product Group Rollups (USD)</pluralLabel>
+    <sharingModel>ReadWrite</sharingModel>
+    <visibility>Public</visibility>
+</CustomObject>

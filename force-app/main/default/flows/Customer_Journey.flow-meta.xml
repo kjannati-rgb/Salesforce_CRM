@@ -9,7 +9,7 @@
         <actionName>Customer_Journey__c.Lex_Pro_BG_Handshake</actionName>
         <actionType>emailAlert</actionType>
         <connector>
-            <targetReference>Case_Lex_Pro_BG_Day_1</targetReference>
+            <targetReference>SDR_Notify_BG_Orig</targetReference>
         </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
@@ -29,7 +29,7 @@
         <actionName>Customer_Journey__c.Content_Subs_NB_Handshake</actionName>
         <actionType>emailAlert</actionType>
         <connector>
-            <targetReference>Copy_1_of_Case_Lex_Pro_NB_Day_1</targetReference>
+            <targetReference>SDR_Notify_CS_Orig</targetReference>
         </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
@@ -50,7 +50,7 @@
         <actionName>Customer_Journey__c.Lex_Pro_BG_Handshake</actionName>
         <actionType>emailAlert</actionType>
         <connector>
-            <targetReference>Copy_1_of_Case_Lex_Pro_BG_Day_1</targetReference>
+            <targetReference>SDR_Notify_BG_Copy</targetReference>
         </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
@@ -70,7 +70,7 @@
         <actionName>Customer_Journey__c.Lex_Pro_NB_Handshake</actionName>
         <actionType>emailAlert</actionType>
         <connector>
-            <targetReference>Copy_2_of_Case_Lex_Pro_NB_Day_1</targetReference>
+            <targetReference>SDR_Notify_PRO_Copy</targetReference>
         </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
@@ -90,7 +90,7 @@
         <actionName>Customer_Journey__c.Lex_Pro_NB_Handshake</actionName>
         <actionType>emailAlert</actionType>
         <connector>
-            <targetReference>Case_Lex_Pro_NB_Day_1</targetReference>
+            <targetReference>SDR_Notify_PRO_Orig</targetReference>
         </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
@@ -1140,7 +1140,7 @@
     </decisions>
     <decisions>
         <name>Is_Benefitting_Group_present</name>
-        <label>Is Benefitting Group present and Content Subs?</label>
+        <label>Is Benefitting Group present and Pro?</label>
         <locationX>8553</locationX>
         <locationY>600</locationY>
         <defaultConnector>
@@ -1165,7 +1165,7 @@
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>$Record.Content_Sub_Present__c</leftValueReference>
+                <leftValueReference>$Record.LexPro_present__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
@@ -1586,7 +1586,7 @@
         </rules>
         <rules>
             <name>Renewal_Lex_Pro_contract_out</name>
-            <conditionLogic>(1 OR 2) AND (3 OR 4 OR 5) AND 6</conditionLogic>
+            <conditionLogic>(1 OR 2) AND (3 OR 4 OR 5) AND 6 and 7</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.StageName</leftValueReference>
                 <operator>EqualTo</operator>
@@ -1625,6 +1625,13 @@
             <conditions>
                 <leftValueReference>$Record.Customer_Journey__c</leftValueReference>
                 <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.LexPro_present__c</leftValueReference>
+                <operator>EqualTo</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
                 </rightValue>
@@ -3711,7 +3718,7 @@
         <inputAssignments>
             <field>Customer_Journey__c</field>
             <value>
-                <elementReference>Create_handshake</elementReference>
+                <elementReference>Copy_1_of_Create_handshake</elementReference>
             </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>
@@ -3822,7 +3829,7 @@
         </scheduledPaths>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Obsolete</status>
+    <status>Active</status>
     <subflows>
         <name>CReate_flow_log_record</name>
         <label>CReate flow log record</label>
@@ -3851,6 +3858,151 @@
             </value>
         </inputAssignments>
         <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <subflows>
+        <name>SDR_Notify_BG_Orig</name>
+        <label>Notify SDR - BG</label>
+        <locationX>578</locationX>
+        <locationY>1572</locationY>
+        <connector>
+            <targetReference>Case_Lex_Pro_BG_Day_1</targetReference>
+        </connector>
+        <flowName>Send_Handshake_SDR_Notification</flowName>
+        <inputAssignments>
+            <name>inOpportunityId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>inRelatedRecordId</name>
+            <value>
+                <elementReference>Sales_handshake.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>inTemplateDevName</name>
+            <value>
+                <stringValue>NB_BG_Sales_handshake_Lex_Pro</stringValue>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>false</storeOutputAutomatically>
+    </subflows>
+    <subflows>
+        <name>SDR_Notify_CS_Orig</name>
+        <label>Notify SDR - Content Subs</label>
+        <locationX>50</locationX>
+        <locationY>1572</locationY>
+        <connector>
+            <targetReference>Copy_1_of_Case_Lex_Pro_NB_Day_1</targetReference>
+        </connector>
+        <flowName>Send_Handshake_SDR_Notification</flowName>
+        <inputAssignments>
+            <name>inOpportunityId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>inRelatedRecordId</name>
+            <value>
+                <elementReference>Sales_handshake.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>inTemplateDevName</name>
+            <value>
+                <stringValue>NB_Sales_handshake_CS</stringValue>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>false</storeOutputAutomatically>
+    </subflows>
+    <subflows>
+        <name>SDR_Notify_BG_Copy</name>
+        <label>Notify SDR - BG (Renewal)</label>
+        <locationX>3592</locationX>
+        <locationY>1572</locationY>
+        <connector>
+            <targetReference>Copy_1_of_Case_Lex_Pro_BG_Day_1</targetReference>
+        </connector>
+        <flowName>Send_Handshake_SDR_Notification</flowName>
+        <inputAssignments>
+            <name>inOpportunityId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>inRelatedRecordId</name>
+            <value>
+                <elementReference>Copy_1_of_Sales_handshake.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>inTemplateDevName</name>
+            <value>
+                <stringValue>NB_BG_Sales_handshake_Lex_Pro</stringValue>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>false</storeOutputAutomatically>
+    </subflows>
+    <subflows>
+        <name>SDR_Notify_PRO_Copy</name>
+        <label>Notify SDR - Lex Pro NB (Renewal)</label>
+        <locationX>3856</locationX>
+        <locationY>1572</locationY>
+        <connector>
+            <targetReference>Copy_2_of_Case_Lex_Pro_NB_Day_1</targetReference>
+        </connector>
+        <flowName>Send_Handshake_SDR_Notification</flowName>
+        <inputAssignments>
+            <name>inOpportunityId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>inRelatedRecordId</name>
+            <value>
+                <elementReference>Copy_1_of_Sales_handshake.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>inTemplateDevName</name>
+            <value>
+                <stringValue>NB_Sales_handshake_Lex_Pro</stringValue>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>false</storeOutputAutomatically>
+    </subflows>
+    <subflows>
+        <name>SDR_Notify_PRO_Orig</name>
+        <label>Notify SDR - Lex Pro NB</label>
+        <locationX>314</locationX>
+        <locationY>1572</locationY>
+        <connector>
+            <targetReference>Case_Lex_Pro_NB_Day_1</targetReference>
+        </connector>
+        <flowName>Send_Handshake_SDR_Notification</flowName>
+        <inputAssignments>
+            <name>inOpportunityId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>inRelatedRecordId</name>
+            <value>
+                <elementReference>Sales_handshake.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>inTemplateDevName</name>
+            <value>
+                <stringValue>NB_Sales_handshake_Lex_Pro</stringValue>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>false</storeOutputAutomatically>
     </subflows>
     <variables>
         <name>CJ</name>

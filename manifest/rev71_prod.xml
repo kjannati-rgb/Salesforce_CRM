@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- REV-71 PRODUCTION manifest (LBR_PROD). NOTE: PFC_Log_Fault is intentionally EXCLUDED
+     - it already exists + is active in prod (unlike FULLUAT). The OLI field and Flow_Log__c
+     also already exist in prod. Deploy with: RunSpecifiedTests / REV71_ALMCodeFlow_Test. -->
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>ALM_Code_Setting__mdt</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>SBQQ__QuoteLine__c.Full_Contract_Value__c</members>
+        <name>CustomField</name>
+    </types>
+    <types>
+        <members>ALM_Code_Setting.Control</members>
+        <members>ALM_Code_Setting.Family_GLL</members>
+        <members>ALM_Code_Setting.Family_Law_com_International</members>
+        <members>ALM_Code_Setting.Family_Law_com_Premium</members>
+        <members>ALM_Code_Setting.Parent_GLBM</members>
+        <members>ALM_Code_Setting.Parent_Law_com_Intl_Bundle</members>
+        <members>ALM_Code_Setting.Parent_Law_com_Premium</members>
+        <members>ALM_Code_Setting.Parent_Law_com_Pro</members>
+        <members>ALM_Code_Setting.Parent_Law_com_Radar</members>
+        <members>ALM_Code_Setting.Parent_Law_com_VerdictSearch</members>
+        <members>ALM_Code_Setting.Parent_Mid_Market_Pro</members>
+        <name>CustomMetadata</name>
+    </types>
+    <types>
+        <members>Quote_ALM_Code_Stamp</members>
+        <members>Opp_ALM_Code_AfterSave</members>
+        <members>Quote_AfterSave_MasterFlow</members>
+        <name>Flow</name>
+    </types>
+    <types>
+        <members>REV71_ALMCodeFlow_Test</members>
+        <name>ApexClass</name>
+    </types>
+    <version>62.0</version>
+</Package>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Configuration for the Platform_Fault_Logger shared error-handling framework: whether to send email alerts on logged faults, to whom, and the minimum severity that triggers an alert. One "Default" record drives the behaviour org-wide. Logging always happens; alerting is opt-in.</description>
+    <label>Fault Alert Setting</label>
+    <pluralLabel>Fault Alert Settings</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>

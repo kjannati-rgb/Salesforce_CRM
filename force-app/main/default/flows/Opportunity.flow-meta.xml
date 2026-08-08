@@ -7,6 +7,9 @@
         <locationY>2388</locationY>
         <actionName>submit</actionName>
         <actionType>submit</actionType>
+                <faultConnector>
+            <targetReference>Log_Master_Fault</targetReference>
+        </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>objectId</name>
@@ -37,6 +40,9 @@
         <locationY>2388</locationY>
         <actionName>submit</actionName>
         <actionType>submit</actionType>
+                <faultConnector>
+            <targetReference>Log_Master_Fault</targetReference>
+        </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>objectId</name>
@@ -67,6 +73,9 @@
         <locationY>2388</locationY>
         <actionName>submit</actionName>
         <actionType>submit</actionType>
+                <faultConnector>
+            <targetReference>Log_Master_Fault</targetReference>
+        </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>objectId</name>
@@ -97,6 +106,9 @@
         <locationY>2280</locationY>
         <actionName>submit</actionName>
         <actionType>submit</actionType>
+                <faultConnector>
+            <targetReference>Log_Master_Fault</targetReference>
+        </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>objectId</name>
@@ -127,6 +139,9 @@
         <locationY>2388</locationY>
         <actionName>submit</actionName>
         <actionType>submit</actionType>
+                <faultConnector>
+            <targetReference>Log_Master_Fault</targetReference>
+        </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>objectId</name>
@@ -160,6 +175,9 @@
         <connector>
             <targetReference>Opportunity_Generic_flow</targetReference>
         </connector>
+                <faultConnector>
+            <targetReference>Log_Master_Fault</targetReference>
+        </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>SObjectRowId</name>
@@ -668,6 +686,9 @@ ISCHANGED({!$Record.Type}),true,false)</expression>
         <connector>
             <targetReference>Email_Alert_to_Closed_Won_Opps</targetReference>
         </connector>
+                <faultConnector>
+            <targetReference>Log_Master_Fault</targetReference>
+        </faultConnector>
         <inputAssignments>
             <field>CloseDate</field>
             <value>
@@ -690,6 +711,9 @@ ISCHANGED({!$Record.Type}),true,false)</expression>
         <connector>
             <targetReference>Get_ALM_Event_Product</targetReference>
         </connector>
+                <faultConnector>
+            <targetReference>Log_Master_Fault</targetReference>
+        </faultConnector>
         <inputAssignments>
             <field>Distribution_Contact__c</field>
             <value>
@@ -718,7 +742,7 @@ ISCHANGED({!$Record.Type}),true,false)</expression>
                 <targetReference>Check_if_Automation_is_Disabled_for_Running_User2</targetReference>
             </connector>
             <label>Async Path</label>
-            <maxBatchSize>5</maxBatchSize>
+            <maxBatchSize>50</maxBatchSize>
             <offsetNumber>2</offsetNumber>
             <offsetUnit>Minutes</offsetUnit>
             <recordField>LastModifiedDate</recordField>
@@ -765,29 +789,6 @@ ISCHANGED({!$Record.Type}),true,false)</expression>
                 <elementReference>$Record</elementReference>
             </value>
         </inputAssignments>
-    </subflows>
-    <subflows>
-        <name>Create_OA_record</name>
-        <label>Create OA record</label>
-        <locationX>2910</locationX>
-        <locationY>900</locationY>
-        <connector>
-            <targetReference>Update_Opportunity_with_Flow_Data_Groove</targetReference>
-        </connector>
-        <flowName>Opportunity_analytics_product_added</flowName>
-        <inputAssignments>
-            <name>fault_notificaiton_recipients</name>
-            <value>
-                <elementReference>fault_notification_recipients2</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>recordId</name>
-            <value>
-                <elementReference>$Record</elementReference>
-            </value>
-        </inputAssignments>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
     </subflows>
     <subflows>
         <name>Create_Schedules</name>
@@ -894,7 +895,7 @@ ISCHANGED({!$Record.Type}),true,false)</expression>
         <name>Legal_Vertical_tasks</name>
         <label>Legal Vertical tasks</label>
         <locationX>2910</locationX>
-        <locationY>1116</locationY>
+        <locationY>1008</locationY>
         <connector>
             <targetReference>Update_Opportunity_Line_items</targetReference>
         </connector>
@@ -918,7 +919,7 @@ ISCHANGED({!$Record.Type}),true,false)</expression>
         <locationX>2910</locationX>
         <locationY>792</locationY>
         <connector>
-            <targetReference>Create_OA_record</targetReference>
+            <targetReference>Update_Opportunity_with_Flow_Data_Groove</targetReference>
         </connector>
         <flowName>Flow_log_v3</flowName>
         <inputAssignments>
@@ -1028,7 +1029,7 @@ ISCHANGED({!$Record.Type}),true,false)</expression>
         <name>Standardise_Opportunity_Name</name>
         <label>Standardise Opportunity Name</label>
         <locationX>2910</locationX>
-        <locationY>1332</locationY>
+        <locationY>1224</locationY>
         <flowName>Opportunity_Standardize_name_v3</flowName>
         <inputAssignments>
             <name>fault_notification_recipient</name>
@@ -1105,7 +1106,7 @@ ISCHANGED({!$Record.Type}),true,false)</expression>
         <name>Update_Opportunity_Line_items</name>
         <label>Update Opportunity Line items</label>
         <locationX>2910</locationX>
-        <locationY>1224</locationY>
+        <locationY>1116</locationY>
         <connector>
             <targetReference>Standardise_Opportunity_Name</targetReference>
         </connector>
@@ -1128,7 +1129,7 @@ ISCHANGED({!$Record.Type}),true,false)</expression>
         <name>Update_Opportunity_with_Flow_Data_Groove</name>
         <label>Update Opportunity with Flow Data (Groove)</label>
         <locationX>2910</locationX>
-        <locationY>1008</locationY>
+        <locationY>900</locationY>
         <connector>
             <targetReference>Legal_Vertical_tasks</targetReference>
         </connector>
@@ -1172,6 +1173,37 @@ ISCHANGED({!$Record.Type}),true,false)</expression>
             <value>
                 <elementReference>$Record</elementReference>
             </value>
+        </inputAssignments>
+    </subflows>
+    <subflows>
+        <name>Log_Master_Fault</name>
+        <label>Log Master Fault</label>
+        <locationX>50</locationX>
+        <locationY>50</locationY>
+        <flowName>Platform_Fault_Logger</flowName>
+        <inputAssignments>
+            <name>in_Context</name>
+            <value><stringValue>Opportunity master flow action/update fault</stringValue></value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>in_ErrorMessage</name>
+            <value><elementReference>$Flow.FaultMessage</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>in_FlowApiName</name>
+            <value><stringValue>Opportunity_AfterUpdate_MasterFlow</stringValue></value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>in_RecordId</name>
+            <value><elementReference>$Record.Id</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>in_RecordName</name>
+            <value><elementReference>$Record.Name</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>in_Severity</name>
+            <value><stringValue>Error</stringValue></value>
         </inputAssignments>
     </subflows>
     <textTemplates>

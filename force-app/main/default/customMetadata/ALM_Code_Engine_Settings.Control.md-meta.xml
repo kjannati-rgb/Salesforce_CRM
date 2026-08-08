@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <label>Control</label>
+    <protected>false</protected>
+    <values>
+        <field>Master_Active__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>Layer_1_Active__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>Layer_2_Active__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>ALM_Product_Codes__c</field>
+        <value xsi:type="xsd:string">LAWM;LWKM;GLBM;GLBM - Team Membership;GLBM - Individual Membership;NYLM;NYOM;Law.com Pro;PCEM;LNVM;LGCM;LGLM;LRCM;VSCM;WEB;TIOM;DROM;RCOM;TALM;ALLM;CHLM;DBOM;NJOM;NJLM</value>
+    </values>
+    <values>
+        <field>Segment_Promo_Product_Codes__c</field>
+        <value xsi:type="xsd:string">LAWM;LWKM;Law.com Pro;NYLM;NYOM;LNVM;LGCM;LGLM;LRCM;VSCM;WEB;TIOM;DROM;RCOM;TALM;ALLM;CHLM;DBOM;NJOM;NJLM</value>
+    </values>
+    <values>
+        <field>Dispatch_Required_Product_Codes__c</field>
+        <value xsi:type="xsd:string">LAWM;LWKM;GLBM;GLBM - Team Membership;GLBM - Individual Membership;NYLM;NYOM</value>
+    </values>
+    <values>
+        <!-- Grandfathering cutoff for the re-armed LAWM/LWKM/NYOM dispatch backstop, set at the
+             Mon 20 Jul staffed hardening window (go-live was Fri 17 Jul; the backstop ran softened
+             over the weekend). Lines created BEFORE this instant are never hard-blocked; only
+             genuinely new lines must carry a dispatch. It is deliberately the RE-ARM instant, not
+             go-live: the ~914 legacy open quotes AND everything quoted during the softened weekend
+             window are grandfathered. Blank would mean "enforce on every line" and would
+             retroactively block all of them — never clear this without re-checking. -->
+        <field>Enforce_Dispatch_After__c</field>
+        <value xsi:type="xsd:dateTime">2026-07-20T15:35:00.000Z</value>
+    </values>
+    <values>
+        <field>Dispatch_Backstop_Hint__c</field>
+        <value xsi:type="xsd:string">Enter the Dispatch code for the access level: ON (1 user), OS (site licence), OE (enterprise), OL (Pro/firmwide).</value>
+    </values>
+    <values>
+        <field>Year_Suffix_Enabled__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Z_Trigger_Enabled__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Z_Trigger_Product_Codes__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Determinant_Field_API__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Contract_Year_Field_API__c</field>
+        <value xsi:type="xsd:string">SBQQ__SubscriptionTerm__c</value>
+    </values>
+    <values>
+        <field>Frequency_Field_API__c</field>
+        <value xsi:type="xsd:string">SBQQ__BillingFrequency__c</value>
+    </values>
+    <values>
+        <field>Default_Base_Promo__c</field>
+        <value xsi:type="xsd:string">!SJSI</value>
+    </values>
+    <values>
+        <field>Mid_Market_Pro_Product_Codes__c</field>
+        <value xsi:type="xsd:string">Mid Market Pro Bundle</value>
+    </values>
+</CustomMetadata>

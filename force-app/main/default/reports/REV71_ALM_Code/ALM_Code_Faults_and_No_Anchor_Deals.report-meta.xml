@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>ALM Code: Faults &amp; No-Anchor Deals</name>
+    <description>REV-71 observability: Flow_Log rows from the ALM code engine, grouped so faults separate from intentional no-anchor visibility rows. Last 30 days; widen as needed.</description>
+    <format>Summary</format>
+    <reportType>PFC_Flow_Logs</reportType>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Class_Name__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <columns>
+        <field>Name</field>
+    </columns>
+    <columns>
+        <field>Flow_Name__c</field>
+    </columns>
+    <columns>
+        <field>Record_Name__c</field>
+    </columns>
+    <columns>
+        <field>Error_Description__c</field>
+    </columns>
+    <columns>
+        <field>CREATED_DATE</field>
+    </columns>
+    <filter>
+        <criteriaItems>
+            <column>Class_Name__c</column>
+            <operator>contains</operator>
+            <value>REV-71</value>
+        </criteriaItems>
+    </filter>
+    <timeFrameFilter>
+        <dateColumn>CREATED_DATE</dateColumn>
+        <interval>INTERVAL_LAST30</interval>
+    </timeFrameFilter>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+</Report>

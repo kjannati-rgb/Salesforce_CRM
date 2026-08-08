@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>NB Sales handshake Lex Pro</name>
+    <style>none</style>
+    <subject>New business sale – {!Customer_Journey__c.Product_Purchased__c} – {!Customer_Journey__c.Account_name__c}</subject>
+    <textOnly>A new Sales Handshake record has been created for Account &quot;{!Customer_Journey__c.Account_name__c}&quot;, please see details below:
+
+Customer Journey:{!MID(Task.Link, 1, LEN(Task.Link)-15)}{!Customer_Journey__c.Id}
+Name: {!Customer_Journey__c.Name}
+Opportunity: {!Customer_Journey__c.Opportunity__c}
+Sector/Industry: {!Customer_Journey__c.Sector_Industry__c}
+Amount: {!Customer_Journey__c.Amount__c}
+Organisation type: {!Customer_Journey__c.Organisation_type__c}
+Main Contact name: {!Customer_Journey__c.Main_Contact_name__c}
+Main Contact email: {!Customer_Journey__c.Main_Contact_Email__c}
+Main Contact Job title: {!Customer_Journey__c.Main_Contact_Job_title__c}
+Product Purchased: {!Customer_Journey__c.Product_Purchased__c}
+Notes &amp; Business case: {!Customer_Journey__c.Notes_Business_Case__c}
+List of features: {!Customer_Journey__c.Features_discussed__c}
+Seat banding: {!Customer_Journey__c.Seat_banding_number__c}
+Other License Contacts: {!Customer_Journey__c.Other_Licence_contacts__c}
+Notes on potential expansion/risk:{!Customer_Journey__c.Notes_on_potential_expansion_risk__c}
+Set up Instructions: {!Customer_Journey__c.Set_Up_Instructions__c}
+
+Thanks,
+
+Opportunity Owner: {!Customer_Journey__c.OwnerFullName}</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

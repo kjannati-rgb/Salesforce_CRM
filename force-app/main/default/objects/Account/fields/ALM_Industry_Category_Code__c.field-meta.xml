@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ALM_Industry_Category_Code__c</fullName>
+    <description>Returns a standardised single-character code representing the ALM Industry Category. The value is derived using Industry, Ultimate Account AMLaw and Global 300 flags, and attorney count for Law Firm accounts. An override value, if populated, takes precedence over all logic.</description>
+    <externalId>false</externalId>
+    <formula>IF(
+    OR(
+        AmLaw_200_Account__c,
+        Ultimate_Account__r.AmLaw_200_Account__c
+    ),
+    &quot;A&quot;,
+    IF(
+        OR(
+            G300_Account__c,
+            Ultimate_Account__r.G300_Account__c
+        ),
+        &quot;G&quot;,
+        IF(
+            NOT(ISBLANK(Industry_Category_Override__c)),
+            CASE(
+                Industry_Category_Override__c,
+                &quot;Court&quot;, &quot;C&quot;,
+                &quot;Financial Services&quot;, &quot;F&quot;,
+                &quot;Insurance&quot;, &quot;I&quot;,
+                &quot;Large Law&quot;, &quot;L&quot;,
+                &quot;Mid-Market Law&quot;, &quot;M&quot;,
+                &quot;Professional Services&quot;, &quot;P&quot;,
+                &quot;Corporations&quot;, &quot;R&quot;,
+                &quot;SMB Law&quot;, &quot;S&quot;,
+                &quot;University (Non-Law School)&quot;, &quot;U&quot;,
+                &quot;Government Agency&quot;, &quot;V&quot;,
+                &quot;Law School&quot;, &quot;W&quot;,
+                &quot;Solo Practitioner Law&quot;, &quot;Z&quot;,
+                &quot;AMLaw&quot;, &quot;A&quot;,
+                &quot;Global 300&quot;, &quot;G&quot;,
+                NULL
+            ),
+            IF(
+                ISPICKVAL(Industry_ALM__c, &quot;Law Firm&quot;),
+                IF(
+                    ISBLANK(Number_of_Attorneys__c),
+                    NULL,
+                    IF(
+                        Number_of_Attorneys__c &gt;= 151,
+                        &quot;L&quot;,
+                        IF(
+                            Number_of_Attorneys__c &gt;= 71,
+                            &quot;M&quot;,
+                            IF(
+                                Number_of_Attorneys__c &gt;= 6,
+                                &quot;S&quot;,
+                                &quot;Z&quot;
+                            )
+                        )
+                    )
+                ),
+                CASE(
+                    TEXT(Industry_ALM__c),
+                    &quot;PS - Audit/Tax&quot;, &quot;P&quot;,
+                    &quot;Corp - Energy&quot;, &quot;R&quot;,
+                    &quot;Corp - Auto, Boats, Planes&quot;, &quot;R&quot;,
+                    &quot;PS - Alternative Dispute Resolution&quot;, &quot;P&quot;,
+                    &quot;Corp - Healthcare&quot;, &quot;R&quot;,
+                    &quot;Corp - Technology&quot;, &quot;R&quot;,
+                    &quot;Corp - Legal Tech&quot;, &quot;R&quot;,
+                    &quot;Corp - Food &amp; Beverage&quot;, &quot;R&quot;,
+                    &quot;Corp - Media &amp; Communications&quot;, &quot;R&quot;,
+                    &quot;Corp - Retail&quot;, &quot;R&quot;,
+                    &quot;Corp - Hospitality &amp; Travel&quot;, &quot;R&quot;,
+                    &quot;PS - Consulting&quot;, &quot;P&quot;,
+                    &quot;FS - Banking&quot;, &quot;F&quot;,
+                    &quot;Corp - Pharmaceutical&quot;, &quot;R&quot;,
+                    &quot;Corp - Real Estate&quot;, &quot;R&quot;,
+                    &quot;FS - Wealth Management&quot;, &quot;F&quot;,
+                    &quot;Gov - Not-For-Profit &amp; Association&quot;, &quot;V&quot;,
+                    &quot;Gov - Federal Agency&quot;, &quot;V&quot;,
+                    &quot;Insurance - Carrier&quot;, &quot;I&quot;,
+                    &quot;Insurance - Health&quot;, &quot;I&quot;,
+                    &quot;Insurance - Agency&quot;, &quot;I&quot;,
+                    &quot;Insurance - Brokerage&quot;, &quot;I&quot;,
+                    &quot;EDU - University (Non-Law School)&quot;, &quot;U&quot;,
+                    &quot;EDU - Law School&quot;, &quot;W&quot;,
+                    &quot;Judiciary - Federal Court&quot;, &quot;C&quot;,
+                    &quot;Judiciary - State Court&quot;, &quot;C&quot;,
+                    &quot;Judiciary - DA Office&quot;, &quot;C&quot;,
+                    &quot;PS - Legal Services&quot;, &quot;P&quot;,
+                    &quot;Gov - State Agency&quot;, &quot;V&quot;,
+                    &quot;EDU - Secondary or other school&quot;, &quot;U&quot;,
+                    &quot;PS - Recruiting&quot;, &quot;P&quot;,
+                    NULL
+                )
+            )
+        )
+    )
+)</formula>
+    <inlineHelpText>Auto-calculated category code. Override takes priority. For Law Firm accounts, AMLaw = A and overrides Global 300 (G). If neither applies, attorney count determines the code. Non-law firm industries are mapped based on ALM Industry.</inlineHelpText>
+    <label>ALM Industry Category Code</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

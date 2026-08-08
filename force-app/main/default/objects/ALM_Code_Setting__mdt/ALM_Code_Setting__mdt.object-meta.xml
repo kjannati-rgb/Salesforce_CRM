@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>REV-71 ALM Invoice Consolidation Code automation settings. Three record kinds (Setting Type): Bundle Family (TCV code + anchor ProductCodes per spec §3), Bundle Parent (exclusion list per spec §3), Control (per-layer kill switches + price-basis toggle per spec §5). No product identifiers are hardcoded in the flows.</description>
+    <label>ALM Code Setting</label>
+    <pluralLabel>ALM Code Settings</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>

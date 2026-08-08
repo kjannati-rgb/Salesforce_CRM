@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <assignments>
+        <name>Assign_From_Contact</name>
+        <label>Set from Contact</label>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Work_Areas__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Contact.Work_Areas__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Work_Jurisdictions__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Contact.Work_Jurisdictions__c</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Assign_From_Lead</name>
+        <label>Set from Lead</label>
+        <locationX>440</locationX>
+        <locationY>350</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Work_Areas__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Lead.Work_Areas__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Work_Jurisdictions__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Lead.Work_Jurisdictions__c</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <description>REV-57 follow-up (Ken F): on PFC create or person change, stamp Work Areas + Work Jurisdictions from the linked Contact/Lead onto the PFC so reps can see/prioritise. Before-save (no DML). The subscriber date is handled separately by a cross-object formula field.</description>
+    <decisions>
+        <name>Decision_Person</name>
+        <label>Contact or Lead?</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <defaultConnector>
+            <targetReference>Get_Lead</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Lead</defaultConnectorLabel>
+        <rules>
+            <name>HasContact</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Contact__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Contact</targetReference>
+            </connector>
+            <label>Has Contact</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <interviewLabel>PFC Stamp Work Fields {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>PFC Stamp Work Fields</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Contact</name>
+        <label>Get Contact Work Fields</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_From_Contact</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Contact__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Contact</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Lead</name>
+        <label>Get Lead Work Fields</label>
+        <locationX>440</locationX>
+        <locationY>242</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_From_Lead</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Lead__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Lead</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Decision_Person</targetReference>
+        </connector>
+        <filterFormula>AND(
+OR(NOT(ISBLANK({!$Record.Contact__c})), NOT(ISBLANK({!$Record.Lead__c}))),
+OR(ISNEW(), ISCHANGED({!$Record.Contact__c}), ISCHANGED({!$Record.Lead__c}))
+)</filterFormula>
+        <object>Pardot_Form_Completion__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

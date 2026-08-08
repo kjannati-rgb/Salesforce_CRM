@@ -34,6 +34,28 @@
         </connector>
     </assignments>
     <decisions>
+        <name>D_ALM_Code_Relevant</name>
+        <label>ALM Code: Relevant Change?</label>
+        <locationX>182</locationX>
+        <locationY>600</locationY>
+        <defaultConnectorLabel>Not relevant</defaultConnectorLabel>
+        <rules>
+            <name>r_ALM_Relevant</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>frm_ALM_CodeRelevant</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>SF_ALM_Code_Stamp</targetReference>
+            </connector>
+            <label>Relevant</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Check_if_Automations_are_disabled</name>
         <label>Check if Automations are disabled</label>
         <locationX>50</locationX>
@@ -87,6 +109,11 @@
         <name>check_ifNew</name>
         <dataType>Boolean</dataType>
         <expression>isnew()</expression>
+    </formulas>
+    <formulas>
+        <name>frm_ALM_CodeRelevant</name>
+        <dataType>Boolean</dataType>
+        <expression>OR(ISNEW(), ISCHANGED({!$Record.SBQQ__LastCalculatedOn__c}), ISCHANGED({!$Record.SBQQ__NetAmount__c}), ISCHANGED({!$Record.SBQQ__LineItemCount__c}))</expression>
     </formulas>
     <formulas>
         <name>checkif_flowIsDisabled</name>
@@ -153,6 +180,9 @@
         <label>Update Generic Information</label>
         <locationX>182</locationX>
         <locationY>492</locationY>
+        <connector>
+            <targetReference>D_ALM_Code_Relevant</targetReference>
+        </connector>
         <flowName>Quote_AL_UpdateGenericFields</flowName>
         <inputAssignments>
             <name>checkIf_AccountIsChanged</name>
@@ -174,6 +204,21 @@
         </inputAssignments>
         <inputAssignments>
             <name>recordId</name>
+            <value>
+                <elementReference>$Record</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <subflows>
+        <description>REV-71 Layer 1: stamps ALM invoice consolidation codes (Full_Contract_Value__c) on standalone quote lines when quote totals/calculation change. Logic + CMDT kill switch live in the subflow; gated here by D_ALM_Code_Relevant.</description>
+        <name>SF_ALM_Code_Stamp</name>
+        <label>ALM Code Stamp (REV-71)</label>
+        <locationX>182</locationX>
+        <locationY>708</locationY>
+        <flowName>Quote_ALM_Code_Stamp</flowName>
+        <inputAssignments>
+            <name>in_Quote</name>
             <value>
                 <elementReference>$Record</elementReference>
             </value>

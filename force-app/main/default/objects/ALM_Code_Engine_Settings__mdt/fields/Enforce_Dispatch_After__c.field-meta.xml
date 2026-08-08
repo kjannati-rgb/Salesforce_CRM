@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Enforce_Dispatch_After__c</fullName>
+    <description>REV-60 dispatch-backstop grandfathering cutoff. The save-time backstop only raises a Custom Error for a required-but-blank Dispatch_Method_Code__c on lines whose CreatedDate is ON or AFTER this instant. Lines created before it are grandfathered and never hard-block, which is what lets LAWM/LWKM/NYOM be re-armed in Dispatch_Required_Product_Codes__c without retroactively blocking the ~914 legacy open quotes. BLANK = enforce on every line regardless of age (original pre-grandfathering behaviour). Set 2026-07-17 at the post-go-live hardening window.</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Enforce Dispatch After</label>
+    <required>false</required>
+    <type>DateTime</type>
+</CustomField>

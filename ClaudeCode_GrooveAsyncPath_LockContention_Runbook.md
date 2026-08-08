@@ -135,7 +135,50 @@ account from the original incident (FULLUAT is a full copy sandbox, so record ID
 - One untouched record found no task match and got a harmless null-value re-write, cascading into one
   extra Sync+Async round — expected flow re-trigger behavior, not a defect.
 
-## 7. Open items
+## 7. PROD go-live (2026-08-07)
+
+**Discovered a blocker on the standard deploy path:** the committed `Opportunity.flow-meta.xml`
+bundles the `maxBatchSize` fix together with the 2026-06-13 Centellic fault-handling change (commit
+`e6120ec`), which was deployed to KJDEV only — its own commit message flagged **"REVIEW NEEDED:
+approval submits now log-and-continue vs abort - business sign-off before prod"**, and that sign-off
+was never given. The same commit also silently drops the `Create_OA_record` subflow call
+(`Opportunity_analytics_product_added`) from the execution path — a functional removal, not just
+reliability work. Deploying the file as-is would have shipped both, unreviewed, as a side effect of
+the lock-contention fix.
+
+Verified PROD's actual active version (29, fetched via Tooling API) doesn't match either git commit
+exactly — it has neither `Log_Master_Fault` nor `Create_OA_record`, meaning PROD has genuine drift
+from git history. **Reconstructing from git commits would have risked silently reviving a removed
+element in production** — ruled out for that reason.
+
+**Resolution — isolated the fix from the bundle:**
+1. `Opportunity_Update_Opportunity_with_Flow_Data_groove` (retry-gate fix, no dependency on the
+   bundle) deployed and activated standalone — version 2, active in PROD.
+2. `Platform_Fault_Logger` + `Fault_Alert_Setting__mdt` (+3 fields, `Default` record) installed and
+   activated in PROD as a genuine, already-committed dependency gap (same as FULLUAT's) —
+   `Alert_Enabled__c = false`, so no alert emails fire. This does **not** activate the Centellic
+   fault-handling *behavior* on the master flow; it only makes the logger available for when/if that
+   behavior is ever approved.
+3. `Opportunity` master flow: rather than activate the bundled draft (v30), Kam hand-edited PROD's
+   *actual* active version (29) directly in Flow Builder — Async Path Batch Size 5→50, Save As new
+   version (31) — bypassing the reconstruction-from-git risk entirely. Verified via Tooling API diff
+   before activating: **only 4 lines differed** between v29 and v31 (record Id, `status` Active→Draft,
+   and `maxBatchSize: 5→50`) — no stray canvas-position drift from Auto-Layout, no reappearance of
+   `Create_OA_record`. Activated as version 31.
+4. The bundled draft (v30) remains in PROD as an inert, never-activated version — harmless, nothing
+   points to it.
+
+**Net effect in PROD:** both intended fixes are live; the Centellic fault-handling change remains
+exactly where it's always been — unshipped, pending the business sign-off its author called for.
+
+**FULLUAT correction:** the earlier FULLUAT deploy (§6) auto-activated the full bundle, since FULLUAT
+(unlike PROD) deploys flows as active by default — this was a mirror of the same problem, not caught
+until reviewing the PROD activation. Same isolation treatment applied there: v32 (FULLUAT's
+pre-Centellic baseline, Obsolete) hand-edited the same way and reactivated as a new version, so
+FULLUAT's Opportunity flow now matches PROD's actual shipped state — a genuine UAT mirror again,
+not carrying an unreviewed feature the real target environment doesn't have.
+
+## 8. Open items
 
 - The exact mechanism forcing the Account-row lock during `Update_Opp_with_PCR_Task_Data` (an
   Opportunity-only DML) was not directly observed in a trace — the sibling-interview /
@@ -143,3 +186,12 @@ account from the original incident (FULLUAT is a full copy sandbox, so record ID
   not a confirmed causal chain.
 - Not checked: whether other accounts/opportunities across the org hit the same pattern today (this
   diagnosis was scoped to the 3 reported IDs and their siblings on the same 3 accounts).
+- **Centellic fault-handling change (`e6120ec`) remains blocked on business sign-off** — unrelated to
+  this incident, but discovered as a side effect of this deploy. Still sitting on `Opportunity` v30 in
+  PROD (inert) and in git HEAD. Needs its own review track before any future deploy of this flow
+  file accidentally carries it live again.
+- **Process gap**: Salesforce Flow deploys are whole-version, not line-level — there's no clean way to
+  ship one committed change from a flow file without shipping everything else committed alongside it.
+  Worth adopting the kill-switch/CMDT-gating pattern already used elsewhere in this codebase (e.g.
+  REV-71's `Layer 1/2 Active` switches) for flow changes that need to land in source ahead of their
+  business approval, so activation isn't the only lever separating "committed" from "live."

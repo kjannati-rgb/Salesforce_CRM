@@ -1,0 +1,99 @@
+<template>
+    <lightning-card title="Event Speaker Cockpit" icon-name="standard:event">
+        <div slot="actions">
+            <template if:true={hasEvents}>
+                <lightning-combobox
+                    name="eventPicker"
+                    label="Event"
+                    variant="label-hidden"
+                    value={selectedEventId}
+                    options={eventOptions}
+                    onchange={handleEventChange}
+                ></lightning-combobox>
+            </template>
+        </div>
+
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+        </template>
+
+        <template if:true={errorMessage}>
+            <div class="slds-p-around_small slds-text-color_error">{errorMessage}</div>
+        </template>
+
+        <template if:false={hasEvents}>
+            <div class="slds-p-around_medium slds-text-color_weak">
+                No events with speaker records found.
+            </div>
+        </template>
+
+        <template if:true={selectedEventSummary}>
+            <div class="slds-p-horizontal_medium slds-p-bottom_small slds-grid slds-wrap slds-gutters_x-small summary-row">
+                <div class="slds-col slds-p-around_xx-small">
+                    <lightning-badge label={selectedEventSummary.totalSpeakers}></lightning-badge> Total
+                </div>
+                <div class="slds-col slds-p-around_xx-small">
+                    <lightning-badge label={selectedEventSummary.confirmedCount}></lightning-badge> Confirmed
+                </div>
+                <div class="slds-col slds-p-around_xx-small">
+                    <lightning-badge label={selectedEventSummary.pendingCount}></lightning-badge> Pending
+                </div>
+                <div class="slds-col slds-p-around_xx-small">
+                    <lightning-badge label={selectedEventSummary.leadCount}></lightning-badge> Lead
+                </div>
+                <div class="slds-col slds-p-around_xx-small">
+                    <lightning-badge label={selectedEventSummary.noResponseCount}></lightning-badge> No Response
+                </div>
+                <div class="slds-col slds-p-around_xx-small">
+                    <lightning-badge label={selectedEventSummary.declineCount}></lightning-badge> Decline
+                </div>
+                <div class="slds-col slds-p-around_xx-small">
+                    <lightning-badge label={selectedEventSummary.cancelledCount}></lightning-badge> Cancelled
+                </div>
+            </div>
+        </template>
+
+        <div class="board slds-grid slds-p-horizontal_x-small">
+            <template for:each={columns} for:item="col">
+                <div key={col.status} class="board-column slds-col slds-p-horizontal_x-small">
+                    <div class="column-header slds-text-heading_small slds-p-around_x-small">
+                        {col.status} ({col.count})
+                    </div>
+                    <template for:each={col.rows} for:item="row">
+                        <div key={row.recordId} class="speaker-card slds-box slds-box_x-small slds-m-bottom_x-small">
+                            <div class="slds-text-heading_small">{row.speakerName}</div>
+                            <div class="slds-text-body_small slds-text-color_weak">{row.jobTitle}</div>
+                            <div class="slds-text-body_small slds-text-color_weak">{row.accountName}</div>
+                            <div class="slds-text-body_small">{row.speakerType} &middot; {row.session}</div>
+
+                            <div class="chip-row slds-p-vertical_x-small">
+                                <template for:each={row.chips} for:item="chip">
+                                    <span
+                                        key={chip.key}
+                                        class="chip"
+                                        data-recordid={chip.recordId}
+                                        data-apiname={chip.apiName}
+                                        data-value={chip.value}
+                                        onclick={handleChipClick}
+                                    >
+                                        <lightning-badge label={chip.display}></lightning-badge>
+                                    </span>
+                                </template>
+                            </div>
+
+                            <lightning-combobox
+                                name="statusMove"
+                                label="Move to"
+                                variant="label-hidden"
+                                value={row.status}
+                                options={row.statusOptions}
+                                data-id={row.recordId}
+                                onchange={handleStatusMove}
+                            ></lightning-combobox>
+                        </div>
+                    </template>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,37 @@
+.board {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+}
+
+.board-column {
+    min-width: 230px;
+    max-width: 260px;
+    background: #f3f3f3;
+    border-radius: 0.25rem;
+    padding-bottom: 0.5rem;
+}
+
+.column-header {
+    font-weight: 700;
+    border-bottom: 1px solid #d8dde6;
+    padding-bottom: 0.5rem;
+}
+
+.speaker-card {
+    background: #ffffff;
+}
+
+.summary-row {
+    font-size: 0.8rem;
+}
+
+.chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+}
+
+.chip {
+    cursor: pointer;
+}

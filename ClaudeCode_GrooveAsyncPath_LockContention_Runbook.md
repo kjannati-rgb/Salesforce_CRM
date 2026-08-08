@@ -174,9 +174,22 @@ exactly where it's always been — unshipped, pending the business sign-off its 
 **FULLUAT correction:** the earlier FULLUAT deploy (§6) auto-activated the full bundle, since FULLUAT
 (unlike PROD) deploys flows as active by default — this was a mirror of the same problem, not caught
 until reviewing the PROD activation. Same isolation treatment applied there: v32 (FULLUAT's
-pre-Centellic baseline, Obsolete) hand-edited the same way and reactivated as a new version, so
-FULLUAT's Opportunity flow now matches PROD's actual shipped state — a genuine UAT mirror again,
-not carrying an unreviewed feature the real target environment doesn't have.
+pre-Centellic baseline, Obsolete) hand-edited the same way (Async Path Batch Size 5→50, Save As new
+version → 34). Diffed v32 vs v34 via Tooling API before activating: Auto-Layout reflowed nearly every
+element's `locationX`/`locationY` (cosmetic canvas positions only, confirmed by identical element
+count — 134 = 134 — and zero non-location/non-expected diff lines), plus the intended
+`maxBatchSize: 5→50`. Activated v34 — **FULLUAT's Opportunity flow now matches PROD's actual shipped
+state**, a genuine UAT mirror again, not carrying an unreviewed feature the real target environment
+doesn't have.
+
+**Final state, both orgs:**
+
+| Org | Opportunity master flow active version | Groove subflow | Platform_Fault_Logger |
+|---|---|---|---|
+| PROD | 31 (v29 baseline + `maxBatchSize` only) | v2 (retry-gate fix) | Installed, dormant |
+| FULLUAT | 34 (v32 baseline + `maxBatchSize` only) | active (retry-gate fix, §6) | Installed (from §6) |
+
+Neither org runs the Centellic fault-handling bundle or the `Create_OA_record` removal.
 
 ## 8. Open items
 

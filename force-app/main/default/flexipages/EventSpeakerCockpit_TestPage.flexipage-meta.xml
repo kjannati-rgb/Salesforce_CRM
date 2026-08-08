@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  AppPage FlexiPage Template
-  
-  This is a placeholder template for an App Page.
-  Replace this content with your actual FlexiPage XML.
-  
-  Template Variables Available:
-  - flexipagename: The name of the FlexiPage
-  - masterlabel: The display label
-  - description: The page description
-  - apiVersion: The Salesforce API version
--->
 <FlexiPage xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Standalone test page for the Event Speaker Cockpit roster board, additive only - not attached to any existing record page.</description>
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
@@ -19,10 +8,9 @@
                 <identifier>eventSpeakerRosterBoard_1</identifier>
             </componentInstance>
         </itemInstances>
-        <name>region2</name>
+        <name>region3</name>
         <type>Region</type>
     </flexiPageRegions>
-    <description>Standalone test page for the Event Speaker Cockpit roster board, additive only - not attached to any existing record page.</description>
     <masterLabel>Event Speaker Cockpit</masterLabel>
     <template>
         <name>flexipage:appHomeTemplateHeaderTwoColumnsLeftSidebar</name>

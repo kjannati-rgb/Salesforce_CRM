@@ -54,6 +54,7 @@ export default class EventSpeakerRosterBoard extends NavigationMixin(LightningEl
     isLoading = false;
     errorMessage;
     searchTerm = '';
+    missingFilter = '';
     visibleCounts = {};
     selectedIds = new Set();
     bulkFieldApiName = READINESS_FIELDS[0].apiName;
@@ -130,6 +131,14 @@ export default class EventSpeakerRosterBoard extends NavigationMixin(LightningEl
         return READINESS_FIELDS.map((rf) => ({ label: rf.label, value: rf.apiName }));
     }
 
+    get missingFilterOptions() {
+        return [
+            { label: 'All speakers', value: '' },
+            { label: 'Missing any item', value: 'any' },
+            ...READINESS_FIELDS.map((rf) => ({ label: `Missing ${rf.label}`, value: rf.apiName }))
+        ];
+    }
+
     get hasSelection() {
         return this.selectedIds.size > 0;
     }
@@ -139,17 +148,29 @@ export default class EventSpeakerRosterBoard extends NavigationMixin(LightningEl
     }
 
     // Filtered against the full roster (already loaded, cheap array ops even
-    // at hundreds of rows) so search works across everyone, not just what's
-    // currently paged into view.
+    // at hundreds of rows) so search and the missing-item filter both work
+    // across everyone, not just what's currently paged into view.
     get filteredRoster() {
+        let rows = this.roster;
+
         const term = (this.searchTerm || '').trim().toLowerCase();
-        if (!term) {
-            return this.roster;
+        if (term) {
+            rows = rows.filter((r) => {
+                const haystack = `${r.speakerName || ''} ${r.jobTitle || ''} ${r.accountName || ''}`.toLowerCase();
+                return haystack.includes(term);
+            });
         }
-        return this.roster.filter((r) => {
-            const haystack = `${r.speakerName || ''} ${r.jobTitle || ''} ${r.accountName || ''}`.toLowerCase();
-            return haystack.includes(term);
-        });
+
+        if (this.missingFilter === 'any') {
+            rows = rows.filter((r) => READINESS_FIELDS.some((rf) => r[rf.field] !== 'Yes'));
+        } else if (this.missingFilter) {
+            const fieldKey = READINESS_FIELDS.find((rf) => rf.apiName === this.missingFilter)?.field;
+            if (fieldKey) {
+                rows = rows.filter((r) => r[fieldKey] !== 'Yes');
+            }
+        }
+
+        return rows;
     }
 
     get columns() {
@@ -251,6 +272,11 @@ export default class EventSpeakerRosterBoard extends NavigationMixin(LightningEl
 
     handleSearchChange(event) {
         this.searchTerm = event.detail.value;
+        this.visibleCounts = {};
+    }
+
+    handleMissingFilterChange(event) {
+        this.missingFilter = event.detail.value;
         this.visibleCounts = {};
     }
 

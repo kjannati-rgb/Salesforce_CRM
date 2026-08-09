@@ -61,15 +61,26 @@
         </template>
 
         <template if:true={hasEvents}>
-            <div class="slds-p-horizontal_medium slds-p-bottom_small">
-                <lightning-input
-                    type="search"
-                    label="Search speakers"
-                    variant="label-hidden"
-                    placeholder="Search by name, title, or firm..."
-                    value={searchTerm}
-                    onchange={handleSearchChange}
-                ></lightning-input>
+            <div class="filter-row slds-p-horizontal_medium slds-p-bottom_small">
+                <div class="search-field">
+                    <lightning-input
+                        type="search"
+                        label="Search speakers"
+                        variant="label-hidden"
+                        placeholder="Search by name, title, or firm..."
+                        value={searchTerm}
+                        onchange={handleSearchChange}
+                    ></lightning-input>
+                </div>
+                <div class="missing-filter">
+                    <lightning-combobox
+                        label="Filter"
+                        variant="label-hidden"
+                        options={missingFilterOptions}
+                        value={missingFilter}
+                        onchange={handleMissingFilterChange}
+                    ></lightning-combobox>
+                </div>
             </div>
         </template>
 

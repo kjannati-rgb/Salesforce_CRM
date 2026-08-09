@@ -35,6 +35,22 @@
     color: #ba0517;
 }
 
+.filter-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.search-field {
+    flex: 1;
+    min-width: 0;
+}
+
+.missing-filter {
+    width: 200px;
+    flex-shrink: 0;
+}
+
 .bulk-bar {
     display: flex;
     align-items: center;

@@ -29,6 +29,12 @@ const READINESS_FIELDS = [
 // rather than folded into "blank".
 const TOGGLE_CYCLE = ['', 'Yes', 'No'];
 
+// Cards rendered per column before a "show more" click. Apex already returns
+// the full roster in one call (cheap even at hundreds of rows) - this caps
+// how much of it hits the DOM at once, since that's the actual bottleneck at
+// scale, not the server round-trip.
+const PAGE_SIZE = 30;
+
 // Semantic color per status - drives the column dot, card accent border, and
 // avatar fill. Kept in one map so the whole board reads as one color system
 // instead of each element picking its own shade.
@@ -47,6 +53,10 @@ export default class EventSpeakerRosterBoard extends NavigationMixin(LightningEl
     selectedEventId;
     isLoading = false;
     errorMessage;
+    searchTerm = '';
+    visibleCounts = {};
+    selectedIds = new Set();
+    bulkFieldApiName = READINESS_FIELDS[0].apiName;
 
     connectedCallback() {
         this.loadEvents();
@@ -55,12 +65,7 @@ export default class EventSpeakerRosterBoard extends NavigationMixin(LightningEl
     async loadEvents() {
         this.isLoading = true;
         try {
-            const data = await getEventsWithSpeakers();
-            this.events = [...data].sort((a, b) => {
-                const aTime = a.startDate ? new Date(a.startDate).getTime() : 0;
-                const bTime = b.startDate ? new Date(b.startDate).getTime() : 0;
-                return bTime - aTime;
-            });
+            await this.refreshEvents();
             if (!this.selectedEventId && this.events.length > 0) {
                 this.selectedEventId = this.events[0].campaignId;
                 await this.loadRoster();
@@ -72,7 +77,22 @@ export default class EventSpeakerRosterBoard extends NavigationMixin(LightningEl
         }
     }
 
+    // Re-fetches just the event summary tiles (Total/Confirmed/etc counts)
+    // without the isLoading spinner - used after a status move so the stat
+    // bar catches up quietly instead of flashing a full-board spinner over
+    // a card that already moved optimistically.
+    async refreshEvents() {
+        const data = await getEventsWithSpeakers();
+        this.events = [...data].sort((a, b) => {
+            const aTime = a.startDate ? new Date(a.startDate).getTime() : 0;
+            const bTime = b.startDate ? new Date(b.startDate).getTime() : 0;
+            return bTime - aTime;
+        });
+    }
+
     async loadRoster() {
+        this.selectedIds = new Set();
+        this.visibleCounts = {};
         if (!this.selectedEventId) {
             this.roster = [];
             return;
@@ -106,13 +126,51 @@ export default class EventSpeakerRosterBoard extends NavigationMixin(LightningEl
         return STATUS_COLUMNS.map((s) => ({ label: s, value: s }));
     }
 
+    get bulkFieldOptions() {
+        return READINESS_FIELDS.map((rf) => ({ label: rf.label, value: rf.apiName }));
+    }
+
+    get hasSelection() {
+        return this.selectedIds.size > 0;
+    }
+
+    get selectedCount() {
+        return this.selectedIds.size;
+    }
+
+    // Filtered against the full roster (already loaded, cheap array ops even
+    // at hundreds of rows) so search works across everyone, not just what's
+    // currently paged into view.
+    get filteredRoster() {
+        const term = (this.searchTerm || '').trim().toLowerCase();
+        if (!term) {
+            return this.roster;
+        }
+        return this.roster.filter((r) => {
+            const haystack = `${r.speakerName || ''} ${r.jobTitle || ''} ${r.accountName || ''}`.toLowerCase();
+            return haystack.includes(term);
+        });
+    }
+
     get columns() {
+        const filtered = this.filteredRoster;
         return STATUS_COLUMNS.map((status) => {
-            const rows = this.roster
-                .filter((r) => r.status === status)
-                .map((r) => this.decorateRow(r));
+            const allRows = filtered.filter((r) => r.status === status);
+            const visibleCount = this.visibleCounts[status] || PAGE_SIZE;
+            // Only decorate (compute chips, initials, card style) for the
+            // slice actually rendered - this is what keeps a 300-speaker
+            // column from building 300 fully wired-up cards on every
+            // keystroke or toggle.
+            const rows = allRows.slice(0, visibleCount).map((r) => this.decorateRow(r));
             const style = STATUS_STYLE[status] || STATUS_STYLE.Lead;
-            return { status, count: rows.length, rows, dotStyle: `background-color:${style.accent}` };
+            return {
+                status,
+                count: allRows.length,
+                rows,
+                dotStyle: `background-color:${style.accent}`,
+                hasMore: allRows.length > visibleCount,
+                remaining: allRows.length - visibleCount
+            };
         });
     }
 
@@ -137,7 +195,8 @@ export default class EventSpeakerRosterBoard extends NavigationMixin(LightningEl
             chips,
             statusOptions: this.statusOptions,
             initials: this.getInitials(row.speakerName),
-            cardStyle: `--accent-color:${style.accent};--accent-bg:${style.bg};--accent-text:${style.text}`
+            cardStyle: `--accent-color:${style.accent};--accent-bg:${style.bg};--accent-text:${style.text}`,
+            isSelected: this.selectedIds.has(row.recordId)
         };
     }
 
@@ -190,15 +249,93 @@ export default class EventSpeakerRosterBoard extends NavigationMixin(LightningEl
         this.loadRoster();
     }
 
+    handleSearchChange(event) {
+        this.searchTerm = event.detail.value;
+        this.visibleCounts = {};
+    }
+
+    handleShowMore(event) {
+        const status = event.currentTarget.dataset.status;
+        const current = this.visibleCounts[status] || PAGE_SIZE;
+        this.visibleCounts = { ...this.visibleCounts, [status]: current + PAGE_SIZE };
+    }
+
+    handleSelectCard(event) {
+        const recordId = event.currentTarget.dataset.recordid;
+        const next = new Set(this.selectedIds);
+        if (event.detail.checked) {
+            next.add(recordId);
+        } else {
+            next.delete(recordId);
+        }
+        this.selectedIds = next;
+    }
+
+    handleClearSelection() {
+        this.selectedIds = new Set();
+    }
+
+    handleBulkFieldChange(event) {
+        this.bulkFieldApiName = event.detail.value;
+    }
+
+    handleBulkMarkDone() {
+        this.applyBulkField('Yes');
+    }
+
+    handleBulkClear() {
+        this.applyBulkField('');
+    }
+
+    async applyBulkField(newValue) {
+        if (this.selectedIds.size === 0) {
+            return;
+        }
+        const ids = [...this.selectedIds];
+        const fieldKey = READINESS_FIELDS.find((rf) => rf.apiName === this.bulkFieldApiName)?.field;
+        const previousRoster = this.roster;
+        if (fieldKey) {
+            this.roster = this.roster.map((r) => (ids.includes(r.recordId) ? { ...r, [fieldKey]: newValue } : r));
+        }
+        try {
+            await bulkToggleField({ recordIds: ids, fieldApiName: this.bulkFieldApiName, newValue });
+            this.showToast('Success', `Updated ${ids.length} record${ids.length === 1 ? '' : 's'}.`, 'success');
+        } catch (e) {
+            this.roster = previousRoster;
+            this.handleError(e);
+        }
+    }
+
+    async handleBulkStatusMove(event) {
+        const newStatus = event.detail.value;
+        if (!newStatus || this.selectedIds.size === 0) {
+            return;
+        }
+        const ids = [...this.selectedIds];
+        const previousRoster = this.roster;
+        this.roster = this.roster.map((r) => (ids.includes(r.recordId) ? { ...r, status: newStatus } : r));
+        try {
+            await updateStatuses({ updates: ids.map((recordId) => ({ recordId, newStatus })) });
+            this.showToast('Success', `Moved ${ids.length} speaker${ids.length === 1 ? '' : 's'} to ${newStatus}.`, 'success');
+            this.selectedIds = new Set();
+            await this.refreshEvents();
+        } catch (e) {
+            this.roster = previousRoster;
+            this.handleError(e);
+        }
+    }
+
     async handleStatusMove(event) {
         const recordId = event.currentTarget.dataset.id;
         const newStatus = event.detail.value;
+        const previousRoster = this.roster;
+        this.roster = this.roster.map((r) => (r.recordId === recordId ? { ...r, status: newStatus } : r));
         try {
             await updateStatuses({ updates: [{ recordId, newStatus }] });
             this.showToast('Success', 'Speaker status updated.', 'success');
-            await this.loadRoster();
-            await this.loadEvents();
+            await this.refreshEvents();
         } catch (e) {
+            this.roster = previousRoster;
             this.handleError(e);
         }
     }

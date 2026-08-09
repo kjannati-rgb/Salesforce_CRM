@@ -60,6 +60,44 @@
             </div>
         </template>
 
+        <template if:true={hasEvents}>
+            <div class="slds-p-horizontal_medium slds-p-bottom_small">
+                <lightning-input
+                    type="search"
+                    label="Search speakers"
+                    variant="label-hidden"
+                    placeholder="Search by name, title, or firm..."
+                    value={searchTerm}
+                    onchange={handleSearchChange}
+                ></lightning-input>
+            </div>
+        </template>
+
+        <template if:true={hasSelection}>
+            <div class="bulk-bar slds-p-horizontal_medium slds-p-vertical_x-small">
+                <span class="bulk-count">{selectedCount} selected</span>
+                <div class="bulk-status">
+                    <lightning-combobox
+                        variant="label-hidden"
+                        placeholder="Move to..."
+                        options={statusOptions}
+                        onchange={handleBulkStatusMove}
+                    ></lightning-combobox>
+                </div>
+                <div class="bulk-field">
+                    <lightning-combobox
+                        variant="label-hidden"
+                        options={bulkFieldOptions}
+                        value={bulkFieldApiName}
+                        onchange={handleBulkFieldChange}
+                    ></lightning-combobox>
+                </div>
+                <button class="bulk-btn" onclick={handleBulkMarkDone}>Mark done</button>
+                <button class="bulk-btn" onclick={handleBulkClear}>Clear</button>
+                <button class="bulk-btn bulk-btn_clear" onclick={handleClearSelection}>Clear selection</button>
+            </div>
+        </template>
+
         <div class="board slds-grid slds-p-horizontal_x-small">
             <template for:each={columns} for:item="col">
                 <div key={col.status} class="board-column slds-col slds-p-horizontal_x-small">
@@ -69,6 +107,14 @@
                     <template for:each={col.rows} for:item="row">
                         <div key={row.recordId} class="speaker-card slds-m-bottom_x-small" style={row.cardStyle}>
                             <div class="card-head">
+                                <lightning-input
+                                    type="checkbox"
+                                    variant="label-hidden"
+                                    class="card-checkbox"
+                                    checked={row.isSelected}
+                                    data-recordid={row.recordId}
+                                    onchange={handleSelectCard}
+                                ></lightning-input>
                                 <div class="avatar">{row.initials}</div>
                                 <div class="card-info">
                                     <div class="card-name">
@@ -117,6 +163,11 @@
                                 onchange={handleStatusMove}
                             ></lightning-combobox>
                         </div>
+                    </template>
+                    <template if:true={col.hasMore}>
+                        <button class="show-more-btn" data-status={col.status} onclick={handleShowMore}>
+                            Show {col.remaining} more
+                        </button>
                     </template>
                 </div>
             </template>

@@ -1,0 +1,65 @@
+.readiness-panel {
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.readiness-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.status-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+}
+
+.readiness-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #3e3e3c;
+}
+
+.chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    font-size: 0.72rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    border: 1px solid #dddbda;
+    color: #514f4d;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.chip_done {
+    background: #e3f8ee;
+    border-color: transparent;
+    color: #04844b;
+    font-weight: 700;
+}
+
+.chip_no {
+    background: #fde9e9;
+    border-color: transparent;
+    color: #ba0517;
+    font-weight: 700;
+}
+
+.chip-icon {
+    --slds-c-icon-color-foreground-default: currentColor;
+    line-height: 0;
+}

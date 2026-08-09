@@ -1,0 +1,26 @@
+<template>
+    <template if:true={hasRecord}>
+        <div class="readiness-panel">
+            <div class="readiness-header">
+                <span class="status-badge" style={statusStyle}>{statusValue}</span>
+                <span class="readiness-title">Readiness checklist</span>
+            </div>
+            <div class="chip-row">
+                <template for:each={chips} for:item="chip">
+                    <span
+                        key={chip.key}
+                        class={chip.chipClass}
+                        data-apiname={chip.apiName}
+                        data-value={chip.value}
+                        onclick={handleChipClick}
+                    >
+                        <template if:true={chip.iconName}>
+                            <lightning-icon icon-name={chip.iconName} size="xx-small" class="chip-icon"></lightning-icon>
+                        </template>
+                        {chip.label}
+                    </span>
+                </template>
+            </div>
+        </div>
+    </template>
+</template>

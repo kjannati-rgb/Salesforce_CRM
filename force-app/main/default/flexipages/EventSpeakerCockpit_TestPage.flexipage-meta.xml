@@ -10,7 +10,7 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>richTextValue</name>
-                    <value>&lt;p&gt;&lt;strong&gt;How to use this board&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Pick an event from the dropdown above the board to see its speaker roster.&lt;/p&gt;&lt;p&gt;Click a chip (Bio, Photo, Cal. Invite, Briefing, Thank You) to cycle it through outstanding, done, and declined.&lt;/p&gt;&lt;p&gt;Click a speaker&amp;#39;s name to open their contact record, or the small icon on a card to open the underlying speaker record.&lt;/p&gt;</value>
+                    <value>&lt;h3&gt;How to use this board&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Pick an event from the dropdown above the board to see its speaker roster.&lt;/li&gt;&lt;li&gt;Use search and the filter dropdown to narrow a large roster down - for example, to just the speakers still missing a bio.&lt;/li&gt;&lt;li&gt;Click a chip (Bio, Photo, Cal. Invite, Briefing, Thank You) to cycle it through outstanding, done, and declined.&lt;/li&gt;&lt;li&gt;Select multiple cards with the checkbox to move or update several speakers at once.&lt;/li&gt;&lt;li&gt;Click a speaker&amp;#39;s name to open their contact record, or the small icon on a card to open the underlying speaker record.&lt;/li&gt;&lt;/ul&gt;</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:richText</componentName>
                 <identifier>flexipage_richText_howto</identifier>

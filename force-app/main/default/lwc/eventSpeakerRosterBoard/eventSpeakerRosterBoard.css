@@ -103,6 +103,32 @@
     line-height: 1.25;
 }
 
+.card-name a {
+    color: #0176d3;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.card-name a:hover {
+    text-decoration: underline;
+}
+
+.open-record-btn {
+    margin-left: auto;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    background: transparent;
+    border: none;
+    padding: 2px;
+    cursor: pointer;
+    color: #706e6b;
+}
+
+.open-record-btn:hover {
+    color: #0176d3;
+}
+
 .card-sub {
     font-size: 0.72rem;
     color: #706e6b;

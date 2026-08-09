@@ -71,10 +71,21 @@
                             <div class="card-head">
                                 <div class="avatar">{row.initials}</div>
                                 <div class="card-info">
-                                    <div class="card-name">{row.speakerName}</div>
+                                    <div class="card-name">
+                                        <a href="javascript:void(0);" data-contactid={row.speakerId} onclick={navigateToContact}>{row.speakerName}</a>
+                                    </div>
                                     <div class="card-sub">{row.jobTitle}</div>
                                     <div class="card-sub">{row.accountName}</div>
                                 </div>
+                                <button
+                                    class="open-record-btn"
+                                    title="Open speaker record"
+                                    aria-label="Open speaker record"
+                                    data-recordid={row.recordId}
+                                    onclick={navigateToRecord}
+                                >
+                                    <lightning-icon icon-name="utility:new_window" size="xx-small"></lightning-icon>
+                                </button>
                             </div>
                             <div class="card-meta slds-text-body_small slds-text-color_weak">{row.speakerType} &middot; {row.session}</div>
 

@@ -1,4 +1,5 @@
 import { LightningElement, track } from 'lwc';
+import { NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getEventsWithSpeakers from '@salesforce/apex/EventSpeakerCockpitController.getEventsWithSpeakers';
 import getRoster from '@salesforce/apex/EventSpeakerCockpitController.getRoster';
@@ -40,7 +41,7 @@ const STATUS_STYLE = {
     Cancelled: { accent: '#ba0517', bg: '#fde9e9', text: '#ba0517' }
 };
 
-export default class EventSpeakerRosterBoard extends LightningElement {
+export default class EventSpeakerRosterBoard extends NavigationMixin(LightningElement) {
     @track events = [];
     @track roster = [];
     selectedEventId;
@@ -148,6 +149,40 @@ export default class EventSpeakerRosterBoard extends LightningElement {
         const first = parts[0] ? parts[0][0] : '';
         const last = parts.length > 1 ? parts[parts.length - 1][0] : '';
         return (first + last).toUpperCase();
+    }
+
+    navigateToContact(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        const contactId = event.currentTarget.dataset.contactid;
+        if (!contactId) {
+            return;
+        }
+        this[NavigationMixin.Navigate]({
+            type: 'standard__recordPage',
+            attributes: {
+                recordId: contactId,
+                objectApiName: 'Contact',
+                actionName: 'view'
+            }
+        });
+    }
+
+    navigateToRecord(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        const recordId = event.currentTarget.dataset.recordid;
+        if (!recordId) {
+            return;
+        }
+        this[NavigationMixin.Navigate]({
+            type: 'standard__recordPage',
+            attributes: {
+                recordId,
+                objectApiName: 'Event_Speaker_Management__c',
+                actionName: 'view'
+            }
+        });
     }
 
     handleEventChange(event) {

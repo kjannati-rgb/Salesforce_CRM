@@ -109,14 +109,15 @@
             </div>
         </template>
 
-        <div class="board slds-p-horizontal_x-small">
+        <div class="board">
             <template for:each={columns} for:item="col">
-                <div key={col.status} class="board-column slds-p-horizontal_x-small">
-                    <div class="column-header slds-text-heading_small slds-p-around_x-small">
+                <div key={col.status} class="board-column">
+                    <div class="column-header">
                         <span class="column-dot" style={col.dotStyle}></span>{col.status} ({col.count})
                     </div>
+                    <div class="column-body">
                     <template for:each={col.rows} for:item="row">
-                        <div key={row.recordId} class="speaker-card slds-m-bottom_x-small" style={row.cardStyle}>
+                        <div key={row.recordId} class="speaker-card" style={row.cardStyle}>
                             <div class="card-head">
                                 <lightning-input
                                     type="checkbox"
@@ -180,6 +181,7 @@
                             Show {col.remaining} more
                         </button>
                     </template>
+                    </div>
                 </div>
             </template>
         </div>

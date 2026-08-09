@@ -109,9 +109,9 @@
             </div>
         </template>
 
-        <div class="board slds-grid slds-p-horizontal_x-small">
+        <div class="board slds-p-horizontal_x-small">
             <template for:each={columns} for:item="col">
-                <div key={col.status} class="board-column slds-col slds-p-horizontal_x-small">
+                <div key={col.status} class="board-column slds-p-horizontal_x-small">
                     <div class="column-header slds-text-heading_small slds-p-around_x-small">
                         <span class="column-dot" style={col.dotStyle}></span>{col.status} ({col.count})
                     </div>

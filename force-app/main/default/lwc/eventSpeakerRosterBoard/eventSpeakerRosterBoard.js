@@ -172,10 +172,22 @@ export default class EventSpeakerRosterBoard extends LightningElement {
         const { apiname: apiName, recordid: recordId, value } = event.currentTarget.dataset;
         const currentIndex = TOGGLE_CYCLE.indexOf(value);
         const nextValue = TOGGLE_CYCLE[(currentIndex + 1) % TOGGLE_CYCLE.length];
+        const fieldKey = READINESS_FIELDS.find((rf) => rf.apiName === apiName)?.field;
+
+        // Optimistic update: flip the chip immediately instead of waiting on
+        // the round-trip, so it reads as an instant toggle. Roll back to the
+        // pre-click roster only if the save actually fails.
+        const previousRoster = this.roster;
+        if (fieldKey) {
+            this.roster = this.roster.map((r) =>
+                r.recordId === recordId ? { ...r, [fieldKey]: nextValue } : r
+            );
+        }
+
         try {
             await bulkToggleField({ recordIds: [recordId], fieldApiName: apiName, newValue: nextValue });
-            await this.loadRoster();
         } catch (e) {
+            this.roster = previousRoster;
             this.handleError(e);
         }
     }

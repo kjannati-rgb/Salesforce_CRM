@@ -28,6 +28,18 @@ const READINESS_FIELDS = [
 // rather than folded into "blank".
 const TOGGLE_CYCLE = ['', 'Yes', 'No'];
 
+// Semantic color per status - drives the column dot, card accent border, and
+// avatar fill. Kept in one map so the whole board reads as one color system
+// instead of each element picking its own shade.
+const STATUS_STYLE = {
+    Lead: { accent: '#706e6b', bg: '#f3f2f2', text: '#3e3e3c' },
+    'No Response': { accent: '#706e6b', bg: '#f3f2f2', text: '#3e3e3c' },
+    Pending: { accent: '#b98200', bg: '#fef2dd', text: '#b98200' },
+    Confirmed: { accent: '#04844b', bg: '#e3f8ee', text: '#04844b' },
+    Decline: { accent: '#ba0517', bg: '#fde9e9', text: '#ba0517' },
+    Cancelled: { accent: '#ba0517', bg: '#fde9e9', text: '#ba0517' }
+};
+
 export default class EventSpeakerRosterBoard extends LightningElement {
     @track events = [];
     @track roster = [];
@@ -98,23 +110,44 @@ export default class EventSpeakerRosterBoard extends LightningElement {
             const rows = this.roster
                 .filter((r) => r.status === status)
                 .map((r) => this.decorateRow(r));
-            return { status, count: rows.length, rows };
+            const style = STATUS_STYLE[status] || STATUS_STYLE.Lead;
+            return { status, count: rows.length, rows, dotStyle: `background-color:${style.accent}` };
         });
     }
 
     decorateRow(row) {
         const chips = READINESS_FIELDS.map((rf) => {
             const value = row[rf.field] || '';
+            const isDone = value === 'Yes';
+            const isNo = value === 'No';
             return {
                 key: row.recordId + '-' + rf.apiName,
                 label: rf.label,
                 apiName: rf.apiName,
                 recordId: row.recordId,
                 value,
-                display: value ? `${rf.label}: ${value}` : rf.label
+                iconName: isDone ? 'utility:check' : isNo ? 'utility:close' : null,
+                chipClass: 'chip' + (isDone ? ' chip_done' : isNo ? ' chip_no' : '')
             };
         });
-        return { ...row, chips, statusOptions: this.statusOptions };
+        const style = STATUS_STYLE[row.status] || STATUS_STYLE.Lead;
+        return {
+            ...row,
+            chips,
+            statusOptions: this.statusOptions,
+            initials: this.getInitials(row.speakerName),
+            cardStyle: `--accent-color:${style.accent};--accent-bg:${style.bg};--accent-text:${style.text}`
+        };
+    }
+
+    getInitials(name) {
+        if (!name) {
+            return '?';
+        }
+        const parts = name.trim().split(/\s+/);
+        const first = parts[0] ? parts[0][0] : '';
+        const last = parts.length > 1 ? parts[parts.length - 1][0] : '';
+        return (first + last).toUpperCase();
     }
 
     handleEventChange(event) {

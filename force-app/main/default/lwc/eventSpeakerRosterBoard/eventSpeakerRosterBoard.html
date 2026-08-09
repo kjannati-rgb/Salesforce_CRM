@@ -28,27 +28,34 @@
         </template>
 
         <template if:true={selectedEventSummary}>
-            <div class="slds-p-horizontal_medium slds-p-bottom_small slds-grid slds-wrap slds-gutters_x-small summary-row">
-                <div class="slds-col slds-p-around_xx-small">
-                    <lightning-badge label={selectedEventSummary.totalSpeakers}></lightning-badge> Total
+            <div class="stats-row slds-p-horizontal_medium slds-p-bottom_small slds-grid slds-wrap slds-gutters_xx-small">
+                <div class="slds-col stat-tile">
+                    <div class="stat-value">{selectedEventSummary.totalSpeakers}</div>
+                    <div class="stat-label">Total</div>
                 </div>
-                <div class="slds-col slds-p-around_xx-small">
-                    <lightning-badge label={selectedEventSummary.confirmedCount}></lightning-badge> Confirmed
+                <div class="slds-col stat-tile stat-tile_success">
+                    <div class="stat-value">{selectedEventSummary.confirmedCount}</div>
+                    <div class="stat-label">Confirmed</div>
                 </div>
-                <div class="slds-col slds-p-around_xx-small">
-                    <lightning-badge label={selectedEventSummary.pendingCount}></lightning-badge> Pending
+                <div class="slds-col stat-tile stat-tile_warning">
+                    <div class="stat-value">{selectedEventSummary.pendingCount}</div>
+                    <div class="stat-label">Pending</div>
                 </div>
-                <div class="slds-col slds-p-around_xx-small">
-                    <lightning-badge label={selectedEventSummary.leadCount}></lightning-badge> Lead
+                <div class="slds-col stat-tile">
+                    <div class="stat-value">{selectedEventSummary.leadCount}</div>
+                    <div class="stat-label">Lead</div>
                 </div>
-                <div class="slds-col slds-p-around_xx-small">
-                    <lightning-badge label={selectedEventSummary.noResponseCount}></lightning-badge> No Response
+                <div class="slds-col stat-tile">
+                    <div class="stat-value">{selectedEventSummary.noResponseCount}</div>
+                    <div class="stat-label">No response</div>
                 </div>
-                <div class="slds-col slds-p-around_xx-small">
-                    <lightning-badge label={selectedEventSummary.declineCount}></lightning-badge> Decline
+                <div class="slds-col stat-tile stat-tile_error">
+                    <div class="stat-value">{selectedEventSummary.declineCount}</div>
+                    <div class="stat-label">Decline</div>
                 </div>
-                <div class="slds-col slds-p-around_xx-small">
-                    <lightning-badge label={selectedEventSummary.cancelledCount}></lightning-badge> Cancelled
+                <div class="slds-col stat-tile stat-tile_error">
+                    <div class="stat-value">{selectedEventSummary.cancelledCount}</div>
+                    <div class="stat-label">Cancelled</div>
                 </div>
             </div>
         </template>
@@ -57,26 +64,34 @@
             <template for:each={columns} for:item="col">
                 <div key={col.status} class="board-column slds-col slds-p-horizontal_x-small">
                     <div class="column-header slds-text-heading_small slds-p-around_x-small">
-                        {col.status} ({col.count})
+                        <span class="column-dot" style={col.dotStyle}></span>{col.status} ({col.count})
                     </div>
                     <template for:each={col.rows} for:item="row">
-                        <div key={row.recordId} class="speaker-card slds-box slds-box_x-small slds-m-bottom_x-small">
-                            <div class="slds-text-heading_small">{row.speakerName}</div>
-                            <div class="slds-text-body_small slds-text-color_weak">{row.jobTitle}</div>
-                            <div class="slds-text-body_small slds-text-color_weak">{row.accountName}</div>
-                            <div class="slds-text-body_small">{row.speakerType} &middot; {row.session}</div>
+                        <div key={row.recordId} class="speaker-card slds-m-bottom_x-small" style={row.cardStyle}>
+                            <div class="card-head">
+                                <div class="avatar">{row.initials}</div>
+                                <div class="card-info">
+                                    <div class="card-name">{row.speakerName}</div>
+                                    <div class="card-sub">{row.jobTitle}</div>
+                                    <div class="card-sub">{row.accountName}</div>
+                                </div>
+                            </div>
+                            <div class="card-meta slds-text-body_small slds-text-color_weak">{row.speakerType} &middot; {row.session}</div>
 
-                            <div class="chip-row slds-p-vertical_x-small">
+                            <div class="chip-row">
                                 <template for:each={row.chips} for:item="chip">
                                     <span
                                         key={chip.key}
-                                        class="chip"
+                                        class={chip.chipClass}
                                         data-recordid={chip.recordId}
                                         data-apiname={chip.apiName}
                                         data-value={chip.value}
                                         onclick={handleChipClick}
                                     >
-                                        <lightning-badge label={chip.display}></lightning-badge>
+                                        <template if:true={chip.iconName}>
+                                            <lightning-icon icon-name={chip.iconName} size="xx-small" class="chip-icon"></lightning-icon>
+                                        </template>
+                                        {chip.label}
                                     </span>
                                 </template>
                             </div>

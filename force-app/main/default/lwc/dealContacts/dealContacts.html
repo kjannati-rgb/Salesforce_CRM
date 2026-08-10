@@ -1,0 +1,99 @@
+<template>
+    <lightning-card title="Deal Contacts" icon-name="standard:contact">
+        <span slot="actions">
+            <template if:true={panel}>
+                <span class={counterBadgeClass}>{counterLabel}</span>
+            </template>
+        </span>
+
+        <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading Deal Contacts" size="small"></lightning-spinner>
+            </template>
+
+            <template if:true={error}>
+                <div class="slds-text-color_error slds-p-around_small">
+                    Couldn't load Deal Contacts for this quote.
+                </div>
+            </template>
+
+            <template if:true={panel}>
+                <template if:true={showRenewalBanner}>
+                    <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_info slds-m-bottom_small" role="alert">
+                        <lightning-icon icon-name="utility:info" size="x-small" variant="inverse" class="slds-m-right_x-small"></lightning-icon>
+                        <span>{renewalBannerText}</span>
+                        <lightning-button
+                            label="Copy from previous quote"
+                            variant="inverse"
+                            class="slds-float_right"
+                            onclick={handleCopyFromPrevious}
+                            disabled={saving}
+                        ></lightning-button>
+                    </div>
+                </template>
+
+                <template for:each={roleRows} for:item="row">
+                    <div key={row.key} class="slds-m-bottom_x-small">
+                        <div class="slds-box slds-box_x-small slds-grid slds-grid_vertical-align-center slds-wrap">
+                            <div class="slds-col slds-no-flex slds-p-right_small">
+                                <lightning-icon icon-name={row.icon} size="small"></lightning-icon>
+                            </div>
+                            <div class="slds-col slds-grow slds-p-right_small">
+                                <div class="slds-text-title_caps slds-text-color_weak">
+                                    {row.label}
+                                    <template if:true={row.required}>
+                                        <span class="slds-badge slds-theme_error slds-m-left_x-small">Required</span>
+                                    </template>
+                                </div>
+                                <template if:true={row.isSet}>
+                                    <div class="slds-text-heading_small">{row.name}</div>
+                                    <div class="slds-text-body_small slds-text-color_weak">{row.sourceLabel}</div>
+                                </template>
+                                <template if:false={row.isSet}>
+                                    <div class="slds-text-body_regular slds-text-color_weak slds-font-style_italic">Not set</div>
+                                </template>
+                            </div>
+                            <div class="slds-col slds-no-flex slds-grid">
+                                <template if:true={row.showSameAsPrimary}>
+                                    <lightning-button
+                                        label="Same as Primary"
+                                        variant="neutral"
+                                        class="slds-m-right_x-small"
+                                        data-role={row.key}
+                                        onclick={handleSameAsPrimary}
+                                        disabled={saving}
+                                    ></lightning-button>
+                                </template>
+                                <lightning-button-icon
+                                    icon-name="utility:edit"
+                                    alternative-text="Choose contact"
+                                    variant="border-filled"
+                                    data-role={row.key}
+                                    onclick={handleTogglePicker}
+                                    disabled={saving}
+                                ></lightning-button-icon>
+                            </div>
+                        </div>
+                        <template if:true={row.isPickerOpen}>
+                            <div class="slds-box slds-box_x-small slds-theme_shade slds-m-top_xx-small">
+                                <lightning-record-picker
+                                    label={row.label}
+                                    placeholder="Search this account's contacts…"
+                                    object-api-name="Contact"
+                                    filter={accountFilter}
+                                    data-role={row.key}
+                                    onchange={handlePick}
+                                ></lightning-record-picker>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
+                <div class="slds-text-body_small slds-text-color_weak slds-m-top_small">
+                    <lightning-icon icon-name="utility:link" size="xx-small" class="slds-m-right_xx-small"></lightning-icon>
+                    Every contact set here also creates or updates the matching Opportunity Contact Role.
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

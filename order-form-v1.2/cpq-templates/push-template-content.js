@@ -40,11 +40,26 @@ async function upsert(type, extId, fields) {
   return body.id;
 }
 
+let logoUrl = null; // resolved in main() before contents are pushed
 function html(file) {
-  return fs.readFileSync(path.join(DIR, file), "utf8");
+  // Comments stay in the repo files for developers but must not reach the org:
+  // the doc engine fails header/footer content containing <!-- --> with "Bad Request".
+  let s = fs.readFileSync(path.join(DIR, file), "utf8").replace(/<!--[\s\S]*?-->/g, "");
+  if (s.includes("{{LOGO_URL}}")) {
+    if (!logoUrl) { console.error(`${file} needs the Centellic_Logo_2026 Document - run upload-brand-assets.js first`); process.exit(1); }
+    s = s.replaceAll("{{LOGO_URL}}", logoUrl);
+  }
+  return s;
 }
 
 (async () => {
+  const logoDoc = await (await fetch(`${API}/query?q=${encodeURIComponent(
+    "SELECT Id FROM Document WHERE DeveloperName = 'Centellic_Logo_2026' LIMIT 1")}`, { headers: HEADERS })).json();
+  if (logoDoc.records && logoDoc.records.length) {
+    logoUrl = `${info.instanceUrl}/servlet/servlet.ImageServer?id=${logoDoc.records[0].Id}&amp;oid=${info.id.slice(0, 15)}`;
+    console.log("logo document:", logoDoc.records[0].Id);
+  }
+
   console.log("1/4 Template shell");
   const templateId = await upsert("SBQQ__QuoteTemplate__c", "OF-V12-TEMPLATE", {
     Name: "Order Form v1.2 - Subscriptions",
@@ -64,6 +79,8 @@ function html(file) {
 
   console.log("2/4 Template content");
   const contents = [
+    ["OF-V12-CHEAD", "OF v1.2 - Page header", "HTML", "00-page-header.html"],
+    ["OF-V12-CFOOT", "OF v1.2 - Page footer", "HTML", "00-page-footer.html"],
     ["OF-V12-C01", "OF v1.2 - 01 Parties", "HTML", "01-parties.html"],
     ["OF-V12-C02", "OF v1.2 - 02 Customer contacts", "HTML", "02-customer-contacts.html"],
     ["OF-V12-C03", "OF v1.2 - 03 Products intro", "HTML", "03-products-intro.html"],
@@ -81,6 +98,21 @@ function html(file) {
     if (file) { fields.SBQQ__Markup__c = html(file); fields.SBQQ__RawMarkup__c = html(file); }
     contentIds[ext] = await upsert("SBQQ__TemplateContent__c", ext, fields);
   }
+
+  // Brand pass: per-page header/footer + Centellic palette on the line-items table.
+  console.log("2a/4 Branding the template shell");
+  const brand = await fetch(`${API}/sobjects/SBQQ__QuoteTemplate__c/${templateId}`, {
+    method: "PATCH", headers: HEADERS, body: JSON.stringify({
+      SBQQ__HeaderContent__c: contentIds["OF-V12-CHEAD"],
+      SBQQ__FooterContent__c: contentIds["OF-V12-CFOOT"],
+      SBQQ__HeaderHeight__c: 48,
+      SBQQ__FooterHeight__c: 34,
+      SBQQ__BorderColor__c: "C9D9DD",   // hairline grey-teal
+      SBQQ__ShadingColor__c: "EAF3F4",  // brand tint
+      SBQQ__PageNumberPosition__c: "Footer",
+      SBQQ__PageNumberAlignment__c: "Right",
+    }) });
+  console.log(`  template branded -> ${brand.status}`);
 
   // The CPQ package auto-creates default line columns (QTY, PART #, ...) on template insert.
   // Remove anything on this template that our push does not own (no External_Id__c).

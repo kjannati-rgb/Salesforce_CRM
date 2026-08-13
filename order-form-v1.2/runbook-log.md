@@ -198,3 +198,23 @@ Full cell-by-cell results in `uat/UAT-results-kjdev.md`; evidence PDFs in `refer
 - Human gate outstanding: Kam + rep + Finance sign-off on the PDF output.
 
 **Phase 5 KJDEV leg complete. STOPPED - next steps are the FULLUAT leg (after Adobe link + sandbox promotion) and then the Phase 6 PROD gate (`DEPLOY TO PRODUCTION CONFIRMED`).**
+
+---
+
+## Branding pass (2026-08-13, KJDEV - post-Phase-5 addition at Kam's request)
+
+**Sources:** official 2026 Word template (`Centellic_Word template_2026.dotx`) - theme palette navy `#003340`, green `#00C8A7`, teal `#008CA6` (+ tints), theme font Arial (engine renders Helvetica, its metric twin); logo = the dotx's embedded transparent PNG (4703x629).
+
+**Applied:**
+- Logo uploaded as externally-available Document `Centellic_Logo_2026` in public folder "Order Form Brand Assets" (`cpq-templates/upload-brand-assets.js`, idempotent + CONFIRM_PROD guard). Rendered via `<img>` in the per-page header; push script substitutes `{{LOGO_URL}}` with the TARGET org's instance URL + queried Document id, so PROD needs only the asset script run first.
+- Per-page header (logo + "Order Form | quote number" + 2px green rule) and footer (selling-entity line: name | registered office | reg no), wired via `SBQQ__HeaderContent__c`/`FooterContent__c`, heights 48/34; page numbers footer-right.
+- Full restyle of all 8 sections: navy masthead with tinted meta box, green-underlined section headings, navy block-header rows with white text, tinted label columns, grey-teal hairline borders, navy signature rules. Line-items table: template `SBQQ__BorderColor__c` C9D9DD + `SBQQ__ShadingColor__c` EAF3F4.
+- Verbatim legal wording untouched; Adobe tags still black placement mode.
+- Evidence: `reference/order-form-v1.2-branded-Q211545.pdf`.
+
+**New doc-engine gotchas (cost a debug cycle each):**
+1. `&nbsp;` is rejected (XML parser) - use `&#160;`.
+2. `<img>` with a RELATIVE `/servlet/servlet.ImageServer` URL fails the whole render with "Bad Request" - the URL must be absolute (instance URL + servlet path). `SBQQ__LogoDocumentId__c` does not render when header content is set.
+3. HTML comments (`<!-- -->`) inside HEADER content fail generation with "Bad Request" (body sections tolerate them) - push script now strips all comments before upload.
+
+**Phase 6 note:** run `upload-brand-assets.js` against PROD before `push-template-content.js` (the push hard-stops if the logo Document is missing while `{{LOGO_URL}}` is referenced).

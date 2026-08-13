@@ -1,0 +1,12 @@
+<!-- Page header, rendered on every page. {{LOGO_URL}} is substituted by
+     push-template-content.js with the target org's instance URL + the
+     'Centellic_Logo_2026' Document id (upload-brand-assets.js creates it).
+     NOTE: the image URL must be ABSOLUTE - a relative /servlet path makes the
+     doc engine fail the whole render with "Bad Request". -->
+<table style="width:100%;border-collapse:collapse;"><tr>
+  <td style="width:60%;vertical-align:bottom;"><img src="{{LOGO_URL}}" alt="Centellic" height="24"/></td>
+  <td style="width:40%;text-align:right;vertical-align:bottom;color:#5A6E74;font-size:8px;">Order Form | {!quote.Name}</td>
+</tr></table>
+<table style="width:100%;border-collapse:collapse;margin-top:4px;"><tr>
+  <td style="background-color:#00C8A7;font-size:1px;line-height:2px;height:2px;">&#160;</td>
+</tr></table>

@@ -1,52 +1,29 @@
-<!-- Section 1 + document header. Section number is a literal in the <h2> below (ground rule 6). -->
-<p style="font-size:16px;font-weight:bold;margin-bottom:2px;">Order Form</p>
-<table style="width:100%;font-size:9px;margin-bottom:8px;">
-  <tr>
-    <td style="width:50%;"><b>Effective date:</b> {!quote.SBQQ__StartDate__c}</td>
-    <td style="width:50%;"><b>Order no.:</b> {!quote.Name}</td>
-  </tr>
-</table>
-<p style="font-size:9px;">This Order Form is entered into under the General Subscription Terms of Business found at: https://www.centellic.com/general-subscription-terms-of-business/ and the applicable Product Schedule(s), all of which together constitute the Agreement. In the event of conflict, this Order Form prevails, then the applicable Product Schedule, then the General Terms.</p>
-<p style="font-size:12px;font-weight:bold;margin-top:10px;margin-bottom:4px;">1. Parties</p>
-<table style="width:100%;font-size:9px;border-collapse:collapse;" border="1" cellpadding="4">
-  <tr>
-    <td style="border:1px solid #000000;padding:3px;width:30%;background-color:#F2F2F2;"><b>Company (Centellic)</b></td>
-    <td style="border:1px solid #000000;padding:3px;width:70%;"></td>
-  </tr>
-  <tr>
-    <td style="border:1px solid #000000;padding:3px;">Legal entity name</td>
-    <td style="border:1px solid #000000;padding:3px;">{!quote.Company_Entity_Name__c}</td>
-  </tr>
-  <tr>
-    <td style="border:1px solid #000000;padding:3px;">Registration number</td>
-    <td style="border:1px solid #000000;padding:3px;">{!quote.Company_Reg_Number__c}</td>
-  </tr>
-  <tr>
-    <td style="border:1px solid #000000;padding:3px;">Registered office</td>
-    <td style="border:1px solid #000000;padding:3px;">{!quote.Company_Registered_Office__c}</td>
-  </tr>
+<!-- Section 1 + document masthead. Section number literal per ground rule 6.
+     VAT row holds a signer-fillable Adobe tag - PLACEMENT MODE black 8px, final white 5px. -->
+<table style="width:100%;border-collapse:collapse;"><tr>
+  <td style="width:55%;vertical-align:bottom;"><span style="color:#003340;font-size:22px;font-weight:bold;">Order Form</span></td>
+  <td style="width:45%;vertical-align:bottom;">
+    <table style="width:100%;font-size:9px;border-collapse:collapse;color:#212B2E;">
+      <tr><td style="background-color:#EAF3F4;color:#003340;padding:4px 6px;width:45%;">Effective date</td>
+          <td style="background-color:#EAF3F4;padding:4px 6px;font-weight:bold;">{!quote.SBQQ__StartDate__c}</td></tr>
+      <tr><td style="background-color:#EAF3F4;color:#003340;padding:4px 6px;">Order no.</td>
+          <td style="background-color:#EAF3F4;padding:4px 6px;font-weight:bold;">{!quote.Name}</td></tr>
+    </table>
+  </td>
+</tr></table>
+<p style="font-size:9px;color:#212B2E;margin-top:10px;">This Order Form is entered into under the General Subscription Terms of Business found at: https://www.centellic.com/general-subscription-terms-of-business/ and the applicable Product Schedule(s), all of which together constitute the Agreement. In the event of conflict, this Order Form prevails, then the applicable Product Schedule, then the General Terms.</p>
+<table style="width:100%;border-collapse:collapse;margin-top:14px;margin-bottom:6px;"><tr><td style="border-bottom:2px solid #00C8A7;color:#003340;font-size:12px;font-weight:bold;padding:2px 0 3px 0;">1. Parties</td></tr></table>
+<table style="width:100%;font-size:9px;border-collapse:collapse;color:#212B2E;">
+<tr><td colspan="2" style="border:1px solid #C9D9DD;background-color:#003340;color:#FFFFFF;font-weight:bold;padding:5px 6px;">Company (Centellic)</td></tr>
+<tr><td style="border:1px solid #C9D9DD;background-color:#EAF3F4;color:#003340;width:30%;padding:5px 6px;">Legal entity name</td><td style="border:1px solid #C9D9DD;padding:5px 6px;">{!quote.Company_Entity_Name__c}</td></tr>
+<tr><td style="border:1px solid #C9D9DD;background-color:#EAF3F4;color:#003340;width:30%;padding:5px 6px;">Registration number</td><td style="border:1px solid #C9D9DD;padding:5px 6px;">{!quote.Company_Reg_Number__c}</td></tr>
+<tr><td style="border:1px solid #C9D9DD;background-color:#EAF3F4;color:#003340;width:30%;padding:5px 6px;">Registered office</td><td style="border:1px solid #C9D9DD;padding:5px 6px;">{!quote.Company_Registered_Office__c}</td></tr>
 </table>
 <br/>
-<table style="width:100%;font-size:9px;border-collapse:collapse;" border="1" cellpadding="4">
-  <tr>
-    <td style="border:1px solid #000000;padding:3px;width:30%;background-color:#F2F2F2;"><b>Customer</b></td>
-    <td style="border:1px solid #000000;padding:3px;width:70%;"></td>
-  </tr>
-  <tr>
-    <td style="border:1px solid #000000;padding:3px;">Legal entity name</td>
-    <td style="border:1px solid #000000;padding:3px;">{!quote.SBQQ__BillingName__c}</td>
-  </tr>
-  <tr>
-    <td style="border:1px solid #000000;padding:3px;">Registration number</td>
-    <td style="border:1px solid #000000;padding:3px;">{!quote.Customer_Registration_Number__c}</td>
-  </tr>
-  <tr>
-    <td style="border:1px solid #000000;padding:3px;">VAT/GST/Sales Tax No. (if applicable)</td>
-    <!-- Signer-fillable Adobe Sign field; pre-filled by merge mapping when we hold the value. PLACEMENT MODE: black 8px. Final state: color:#FFFFFF;font-size:5px. -->
-    <td><span style="border:1px solid #000000;padding:3px;color:#000000;font-size:8px;">{{VAT_Number_es_:signer1}}</span></td>
-  </tr>
-  <tr>
-    <td style="border:1px solid #000000;padding:3px;">Registered / principal address</td>
-    <td style="border:1px solid #000000;padding:3px;">{!quote.SBQQ__BillingStreet__c}, {!quote.SBQQ__BillingCity__c} {!quote.SBQQ__BillingState__c} {!quote.SBQQ__BillingPostalCode__c}, {!quote.SBQQ__BillingCountry__c}</td>
-  </tr>
+<table style="width:100%;font-size:9px;border-collapse:collapse;color:#212B2E;">
+<tr><td colspan="2" style="border:1px solid #C9D9DD;background-color:#003340;color:#FFFFFF;font-weight:bold;padding:5px 6px;">Customer</td></tr>
+<tr><td style="border:1px solid #C9D9DD;background-color:#EAF3F4;color:#003340;width:30%;padding:5px 6px;">Legal entity name</td><td style="border:1px solid #C9D9DD;padding:5px 6px;">{!quote.SBQQ__BillingName__c}</td></tr>
+<tr><td style="border:1px solid #C9D9DD;background-color:#EAF3F4;color:#003340;width:30%;padding:5px 6px;">Registration number</td><td style="border:1px solid #C9D9DD;padding:5px 6px;">{!quote.Customer_Registration_Number__c}</td></tr>
+<tr><td style="border:1px solid #C9D9DD;background-color:#EAF3F4;color:#003340;width:30%;padding:5px 6px;">VAT/GST/Sales Tax No. (if applicable)</td><td style="border:1px solid #C9D9DD;padding:5px 6px;"><span style="color:#000000;font-size:8px;">{{VAT_Number_es_:signer1}}</span></td></tr>
+<tr><td style="border:1px solid #C9D9DD;background-color:#EAF3F4;color:#003340;width:30%;padding:5px 6px;">Registered / principal address</td><td style="border:1px solid #C9D9DD;padding:5px 6px;">{!quote.SBQQ__BillingStreet__c}, {!quote.SBQQ__BillingCity__c} {!quote.SBQQ__BillingState__c} {!quote.SBQQ__BillingPostalCode__c}, {!quote.SBQQ__BillingCountry__c}</td></tr>
 </table>

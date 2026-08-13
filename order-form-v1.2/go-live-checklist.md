@@ -11,7 +11,7 @@ https://claude.ai/code/artifact/026330c1-3dc7-45e4-b033-7cf24975afab
 - [ ] Decision 2 - missing section 5: typo or deleted (one-line renumber).
 - [x] Decision 4 - CONFIRMED 2026-08-13: Net Total is the per-line annual fee.
 - [x] Decision 5 - CONFIRMED 2026-08-13: signatory defaults from Main/commercial contact, rep can override.
-- [ ] Confirm payment-due renders the quote's live payment terms (not the fixed v1.2 sentence); font is Helvetica (no Aptos/Arial in engine).
+- [x] CONFIRMED 2026-08-13 (Kam): payment-due renders the quote's live payment terms. Font: Helvetica stands in for Aptos (accepted via brand review).
 - [ ] Decision 6 - General Terms URL live at centellic.com before first customer send.
 
 ## 2. FULLUAT setup (Kam / admin)

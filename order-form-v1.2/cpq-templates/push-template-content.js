@@ -1,5 +1,8 @@
 // node push-template-content.js --org KJDEV
 // Idempotent upsert of the Order Form v1.2 CPQ template records, keyed on External_Id__c.
+// The single template carries the DRAFT watermark image (SBQQ__WatermarkId__c); whether it
+// SHOWS on a given document is the per-quote SBQQ__WatermarkShown__c flag, which the org's
+// existing Quote flows set true for Draft/In Review and false on approval.
 // Auth via sf CLI session. No npm dependencies (uses global fetch, Node 18+).
 const { execSync } = require("child_process");
 const fs = require("fs");
@@ -21,6 +24,19 @@ console.log(`Target: ${info.username} @ ${info.instanceUrl}`);
 const API = `${info.instanceUrl}/services/data/v62.0`;
 const HEADERS = { Authorization: `Bearer ${info.accessToken}`, "Content-Type": "application/json" };
 const DIR = path.join(__dirname, "order-form-v1_2");
+const soql = async (q) => (await (await fetch(`${API}/query?q=${encodeURIComponent(q)}`, { headers: HEADERS })).json());
+
+let logoUrl = null; // resolved in main() before contents are pushed
+function html(file) {
+  // Comments stay in the repo files for developers but must not reach the org:
+  // the doc engine fails header/footer content containing <!-- --> with "Bad Request".
+  let s = fs.readFileSync(path.join(DIR, file), "utf8").replace(/<!--[\s\S]*?-->/g, "");
+  if (s.includes("{{LOGO_URL}}")) {
+    if (!logoUrl) { console.error(`${file} needs the Centellic_Logo_2026 Document - run upload-brand-assets.js first`); process.exit(1); }
+    s = s.replaceAll("{{LOGO_URL}}", logoUrl);
+  }
+  return s;
+}
 
 async function upsert(type, extId, fields) {
   const url = `${API}/sobjects/${type}/External_Id__c/${encodeURIComponent(extId)}`;
@@ -40,29 +56,18 @@ async function upsert(type, extId, fields) {
   return body.id;
 }
 
-let logoUrl = null; // resolved in main() before contents are pushed
-function html(file) {
-  // Comments stay in the repo files for developers but must not reach the org:
-  // the doc engine fails header/footer content containing <!-- --> with "Bad Request".
-  let s = fs.readFileSync(path.join(DIR, file), "utf8").replace(/<!--[\s\S]*?-->/g, "");
-  if (s.includes("{{LOGO_URL}}")) {
-    if (!logoUrl) { console.error(`${file} needs the Centellic_Logo_2026 Document - run upload-brand-assets.js first`); process.exit(1); }
-    s = s.replaceAll("{{LOGO_URL}}", logoUrl);
-  }
-  return s;
-}
-
 (async () => {
-  const logoDoc = await (await fetch(`${API}/query?q=${encodeURIComponent(
-    "SELECT Id FROM Document WHERE DeveloperName = 'Centellic_Logo_2026' LIMIT 1")}`, { headers: HEADERS })).json();
+  const logoDoc = await soql("SELECT Id FROM Document WHERE DeveloperName = 'Centellic_Logo_2026' LIMIT 1");
   if (logoDoc.records && logoDoc.records.length) {
     logoUrl = `${info.instanceUrl}/servlet/servlet.ImageServer?id=${logoDoc.records[0].Id}&amp;oid=${info.id.slice(0, 15)}`;
     console.log("logo document:", logoDoc.records[0].Id);
   }
+  const wmDoc = await soql("SELECT Id FROM Document WHERE DeveloperName = 'Order_Form_Draft_Watermark' LIMIT 1");
+  const watermarkId = wmDoc.records && wmDoc.records.length ? wmDoc.records[0].Id : null;
+  console.log("watermark document:", watermarkId || "MISSING (run upload-brand-assets.js --watermark)");
 
   console.log("1/4 Template shell");
-  const templateId = await upsert("SBQQ__QuoteTemplate__c", "OF-V12-TEMPLATE", {
-    Name: "Order Form v1.2 - Subscriptions",
+  const shell = {
     SBQQ__Default__c: false,
     SBQQ__DeploymentStatus__c: "In Development",
     SBQQ__PageOrientation__c: "Portrait",
@@ -75,7 +80,16 @@ function html(file) {
     SBQQ__TotalsHidden__c: false,
     SBQQ__TopMargin__c: 0.75, SBQQ__BottomMargin__c: 0.75,
     SBQQ__LeftMargin__c: 0.75, SBQQ__RightMargin__c: 0.75,
-  });
+    SBQQ__HeaderHeight__c: 48,
+    SBQQ__FooterHeight__c: 34,
+    SBQQ__BorderColor__c: "C9D9DD",   // hairline grey-teal
+    SBQQ__ShadingColor__c: "EAF3F4",  // brand tint
+    SBQQ__PageNumberPosition__c: "Footer",
+    SBQQ__PageNumberAlignment__c: "Right",
+  };
+  const templateId = await upsert("SBQQ__QuoteTemplate__c", "OF-V12-TEMPLATE", {
+    ...shell, Name: "Order Form v1.2 - Subscriptions", SBQQ__WatermarkId__c: watermarkId });
+  const templates = [["", templateId]];
 
   console.log("2/4 Template content");
   const contents = [
@@ -86,7 +100,8 @@ function html(file) {
     ["OF-V12-C03", "OF v1.2 - 03 Products intro", "HTML", "03-products-intro.html"],
     ["OF-V12-C03B", "OF v1.2 - 03b Tax statement", "HTML", "03b-tax-statement.html"],
     ["OF-V12-C04", "OF v1.2 - 04 Payment terms", "HTML", "04-payment-terms.html"],
-    ["OF-V12-C06", "OF v1.2 - 06 Governing law", "HTML", "06-governing-law.html"],
+    ["OF-V12-C06", "OF v1.2 - 05 Governing law", "HTML", "05-governing-law.html"],
+    ["OF-V12-C06B", "OF v1.2 - 06 Special instructions", "HTML", "06-special-instructions.html"],
     ["OF-V12-C07", "OF v1.2 - 07 Special terms", "HTML", "07-special-terms.html"],
     ["OF-V12-C08", "OF v1.2 - 08 Execution", "HTML", "08-execution.html"],
     ["OF-V12-CLINES", "OF v1.2 - Line items", "Line Items", null],
@@ -99,30 +114,18 @@ function html(file) {
     contentIds[ext] = await upsert("SBQQ__TemplateContent__c", ext, fields);
   }
 
-  // Brand pass: per-page header/footer + Centellic palette on the line-items table.
-  console.log("2a/4 Branding the template shell");
-  const brand = await fetch(`${API}/sobjects/SBQQ__QuoteTemplate__c/${templateId}`, {
-    method: "PATCH", headers: HEADERS, body: JSON.stringify({
+  for (const [suffix, tid] of templates) {
+    console.log(`2b/4 Wiring header/footer + removing package-default columns (${suffix || "clean"})`);
+    await fetch(`${API}/sobjects/SBQQ__QuoteTemplate__c/${tid}`, { method: "PATCH", headers: HEADERS, body: JSON.stringify({
       SBQQ__HeaderContent__c: contentIds["OF-V12-CHEAD"],
       SBQQ__FooterContent__c: contentIds["OF-V12-CFOOT"],
-      SBQQ__HeaderHeight__c: 48,
-      SBQQ__FooterHeight__c: 34,
-      SBQQ__BorderColor__c: "C9D9DD",   // hairline grey-teal
-      SBQQ__ShadingColor__c: "EAF3F4",  // brand tint
-      SBQQ__PageNumberPosition__c: "Footer",
-      SBQQ__PageNumberAlignment__c: "Right",
     }) });
-  console.log(`  template branded -> ${brand.status}`);
-
-  // The CPQ package auto-creates default line columns (QTY, PART #, ...) on template insert.
-  // Remove anything on this template that our push does not own (no External_Id__c).
-  console.log("2b/4 Removing package-default line columns");
-  const strays = await (await fetch(`${API}/query?q=${encodeURIComponent(
-    `SELECT Id, Name FROM SBQQ__LineColumn__c WHERE SBQQ__Template__c = '${templateId}' AND External_Id__c = null`)}`,
-    { headers: HEADERS })).json();
-  for (const s of strays.records || []) {
-    const del = await fetch(`${API}/sobjects/SBQQ__LineColumn__c/${s.Id}`, { method: "DELETE", headers: HEADERS });
-    console.log(`  deleted default column "${s.Name}" (${s.Id}) -> ${del.status}`);
+    // The CPQ package auto-creates default line columns (QTY, PART #, ...) on template insert.
+    const strays = await soql(`SELECT Id, Name FROM SBQQ__LineColumn__c WHERE SBQQ__Template__c = '${tid}' AND External_Id__c = null`);
+    for (const s of strays.records || []) {
+      const del = await fetch(`${API}/sobjects/SBQQ__LineColumn__c/${s.Id}`, { method: "DELETE", headers: HEADERS });
+      console.log(`  deleted default column "${s.Name}" (${s.Id}) -> ${del.status}`);
+    }
   }
 
   console.log("3/4 Template sections");
@@ -133,19 +136,22 @@ function html(file) {
     ["OF-V12-S40", "3 Products table", 40, "OF-V12-CLINES"],
     ["OF-V12-S50", "3 Tax statement", 50, "OF-V12-C03B"],
     ["OF-V12-S60", "4 Payment", 60, "OF-V12-C04"],
-    ["OF-V12-S70", "6 Governing law", 70, "OF-V12-C06"],
+    ["OF-V12-S70", "5 Governing law", 70, "OF-V12-C06"],
+    ["OF-V12-S75", "6 Special instructions", 75, "OF-V12-C06B"],
     ["OF-V12-S80", "7 Special terms", 80, "OF-V12-C07"],
     ["OF-V12-S90", "8 Execution", 90, "OF-V12-C08"],
   ];
-  for (const [ext, name, order, contentExt] of sections) {
-    const fields = {
-      Name: name,
-      SBQQ__Template__c: templateId,
-      SBQQ__Content__c: contentIds[contentExt],
-      SBQQ__DisplayOrder__c: order,
-    };
-    if (ext === "OF-V12-S40") fields.SBQQ__QuoteTotalsPrinted__c = true;
-    await upsert("SBQQ__TemplateSection__c", ext, fields);
+  for (const [suffix, tid] of templates) {
+    for (const [ext, name, order, contentExt] of sections) {
+      const fields = {
+        Name: name,
+        SBQQ__Template__c: tid,
+        SBQQ__Content__c: contentIds[contentExt],
+        SBQQ__DisplayOrder__c: order,
+      };
+      if (ext === "OF-V12-S40") fields.SBQQ__QuoteTotalsPrinted__c = true;
+      await upsert("SBQQ__TemplateSection__c", ext + suffix, fields);
+    }
   }
 
   console.log("4/4 Line columns");
@@ -157,15 +163,17 @@ function html(file) {
     ["OF-V12-L50", "Start date", 50, "SBQQ__StartDate__c", 12, "Center"],
     ["OF-V12-L60", "End date", 60, "SBQQ__EndDate__c", 12, "Center"],
   ];
-  for (const [ext, name, order, fieldName, width, align] of columns) {
-    await upsert("SBQQ__LineColumn__c", ext, {
-      Name: name,
-      SBQQ__Template__c: templateId,
-      SBQQ__DisplayOrder__c: order,
-      SBQQ__FieldName__c: fieldName,
-      SBQQ__Width__c: width,
-      SBQQ__Alignment__c: align,
-    });
+  for (const [suffix, tid] of templates) {
+    for (const [ext, name, order, fieldName, width, align] of columns) {
+      await upsert("SBQQ__LineColumn__c", ext + suffix, {
+        Name: name,
+        SBQQ__Template__c: tid,
+        SBQQ__DisplayOrder__c: order,
+        SBQQ__FieldName__c: fieldName,
+        SBQQ__Width__c: width,
+        SBQQ__Alignment__c: align,
+      });
+    }
   }
   console.log("Push complete.");
 })().catch(e => { console.error(e); process.exit(1); });

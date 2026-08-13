@@ -218,3 +218,78 @@ Full cell-by-cell results in `uat/UAT-results-kjdev.md`; evidence PDFs in `refer
 3. HTML comments (`<!-- -->`) inside HEADER content fail generation with "Bad Request" (body sections tolerate them) - push script now strips all comments before upload.
 
 **Phase 6 note:** run `upload-brand-assets.js` against PROD before `push-template-content.js` (the push hard-stops if the logo Document is missing while `{{LOGO_URL}}` is referenced).
+
+---
+
+## DRAFT watermark for unapproved quotes (2026-08-13, KJDEV)
+
+**Requirement (Kam):** documents generated while the quote is Draft or In Review carry a DRAFT watermark; approved documents are clean.
+
+**Mechanism (corrected by Kam):** the watermark image is template-level (`SBQQ__WatermarkId__c`) but its DISPLAY is per-quote via `SBQQ__WatermarkShown__c` - and the org's EXISTING quote flows already manage that flag by status (`Quote_BeforeSave_UpdateQuoteFields` sets it true on new/draft quotes; `Quote_Create_Edit`, `Quote_Approval_Process`, `Quote_AL_UpdateGenericFields` clear it on approval). No new automation needed. (First-pass detour for the record: I initially concluded the watermark was unconditional and built a second DRAFT template + flow-driven `SBQQ__QuoteTemplateId__c` selection - wrong, because BOTH test quotes happened to have WatermarkShown=true; the API-only status change to Approved had not fired the org flow that clears it. The dual-template variant and the selection logic were removed and the org cleaned up.)
+
+**Implementation (final):**
+- Watermark asset: diagonal navy "DRAFT" PNG (780x1010 - the engine renders watermarks at native pixel size, a 1400px canvas overflowed the page), ~13% alpha of brand navy. Source committed at `cpq-templates/draft-watermark.png`; uploaded as Document `Order_Form_Draft_Watermark` by `upload-brand-assets.js --watermark`.
+- The single "Order Form v1.2 - Subscriptions" template carries `SBQQ__WatermarkId__c`; the existing org flows toggle `SBQQ__WatermarkShown__c`. `Quote_Stamp_Order_Form_Fields` stays focused on stamping (template-selection logic removed).
+
+**Verified E2E in KJDEV (single template):** Q-211543 (Draft, WatermarkShown=true) -> watermarked on every page (`reference/order-form-v1.2-draft-watermarked-Q211543.pdf`); Q-211545 (Approved, WatermarkShown=false) -> byte-identical to the clean branded baseline.
+
+**UAT/FULLUAT check:** confirm the org flows actually clear WatermarkShown through the REAL approval path (AA approve action) - in KJDEV an API-only status flip to Approved left it true (entry criteria/record-type scoping of those flows to verify), in which case approved docs would render watermarked until the flow fires or the flag is cleared.
+
+---
+
+## FULLUAT promotion (2026-08-13)
+
+**Org verified:** kamyar.jannati@lbresearch.com.fulluat, 00DAd00000CZR4rMAH, sandbox. Full sequence executed:
+1. Metadata deploy: **56/56 Succeeded, 0 errors** (fields, CMDTs, 4 flows, Apex + test, permset, quick action).
+2. `Order_Form_Template_Admin` assigned to Kamyar (needed for the push script's External_Id__c access).
+3. `upload-brand-assets.js` - logo Document 015Ad00000AlBezIAF, watermark 015Ad00000AlBgbIAF (logo source now committed at `cpq-templates/centellic-logo-2026.png`).
+4. `push-template-content.js` - template a1GAd0000161Qm5MAE + contents/sections/columns; package-default columns cleaned; logo URL resolved to the FULLUAT instance (org-portability proven).
+5. `create-agreement-template.js` - all 14 Adobe Sign records created (template a2wAd0000025WxNIAU).
+6. Tests: **10/10 pass, 93% coverage** in FULLUAT.
+7. Verification sweep: all 4 flows Active, 6 entity CMDT records, send kill switch Active=true.
+8. Rendering smoke on real data (Q-206372, In Review, GIR event quote): full branding + logo render, and the DRAFT watermark displayed via the org flows' WatermarkShown - the KJDEV-untestable interplay proven on FULLUAT data. Smoke PDF kept out of the repo (real customer data).
+
+**For the UAT team before send-path testing:**
+- **Adobe account link:** FULLUAT has 50,479 agreement records (copied PROD data) but 0 created in the last 60 days - the refresh almost certainly severed the Adobe OAuth link. Re-link via Adobe Sign Admin tab before round-trip tests, then run the Phase 3 step 5 round trip (send to test mailbox -> sign -> verify placement, write-backs, PDF filing) and flip tags white 5px + re-push.
+- **Quick action placement:** "Send for Signature" quick action is deployed but not on any Quote layout - place it on the relevant layout(s) as part of UAT setup.
+- **Existing quotes render blank company blocks until saved once** (stamping flow runs on save) - edit-and-save a quote before generating its first Order Form.
+- Remaining UAT matrix cells from `uat/UAT-results-kjdev.md`: write-backs, one-click UI walk, AA-approval watermark clearing, renewal + default-template regression, real CMDT values (decision 3).
+
+---
+
+## Billing Entity as the legal-entity determinant + real entity values (2026-08-13)
+
+**Kam's direction:** `Opportunity.Billing_Entity__c` (populated on all opps going forward) is the entity determinant, and Kam supplied the value -> legal entity mapping with full registration details - resolving most of decision 3.
+
+**Field facts:** unrestricted picklist, active values LBR / ALM / GHK / LLC / MBL. PROD last-365d: LBR 21,114; ALM 9,047; GHK 6,863; LLC 4,049; MBL 2,567; blank 4,677; plus ~1,300 opps polluted with record IDs (keyprefix a7sUz) from some writer - separate cleanup task spawned. No existing Billing-Entity CMDT in the org (`Renewal_Policy_Owner_Legal_Entity__mdt` is a per-entity timezone policy, not a mapping).
+
+**Implementation (deployed KJDEV + FULLUAT):**
+- `Legal_Entity_Document_Config__mdt` + `Billing_Entity_Value__c`; records rebuilt as 5 rows keyed LBR/ALM/GHK/LLC/MBL with the real legal names, registration numbers, and registered offices. Old 6 placeholder records deleted via destructive changes. Gotcha: additive+postDestructive in ONE deploy fails on the unique `Entity_Value__c` collision (new records validate before old ones delete) - run the destructive deploy FIRST, then additive.
+- `Quote_Stamp_Order_Form_Fields`: primary CMDT match on `TEXT($Record.SBQQ__Opportunity2__r.Billing_Entity__c)`; fallback to the sales-rep entity (`Entity_Value__c`) when billing is blank/junk/unmatched; still clears the block when nothing matches.
+- Verified in KJDEV: ALM -> NY block; GHK -> HK entity block; LBR -> UK block incl. "Trading as Centellic"; junk ID value -> rep-entity fallback.
+
+**Open legal items (decision 3 residue, for Shinae):**
+1. ALM GLOBAL, LLC has NO registration number in the supplied table - row renders blank.
+2. GHK (Hong Kong entity) governing law: v1.2 only defines English or New York law - HK needs a ruling; until then GHK quotes print a visible PLACEHOLDER in section 6.
+3. Governing-law clause sentences for English/NY are stamped as "[DRAFT wording - Legal to confirm] ..." - drafted from the v1.2 source, need sign-off (marker is visible on UAT documents by design).
+4. Rep-entity fallback assumption: GHK maps to rep value "Law Business Research (Asia) Ltd."; The Business Research Company has no billing code and no CMDT row (TBRC-rep quotes with no billing entity clear the block).
+
+## v1.3 source document (13 Aug 2026) - missing section 5 resolved
+
+Shinae's "v1.3 Order Form template 13082026.docx" resolves decision 2: the v1.2 gap at section 5 was the **Special Instructions** section. v1.3 numbering is continuous 1-8: governing law renumbered 6 -> 5; NEW section 6 "Special Instructions". Intro and execution wording verbatim-identical to v1.2 (checked). Implemented + deployed KJDEV & FULLUAT, verified in the rendered PDF:
+- `05-governing-law.html` (renumbered), new `06-special-instructions.html` rendering flow-stamped `Special_Instructions_Display__c` <- the EXISTING `Special_Instructions__c` ("Finance Terms only", LTA 512 - formulas cannot reference it), "None" fallback mirroring Special Terms; new section record S75 order 75.
+- v1.3 still draws governing law as checkboxes - standing rule renders resolved text (unchanged). v1.3 still says payment due "Immediate on receipt of valid invoice" - decision 8 (render live picklist) stands.
+- v1.3's section 2 has only TWO contact rows (Main/commercial, Billing/invoice) - Legal/notices removed from the doc. **Kam ruled same day: drop the row to match v1.3.** Done + pushed to both orgs; `Legal_Notices_Contact__c` and its display formulas remain on the Quote for operational use (not rendered).
+
+**Customer-side field mapping (Kam, 2026-08-13, deployed KJDEV + FULLUAT):**
+| Document blank | Source | Behaviour |
+|---|---|---|
+| Legal entity name | Quote > Bill To Name | merge (unchanged) |
+| Registration number | Quote > Account > Trade Register Number | merge (unchanged) |
+| VAT/GST/Sales Tax No. | Quote > Account > **Sales_Tax_Number__c** (was VAT_ID__c) | signer-fillable: pre-filled via merge mapping from `Customer_VAT_Number__c`, signer can overwrite, written back to Account.Sales_Tax_Number__c on signing (sync flow retargeted) |
+| Billing frequency | Quote > Billing Frequency (via `Adobe_Sign_Billing_Frequency__c` pretty formula) | merge - replaced the fixed "Annual (full year upfront)" literal |
+| PO number | Quote > PO_Number__c | signer-fillable: pre-filled via merge mapping, signer can overwrite, written back on signing |
+
+Kam explicitly chose "both" for VAT/PO: populate from source AND let the signer overwrite with write-back - which is exactly the Phase 3 merge-mapping + data-mapping design, so no mapping records changed (only the VAT formula source and sync-flow target). Pre-fill behaviour remains an UNVERIFIED-until-round-trip convention. Note: the PDF itself always shows the (placement-mode) tag, never the pre-filled value - pre-fill appears in the Adobe signing session.
+
+**RESOLVED same day (Kam, 2026-08-13):** GHK is governed by English law; rule = Americas entities (ALM, LLC) -> New York law, all others (LBR, GHK, MBL) -> English law. Draft markers removed; final clause sentences deployed to KJDEV + FULLUAT and verified (ALM/LLC=NY, LBR/GHK/MBL=English). Also resolved: decision 1 (Legal/Notices = optional Contact lookup on Quote, per-quote entry - built as such, layout placement pending), decision 4 (annual fee = Net Total, confirmed), decision 5 (signatory default from Main/commercial contact, rep can override - confirmed). Still open: ALM registration number (renders blank), decision 2 (missing section 5), decision 6 (General Terms URL live), payment-due/font confirmation.

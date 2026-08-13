@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>Legal_Entity_Document_Config.ALM_Global_LLC</members>
+        <members>Legal_Entity_Document_Config.LBR_UK_Ltd</members>
+        <members>Legal_Entity_Document_Config.LBR_LLC</members>
+        <members>Legal_Entity_Document_Config.LBR_Asia_Ltd</members>
+        <members>Legal_Entity_Document_Config.The_Business_Research_Company</members>
+        <members>Legal_Entity_Document_Config.MBL_Seminars_Limited</members>
+        <name>CustomMetadata</name>
+    </types>
+    <version>62.0</version>
+</Package>

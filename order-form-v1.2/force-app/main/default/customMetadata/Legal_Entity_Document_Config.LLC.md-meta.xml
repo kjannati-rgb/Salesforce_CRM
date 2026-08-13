@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>LLC</label>
+    <protected>false</protected>
+    <values>
+        <field>Billing_Entity_Value__c</field>
+        <value xsi:type="xsd:string">LLC</value>
+    </values>
+    <values>
+        <field>Entity_Value__c</field>
+        <value xsi:type="xsd:string">Law Business Research LLC</value>
+    </values>
+    <values>
+        <field>Legal_Entity_Name__c</field>
+        <value xsi:type="xsd:string">Law Business Research LLC (Trading as “Centellic”)</value>
+    </values>
+    <values>
+        <field>Registration_Number__c</field>
+        <value xsi:type="xsd:string">47-3344406 (Delaware, United States)</value>
+    </values>
+    <values>
+        <field>Registered_Office__c</field>
+        <value xsi:type="xsd:string">21st Floor, 220 East 42nd Street, New York, New York, 10017, United States</value>
+    </values>
+    <values>
+        <field>Governing_Law_Clause__c</field>
+        <value xsi:type="xsd:string">This Order Form and the Agreement are governed by the laws of the State of New York, and the courts of New York County, New York have exclusive jurisdiction over any dispute arising out of or in connection with them.</value>
+    </values>
+</CustomMetadata>

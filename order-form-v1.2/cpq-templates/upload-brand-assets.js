@@ -1,6 +1,6 @@
-// node upload-brand-assets.js --org KJDEV --logo <path-to-png>
-// Uploads the Centellic logo as an externally-available Document in a public folder,
-// idempotent by folder/document name. Prints the ImageServer URL for template HTML.
+// node upload-brand-assets.js --org KJDEV --logo <path-to-png> [--watermark <path-to-png>]
+// Uploads the Centellic logo (and optionally the DRAFT watermark) as externally-available
+// Documents in a public folder, idempotent by document name. Prints ids/URLs for the template.
 const { execSync } = require("child_process");
 const fs = require("fs");
 
@@ -45,4 +45,23 @@ const soql = async (q) => (await (await fetch(`${API}/query?q=${encodeURICompone
   }
   console.log("LOGO_DOC_ID=" + doc.Id);
   console.log("IMG_URL=/servlet/servlet.ImageServer?id=" + doc.Id + "&oid=" + info.id.slice(0, 15));
+
+  const wmIdx = process.argv.indexOf("--watermark");
+  if (wmIdx > -1) {
+    const wm64 = fs.readFileSync(process.argv[wmIdx + 1]).toString("base64");
+    let wm = (await soql(`SELECT Id FROM Document WHERE DeveloperName = 'Order_Form_Draft_Watermark' LIMIT 1`)).records[0];
+    if (wm) {
+      const res = await fetch(`${API}/sobjects/Document/${wm.Id}`, { method: "PATCH", headers: H, body: JSON.stringify({ Body: wm64, IsPublic: true }) });
+      console.log("updated watermark", wm.Id, res.status);
+    } else {
+      const res = await fetch(`${API}/sobjects/Document`, { method: "POST", headers: H, body: JSON.stringify({
+        Name: "Order Form Draft Watermark", DeveloperName: "Order_Form_Draft_Watermark", FolderId: folder.Id,
+        Type: "png", ContentType: "image/png", IsPublic: true, Body: wm64 }) });
+      const b = await res.json();
+      if (!res.ok) { console.error("Watermark create failed:", JSON.stringify(b)); process.exit(1); }
+      wm = { Id: b.id };
+      console.log("created watermark", b.id);
+    }
+    console.log("WATERMARK_DOC_ID=" + wm.Id);
+  }
 })().catch(e => { console.error(e); process.exit(1); });

@@ -31,7 +31,7 @@
             </value>
         </filters>
         <inputAssignments>
-            <field>VAT_ID__c</field>
+            <field>Sales_Tax_Number__c</field>
             <value>
                 <elementReference>$Record.Customer_VAT_Number_Captured__c</elementReference>
             </value>

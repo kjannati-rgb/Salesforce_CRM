@@ -2,6 +2,43 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>62.0</apiVersion>
     <assignments>
+        <name>Assign_Stamp_From_Billing</name>
+        <label>Stamp company block from billing entity config</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Company_Entity_Name__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Billing_Config.Legal_Entity_Name__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Company_Reg_Number__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Billing_Config.Registration_Number__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Company_Registered_Office__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Billing_Config.Registered_Office__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Governing_Law_Text__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Billing_Config.Governing_Law_Clause__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Decision_Signatory_Blank</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assign_Stamp_Company_Block</name>
         <label>Stamp company block from config</label>
         <locationX>0</locationX>
@@ -103,6 +140,9 @@
                 <stringValue>None</stringValue>
             </value>
         </assignmentItems>
+        <connector>
+            <targetReference>Decision_Special_Instructions</targetReference>
+        </connector>
     </assignments>
     <assignments>
         <name>Assign_Special_Terms_Copy</name>
@@ -116,7 +156,61 @@
                 <elementReference>$Record.Special_Terms__c</elementReference>
             </value>
         </assignmentItems>
+        <connector>
+            <targetReference>Decision_Special_Instructions</targetReference>
+        </connector>
     </assignments>
+    <assignments>
+        <name>Assign_Special_Instructions_None</name>
+        <label>Special instructions display = None</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Special_Instructions_Display__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>None</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Assign_Special_Instructions_Copy</name>
+        <label>Special instructions display = value</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Special_Instructions_Display__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Special_Instructions__c</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <name>Decision_Billing_Found</name>
+        <label>Billing entity config found?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Get_Entity_Config</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No billing match - fall back to rep entity</defaultConnectorLabel>
+        <rules>
+            <name>Billing_Config_Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Billing_Config</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Stamp_From_Billing</targetReference>
+            </connector>
+            <label>Billing config found</label>
+        </rules>
+    </decisions>
     <decisions>
         <name>Decision_Config_Found</name>
         <label>Entity config found?</label>
@@ -168,6 +262,31 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Decision_Special_Instructions</name>
+        <label>Special instructions populated?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Special_Instructions_Copy</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Has special instructions</defaultConnectorLabel>
+        <rules>
+            <name>Special_Instructions_Blank</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Special_Instructions__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Special_Instructions_None</targetReference>
+            </connector>
+            <label>Blank</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Decision_Signatory_Blank</name>
         <label>Signatory blank and primary set?</label>
         <locationX>0</locationX>
@@ -201,6 +320,11 @@
     </decisions>
     <environments>Default</environments>
     <formulas>
+        <name>BillingEntityText</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!$Record.SBQQ__Opportunity2__r.Billing_Entity__c})</expression>
+    </formulas>
+    <formulas>
         <name>EntityText</name>
         <dataType>String</dataType>
         <expression>TEXT({!$Record.SBQQ__SalesRep__r.LBR_Legal_Entity__c})</expression>
@@ -220,6 +344,27 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Billing_Config</name>
+        <label>Get config by opportunity billing entity</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Decision_Billing_Found</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Billing_Entity_Value__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>BillingEntityText</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Legal_Entity_Document_Config__mdt</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <recordLookups>
         <name>Get_Entity_Config</name>
         <label>Get entity config</label>
@@ -245,7 +390,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_Entity_Config</targetReference>
+            <targetReference>Get_Billing_Config</targetReference>
         </connector>
         <object>SBQQ__Quote__c</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>

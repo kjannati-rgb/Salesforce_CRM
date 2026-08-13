@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    <label>ALM Global, LLC</label>
+    <label>ALM</label>
     <protected>false</protected>
+    <values>
+        <field>Billing_Entity_Value__c</field>
+        <value xsi:type="xsd:string">ALM</value>
+    </values>
     <values>
         <field>Entity_Value__c</field>
         <value xsi:type="xsd:string">ALM Global, LLC</value>
     </values>
     <values>
         <field>Legal_Entity_Name__c</field>
-        <value xsi:type="xsd:string">ALM Global, LLC</value>
+        <value xsi:type="xsd:string">ALM GLOBAL, LLC</value>
     </values>
     <values>
         <field>Registration_Number__c</field>
-        <value xsi:type="xsd:string">PLACEHOLDER</value>
+        <value xsi:nil="true"/>
     </values>
     <values>
         <field>Registered_Office__c</field>
-        <value xsi:type="xsd:string">PLACEHOLDER - registered office pending decision 3</value>
+        <value xsi:type="xsd:string">21st Floor, 220 East 42nd Street, New York, NY 10017, United States</value>
     </values>
     <values>
         <field>Governing_Law_Clause__c</field>
-        <value xsi:type="xsd:string">PLACEHOLDER - governing law clause pending decision 3</value>
+        <value xsi:type="xsd:string">This Order Form and the Agreement are governed by the laws of the State of New York, and the courts of New York County, New York have exclusive jurisdiction over any dispute arising out of or in connection with them.</value>
     </values>
 </CustomMetadata>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Legal_Notices_Contact__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <externalId>false</externalId>
+    <label>Legal Notices Contact</label>
+    <referenceTo>Contact</referenceTo>
+    <relationshipLabel>Quotes (Legal Notices)</relationshipLabel>
+    <relationshipName>Quotes_Legal_Notices</relationshipName>
+    <required>false</required>
+    <type>Lookup</type>
+</CustomField>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Main_Contact_Email_Phone__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(ISBLANK(SBQQ__PrimaryContact__c), "", SBQQ__PrimaryContact__r.Email &amp; IF(ISBLANK(SBQQ__PrimaryContact__r.Phone), "", " / " &amp; SBQQ__PrimaryContact__r.Phone))</formula>
+    <formulaTreatBlanksAs>BlankAsBlank</formulaTreatBlanksAs>
+    <label>Main/Commercial Contact Email and Phone</label>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

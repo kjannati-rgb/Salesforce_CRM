@@ -1,0 +1,24 @@
+<!-- Section 2. Legal/notices row renders blank until decision 1 lands (field exists, not yet populated by any process). -->
+<p style="font-size:12px;font-weight:bold;margin-top:10px;margin-bottom:4px;">2. Customer contacts</p>
+<table style="width:100%;font-size:9px;border-collapse:collapse;" border="1" cellpadding="4">
+  <tr style="background-color:#F2F2F2;">
+    <td style="border:1px solid #000000;padding:3px;width:24%;"><b>Role</b></td>
+    <td style="border:1px solid #000000;padding:3px;width:42%;"><b>Name and title</b></td>
+    <td style="border:1px solid #000000;padding:3px;width:34%;"><b>Email / phone</b></td>
+  </tr>
+  <tr>
+    <td style="border:1px solid #000000;padding:3px;">Main / commercial</td>
+    <td style="border:1px solid #000000;padding:3px;">{!quote.Main_Contact_Name_Title__c}</td>
+    <td style="border:1px solid #000000;padding:3px;">{!quote.Main_Contact_Email_Phone__c}</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid #000000;padding:3px;">Billing / invoice</td>
+    <td style="border:1px solid #000000;padding:3px;">{!quote.Billing_Contact_Name_Title__c}</td>
+    <td style="border:1px solid #000000;padding:3px;">{!quote.Billing_Contact_Email_Phone__c}</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid #000000;padding:3px;">Legal / notices</td>
+    <td style="border:1px solid #000000;padding:3px;">{!quote.Legal_Contact_Name_Title__c}</td>
+    <td style="border:1px solid #000000;padding:3px;">{!quote.Legal_Contact_Email_Phone__c}</td>
+  </tr>
+</table>

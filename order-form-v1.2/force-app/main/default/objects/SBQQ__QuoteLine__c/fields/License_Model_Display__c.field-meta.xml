@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>License_Model_Display__c</fullName>
+    <externalId>false</externalId>
+    <formula>CASE(TEXT(License_Model__c),
+"Authorised Users", "Authorised Users - Named individuals as listed in Annex A. Number of authorised users: " &amp; TEXT(Authorised_User_Count__c),
+"Limited Access", "Limited Access - Up to " &amp; TEXT(Authorised_User_Count__c) &amp; " authorised users (as defined in the General Terms).",
+"Benefiting Group", "Benefiting Group - All individuals within the following group: " &amp; Benefiting_Group_Description__c,
+"Enterprise-Wide Access", "Enterprise-Wide Access - All current staff of the Customer and its Affiliates. Customer warrants approximately " &amp; TEXT(Warranted_Headcount__c) &amp; " staff at the Effective Date and will notify the Company promptly if headcount increases by more than 5%.",
+"")</formula>
+    <formulaTreatBlanksAs>BlankAsBlank</formulaTreatBlanksAs>
+    <label>License Model (Display)</label>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

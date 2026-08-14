@@ -8,15 +8,15 @@ https://claude.ai/code/artifact/026330c1-3dc7-45e4-b033-7cf24975afab
 ## 1. Business decisions (Shinae / Finance / Kam)
 - [x] **Decision 3 - legal entity table: RESOLVED 2026-08-13.** Kam supplied the Billing Entity mapping (LBR/ALM/GHK/LLC/MBL) with legal names, reg numbers, offices; deployed to KJDEV + FULLUAT, keyed on Opportunity.Billing_Entity__c with sales-rep fallback. Governing law resolved same day: Americas entities (ALM, LLC) -> New York; LBR, GHK, MBL -> English law; final clauses deployed, draft markers removed. Only residue: ALM GLOBAL, LLC registration number (renders blank).
 - [x] Decision 1 - RESOLVED 2026-08-13: optional Contact lookup on Quote, entered per quote (built as such; needs layout placement with the quick action).
-- [ ] Decision 2 - missing section 5: typo or deleted (one-line renumber).
+- [x] Decision 2 - RESOLVED by v1.3 (2026-08-13): missing section was Special Instructions; governing law renumbered 6->5, new section 6 renders Special_Instructions__c. Implemented both sandboxes.
 - [x] Decision 4 - CONFIRMED 2026-08-13: Net Total is the per-line annual fee.
 - [x] Decision 5 - CONFIRMED 2026-08-13: signatory defaults from Main/commercial contact, rep can override.
 - [x] CONFIRMED 2026-08-13 (Kam): payment-due renders the quote's live payment terms. Font: Helvetica stands in for Aptos (accepted via brand review).
-- [ ] Decision 6 - General Terms URL live at centellic.com before first customer send.
+- [x] Decision 6 - VERIFIED 2026-08-13 (Kam tested): the General Terms URL resolves. Note: if the page path ever changes, the Order Form intro wording must change with it.
 
 ## 2. FULLUAT setup (Kam / admin)
 - [ ] **Re-link Adobe Sign account** (Adobe Sign Admin tab, interactive OAuth) - refresh severed it; gates all send tests.
-- [ ] Quote layout updates: "Send for Signature" quick action + Legal/Notices Contact + Signatory Contact fields on the subs Quote layout(s).
+- [ ] Quote layout updates: "Send for Signature" quick action + Signatory Contact field on the subs Quote layout(s). (Legal/Notices no longer prints per v1.3; layout placement optional/ops-only.)
 - [ ] Assign `Order_Form_Template_Admin` to UAT testers.
 
 ## 3. FULLUAT testing (UAT team - remaining cells from uat/UAT-results-kjdev.md)

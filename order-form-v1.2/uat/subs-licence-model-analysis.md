@@ -16,6 +16,11 @@ and where the user count lives for each family.
 `Number_of_Users__c` (picklist) is NULL on every line in all three families - dead field for subs.
 `Employee_Headcount__c` also null throughout.
 
+**Scope correction (Kam 2026-08-13):** the Order Form covers SUBSCRIPTION products only.
+Non-subs GAR items in the 180-day data (Awards/Academy delegate tickets, Guides, Know-how
+editions, firm profiles) never appear on this Order Form and are out of scope. Lexology PRO
+Insights editions likewise if they are not sold as subscriptions.
+
 ## Treatment map
 
 | Product (180d CW lines) | Licence model | Count/description source |
@@ -27,7 +32,7 @@ and where the user count lives for each family.
 | Law.com / Law.Com International / News Vault / Compass / Radar / Pro (2,581) | **Limited Access** ("Up to N users") | count = `Number_of_Seats__c` |
 | GAR - Individual License (74 incl. Standard) | **Authorised Users** | count = 1 (or quantity) |
 | GAR - Team License (81) | **Limited Access** | team size is a commercial construct, count not reliably in data (qty mostly 1, max 5) -> product-level default needed |
-| GAR - Office License (38) | **Benefiting Group** | group = the named office - description needs capturing per deal |
+| GAR - Office License (38) | **CORRECTED (Kam 2026-08-13): not Benefiting Group** - commercially a flat list price x quantity product | licence wording ruling needed: none of the four v1.3 sentences describes it; product name itself carries the scope |
 | GAR - Group License (27) | **Benefiting Group** | description needs capturing per deal |
 | GAR - Firmwide License (30) | **Enterprise-Wide Access** | warranted headcount not captured anywhere today -> new data point for reps |
 | GAR - Bespoke License (6) | per-deal manual | rep sets model + values |

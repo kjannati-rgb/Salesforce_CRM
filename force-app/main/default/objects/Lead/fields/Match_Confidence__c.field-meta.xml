@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Match_Confidence__c</fullName>
+    <label>Match Confidence (Smart Convert)</label>
+    <description>The Smart Convert confidence tier at conversion: ONECLICK / REVIEW / GUIDED_CREATE.</description>
+    <type>Text</type>
+    <length>40</length>
+    <required>false</required>
+</CustomField>

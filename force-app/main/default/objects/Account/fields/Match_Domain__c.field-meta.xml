@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Match_Domain__c</fullName>
+    <description>Indexed email/web domain key used by LeadMatchSelectService to resolve a lead to a Firm. Backfilled from Approved_Email_Domain__c, Website, and Groove domains.</description>
+    <externalId>true</externalId>
+    <label>Match Domain</label>
+    <length>255</length>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,564 @@
+<template>
+    <div class="sc-root">
+        <div class="sc-top">
+            <div class="sc-brand">
+                <span class="sc-mark"></span>
+                <span><span class="sc-wm">Smart Convert</span><small>RevOps · Match &amp; Select</small></span>
+            </div>
+            <span class="sc-cent">CE<i>N</i>TELLIC</span>
+            <template lwc:if={envPill}><span class="sc-pill">{envPill}</span></template>
+        </div>
+
+        <template lwc:if={converting}>
+            <div class="sc-converting">
+                <div class="sc-conv-ring"></div>
+                <div class="sc-conv-h">Converting…</div>
+                <div class="sc-conv-msg">{convertingMsg}</div>
+            </div>
+        </template>
+
+        <template lwc:if={loading}>
+            <div class="sc-stage" role="status" aria-busy="true" aria-label="Resolving this lead">
+                <div class="sc-skel sc-skel-bar" style="width:130px;margin-bottom:14px"></div>
+                <div class="sc-grid">
+                    <div class="sc-panel"><div class="sc-pb">
+                        <div class="sc-skel-row"><span class="sc-skel sc-skel-dot"></span>
+                            <div class="sc-skel-lines"><div class="sc-skel sc-skel-bar" style="width:65%"></div>
+                                <div class="sc-skel sc-skel-bar" style="width:40%"></div></div></div>
+                        <div class="sc-skel-row"><span class="sc-skel sc-skel-dot"></span>
+                            <div class="sc-skel-lines"><div class="sc-skel sc-skel-bar" style="width:55%"></div>
+                                <div class="sc-skel sc-skel-bar" style="width:35%"></div></div></div>
+                    </div></div>
+                    <div class="sc-panel"><div class="sc-pb">
+                        <div class="sc-skel-row"><span class="sc-skel sc-skel-dot"></span>
+                            <div class="sc-skel-lines"><div class="sc-skel sc-skel-bar" style="width:60%"></div>
+                                <div class="sc-skel sc-skel-bar" style="width:45%"></div></div></div>
+                        <div class="sc-skel-row"><span class="sc-skel sc-skel-dot"></span>
+                            <div class="sc-skel-lines"><div class="sc-skel sc-skel-bar" style="width:50%"></div>
+                                <div class="sc-skel sc-skel-bar" style="width:30%"></div></div></div>
+                    </div></div>
+                </div>
+            </div>
+        </template>
+
+        <template lwc:if={error}>
+            <div class="sc-stage"><div class="sc-banner sc-block"><c-sc-icon name="ban" size="16" class="sc-ic"></c-sc-icon><div>{error}</div></div></div>
+        </template>
+
+        <template lwc:if={data}>
+            <div class="sc-stepper">
+                <template for:each={stepper} for:item="st">
+                    <div key={st.label} class={st.cls}>
+                        <span class="sc-num">{st.num}</span><span class="sc-lbl">{st.label}</span>
+                        <template lwc:if={st.showBar}><span class="sc-bar"></span></template>
+                    </div>
+                </template>
+            </div>
+
+            <div class="sc-qbar">
+                <template lwc:if={hasQuality}>
+                    <template lwc:if={data.quality.grade}><span class="sc-qchip">Grade {data.quality.grade}</span></template>
+                    <template lwc:if={data.quality.score}><span class="sc-qchip">Score {data.quality.score}</span></template>
+                    <template lwc:if={data.quality.emailStatus}><span class={emailChipClass}>Email: {data.quality.emailStatus}</span></template>
+                </template>
+                <template lwc:if={showNoScore}><span class="sc-qchip sc-q-none">No Pardot score on this lead</span></template>
+            </div>
+
+            <div class="sc-stage">
+                <!-- ===== IN-FLOW DISQUALIFY ===== -->
+                <template lwc:if={disqualifyOpen}>
+                    <div class="sc-screen">
+                        <div class="sc-eyebrow">Not a fit · disqualify</div>
+                        <h2 class="sc-title">Disqualify — but keep the record</h2>
+                        <p class="sc-sub">We'll still link this person to the account and contact (existing or new) with <b>no opportunity</b>, and note the reason — so you keep one complete view of every customer.</p>
+                        <div class="sc-optrow">
+                            <lightning-combobox label="Reason (required)" required value={disqualifyReason}
+                                options={disqualifyReasonOptions} onchange={handleDisqualifyReason}
+                                placeholder="Select a reason…"></lightning-combobox>
+                        </div>
+                        <div class="sc-express-actions">
+                            <button class="sc-btn sc-primary" onclick={doDisqualify} disabled={disqualifyDisabled}><c-sc-icon name="ban" size="15"></c-sc-icon> Disqualify lead</button>
+                            <button class="sc-express-review" onclick={cancelDisqualify}>← Back</button>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- ===== STEP 0 · INBOUND ===== -->
+                <template lwc:if={isStep0}>
+                    <div class="sc-screen">
+                        <div class="sc-eyebrow">One engine · two doors</div>
+                        <h2 class="sc-title">An enquiry lands</h2>
+                        <p class="sc-sub">A Lead (or a Pardot Form Completion) arrives. Both call the same match-and-select service.</p>
+                        <div class="sc-grid">
+                            <div class="sc-panel">
+                                <div class="sc-ph"><c-sc-icon name="mail" size="15"></c-sc-icon> Lead</div>
+                                <div class="sc-pb">
+                                    <div class="sc-row"><span class="sc-l">Name</span><span class="sc-v">{data.inbound.name}</span></div>
+                                    <div class="sc-row"><span class="sc-l">Title</span><span class="sc-v">{data.inbound.title}</span></div>
+                                    <div class="sc-row"><span class="sc-l">Email</span><span class="sc-v">{data.inbound.email}</span></div>
+                                    <div class="sc-row"><span class="sc-l">Company</span><span class="sc-v">{data.inbound.company}</span></div>
+                                    <div class="sc-row"><span class="sc-l">Country / City</span><span class="sc-v">{data.inbound.country} · {data.inbound.region}</span></div>
+                                </div>
+                            </div>
+                            <div class="sc-panel">
+                                <div class="sc-ph"><c-sc-icon name="refresh" size="15"></c-sc-icon> Two doors, one engine</div>
+                                <div class="sc-pb">
+                                    <p class="sc-mini sc-mb12">Replaces both conversion paths with a single service:</p>
+                                    <div class="sc-node sc-office"><div class="sc-ni">1</div><div><div class="sc-nt">Native “Convert” button</div><div class="sc-nm">Lead record → this component</div></div></div>
+                                    <div class="sc-conn"></div>
+                                    <div class="sc-node sc-office"><div class="sc-ni">2</div><div><div class="sc-nt">Pardot form completion</div><div class="sc-nm">links the right account the moment a form comes in</div></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- ===== STEP 1 · MATCH ===== -->
+                <template lwc:if={isStep1}>
+                    <div class="sc-screen">
+                        <template lwc:if={expressEligible}>
+                            <div class="sc-express">
+                                <div class="sc-express-h"><c-sc-icon name="bolt" size="15"></c-sc-icon> High-confidence match — convert in one click</div>
+                                <div class="sc-express-b">{data.firm.name} → <b>{recommendedOfficeName}</b>{expressExtra}</div>
+                                <div class="sc-express-actions">
+                                    <button class="sc-btn sc-primary" onclick={expressConvert}><c-sc-icon name="bolt" size="15"></c-sc-icon> Convert now</button>
+                                    <button class="sc-express-review" onclick={next}>Review details →</button>
+                                </div>
+                            </div>
+                        </template>
+                        <template lwc:if={emailBad}>
+                            <div class="sc-banner sc-block"><c-sc-icon name="mail" size="16" class="sc-ic"></c-sc-icon>
+                                <div><b>Email flagged Invalid</b> by verification — converting will create a contact with a bad email. Consider disqualifying instead.</div></div>
+                        </template>
+                        <div class="sc-eyebrow">Resolve · indexed, instant</div>
+                        <h2 class="sc-title">Who is this, really?</h2>
+                        <p class="sc-sub">Domain → Firm via the indexed match key. No fuzzy compute in the live path.</p>
+                        <div class="sc-grid">
+                            <div class="sc-panel">
+                                <div class="sc-ph"><c-sc-icon name="search" size="15"></c-sc-icon> Matching</div>
+                                <div class="sc-pb">
+                                    <ul class="sc-scan">
+                                        <template for:each={scanItems} for:item="s">
+                                            <li key={s.key} style={s.style}>
+                                                <span class="sc-dot"></span>
+                                                <lightning-formatted-rich-text value={s.html}></lightning-formatted-rich-text>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                    <div class={confClass}>
+                                        <div class="sc-conf-h"><span>Confidence</span><span>{data.confLabel}</span></div>
+                                        <div class="sc-meter"><i></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sc-panel">
+                                <div class="sc-ph"><c-sc-icon name="company" size="15"></c-sc-icon> Resolved company</div>
+                                <div class="sc-pb">
+                                    <template lwc:if={data.hasFirm}>
+                                        <div class="sc-firmcard"><div class="sc-logo">{data.firm.init}</div>
+                                            <div><div class="sc-fnm">{data.firm.name}</div><div class="sc-fmt">{data.firm.meta}</div></div></div>
+                                        <p class="sc-mini sc-mt12">Leads convert into an <b>Office</b> under this Firm — never the Firm itself.</p>
+                                    </template>
+                                    <template lwc:if={data.ambiguous}>
+                                        <div class="sc-firmcard"><div class="sc-logo sc-amber"><c-sc-icon name="warning" size="22"></c-sc-icon></div>
+                                            <div><div class="sc-fnm">Several entities share this domain</div><div class="sc-fmt">Pick the right one next.</div></div></div>
+                                    </template>
+                                    <template lwc:if={isNoMatch}>
+                                        <div class="sc-firmcard"><div class="sc-logo sc-red">?</div>
+                                            <div><div class="sc-fnm">No existing company</div><div class="sc-fmt">We'll create one — carefully.</div></div></div>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- ===== STEP 2 · CHOOSE ===== -->
+                <template lwc:if={isStep2}>
+                    <div class="sc-screen">
+                      <template lwc:if={searchOpen}>
+                        <div class="sc-eyebrow">Manual override · search</div>
+                        <h2 class="sc-title">Find the right firm</h2>
+                        <p class="sc-sub">Auto-match wrong or empty? Search existing Firms and convert into one of its offices.</p>
+                        <div class="sc-searchrow">
+                            <lightning-input type="search" variant="label-hidden" label="Firm name"
+                                value={searchTerm} onchange={handleSearchInput} placeholder="Type a firm name…"></lightning-input>
+                            <button class="sc-btn sc-primary" onclick={runSearch}>Search</button>
+                        </div>
+                        <template lwc:if={searching}>
+                            <div class="sc-cand" style="pointer-events:none"><div class="sc-skel-row" style="margin-bottom:0"><span class="sc-skel sc-skel-dot"></span><div class="sc-skel-lines"><div class="sc-skel sc-skel-bar" style="width:55%"></div><div class="sc-skel sc-skel-bar" style="width:35%"></div></div></div></div>
+                            <div class="sc-cand" style="pointer-events:none"><div class="sc-skel-row" style="margin-bottom:0"><span class="sc-skel sc-skel-dot"></span><div class="sc-skel-lines"><div class="sc-skel sc-skel-bar" style="width:45%"></div><div class="sc-skel sc-skel-bar" style="width:30%"></div></div></div></div>
+                        </template>
+                        <template for:each={searchResultsView} for:item="f">
+                            <div key={f.key} class={f.cls} data-key={f.key} role="button" tabindex="0" onclick={pickManualFirm} onkeydown={handleCardKey}>
+                                <div class="sc-top2"><div class="sc-lft"><span class={f.radioCls}></span>
+                                    <div><div class="sc-onm">{f.name}</div><div class="sc-cmeta">{f.meta}</div></div></div></div>
+                            </div>
+                        </template>
+                        <p class="sc-override"><button class="sc-btn-link" onclick={resetToRecommendation}>← Back to the recommendation</button></p>
+                      </template>
+                      <template lwc:else>
+                        <template lwc:if={showFirmPicker}>
+                            <div class="sc-eyebrow">Review · confidence-adaptive</div>
+                            <h2 class="sc-title">Which company?</h2>
+                            <p class="sc-sub">One domain, several legal entities. A review match never auto-converts — you pick.</p>
+                            <div class={bannerCls}><c-sc-icon name={data.banner.ic} size="16" class="sc-ic"></c-sc-icon>
+                                <lightning-formatted-rich-text value={data.banner.html}></lightning-formatted-rich-text></div>
+                            <div role="radiogroup" aria-label="Candidate companies"><template for:each={firmOptions} for:item="f">
+                                <div key={f.id} class={f.cls} data-id={f.id} role="radio" tabindex="0" aria-checked={f.ariaChecked} onclick={handleSelectFirm} onkeydown={handleCardKey}>
+                                    <div class="sc-top2"><div class="sc-lft"><span class={f.radioCls}></span>
+                                        <div><div class="sc-onm">{f.name}</div><div class="sc-cmeta">{f.meta}</div></div></div></div>
+                                </div>
+                            </template></div>
+                        </template>
+
+                        <template lwc:if={isNoMatch}>
+                            <div class="sc-eyebrow">Create new · check for duplicates first</div>
+                            <h2 class="sc-title">No existing match — create cleanly</h2>
+                            <p class="sc-sub">No firm matched this domain. We'll check for look-alikes first, then set up a new firm with its first office.</p>
+                            <div class={bannerCls}><c-sc-icon name={data.banner.ic} size="16" class="sc-ic"></c-sc-icon>
+                                <lightning-formatted-rich-text value={data.banner.html}></lightning-formatted-rich-text></div>
+                            <div class="sc-cand sc-sel">
+                                <div class="sc-top2"><div class="sc-lft"><span class="sc-radio sc-on"></span>
+                                    <div><div class="sc-onm">Create new Firm + first Office</div>
+                                        <div class="sc-cmeta">{data.inbound.company} · {data.inbound.country}</div></div></div></div>
+                            </div>
+                        </template>
+
+                        <template lwc:if={firmNoOffice}>
+                            <div class="sc-eyebrow">Create office · under existing firm</div>
+                            <h2 class="sc-title">Firm found — add its first office</h2>
+                            <p class="sc-sub">This firm already exists but doesn't have an office here yet. We'll add the first office under it — never a duplicate firm, never a stray record.</p>
+                            <div class={bannerCls}><c-sc-icon name={data.banner.ic} size="16" class="sc-ic"></c-sc-icon>
+                                <lightning-formatted-rich-text value={data.banner.html}></lightning-formatted-rich-text></div>
+                            <div class="sc-cand sc-sel">
+                                <div class="sc-top2"><div class="sc-lft"><span class="sc-radio sc-on"></span>
+                                    <div><div class="sc-onm">Create new Office under {placementFirmName}</div>
+                                        <div class="sc-cmeta">{data.inbound.region} · {data.inbound.country}</div></div></div></div>
+                            </div>
+                        </template>
+
+                        <template lwc:if={showOfficePicker}>
+                            <div class="sc-eyebrow">Select · most (recent) opportunities by default</div>
+                            <h2 class="sc-title">Convert into the right office</h2>
+                            <p class="sc-sub">Candidate offices ranked by location, then opportunity weight. The recommendation is pre-selected; override anytime.</p>
+                            <template lwc:if={manualMode}>
+                                <div class="sc-banner sc-info"><c-sc-icon name="search" size="16" class="sc-ic"></c-sc-icon>
+                                    <div>Manually selected firm: <b>{placementFirmName}</b>. Choose an office below.</div></div>
+                            </template>
+                            <template lwc:else>
+                                <div class={bannerCls}><c-sc-icon name={data.banner.ic} size="16" class="sc-ic"></c-sc-icon>
+                                    <lightning-formatted-rich-text value={data.banner.html}></lightning-formatted-rich-text></div>
+                            </template>
+                            <div role="radiogroup" aria-label="Candidate offices"><template for:each={decoratedOffices} for:item="o">
+                                <div key={o.id} class={o.cls} data-i={o.index} role="radio" tabindex="0" aria-checked={o.ariaChecked} onclick={handleSelectOffice} onkeydown={handleCardKey}>
+                                    <template lwc:if={o.hasBadge}><span class={o.badgeCls}>{o.badgeLabel}</span></template>
+                                    <div class="sc-top2">
+                                        <div class="sc-lft"><span class={o.radioCls}></span>
+                                            <div><div class="sc-onm">{o.nm}</div><div class="sc-cmeta">{o.meta}</div>
+                                                <div class="sc-cmeta">{o.sub}</div>
+                                                <template lwc:if={o.flag}><span class="sc-flagchip">{o.flag}</span></template>
+                                            </div>
+                                        </div>
+                                        <div class="sc-opps"><div class="sc-big">{o.opps}</div><div class="sc-cap">{o.val} won</div></div>
+                                    </div>
+                                    <div class="sc-obar"><i style={o.barStyle}></i></div>
+                                </div>
+                            </template></div>
+                        </template>
+                        <p class="sc-override">
+                            <template lwc:if={manualMode}>
+                                <button class="sc-btn-link" onclick={resetToRecommendation}>↩ Back to the recommendation</button>
+                                &nbsp;·&nbsp;
+                                <button class="sc-btn-link" onclick={openSearch}><c-sc-icon name="search" size="13"></c-sc-icon> Search again</button>
+                            </template>
+                            <template lwc:else>
+                                <button class="sc-btn-link" onclick={openSearch}><c-sc-icon name="search" size="13"></c-sc-icon> Wrong firm? Search &amp; pick a different one</button>
+                            </template>
+                        </p>
+                      </template>
+                    </div>
+                </template>
+
+                <!-- ===== STEP 3 · CONFIRM ===== -->
+                <template lwc:if={isStep3}>
+                    <div class="sc-screen">
+                        <template lwc:if={hasContext}>
+                            <div class="sc-ctx">
+                                <button class={contextBarCls} onclick={toggleContext} aria-expanded={contextOpen} aria-controls="ctxBody">
+                                    <c-sc-icon name="shield" size="14"></c-sc-icon>
+                                    <span class="sc-ctx-title">Account context</span>
+                                    <span class="sc-ctx-sum">{contextSummary}</span>
+                                    <c-sc-icon name="chevron" size="16" class="sc-ctx-chev"></c-sc-icon>
+                                </button>
+                                <template lwc:if={contextOpen}>
+                                    <div class="sc-ctx-body" id="ctxBody">
+                                        <template lwc:if={hasOwnership}>
+                                            <div class="sc-ctx-row">
+                                                <span class="sc-own-l">Owner</span><span class="sc-own-v">{ownership.firmOwner}</span>
+                                                <template lwc:if={ownership.youOwn}><span class="sc-own-you">You own this</span></template>
+                                            </div>
+                                            <template lwc:if={ownership.hasTeam}>
+                                                <div class="sc-own-team">
+                                                    <template for:each={ownershipTeamView} for:item="tm">
+                                                        <span key={tm.key} class={tm.cls}>{tm.label}</span>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                        </template>
+                                        <template lwc:if={hasCommittee}>
+                                            <div class="sc-ctx-div"></div>
+                                            <div class="sc-comm-head"><c-sc-icon name="user" size="14"></c-sc-icon> <span>Buying committee</span>
+                                                <span class="sc-comm-sum">{committeeSummary}</span></div>
+                                            <div class="sc-comm-cov">
+                                                <template for:each={coverageView} for:item="cov">
+                                                    <span key={cov.persona} class={cov.cls}>{cov.label}</span>
+                                                </template>
+                                            </div>
+                                            <div class="sc-comm-list">
+                                                <template for:each={committeeMembersView} for:item="m">
+                                                    <div key={m.id} class="sc-comm-row">
+                                                        <div class="sc-comm-main">
+                                                            <a href={m.url} target="_blank">{m.name}</a>
+                                                            <div class="sc-comm-meta">{m.meta}</div>
+                                                        </div>
+                                                        <template lwc:if={m.showPersona}><span class={m.personaCls}>{m.persona}</span></template>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                            <template lwc:if={committeeMore}>
+                                                <div class="sc-comm-more">+{committeeMore} more at this firm</div>
+                                            </template>
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                        <template lwc:if={isNoMatch}>
+                            <div class="sc-eyebrow">Create new · check for duplicates first</div>
+                            <h2 class="sc-title">Create — without making a duplicate</h2>
+                            <p class="sc-sub">We couldn't find a match, so we double-check for look-alikes first, then set up a new firm with its first office.</p>
+                            <div class="sc-grid">
+                                <div class="sc-panel"><div class="sc-ph"><c-sc-icon name="shield" size="15"></c-sc-icon> Duplicate checks</div><div class="sc-pb">
+                                    <ul class="sc-scan"><template for:each={data.dedup} for:item="d">
+                                        <li key={d}><span class="sc-dot"></span>
+                                            <lightning-formatted-rich-text value={d}></lightning-formatted-rich-text></li>
+                                    </template></ul></div></div>
+                                <div class="sc-panel"><div class="sc-ph"><c-sc-icon name="layout" size="15"></c-sc-icon> What gets created</div><div class="sc-pb">
+                                    <div class="sc-node sc-firm"><div class="sc-ni">N</div><div><div class="sc-nt">New firm</div><div class="sc-nm">the parent record for this organisation</div></div></div>
+                                    <div class="sc-conn"></div>
+                                    <div class="sc-node sc-office"><div class="sc-ni"><c-sc-icon name="company" size="16"></c-sc-icon></div><div><div class="sc-nt">New office</div><div class="sc-nm">where this contact will live</div></div></div>
+                                    <div class="sc-conn"></div>
+                                    <div class="sc-node sc-contact"><div class="sc-ni"><c-sc-icon name="user" size="16"></c-sc-icon></div><div><div class="sc-nt">{data.inbound.name}</div><div class="sc-nm">{data.inbound.email}</div></div></div>
+                                    <div class="sc-stamp">Flagged as a <span class="sc-y">new account</span> so your team can give it a quick review</div>
+                                </div></div>
+                            </div>
+                            <div class="sc-optrow">
+                                <lightning-combobox label="Why are you creating a new account? (required)" required
+                                    value={createReason} options={createReasonOptions} onchange={handleCreateReason}
+                                    placeholder="Select a reason…"></lightning-combobox>
+                            </div>
+                        </template>
+
+                        <template lwc:if={firmNoOffice}>
+                            <div class="sc-eyebrow">Confirm · new office under firm</div>
+                            <h2 class="sc-title">Create the office, then convert</h2>
+                            <p class="sc-sub">We'll add a new office under {placementFirmName} using the lead's location, then convert the contact into it.</p>
+                            <div class="sc-grid">
+                                <div class="sc-panel"><div class="sc-ph"><c-sc-icon name="target" size="15"></c-sc-icon> Where this lands</div><div class="sc-pb">
+                                    <div class="sc-node sc-firm"><div class="sc-ni">{firmInitial}</div><div><div class="sc-nt">{placementFirmName}</div><div class="sc-nm">The existing firm — kept as the parent</div></div></div>
+                                    <div class="sc-conn"></div>
+                                    <div class="sc-node sc-office"><div class="sc-ni"><c-sc-icon name="company" size="16"></c-sc-icon></div><div><div class="sc-nt">New office · {data.inbound.region}</div><div class="sc-nm">the firm's first office</div></div></div>
+                                    <div class="sc-conn"></div>
+                                    <div class="sc-node sc-contact"><div class="sc-ni"><c-sc-icon name="user" size="16"></c-sc-icon></div><div><div class="sc-nt">{data.inbound.name}</div><div class="sc-nm">{data.inbound.email}</div></div></div>
+                                </div></div>
+                                <div class="sc-panel"><div class="sc-ph"><c-sc-icon name="layout" size="15"></c-sc-icon> What happens</div><div class="sc-pb">
+                                    <div class="sc-stamp">New office under <span class="sc-bl">{placementFirmName}</span></div>
+                                    <div class="sc-stamp">Office location from the lead = <span class="sc-bl">{data.inbound.region} · {data.inbound.country}</span></div>
+                                    <div class="sc-stamp">The lead becomes a contact + account — <span class="sc-y">no duplicate created</span></div>
+                                    <div class="sc-stamp">The firm's totals stay intact — <span class="sc-y">no orphan, no duplicate firm</span></div>
+                                </div></div>
+                            </div>
+                        </template>
+
+                        <template lwc:if={showPlacement}>
+                            <template lwc:if={isNormalConfirm}>
+                                <div class="sc-eyebrow">Confirm · where it lands + who</div>
+                                <h2 class="sc-title">One click, no duplicate</h2>
+                                <p class="sc-sub">The contact lands on the chosen office under the right firm — once we've checked they aren't already on record.</p>
+                            </template>
+                            <template lwc:if={isLinkExisting}>
+                                <div class="sc-eyebrow">Confirm · link, don't duplicate</div>
+                                <h2 class="sc-title">This person already exists</h2>
+                                <p class="sc-sub">This email matches a contact already at {data.firm.name}. We'll attach the enquiry to them — no second record, and they stay right where they are.</p>
+                            </template>
+                            <template lwc:if={possibleMove}>
+                                <div class="sc-banner sc-warn">
+                                    <c-sc-icon name="location" size="16" class="sc-ic"></c-sc-icon>
+                                    <div>{linkedContactName} already sits at <b>{targetOffice.nm}</b>, but this enquiry came from {recommendedOfficeName}.
+                                    We'll attach it where they already are — we never move people between offices (that would overwrite their address).
+                                    This is flagged as a <b>possible move</b> for your team to review.</div>
+                                </div>
+                            </template>
+                            <div class="sc-grid">
+                                <div class="sc-panel"><div class="sc-ph"><c-sc-icon name="target" size="15"></c-sc-icon> Where this lands</div><div class="sc-pb">
+                                    <div class="sc-node sc-firm"><div class="sc-ni">{firmInitial}</div><div><div class="sc-nt">{placementFirmName}</div><div class="sc-nm">The firm — its totals stay exactly as they are</div></div></div>
+                                    <div class="sc-conn"></div>
+                                    <div class="sc-node sc-office"><div class="sc-ni"><c-sc-icon name="company" size="16"></c-sc-icon></div><div><div class="sc-nt">{targetOffice.nm}</div><div class="sc-nm">{targetOffice.sub}</div></div></div>
+                                    <div class="sc-conn"></div>
+                                    <div class="sc-node sc-contact"><div class="sc-ni"><c-sc-icon name="user" size="16"></c-sc-icon></div><div><div class="sc-nt">{data.inbound.name}</div><div class="sc-nm">{data.inbound.email} · {data.inbound.title}</div></div></div>
+                                </div></div>
+                                <div class="sc-panel"><div class="sc-ph"><c-sc-icon name="user" size="15"></c-sc-icon> Who should this enquiry attach to?</div><div class="sc-pb">
+                                    <div class={contactBannerCls}><c-sc-icon name={contactIc} size="16" class="sc-ic"></c-sc-icon>
+                                        <lightning-formatted-rich-text value={data.contact.html}></lightning-formatted-rich-text></div>
+                                    <template lwc:if={hasContactOptions}>
+                                        <div role="radiogroup" aria-label="Attach to contact"><template for:each={contactPickerOptions} for:item="c">
+                                            <div key={c.id} class={c.cls} data-id={c.id} role="radio" tabindex="0" aria-checked={c.ariaChecked} onclick={handleSelectContact} onkeydown={handleCardKey}>
+                                                <div class="sc-top2"><div class="sc-lft"><span class={c.radioCls}></span>
+                                                    <div><div class="sc-onm">{c.name}</div>
+                                                        <div class="sc-cmeta">{c.title} · {c.office}</div>
+                                                        <template lwc:if={c.isReal}>
+                                                            <div class="sc-cmeta">last active {c.lastActivity} · {c.tag}</div>
+                                                        </template>
+                                                    </div></div>
+                                                    <template lwc:if={c.recommended}><span class="sc-recchip">recommended</span></template>
+                                                </div>
+                                            </div>
+                                        </template></div>
+                                    </template>
+                                    <div class="sc-stamp">Lands under <span class="sc-bl">{targetOffice.nm}</span></div>
+                                    <div class="sc-stamp">The lead becomes a contact + account — <span class="sc-y">no duplicate created</span></div>
+                                    <template lwc:if={reasonDisq}>
+                                        <div class="sc-stamp">Marked as <span class="sc-y">{reasonDisq}</span> — kept for the full customer view</div>
+                                    </template>
+                                    <div class="sc-stamp">Existing contacts stay at their current office — <span class="sc-rd">we never move people</span></div>
+                                </div></div>
+                            </div>
+                        </template>
+                        <template lwc:if={hasOpenOpps}>
+                            <div class={openOppWarnClass}>
+                                <c-sc-icon name="opportunity" size="16" class="sc-ic"></c-sc-icon>
+                                <div>
+                                    <div>{openOppHeadline}</div>
+                                    <template for:each={openOppsView} for:item="oo">
+                                        <div key={oo.id} class="sc-openopp">
+                                            <div class="sc-oo-top">
+                                                <a href={oo.url} target="_blank">{oo.name}</a>
+                                                <template lwc:if={oo.tag}><span class="sc-recchip">{oo.tag}</span></template>
+                                            </div>
+                                            <div class="sc-oo-meta">{oo.meta}</div>
+                                            <template lwc:if={oo.renewal}>
+                                                <span class="sc-oo-renew"><c-sc-icon name="refresh" size="12"></c-sc-icon> {oo.renewal}</span>
+                                            </template>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+                        <div class="sc-optrow">
+                            <lightning-input type="toggle" label={oppToggleLabel}
+                                checked={createOpp} onchange={handleOppToggle}
+                                message-toggle-active="Opportunity will be created"
+                                message-toggle-inactive="No opportunity"></lightning-input>
+                            <template lwc:if={isRenewal}>
+                                <p class="sc-mini"><c-sc-icon name="refresh" size="13"></c-sc-icon> Existing term ends {renewalDateText} — we'll set the close date to match so it lands on the renewal forecast.</p>
+                            </template>
+                            <template lwc:if={showCurrency}>
+                                <div class="sc-currrow">
+                                    <lightning-combobox label="Opportunity currency" variant="label-inline"
+                                        value={selectedCurrency} options={currencyOptions}
+                                        onchange={handleCurrencyChange}></lightning-combobox>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- ===== STEP 4 · DONE ===== -->
+                <template lwc:if={isStep4}>
+                    <div class="sc-screen">
+                        <template lwc:if={convertBlocked}>
+                            <div class="sc-done-wrap">
+                                <div class="sc-seal sc-red">!</div>
+                                <h2 class="sc-title">Convert blocked</h2>
+                                <p class="sc-sub sc-center">{convertResult.message}</p>
+                                <p class="sc-mini sc-center">One of the data-quality checks stopped this — the message above tells you why, so nothing happens silently.</p>
+                            </div>
+                        </template>
+                        <template lwc:if={isDoneDisqualified}>
+                            <div class="sc-done-wrap">
+                                <div class="sc-seal sc-amber"><c-sc-icon name="ban" size="32"></c-sc-icon></div>
+                                <div class="sc-eyebrow sc-center">Disqualified · still linked</div>
+                                <h2 class="sc-title">Disqualified — but kept on record</h2>
+                                <p class="sc-sub sc-center">Linked to the account and contact with <b>no opportunity</b>, so you keep one complete view of this customer. Reason: {disqualifyReason}.</p>
+                                <template lwc:if={hasConvertIds}>
+                                    <div class="sc-links">
+                                        <a class="sc-link" href={accountUrl}><c-sc-icon name="company" size="14"></c-sc-icon> View Account</a>
+                                        <a class="sc-link" href={contactUrl}><c-sc-icon name="user" size="14"></c-sc-icon> View Contact</a>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                        <template lwc:if={showDoneSuccess}>
+                            <div class="sc-done-wrap">
+                                <div class="sc-seal"><c-sc-icon name="check" size="34"></c-sc-icon></div>
+                                <div class="sc-eyebrow sc-center">{doneEyebrow}</div>
+                                <h2 class="sc-title">{done.t}</h2>
+                                <p class="sc-sub sc-center">{done.s}</p>
+                                <div class="sc-kpi"><span class="sc-knum">{done.k}</span><span class="sc-kcap">{done.cap}</span></div>
+                                <template lwc:if={hasConvertIds}>
+                                    <div class="sc-links">
+                                        <a class="sc-link" href={accountUrl}><c-sc-icon name="company" size="14"></c-sc-icon> View Account</a>
+                                        <a class="sc-link" href={contactUrl}><c-sc-icon name="user" size="14"></c-sc-icon> View Contact</a>
+                                        <template lwc:if={hasOpp}>
+                                            <a class="sc-link" href={oppUrl}><c-sc-icon name="opportunity" size="14"></c-sc-icon> View Opportunity</a>
+                                        </template>
+                                    </div>
+
+                                    <div class="sc-nextaction">
+                                        <div class="sc-na-head"><c-sc-icon name="target" size="14"></c-sc-icon> <span>Next action</span></div>
+                                        <p class="sc-na-rec">{nextStepText}</p>
+                                        <template lwc:if={taskCreated}>
+                                            <div class="sc-na-done"><c-sc-icon name="check" size="14"></c-sc-icon> Follow-up task created · <a href={taskUrl}>Open task</a></div>
+                                        </template>
+                                        <template lwc:if={showTaskForm}>
+                                            <div class="sc-na-row">
+                                                <lightning-combobox label="Type" variant="label-inline" value={followUpType}
+                                                    options={taskTypeOptions} onchange={handleTypeChange}></lightning-combobox>
+                                                <lightning-combobox label="Due" variant="label-inline" value={followUpDueDays}
+                                                    options={dueOptions} onchange={handleDueChange}></lightning-combobox>
+                                                <template lwc:if={showAssignee}>
+                                                    <lightning-combobox label="Assign to" variant="label-inline" value={followUpAssignee}
+                                                        options={assigneeOptions} onchange={handleAssigneeChange}></lightning-combobox>
+                                                </template>
+                                            </div>
+                                            <div class="sc-na-subj">{followUpSubject}</div>
+                                            <div class="sc-na-comments">
+                                                <lightning-textarea label="Comments" value={followUpComments}
+                                                    placeholder="What's the follow-up about? Context, talking points, anything the next call needs…"
+                                                    onchange={handleCommentsChange}></lightning-textarea>
+                                            </div>
+                                            <button class="sc-btn sc-primary sc-na-btn" onclick={createTask} disabled={creatingTask}>
+                                                <c-sc-icon name="add" size="14"></c-sc-icon> Create follow-up task</button>
+                                            <template lwc:if={taskError}><div class="sc-na-err">{taskError}</div></template>
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </div>
+
+            <template lwc:if={showControls}>
+                <div class="sc-controls">
+                    <button class="sc-btn sc-ghost" onclick={back} disabled={backDisabled}>← Back</button>
+                    <template lwc:if={showDisqualifyBtn}>
+                        <button class="sc-btn sc-ghost sc-dq" onclick={openDisqualify}><c-sc-icon name="ban" size="15"></c-sc-icon> Disqualify</button>
+                    </template>
+                    <button class="sc-btn sc-primary" onclick={next} disabled={nextDisabled}>{nextLabel}</button>
+                </div>
+            </template>
+        </template>
+    </div>
+</template>

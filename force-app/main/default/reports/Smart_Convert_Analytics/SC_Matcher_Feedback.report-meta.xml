@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Smart Convert — Matcher Feedback (overrides &amp; manual search)</name>
+    <description>The feedback loop for the data team: conversions where the rep overrode the recommended office or had to search for the firm manually. These point to exactly which firms/domains need dedup or enrichment next.</description>
+    <format>Summary</format>
+    <reportType>Smart_Convert_Conversions</reportType>
+    <groupingsDown>
+        <field>Overrode_Recommendation__c</field>
+        <sortOrder>Desc</sortOrder>
+    </groupingsDown>
+    <columns><field>Manual_Search_Used__c</field></columns>
+    <columns><field>Opportunity_Motion__c</field></columns>
+    <columns><field>Match_Confidence__c</field></columns>
+    <filter>
+        <criteriaItems>
+            <column>Conversion_Source__c</column>
+            <operator>equals</operator>
+            <value>Smart Convert</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Overrode_Recommendation__c</column>
+            <operator>equals</operator>
+            <value>true</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Manual_Search_Used__c</column>
+            <operator>equals</operator>
+            <value>true</value>
+        </criteriaItems>
+        <booleanFilter>1 AND (2 OR 3)</booleanFilter>
+    </filter>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+</Report>

@@ -1,0 +1,34 @@
+<html>
+<body style="margin:0; padding:0; background:#efeee8;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#efeee8; padding:24px 0;">
+<tr><td align="center">
+    <table cellpadding="0" cellspacing="0" style="width:600px; max-width:100%; background:#ffffff; border-radius:16px; overflow:hidden; border:1px solid #e1e0d9; border-collapse:separate; font-family:'Helvetica Neue',Arial,sans-serif; color:#003340;">
+        <tr>
+            <td style="background:#003340; padding:30px 40px 24px; text-align:center; font-family:'Helvetica Neue',Arial,sans-serif;">
+                <div style="font-weight:bold; font-size:28px; line-height:1; letter-spacing:.14em; color:#ffffff;">CE<span style="color:#00c8a7">N</span>TELLIC</div>
+                <div style="margin-top:9px; font-size:11px; letter-spacing:.32em; color:#80ffff; text-transform:uppercase;">Intelligence &amp; information services</div>
+            </td>
+        </tr>
+        <tr><td style="height:4px; background:#00c8a7; line-height:4px; font-size:0;">&nbsp;</td></tr>
+        <tr>
+            <td style="padding:28px 40px;">
+                <div style="font-weight:bold; font-size:20px; color:#008f96;">New firm to review &amp; enrich</div>
+                <div style="margin-top:8px; font-size:14px; color:#5c6b6e; line-height:1.5;">A new firm has been created without a match domain &mdash; for example, via Smart Convert lead conversion. Please check for duplicates and add its domain / match key. A firm is a rollup parent and carries no address of its own.</div>
+
+                <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:20px; font-family:'Helvetica Neue',Arial,sans-serif;">
+                    <tr><td style="padding:9px 0; color:#5c6b6e; border-bottom:1px solid #efeee8;">Firm</td><td style="padding:9px 0; color:#003340; border-bottom:1px solid #efeee8; text-align:right; font-weight:bold;">{!Account.Name}</td></tr>
+                    <tr><td style="padding:9px 0; color:#5c6b6e; border-bottom:1px solid #efeee8;">Match domain</td><td style="padding:9px 0; color:#b8402f; border-bottom:1px solid #efeee8; text-align:right; font-weight:bold;">Missing &#8212; add one so leads can match this firm</td></tr>
+                    <tr><td style="padding:9px 0; color:#5c6b6e; border-bottom:1px solid #efeee8;">Website</td><td style="padding:9px 0; color:#003340; border-bottom:1px solid #efeee8; text-align:right;">{!Account.Website}</td></tr>
+                    <tr><td style="padding:9px 0; color:#5c6b6e; border-bottom:1px solid #efeee8;">Owner</td><td style="padding:9px 0; color:#003340; border-bottom:1px solid #efeee8; text-align:right;">{!Account.OwnerFullName}</td></tr>
+                    <tr><td style="padding:9px 0; color:#5c6b6e;">Created</td><td style="padding:9px 0; color:#003340; text-align:right;">{!Account.CreatedDate}</td></tr>
+                </table>
+
+                <div style="margin-top:24px;"><a href="{!Account.Link}" style="display:inline-block; background:#008f96; color:#ffffff; text-decoration:none; font-weight:bold; font-size:14px; padding:12px 24px; border-radius:8px;">Open the firm to review &amp; enrich</a></div>
+                <div style="margin-top:24px; font-size:12px; color:#9fc7c6;">Automatic notification &mdash; a new Firm was created with no match domain.</div>
+            </td>
+        </tr>
+    </table>
+</td></tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Conversion_Source__c</fullName>
+    <label>Conversion Source (Smart Convert)</label>
+    <description>How the lead was converted: Smart Convert (the guided service) vs Native.</description>
+    <type>Text</type>
+    <length>40</length>
+    <required>false</required>
+</CustomField>

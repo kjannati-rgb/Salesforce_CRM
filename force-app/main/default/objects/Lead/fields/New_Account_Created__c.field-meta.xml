@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>New_Account_Created__c</fullName>
+    <label>New Account Created (Smart Convert)</label>
+    <description>True when Smart Convert created a new Account (Firm and/or Office) at conversion, rather than converting into an existing one. Powers the duplicate-creation-rate KPI.</description>
+    <type>Checkbox</type>
+    <defaultValue>false</defaultValue>
+</CustomField>

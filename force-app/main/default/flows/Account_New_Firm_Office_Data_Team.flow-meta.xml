@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <actionCalls>
+        <name>Send_Firm_Email</name>
+        <label>Send Firm Email</label>
+        <locationX>50</locationX>
+        <locationY>600</locationY>
+        <actionName>Account.Data_Team_New_Firm</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Office_Email</name>
+        <label>Send Office Email</label>
+        <locationX>302</locationX>
+        <locationY>600</locationY>
+        <actionName>Account.Data_Team_New_Office</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    <decisions>
+        <name>Route_By_Type</name>
+        <label>Route by record type (fresh values)</label>
+        <locationX>176</locationX>
+        <locationY>492</locationY>
+        <defaultConnectorLabel>Self-healed — no email</defaultConnectorLabel>
+        <rules>
+            <name>Firm_No_Match_Domain</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Fresh_Account.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Firm</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Fresh_Account.Match_Domain__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Firm_Email</targetReference>
+            </connector>
+            <label>Firm still missing match domain</label>
+        </rules>
+        <rules>
+            <name>Office_No_Opp</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Fresh_Account.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Office</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Fresh_Account.BillingStreet</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Opportunity</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Office_Email</targetReference>
+            </connector>
+            <label>Office still missing address, no opportunity</label>
+        </rules>
+    </decisions>
+    <description>15 min after a new Firm/Office is created: FIRM still missing its match domain -> email Data Team to dedup/enrich; OFFICE still missing its billing street AND with no opportunity -> email Data Team to add the address. Re-checks FRESH values at send time so records self-healed by the match-key stamper (or a human) within the window never email. Data Team creators (Custom: Data Management profile) are skipped entirely — they do not need to be told about their own creations.</description>
+    <environments>Default</environments>
+    <interviewLabel>Account New Firm-Office Data Team Alert {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Account New Firm-Office Data Team Alert</label>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Fresh_Account</name>
+        <label>Get fresh Account values</label>
+        <locationX>176</locationX>
+        <locationY>276</locationY>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Opportunity</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Opportunity</name>
+        <label>Get Opportunity on Account</label>
+        <locationX>176</locationX>
+        <locationY>384</locationY>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Route_By_Type</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>AccountId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Opportunity</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <filterFormula>AND(
+  {!$Record.CreatedBy.Profile.Name} &lt;&gt; &quot;Custom: Data Management&quot;,
+  OR(
+    AND( {!$Record.RecordType.DeveloperName} = &quot;Office&quot;, ISBLANK({!$Record.BillingStreet}) ),
+    AND( {!$Record.RecordType.DeveloperName} = &quot;Firm&quot;, ISBLANK({!$Record.Match_Domain__c}) )
+  )
+)</filterFormula>
+        <object>Account</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <scheduledPaths>
+            <name>After_creation</name>
+            <connector>
+                <targetReference>Get_Fresh_Account</targetReference>
+            </connector>
+            <label>15 minutes after creation</label>
+            <offsetNumber>15</offsetNumber>
+            <offsetUnit>Minutes</offsetUnit>
+            <recordField>CreatedDate</recordField>
+            <timeSource>RecordField</timeSource>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

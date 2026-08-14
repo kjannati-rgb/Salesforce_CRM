@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Manual_Search_Used__c</fullName>
+    <label>Manual Search Used (Smart Convert)</label>
+    <description>True when the rep used the manual firm search rather than the auto-match. Flags domains/firms where enrichment or dedup is needed.</description>
+    <type>Checkbox</type>
+    <defaultValue>false</defaultValue>
+</CustomField>

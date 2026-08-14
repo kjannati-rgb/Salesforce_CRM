@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Overrode_Recommendation__c</fullName>
+    <label>Overrode Recommendation (Smart Convert)</label>
+    <description>True when the rep converted into a different Office than the matcher recommended. Surfaces matcher mis-ranks / duplicate offices for the data team.</description>
+    <type>Checkbox</type>
+    <defaultValue>false</defaultValue>
+</CustomField>

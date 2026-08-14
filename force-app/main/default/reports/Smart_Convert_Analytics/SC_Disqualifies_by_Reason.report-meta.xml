@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Smart Convert — Disqualifies by Reason</name>
+    <description>Leads disqualified at convert (still linked to account/contact with no opportunity, preserving the single customer view) grouped by reason. Shows why leads die without losing the relationship.</description>
+    <format>Summary</format>
+    <reportType>Smart_Convert_Conversions</reportType>
+    <groupingsDown>
+        <field>Disqualify_Reason__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <columns><field>Opportunity_Motion__c</field></columns>
+    <columns><field>Match_Confidence__c</field></columns>
+    <filter>
+        <criteriaItems>
+            <column>Conversion_Source__c</column>
+            <operator>equals</operator>
+            <value>Smart Convert</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Disqualified_At_Convert__c</column>
+            <operator>equals</operator>
+            <value>true</value>
+        </criteriaItems>
+    </filter>
+    <scope>organization</scope>
+    <showDetails>false</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+</Report>

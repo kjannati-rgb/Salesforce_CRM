@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Stamp_Match_Keys</name>
+        <label>Stamp Match Keys</label>
+        <locationX>176</locationX>
+        <locationY>287</locationY>
+        <actionName>AccountMatchKeyStamper</actionName>
+        <actionType>apex</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>accountIds</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>AccountMatchKeyStamper</nameSegment>
+    </actionCalls>
+    <apiVersion>62.0</apiVersion>
+    <description>Keeps Smart Convert match keys alive on newly created Firm/Office accounts: derives Match_Domain__c from Website (free-mail-safe) and Match_Name__c from Name when blank. Fills gaps the one-off backfill cannot cover. Never overwrites existing keys.</description>
+    <environments>Default</environments>
+    <interviewLabel>Account - Stamp Match Keys {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Account - Stamp Match Keys</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Stamp_Match_Keys</targetReference>
+        </connector>
+        <filterFormula>AND(
+  OR(
+    {!$Record.RecordType.DeveloperName} = &quot;Firm&quot;,
+    {!$Record.RecordType.DeveloperName} = &quot;Office&quot;
+  ),
+  OR(
+    ISBLANK({!$Record.Match_Domain__c}),
+    ISBLANK({!$Record.Match_Name__c})
+  )
+)</filterFormula>
+        <object>Account</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

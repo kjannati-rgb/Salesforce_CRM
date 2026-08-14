@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Smart Convert — Duplicate Creation Rate</name>
+    <description>Share of Smart Convert conversions that created a new account vs landed in an existing one. The headline KPI — lower new-account share means fewer duplicate firms.</description>
+    <format>Summary</format>
+    <reportType>Smart_Convert_Conversions</reportType>
+    <groupingsDown>
+        <field>New_Account_Created__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <columns><field>Opportunity_Motion__c</field></columns>
+    <columns><field>Match_Confidence__c</field></columns>
+    <columns><field>Create_Reason__c</field></columns>
+    <filter>
+        <criteriaItems>
+            <column>Conversion_Source__c</column>
+            <operator>equals</operator>
+            <value>Smart Convert</value>
+        </criteriaItems>
+    </filter>
+    <scope>organization</scope>
+    <showDetails>false</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+</Report>

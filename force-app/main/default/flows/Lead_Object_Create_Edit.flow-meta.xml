@@ -33,6 +33,28 @@
     </actionCalls>
     <apiVersion>49.0</apiVersion>
     <decisions>
+        <name>Skip_When_Converted</name>
+        <label>Skip when converted</label>
+        <locationX>25</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Lead is converting</defaultConnectorLabel>
+        <rules>
+            <name>Lead_Not_Converted</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>myVariable_current.IsConverted</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>myDecision</targetReference>
+            </connector>
+            <label>Lead not converted</label>
+        </rules>
+    </decisions>
+    <decisions>
         <processMetadataValues>
             <name>index</name>
             <value>
@@ -222,6 +244,13 @@
                 </processMetadataValues>
                 <leftValueReference>myVariable_current.LinkedIn_Source_Form_ID__c</leftValueReference>
                 <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>myVariable_current.IsConverted</leftValueReference>
+                <operator>EqualTo</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
                 </rightValue>
@@ -1530,7 +1559,7 @@
         </inputAssignments>
         <object>Lead</object>
     </recordUpdates>
-    <startElementReference>myDecision</startElementReference>
+    <startElementReference>Skip_When_Converted</startElementReference>
     <status>Active</status>
     <variables>
         <name>myVariable_current</name>

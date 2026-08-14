@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Smart Convert — Conversions by Motion</name>
+    <description>Sales motion mix of Smart Convert conversions (New Business / Cross-sell / Upsell / Renewal). The convert-to-expansion pipeline.</description>
+    <format>Summary</format>
+    <reportType>Smart_Convert_Conversions</reportType>
+    <groupingsDown>
+        <field>Opportunity_Motion__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <columns><field>Match_Confidence__c</field></columns>
+    <columns><field>New_Account_Created__c</field></columns>
+    <filter>
+        <criteriaItems>
+            <column>Conversion_Source__c</column>
+            <operator>equals</operator>
+            <value>Smart Convert</value>
+        </criteriaItems>
+    </filter>
+    <scope>organization</scope>
+    <showDetails>false</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+</Report>

@@ -152,4 +152,31 @@ private class LeadMatchSelectService_Test {
             LeadMatchSelectService.matchAndSelect(new List<LeadMatchSelectService.Request>()).size());
         Test.stopTest();
     }
+
+    @IsTest
+    static void websiteFallback_matchesWhenEmailDomainUnknown() {
+        Test.startTest();
+        // Alias email domain we have never seen, but the lead's website is Acme's canonical domain.
+        LeadMatchSelectService.Result res = one(req('jane@acme-alias-co.com', 'GB', 'London', 'https://www.acme-demo.com'));
+        Test.stopTest();
+        System.assertEquals('Acme Law Demo', res.resolvedFirmName, 'website host resolves the firm');
+        System.assertEquals(true, res.matchedViaWebsite, 'flagged as a website-based match');
+        System.assertEquals('REVIEW', res.confidenceTier,
+            'website matches are capped at REVIEW - never express one-click: ' + res.matchEvidence);
+    }
+
+    @IsTest
+    static void secondaryDomain_rules() {
+        LeadMatchSelectService.Request r = req('jane@acme-alias-co.com', 'GB', 'London', 'https://www.acme-demo.com');
+        System.assertEquals('acme-demo.com',
+            LeadMatchSelectService.secondaryDomain(r, 'acme-alias-co.com'), 'differing website host is the secondary key');
+        System.assertEquals(null,
+            LeadMatchSelectService.secondaryDomain(r, null), 'no primary key means the website was already the primary');
+        r.website = 'https://gmail.com';
+        System.assertEquals(null,
+            LeadMatchSelectService.secondaryDomain(r, 'acme-alias-co.com'), 'free-mail website never becomes a key');
+        r.website = 'https://acme-alias-co.com';
+        System.assertEquals(null,
+            LeadMatchSelectService.secondaryDomain(r, 'acme-alias-co.com'), 'same host as primary adds nothing');
+    }
 }

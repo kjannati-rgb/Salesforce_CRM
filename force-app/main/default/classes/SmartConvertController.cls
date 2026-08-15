@@ -216,11 +216,13 @@ public with sharing class SmartConvertController {
         v.hasFirm = (m.resolvedFirmId != null);
 
         // Confidence
+        Boolean viaWeb = (m.matchedViaWebsite == true);
         if (m.confidenceTier == 'ONECLICK') { v.conf = 'high'; v.confLabel = 'Strong match · one firm owns this domain'; }
         else if (m.confidenceTier == 'REVIEW') {
             v.conf = 'med';
             v.confLabel = v.ambiguous ? ('Worth a check · ' + m.candidateFirmIds.size() + ' firms share this domain')
-                                      : (v.conflict ? 'Firm is clear · we pick the office by location' : 'Worth a quick check before you convert');
+                                      : (viaWeb ? 'Worth a check · matched via the lead\'s website'
+                                                : (v.conflict ? 'Firm is clear · we pick the office by location' : 'Worth a quick check before you convert'));
         } else { v.conf = 'none'; v.confLabel = 'No match yet · no existing account'; }
 
         // Scan trace
@@ -229,7 +231,9 @@ public with sharing class SmartConvertController {
             'Email domain → <b>' + (domain == null ? '—' : domain) + '</b>',
             'Work or personal email? → <b>' + (domain == null ? 'personal / none' : 'work address') + '</b>',
             v.ambiguous ? ('Matched the domain → <b>' + m.candidateFirmIds.size() + ' firms share it</b>')
-                        : (v.hasFirm ? 'Matched the domain → <b>1 firm</b>' : 'Matched the domain → <b>no firm found</b>'),
+                        : (v.hasFirm ? (viaWeb ? 'Email domain new to us → <b>matched via the lead\'s website</b>'
+                                               : 'Matched the domain → <b>1 firm</b>')
+                                     : 'Matched the domain → <b>no firm found</b>'),
             v.brand != null
                 ? (v.existingCustomer ? ('Active ' + v.brand + ' subscription → <b>existing customer / upsell</b>')
                                       : ('No active ' + v.brand + ' subscription → <b>new to ' + v.brand + '</b>'))

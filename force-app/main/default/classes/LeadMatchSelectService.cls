@@ -50,6 +50,7 @@ public with sharing class LeadMatchSelectService {
         @InvocableVariable public List<Id> candidateOfficeIds;   // ranked, for a Flow choice set
         @InvocableVariable public String candidateSummary;       // ranked, human-readable evidence
         @InvocableVariable public String confidenceTier;   // ONECLICK / REVIEW / GUIDED_CREATE
+        @InvocableVariable public Boolean matchedViaWebsite; // firm found via the lead's website host, not the email domain
         @InvocableVariable public Boolean conflict;
         @InvocableVariable public Boolean existingCustomer;
         @InvocableVariable public String matchEvidence;
@@ -84,13 +85,19 @@ public with sharing class LeadMatchSelectService {
         List<Result> results = new List<Result>();
         if (requests == null || requests.isEmpty()) return results;
 
-        // 1) Derive a domain key per request.
+        // 1) Derive domain keys per request: the email domain (primary) plus, when it differs,
+        // the website host as a secondary key - people often email from an alias domain while
+        // the lead form carries the canonical website (e.g. @victoria.com vs victoriassecret.com).
         List<String> perReqDomain = new List<String>();
+        List<String> perReqSecondary = new List<String>();
         Set<String> domains = new Set<String>();
         for (Request r : requests) {
             String dom = extractDomain(r);
+            String dom2 = secondaryDomain(r, dom);
             perReqDomain.add(dom);
+            perReqSecondary.add(dom2);
             if (dom != null) domains.add(dom);
+            if (dom2 != null) domains.add(dom2);
         }
 
         // 2) One query: accounts whose domain key matches (Office or Firm).
@@ -129,20 +136,21 @@ public with sharing class LeadMatchSelectService {
 
         // 4) Build a result per request.
         for (Integer i = 0; i < requests.size(); i++) {
-            results.add(buildResult(requests[i], perReqDomain[i], domainToAccounts, firmToOffices));
+            results.add(buildResult(requests[i], perReqDomain[i], perReqSecondary[i], domainToAccounts, firmToOffices));
         }
         return results;
     }
 
     // ---- Per-request resolution -------------------------------------------
 
-    private static Result buildResult(Request r, String dom,
+    private static Result buildResult(Request r, String dom, String dom2,
                                       Map<String, List<Account>> domainToAccounts,
                                       Map<Id, List<Account>> firmToOffices) {
         Result res = new Result();
         res.candidateOffices = new List<CandidateOffice>();
         res.conflict = false;
         res.existingCustomer = false;
+        res.matchedViaWebsite = false;
 
         // Resolve the distinct set of Firms reachable from this request's domain.
         Set<Id> firmsForReq = new Set<Id>();
@@ -153,12 +161,21 @@ public with sharing class LeadMatchSelectService {
                 if (fid != null) { firmsForReq.add(fid); firmName = firmNameOf(a); }
             }
         }
+        // Email domain unknown to us -> try the lead's website host as an exact secondary key.
+        if (firmsForReq.isEmpty() && dom2 != null && domainToAccounts.containsKey(dom2)) {
+            for (Account a : domainToAccounts.get(dom2)) {
+                Id fid = firmIdOf(a);
+                if (fid != null) { firmsForReq.add(fid); firmName = firmNameOf(a); }
+            }
+            res.matchedViaWebsite = !firmsForReq.isEmpty();
+        }
 
         if (firmsForReq.isEmpty()) {
             res.confidenceTier = 'GUIDED_CREATE';
             res.matchEvidence = dom == null
                 ? 'No usable domain key (free-mail or blank); company/name dedup required.'
-                : 'No account matched domain "' + dom + '"; guided create.';
+                : 'No account matched domain "' + dom + '"'
+                  + (dom2 != null ? ' or website "' + dom2 + '"' : '') + '; guided create.';
             return res;
         }
         if (firmsForReq.size() > 1) {
@@ -241,6 +258,13 @@ public with sharing class LeadMatchSelectService {
             res.confidenceTier = 'ONECLICK';
             res.matchEvidence = 'Unique Firm; single best-location Office "' + rec.name
                 + '"' + (rec.wonOppCount > 0 ? ' (existing customer)' : '') + '.';
+        }
+        // A website-based match is an exact key hit, but the person's EMAIL domain is new to us -
+        // never auto-convert on it; the rep confirms (and the domain can be added as approved).
+        if (res.matchedViaWebsite == true && res.confidenceTier == 'ONECLICK') {
+            res.confidenceTier = 'REVIEW';
+            res.matchEvidence = 'Matched via the lead\'s website ("' + dom2 + '") - the email domain "'
+                + dom + '" is new to us. Confirm before converting.';
         }
         return res;
     }
@@ -335,6 +359,19 @@ public with sharing class LeadMatchSelectService {
         String web = hostFromUrl(r.website);
         if (web != null && !fm.contains(web)) return web;
         return null;
+    }
+
+    /**
+     * The website host as a SECONDARY key - only when a primary (email) key exists, the website
+     * host differs from it, and it isn't free-mail. When there is no email key, extractDomain
+     * already used the website as the primary, so there is nothing extra to try.
+     */
+    @TestVisible
+    static String secondaryDomain(Request r, String primary) {
+        if (primary == null) return null;
+        String web = hostFromUrl(r.website);
+        if (web == null || web == primary || freeMail().contains(web)) return null;
+        return web;
     }
 
     private static String domainFromEmail(String email) {

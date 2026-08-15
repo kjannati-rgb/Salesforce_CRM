@@ -180,6 +180,7 @@
 .sc-express{border:1.5px solid var(--green);background:var(--green-bg);border-radius:14px;padding:14px 16px;margin-bottom:18px;box-shadow:var(--shadow-sm);animation:sc-pop .35s both}
 .sc-express-h{font-weight:700;font-size:13.5px;color:var(--green);letter-spacing:.01em}
 .sc-express-b{font-size:14px;color:var(--navy);margin-top:5px}
+.sc-express-opt{margin-top:10px;display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end}
 .sc-express-actions{display:flex;gap:14px;align-items:center;margin-top:12px}
 .sc-express-review{font-size:12.5px;font-weight:600;color:var(--ink2);cursor:pointer;text-decoration:none;
     background:none;border:none;font-family:inherit;padding:8px 10px;margin:-4px -6px;border-radius:8px}

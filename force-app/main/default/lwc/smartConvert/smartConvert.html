@@ -120,6 +120,17 @@
                             <div class="sc-express">
                                 <div class="sc-express-h"><c-sc-icon name="bolt" size="15"></c-sc-icon> High-confidence match — convert in one click</div>
                                 <div class="sc-express-b">{data.firm.name} → <b>{recommendedOfficeName}</b>{expressExtra}</div>
+                                <div class="sc-express-opt">
+                                    <lightning-input type="toggle" label={oppToggleLabel}
+                                        checked={createOpp} onchange={handleOppToggle}
+                                        message-toggle-active="Opportunity will be created"
+                                        message-toggle-inactive="No opportunity"></lightning-input>
+                                    <template lwc:if={showCurrency}>
+                                        <lightning-combobox label="Opportunity currency" variant="label-inline"
+                                            value={selectedCurrency} options={currencyOptions}
+                                            onchange={handleCurrencyChange}></lightning-combobox>
+                                    </template>
+                                </div>
                                 <div class="sc-express-actions">
                                     <button class="sc-btn sc-primary" onclick={expressConvert}><c-sc-icon name="bolt" size="15"></c-sc-icon> Convert now</button>
                                     <button class="sc-express-review" onclick={next}>Review details →</button>

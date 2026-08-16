@@ -1,8 +1,8 @@
 # Runbook: "Account is not complete" Data Team alert — dynamic fields + suppression
 
-**Status:** Built and verified in KJDEV 2026-08-16. **Not deployed to production.**
-Supersedes `update-email-template-runbook.md`, whose Steps 1, 2 and 4 were based on a
-mistaken reading of the trigger mechanism (see below).
+**Status: LIVE IN PRODUCTION 2026-08-16** (flow v33 Active). Built and verified in KJDEV
+the same day. Supersedes `update-email-template-runbook.md`, whose Steps 1, 2 and 4 were
+based on a mistaken reading of the trigger mechanism (see below).
 
 ## What the original runbook got wrong
 
@@ -87,24 +87,60 @@ create an Opportunity in KJDEV **as a user on a sales profile** against an accou
 exactly one billing field, and confirm the email names only that field. KJDEV emails are
 `.invalid` for everyone except Kamyar, so a sandbox send reaches no one else.
 
-## Production deploy
+## The local flow file was stale — do not deploy it
 
-1. Deploy the four components above with
+Deploying the repo's `Opportunity.flow-meta.xml` to production would have been
+**destructive**. Diffed against a fresh PROD retrieve, the local copy was 78 lines short
+and would have:
+
+- **deleted** three live PROD elements: `Check_for_Swoogo_deal`,
+  `Copy_1_of_Create_Schedules`, `Copy_2_of_Fault_notification_recipients`;
+- **introduced** a `Renewal_Email_Alert` element and `EmailAlert_RenewalCreation` subflow
+  that have never existed in production.
+
+What was actually deployed is PROD-retrieved-plus-three-changes, verified by diffing the
+merged file against a *second* pristine retrieve — the only differences were the action
+swap, the two suppression conditions and the `missing_fields_list` formula. That artifact
+is kept at `prod-deploy/data-team-enrich/`.
+
+`Renewal_Email_Alert` was deliberately **excluded**. It remains in the repo copy and is
+still undeployed. **The repo's `flows/Opportunity.flow-meta.xml` is now known-stale
+against production** — always retrieve fresh before touching that flow again.
+
+## Production deploy (completed 2026-08-16)
+
+Order matters and is not the obvious one. Activating the flow *before* deploying the
+template is safe (the new Apex renders the old template, finds no token, sends today's
+static wording). The reverse order puts a literal `[[MISSING_FIELDS]]` in real emails,
+because the old active version would render the new token-bearing template.
+
+1. **Apex first** — `DataTeamEnrichNotifier` + test. Inert until the flow points at it.
+   5/5 tests. `NoTestRun` is rejected in production; use
    `--test-level RunSpecifiedTests --tests DataTeamEnrichNotifierTest`.
-2. **Flows deploy as Draft in PROD** (the org has "deploy flows as active" OFF). Activate
-   the new `Opportunity` flow version via `FlowDefinition` after deploy, and confirm the
-   previously active version goes Obsolete — a period with *no* active master flow would
-   disable far more than this alert.
-3. Confirm `Data_Team_Enrich_Account` in PROD still contains the `[[MISSING_FIELDS]]`
-   token after deploy. If the token is missing the email will read "Not specified" rather
-   than failing, so this will not announce itself.
-4. Burn-in: leave the old Email Alert in the workflow metadata. Rollback is reverting the
-   flow to the prior version, which restores the `emailAlert` action.
+2. **Flow** — deployed as **Draft v33** (org has "deploy flows as active" OFF).
+3. **Activate** — `FlowDefinition` with `activeVersionNumber=33`. v33 Active, v32 Obsolete.
+4. **Template last** — token-bearing HTML.
 
-**Re-run the test class standalone after deploying** — `EmailTemplate` is a setup object
-in this org, and the `MIXED_DML_OPERATION` failure it causes did **not** surface in the
-deploy-time `RunSpecifiedTests` run (which reported 5/5 green) but did on a standalone
+Post-deploy verification (read-only render against a real incomplete PROD account, no
+send): subject merged, `[[MISSING_FIELDS]]` survived the merge engine, **no unresolved
+`{!` merge fields**, substituted row correct, group resolved **16 members → 9 active**,
+matching the original alert's recipient list exactly.
+
+**Rollback:** revert the flow to v32, which restores the `emailAlert` action. The old
+Email Alert is deliberately left in `Opportunity.workflow-meta.xml`, now unreferenced.
+
+**Re-run the test class standalone** — `EmailTemplate` is a setup object in this org, and
+the `MIXED_DML_OPERATION` failure it causes did **not** surface in a deploy-time
+`RunSpecifiedTests` run (which reported 5/5 green) but did on a standalone
 `sf apex run test`.
+
+## Still unverified
+
+The **single-missing-field happy path has never been exercised live.** Every test so far
+used an account with all three fields blank, and the suppression correctly blocks the
+System Administrator profile that both deploys ran as, so no CLI-driven test can reach it.
+First real proof will be the first sales-created opportunity on an incomplete account —
+worth watching for one and confirming the email names only the missing field(s).
 
 ## Open question
 

@@ -134,13 +134,50 @@ the `MIXED_DML_OPERATION` failure it causes did **not** surface in a deploy-time
 `RunSpecifiedTests` run (which reported 5/5 green) but did on a standalone
 `sf apex run test`.
 
+## Integration test (KJDEV, 5/5 passing)
+
+`DataTeamEnrichAlertFlowTest` closes the gap that CLI testing could not: it drives the
+whole path through the master flow rather than calling the Apex directly, using
+`System.runAs` to create the Opportunity as users on different profiles.
+
+| Case | Creator profile | Account | Expected |
+|---|---|---|---|
+| `alertFiresForSalesUserWithSingleMissingField` | Custom: Sales Profile | only Billing City blank | email sent |
+| `alertFiresWhenAllThreeMissing` | Custom: Sales Profile | all three blank | email sent |
+| `noAlertWhenAddressComplete` | Custom: Sales Profile | complete | no email |
+| `suppressedForSystemAdministratorCreator` | System Administrator | all three blank | no email |
+| `suppressedForDataManagementCreator` | Custom: Data Management | all three blank | no email |
+
+Assertions compare `Limits.getEmailInvocations()` either side of the insert. The negatives
+are only meaningful because the positives pass — each negative changes exactly one variable
+(address, or profile) against a passing positive, so a zero increment is attributable
+rather than the flow simply never having run.
+
+Two traps this test had to work around, both of which make a test pass for the wrong reason:
+
+- `TestDataFactory.bypassAutomation()` **cannot be used** — it inserts a fresh org-level
+  `Application_Settings__c`, which collides under `SeeAllData` with the real one
+  (`DUPLICATE_VALUE` on `SetupOwnerId`). The local helper reuses the existing row.
+- The helper forces `Disable_Process_Builders__c` **off**. That is the flag the master
+  flow's own `CheckAutomationDisabled` formula reads — inheriting a `true` from the org
+  would disable the flow under test and every assertion would pass vacuously.
+
+`SeeAllData=true` is required because the flow hardcodes the `Data_Team_Enrich_Account`
+template and `Data_Team` group, which a test cannot create. The email assertions therefore
+double as a check that both still exist and are reachable.
+
+**Not deployed to production.** A `SeeAllData` test that inserts an Opportunity drags in the
+org's full automation; if it proves flaky in production it would block unrelated deploys,
+and this org already carries pre-existing red tests. Worth deploying only if you want the
+regression protection there and are willing to watch it for a few deploys.
+
 ## Still unverified
 
-The **single-missing-field happy path has never been exercised live.** Every test so far
-used an account with all three fields blank, and the suppression correctly blocks the
-System Administrator profile that both deploys ran as, so no CLI-driven test can reach it.
-First real proof will be the first sales-created opportunity on an incomplete account —
-worth watching for one and confirming the email names only the missing field(s).
+Nobody has **looked at the rendered email**. The render is verified structurally in both
+orgs, but the visual result — Centellic layout, the dynamic row, the button link — has not
+been seen. Quickest check is Setup → **Log in as** a sales user in KJDEV and create an
+Opportunity on an account missing one field; KJDEV emails are `.invalid` for everyone
+except Kamyar, so only his inbox receives it.
 
 ## Open question
 

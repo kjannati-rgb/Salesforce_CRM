@@ -166,10 +166,13 @@ Two traps this test had to work around, both of which make a test pass for the w
 template and `Data_Team` group, which a test cannot create. The email assertions therefore
 double as a check that both still exist and are reachable.
 
-**Not deployed to production.** A `SeeAllData` test that inserts an Opportunity drags in the
-org's full automation; if it proves flaky in production it would block unrelated deploys,
-and this org already carries pre-existing red tests. Worth deploying only if you want the
-regression protection there and are willing to watch it for a few deploys.
+**Deployed to production 2026-08-16**, 5/5 on the deploy run and 5/5 again standalone —
+two consecutive green runs. The concern that a `SeeAllData` test inserting an Opportunity
+would drag in the org's full automation and prove flaky did not materialise, but it has
+only two runs of history. **Watch it for the next few production deploys**: if it starts
+failing intermittently it will block unrelated work, and this org already carries
+pre-existing red tests. Removing it is a clean rollback — it is a test class with no
+runtime callers.
 
 ## Still unverified
 

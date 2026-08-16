@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Sent by DataTeamEnrichNotifier (invoked from the Opportunity master flow) when an Opportunity is created on an Account with an incomplete billing address. The [[MISSING_FIELDS]] token is NOT a merge field - it is substituted after render by DataTeamEnrichNotifier with only the fields actually blank. Do not remove or reformat that token. Rendered against the Account, so only Account merge fields resolve.</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Data Team Enrich Account</name>
+    <style>none</style>
+    <subject>Account {!Account.Name} is not complete</subject>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

@@ -170,8 +170,8 @@
         <label>Send Email to Data Team</label>
         <locationX>974</locationX>
         <locationY>1008</locationY>
-        <actionName>Opportunity.Data_Team_Enrich_Account</actionName>
-        <actionType>emailAlert</actionType>
+        <actionName>DataTeamEnrichNotifier</actionName>
+        <actionType>apex</actionType>
         <connector>
             <targetReference>Opportunity_Generic_flow</targetReference>
         </connector>
@@ -180,12 +180,30 @@
         </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
-            <name>SObjectRowId</name>
+            <name>relatedRecordId</name>
             <value>
-                <elementReference>$Record.Id</elementReference>
+                <elementReference>$Record.AccountId</elementReference>
             </value>
         </inputParameters>
-        <nameSegment>Opportunity.Data_Team_Enrich_Account</nameSegment>
+        <inputParameters>
+            <name>templateDevName</name>
+            <value>
+                <stringValue>Data_Team_Enrich_Account</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientGroupDevName</name>
+            <value>
+                <stringValue>Data_Team</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>missingFields</name>
+            <value>
+                <elementReference>missing_fields_list</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>DataTeamEnrichNotifier</nameSegment>
         <offset>0</offset>
     </actionCalls>
     <apiVersion>63.0</apiVersion>
@@ -245,6 +263,20 @@
                 <operator>EqualTo</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Profile.Name</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Custom: Data Management</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Profile.Name</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>System Administrator</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -641,6 +673,15 @@ ISCHANGED({!$Record.Type}),true,false)</expression>
         <name>isNew_check</name>
         <dataType>Boolean</dataType>
         <expression>isNew()</expression>
+    </formulas>
+    <formulas>
+        <name>missing_fields_list</name>
+        <dataType>String</dataType>
+        <expression>MID(
+IF(ISBLANK({!$Record.Account.BillingCountry}), &quot;, Billing Country&quot;, &quot;&quot;) &amp;
+IF(ISBLANK({!$Record.Account.BillingCity}), &quot;, Billing City&quot;, &quot;&quot;) &amp;
+IF(ISBLANK({!$Record.Account.BillingStreet}), &quot;, Billing Street&quot;, &quot;&quot;),
+3, 255)</expression>
     </formulas>
     <formulas>
         <name>Production_contact</name>

@@ -3,11 +3,12 @@
     <actionCalls>
         <name>ALM_Events_Cancellation</name>
         <label>ALM Events - Cancellation</label>
-        <locationX>578</locationX>
-        <locationY>2388</locationY>
+        <locationX>1106</locationX>
+        <locationY>2436</locationY>
         <actionName>submit</actionName>
         <actionType>submit</actionType>
-                <faultConnector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
             <targetReference>Log_Master_Fault</targetReference>
         </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -36,11 +37,12 @@
     <actionCalls>
         <name>Cancellation_Approval_Process</name>
         <label>Cancellation Approval Process</label>
-        <locationX>1370</locationX>
-        <locationY>2388</locationY>
+        <locationX>2426</locationX>
+        <locationY>2436</locationY>
         <actionName>submit</actionName>
         <actionType>submit</actionType>
-                <faultConnector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
             <targetReference>Log_Master_Fault</targetReference>
         </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -69,11 +71,12 @@
     <actionCalls>
         <name>Finance_Approval_Process</name>
         <label>Finance Approval Process</label>
-        <locationX>1634</locationX>
-        <locationY>2388</locationY>
+        <locationX>2954</locationX>
+        <locationY>2436</locationY>
         <actionName>submit</actionName>
         <actionType>submit</actionType>
-                <faultConnector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
             <targetReference>Log_Master_Fault</targetReference>
         </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -102,11 +105,12 @@
     <actionCalls>
         <name>Finance_Approval_Process_ALM</name>
         <label>Finance Approval Process - ALM</label>
-        <locationX>314</locationX>
-        <locationY>2280</locationY>
+        <locationX>578</locationX>
+        <locationY>2328</locationY>
         <actionName>submit</actionName>
         <actionType>submit</actionType>
-                <faultConnector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
             <targetReference>Log_Master_Fault</targetReference>
         </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -135,11 +139,12 @@
     <actionCalls>
         <name>Finance_Approval_Process_ALM_Events</name>
         <label>Finance Approval Process - ALM Events</label>
-        <locationX>842</locationX>
-        <locationY>2388</locationY>
+        <locationX>1634</locationX>
+        <locationY>2436</locationY>
         <actionName>submit</actionName>
         <actionType>submit</actionType>
-                <faultConnector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
             <targetReference>Log_Master_Fault</targetReference>
         </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -168,14 +173,15 @@
     <actionCalls>
         <name>SeSendEmailtoDataTeamnd_Email_to_Data_Team</name>
         <label>Send Email to Data Team</label>
-        <locationX>974</locationX>
+        <locationX>1832</locationX>
         <locationY>1008</locationY>
         <actionName>DataTeamEnrichNotifier</actionName>
         <actionType>apex</actionType>
         <connector>
             <targetReference>Opportunity_Generic_flow</targetReference>
         </connector>
-                <faultConnector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
             <targetReference>Log_Master_Fault</targetReference>
         </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -210,7 +216,7 @@
     <assignments>
         <name>Copy_1_of_Fault_notification_recipients</name>
         <label>Fault notification recipients</label>
-        <locationX>2910</locationX>
+        <locationX>5022</locationX>
         <locationY>684</locationY>
         <assignmentItems>
             <assignToReference>fault_notification_recipients2</assignToReference>
@@ -224,9 +230,25 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Copy_2_of_Fault_notification_recipients</name>
+        <label>Fault notification recipients</label>
+        <locationX>4010</locationX>
+        <locationY>2004</locationY>
+        <assignmentItems>
+            <assignToReference>fault_notification_recipients2</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Copy_1_of_Create_Schedules</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Fault_notification_recipients</name>
         <label>Fault notification recipients</label>
-        <locationX>1106</locationX>
+        <locationX>2096</locationX>
         <locationY>684</locationY>
         <assignmentItems>
             <assignToReference>fault_notification_recipients2</assignToReference>
@@ -240,9 +262,38 @@
         </connector>
     </assignments>
     <decisions>
+        <name>Check_for_Swoogo_deal</name>
+        <label>Check for Swoogo deal</label>
+        <locationX>4142</locationX>
+        <locationY>1896</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>isSwoogo_Deal</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Swoogo_Registrant_ID__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Profile.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Salesforce API Only System Integrations</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Copy_2_of_Fault_notification_recipients</targetReference>
+            </connector>
+            <label>isSwoogo Deal</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Check_if_Accounts_billing_city_country_and_street_is_missing</name>
         <label>Check if Accounts billing city, country and street is missing</label>
-        <locationX>1106</locationX>
+        <locationX>2096</locationX>
         <locationY>900</locationY>
         <defaultConnector>
             <targetReference>Opportunity_Generic_flow</targetReference>
@@ -288,7 +339,7 @@
     <decisions>
         <name>Check_if_Automation_is_Disabled_for_Running_User</name>
         <label>Check if Automation is Disabled for Running User</label>
-        <locationX>446</locationX>
+        <locationX>941</locationX>
         <locationY>276</locationY>
         <defaultConnector>
             <targetReference>Flow</targetReference>
@@ -310,7 +361,7 @@
     <decisions>
         <name>Check_if_Automation_is_Disabled_for_Running_User2</name>
         <label>Check if Automation is Disabled for Running User</label>
-        <locationX>2668</locationX>
+        <locationX>4780</locationX>
         <locationY>276</locationY>
         <defaultConnector>
             <targetReference>Flow_to_run</targetReference>
@@ -332,8 +383,8 @@
     <decisions>
         <name>Check_stage</name>
         <label>Check stage</label>
-        <locationX>1634</locationX>
-        <locationY>2280</locationY>
+        <locationX>2954</locationX>
+        <locationY>2328</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Cancellation_Pending_Approval</name>
@@ -369,8 +420,8 @@
     <decisions>
         <name>Check_Team</name>
         <label>Check Team</label>
-        <locationX>974</locationX>
-        <locationY>2172</locationY>
+        <locationX>1766</locationX>
+        <locationY>2220</locationY>
         <defaultConnector>
             <targetReference>Check_stage</targetReference>
         </defaultConnector>
@@ -416,8 +467,11 @@
     <decisions>
         <name>Closed_Won_lost</name>
         <label>Closed Won/lost</label>
-        <locationX>1106</locationX>
-        <locationY>1740</locationY>
+        <locationX>2096</locationX>
+        <locationY>1788</locationY>
+        <defaultConnector>
+            <targetReference>Check_for_Swoogo_deal</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Closed_Won</name>
@@ -462,8 +516,8 @@
     <decisions>
         <name>Copy_1_of_Check_stage</name>
         <label>Check stage</label>
-        <locationX>842</locationX>
-        <locationY>2280</locationY>
+        <locationX>1634</locationX>
+        <locationY>2328</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Copy_1_of_Cancellation_Pending_Approval</name>
@@ -500,7 +554,7 @@
         <description>Flow to run only for open opps, if closed then only admins can run</description>
         <name>Flow</name>
         <label>Flow to run?</label>
-        <locationX>1106</locationX>
+        <locationX>2096</locationX>
         <locationY>384</locationY>
         <defaultConnector>
             <targetReference>Fault_notification_recipients</targetReference>
@@ -528,6 +582,13 @@
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>ALM - Custom: Fin/Ops/HR</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Profile.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Salesforce API Only System Integrations</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -566,7 +627,7 @@
         <description>Flow to run only for open opps, if closed then only admins can run</description>
         <name>Flow_to_run</name>
         <label>Flow to run?</label>
-        <locationX>2910</locationX>
+        <locationX>5022</locationX>
         <locationY>384</locationY>
         <defaultConnector>
             <targetReference>Copy_1_of_Fault_notification_recipients</targetReference>
@@ -594,6 +655,13 @@
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>ALM - Custom: Fin/Ops/HR</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Profile.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Salesforce API Only System Integrations</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -723,11 +791,11 @@ IF(ISBLANK({!$Record.Account.BillingStreet}), &quot;, Billing Street&quot;, &quo
         <name>Update_closed_Opportunity_fields</name>
         <label>Update closed Opportunity fields</label>
         <locationX>50</locationX>
-        <locationY>1848</locationY>
+        <locationY>1896</locationY>
         <connector>
             <targetReference>Email_Alert_to_Closed_Won_Opps</targetReference>
         </connector>
-                <faultConnector>
+        <faultConnector>
             <targetReference>Log_Master_Fault</targetReference>
         </faultConnector>
         <inputAssignments>
@@ -747,12 +815,13 @@ IF(ISBLANK({!$Record.Account.BillingStreet}), &quot;, Billing Street&quot;, &quo
     <recordUpdates>
         <name>Update_Opportunity_fields</name>
         <label>Update Opportunity fields</label>
-        <locationX>974</locationX>
-        <locationY>1848</locationY>
+        <locationX>1766</locationX>
+        <locationY>1896</locationY>
         <connector>
             <targetReference>Get_ALM_Event_Product</targetReference>
         </connector>
-                <faultConnector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
             <targetReference>Log_Master_Fault</targetReference>
         </faultConnector>
         <inputAssignments>
@@ -770,7 +839,7 @@ IF(ISBLANK({!$Record.Account.BillingStreet}), &quot;, Billing Street&quot;, &quo
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <start>
-        <locationX>1750</locationX>
+        <locationX>2734</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Check_if_Automation_is_Disabled_for_Running_User</targetReference>
@@ -789,25 +858,14 @@ IF(ISBLANK({!$Record.Account.BillingStreet}), &quot;, Billing Street&quot;, &quo
             <recordField>LastModifiedDate</recordField>
             <timeSource>RecordField</timeSource>
         </scheduledPaths>
-        <scheduledPaths>
-            <name>Renewal_Email_Notification</name>
-            <connector>
-                <targetReference>Renewal_Email_Alert</targetReference>
-            </connector>
-            <label>Renewal Email Notification</label>
-            <offsetNumber>15</offsetNumber>
-            <offsetUnit>Minutes</offsetUnit>
-            <recordField>Created_Date__c</recordField>
-            <timeSource>RecordField</timeSource>
-        </scheduledPaths>
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
     <subflows>
         <name>Chloe_Mascart_Task_Creation2</name>
         <label>Chloe Mascart Task Creation</label>
-        <locationX>1106</locationX>
-        <locationY>1632</locationY>
+        <locationX>2096</locationX>
+        <locationY>1680</locationY>
         <connector>
             <targetReference>Closed_Won_lost</targetReference>
         </connector>
@@ -832,10 +890,30 @@ IF(ISBLANK({!$Record.Account.BillingStreet}), &quot;, Billing Street&quot;, &quo
         </inputAssignments>
     </subflows>
     <subflows>
+        <name>Copy_1_of_Create_Schedules</name>
+        <label>Create Schedules</label>
+        <locationX>4010</locationX>
+        <locationY>2112</locationY>
+        <flowName>ScheduleCreationFlow</flowName>
+        <inputAssignments>
+            <name>fault_notificaiton_recipients</name>
+            <value>
+                <elementReference>fault_notification_recipients2</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>$Record</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <subflows>
         <name>Create_Schedules</name>
         <label>Create Schedules</label>
-        <locationX>974</locationX>
-        <locationY>2064</locationY>
+        <locationX>1766</locationX>
+        <locationY>2112</locationY>
         <connector>
             <targetReference>Check_Team</targetReference>
         </connector>
@@ -858,7 +936,7 @@ IF(ISBLANK({!$Record.Account.BillingStreet}), &quot;, Billing Street&quot;, &quo
         <name>Email_Alert_for_Production</name>
         <label>Email Alert for Production</label>
         <locationX>50</locationX>
-        <locationY>2172</locationY>
+        <locationY>2220</locationY>
         <flowName>Opportunity_Email_alert_to_production</flowName>
         <inputAssignments>
             <name>fault_notification_recipients</name>
@@ -878,7 +956,7 @@ IF(ISBLANK({!$Record.Account.BillingStreet}), &quot;, Billing Street&quot;, &quo
         <name>Email_Alert_to_Closed_Won_Opps</name>
         <label>Email Alert to Closed Won Opps</label>
         <locationX>50</locationX>
-        <locationY>1956</locationY>
+        <locationY>2004</locationY>
         <connector>
             <targetReference>Email_alert_to_lexology_index</targetReference>
         </connector>
@@ -894,7 +972,7 @@ IF(ISBLANK({!$Record.Account.BillingStreet}), &quot;, Billing Street&quot;, &quo
         <name>Email_alert_to_lexology_index</name>
         <label>Email alert to lexology index</label>
         <locationX>50</locationX>
-        <locationY>2064</locationY>
+        <locationY>2112</locationY>
         <connector>
             <targetReference>Email_Alert_for_Production</targetReference>
         </connector>
@@ -915,8 +993,8 @@ IF(ISBLANK({!$Record.Account.BillingStreet}), &quot;, Billing Street&quot;, &quo
     <subflows>
         <name>Get_ALM_Event_Product</name>
         <label>Get ALM Event Product</label>
-        <locationX>974</locationX>
-        <locationY>1956</locationY>
+        <locationX>1766</locationX>
+        <locationY>2004</locationY>
         <connector>
             <targetReference>Create_Schedules</targetReference>
         </connector>
@@ -935,7 +1013,7 @@ IF(ISBLANK({!$Record.Account.BillingStreet}), &quot;, Billing Street&quot;, &quo
     <subflows>
         <name>Legal_Vertical_tasks</name>
         <label>Legal Vertical tasks</label>
-        <locationX>2910</locationX>
+        <locationX>5022</locationX>
         <locationY>1008</locationY>
         <connector>
             <targetReference>Update_Opportunity_Line_items</targetReference>
@@ -957,7 +1035,7 @@ IF(ISBLANK({!$Record.Account.BillingStreet}), &quot;, Billing Street&quot;, &quo
     <subflows>
         <name>Log_Async_Path</name>
         <label>Log Async Path</label>
-        <locationX>2910</locationX>
+        <locationX>5022</locationX>
         <locationY>792</locationY>
         <connector>
             <targetReference>Update_Opportunity_with_Flow_Data_Groove</targetReference>
@@ -984,9 +1062,52 @@ IF(ISBLANK({!$Record.Account.BillingStreet}), &quot;, Billing Street&quot;, &quo
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </subflows>
     <subflows>
+        <name>Log_Master_Fault</name>
+        <label>Log Master Fault</label>
+        <locationX>314</locationX>
+        <locationY>2004</locationY>
+        <flowName>Platform_Fault_Logger</flowName>
+        <inputAssignments>
+            <name>in_Context</name>
+            <value>
+                <stringValue>Opportunity master flow action/update fault</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>in_ErrorMessage</name>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>in_FlowApiName</name>
+            <value>
+                <stringValue>Opportunity_AfterUpdate_MasterFlow</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>in_RecordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>in_RecordName</name>
+            <value>
+                <elementReference>$Record.Name</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>in_Severity</name>
+            <value>
+                <stringValue>Error</stringValue>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <subflows>
         <name>Log_Sync_Path</name>
         <label>Log Sync Path</label>
-        <locationX>1106</locationX>
+        <locationX>2096</locationX>
         <locationY>792</locationY>
         <connector>
             <targetReference>Check_if_Accounts_billing_city_country_and_street_is_missing</targetReference>
@@ -1015,8 +1136,8 @@ IF(ISBLANK({!$Record.Account.BillingStreet}), &quot;, Billing Street&quot;, &quo
     <subflows>
         <name>Opportunity_Generic_flow</name>
         <label>Opportunity Generic flow</label>
-        <locationX>1106</locationX>
-        <locationY>1200</locationY>
+        <locationX>2096</locationX>
+        <locationY>1248</locationY>
         <connector>
             <targetReference>Sync_Opportunity_Team_Member</targetReference>
         </connector>
@@ -1054,22 +1175,9 @@ IF(ISBLANK({!$Record.Account.BillingStreet}), &quot;, Billing Street&quot;, &quo
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </subflows>
     <subflows>
-        <name>Renewal_Email_Alert</name>
-        <label>Renewal Email Alert</label>
-        <locationX>3306</locationX>
-        <locationY>276</locationY>
-        <flowName>EmailAlert_RenewalCreation</flowName>
-        <inputAssignments>
-            <name>recordId</name>
-            <value>
-                <elementReference>$Record</elementReference>
-            </value>
-        </inputAssignments>
-    </subflows>
-    <subflows>
         <name>Standardise_Opportunity_Name</name>
         <label>Standardise Opportunity Name</label>
-        <locationX>2910</locationX>
+        <locationX>5022</locationX>
         <locationY>1224</locationY>
         <flowName>Opportunity_Standardize_name_v3</flowName>
         <inputAssignments>
@@ -1089,8 +1197,8 @@ IF(ISBLANK({!$Record.Account.BillingStreet}), &quot;, Billing Street&quot;, &quo
     <subflows>
         <name>Sync_Interaction_Records</name>
         <label>Sync Interaction Records</label>
-        <locationX>1106</locationX>
-        <locationY>1416</locationY>
+        <locationX>2096</locationX>
+        <locationY>1464</locationY>
         <connector>
             <targetReference>Update_Target_and_Budget</targetReference>
         </connector>
@@ -1118,8 +1226,8 @@ IF(ISBLANK({!$Record.Account.BillingStreet}), &quot;, Billing Street&quot;, &quo
     <subflows>
         <name>Sync_Opportunity_Team_Member</name>
         <label>Sync Opportunity Team Member</label>
-        <locationX>1106</locationX>
-        <locationY>1308</locationY>
+        <locationX>2096</locationX>
+        <locationY>1356</locationY>
         <connector>
             <targetReference>Sync_Interaction_Records</targetReference>
         </connector>
@@ -1146,7 +1254,7 @@ IF(ISBLANK({!$Record.Account.BillingStreet}), &quot;, Billing Street&quot;, &quo
     <subflows>
         <name>Update_Opportunity_Line_items</name>
         <label>Update Opportunity Line items</label>
-        <locationX>2910</locationX>
+        <locationX>5022</locationX>
         <locationY>1116</locationY>
         <connector>
             <targetReference>Standardise_Opportunity_Name</targetReference>
@@ -1169,7 +1277,7 @@ IF(ISBLANK({!$Record.Account.BillingStreet}), &quot;, Billing Street&quot;, &quo
     <subflows>
         <name>Update_Opportunity_with_Flow_Data_Groove</name>
         <label>Update Opportunity with Flow Data (Groove)</label>
-        <locationX>2910</locationX>
+        <locationX>5022</locationX>
         <locationY>900</locationY>
         <connector>
             <targetReference>Legal_Vertical_tasks</targetReference>
@@ -1191,8 +1299,8 @@ IF(ISBLANK({!$Record.Account.BillingStreet}), &quot;, Billing Street&quot;, &quo
     <subflows>
         <name>Update_Target_and_Budget</name>
         <label>Update Target and Budget</label>
-        <locationX>1106</locationX>
-        <locationY>1524</locationY>
+        <locationX>2096</locationX>
+        <locationY>1572</locationY>
         <connector>
             <targetReference>Chloe_Mascart_Task_Creation2</targetReference>
         </connector>
@@ -1214,37 +1322,6 @@ IF(ISBLANK({!$Record.Account.BillingStreet}), &quot;, Billing Street&quot;, &quo
             <value>
                 <elementReference>$Record</elementReference>
             </value>
-        </inputAssignments>
-    </subflows>
-    <subflows>
-        <name>Log_Master_Fault</name>
-        <label>Log Master Fault</label>
-        <locationX>50</locationX>
-        <locationY>50</locationY>
-        <flowName>Platform_Fault_Logger</flowName>
-        <inputAssignments>
-            <name>in_Context</name>
-            <value><stringValue>Opportunity master flow action/update fault</stringValue></value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>in_ErrorMessage</name>
-            <value><elementReference>$Flow.FaultMessage</elementReference></value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>in_FlowApiName</name>
-            <value><stringValue>Opportunity_AfterUpdate_MasterFlow</stringValue></value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>in_RecordId</name>
-            <value><elementReference>$Record.Id</elementReference></value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>in_RecordName</name>
-            <value><elementReference>$Record.Name</elementReference></value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>in_Severity</name>
-            <value><stringValue>Error</stringValue></value>
         </inputAssignments>
     </subflows>
     <textTemplates>

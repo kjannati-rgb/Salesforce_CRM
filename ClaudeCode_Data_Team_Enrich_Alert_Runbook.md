@@ -103,9 +103,14 @@ merged file against a *second* pristine retrieve — the only differences were t
 swap, the two suppression conditions and the `missing_fields_list` formula. That artifact
 is kept at `prod-deploy/data-team-enrich/`.
 
-`Renewal_Email_Alert` was deliberately **excluded**. It remains in the repo copy and is
-still undeployed. **The repo's `flows/Opportunity.flow-meta.xml` is now known-stale
-against production** — always retrieve fresh before touching that flow again.
+`Renewal_Email_Alert` was deliberately **excluded** from the deploy.
+
+**Resolved 2026-08-16:** the repo file has since been re-synced from production (v33), so it
+is no longer stale — it now carries the three restored elements *and* this feature's
+changes. Re-syncing removed the unshipped `Renewal_Email_Notification` wiring, which is
+recorded in `UNSHIPPED_Renewal_Email_Alert.md` along with a live question: its target
+subflow `EmailAlert_RenewalCreation` is **Active in production (v6)** but nothing in the
+master flow invokes it. Still retrieve fresh before editing that flow — it drifts.
 
 ## Production deploy (completed 2026-08-16)
 

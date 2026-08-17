@@ -213,6 +213,7 @@
         <offset>0</offset>
     </actionCalls>
     <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
         <name>Copy_1_of_Fault_notification_recipients</name>
         <label>Fault notification recipients</label>

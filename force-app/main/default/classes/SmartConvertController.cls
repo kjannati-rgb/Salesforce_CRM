@@ -44,6 +44,7 @@ public with sharing class SmartConvertController {
     public class Quality {
         @AuraEnabled public String grade;
         @AuraEnabled public Decimal score;
+        @AuraEnabled public Decimal radarScore;   // ALM Radar fit score, where applicable
         @AuraEnabled public String emailStatus;
         @AuraEnabled public Boolean emailValid;
         @AuraEnabled public Boolean emailBad;
@@ -179,7 +180,7 @@ public with sharing class SmartConvertController {
             SELECT Id, FirstName, LastName, Name, Title, Email, Company,
                    Country, CountryCode, City, Website, Status, IsConverted,
                    Lexology_Product__c, ALM_Product_Interest__c,
-                   pi__grade__c, pi__score__c, Validity_Email_Verification_Status__c
+                   pi__grade__c, pi__score__c, Radar_Fit_Score__c, Validity_Email_Verification_Status__c
             FROM Lead WHERE Id = :leadId LIMIT 1
         ];
 
@@ -276,6 +277,7 @@ public with sharing class SmartConvertController {
         Quality q = new Quality();
         q.grade = ld.pi__grade__c;
         q.score = ld.pi__score__c;
+        q.radarScore = ld.Radar_Fit_Score__c;
         q.emailStatus = ld.Validity_Email_Verification_Status__c;
         q.emailValid = (q.emailStatus == 'Valid');
         q.emailBad = (q.emailStatus == 'Invalid');
@@ -370,7 +372,9 @@ public with sharing class SmartConvertController {
         String likeTerm = '%' + term.trim() + '%';
         for (Account a : [
             SELECT Id, Name, Website, Match_Domain__c, Ultimate_Account_Name__c,
-                   No_of_Offices__c, No_of_Office_Contacts__c, No_of_Won_Office_Opportunities__c
+                   No_of_Offices__c, No_of_Office_Contacts__c, No_of_Won_Office_Opportunities__c,
+                   (SELECT BillingCity, BillingCountryCode FROM Accounts__r
+                    WHERE RecordType.DeveloperName = 'Office' AND BillingCity != null LIMIT 3)
             FROM Account
             WHERE RecordType.DeveloperName = 'Firm' AND Name LIKE :likeTerm
             ORDER BY Name LIMIT 15
@@ -844,7 +848,9 @@ public with sharing class SmartConvertController {
     private static List<Account> firmRecords(List<Id> ids) {
         return [
             SELECT Id, Name, Website, Match_Domain__c, Ultimate_Account_Name__c,
-                   No_of_Offices__c, No_of_Office_Contacts__c, No_of_Won_Office_Opportunities__c
+                   No_of_Offices__c, No_of_Office_Contacts__c, No_of_Won_Office_Opportunities__c,
+                   (SELECT BillingCity, BillingCountryCode FROM Accounts__r
+                    WHERE RecordType.DeveloperName = 'Office' AND BillingCity != null LIMIT 3)
             FROM Account WHERE Id IN :ids
         ];
     }
@@ -857,6 +863,18 @@ public with sharing class SmartConvertController {
         List<String> bits = new List<String>();
         String dom = (a.Match_Domain__c != null) ? a.Match_Domain__c : LeadMatchSelectService.domainKey(null, a.Website);
         if (String.isNotBlank(dom)) bits.add(dom);                                  // the website/domain key
+        // Office locations - the fastest way to tell similarly named firms apart (UAT feedback)
+        List<String> cities = new List<String>();
+        if (a.getSObjects('Accounts__r') != null) {
+            for (SObject o : a.getSObjects('Accounts__r')) {
+                String city = (String) o.get('BillingCity');
+                String cc = (String) o.get('BillingCountryCode');
+                if (String.isNotBlank(city) && cities.size() < 2) {
+                    cities.add(city + (String.isNotBlank(cc) ? ' ' + cc : ''));
+                }
+            }
+        }
+        if (!cities.isEmpty()) bits.add(String.join(cities, ' / '));
         if (a.No_of_Offices__c != null) bits.add(a.No_of_Offices__c.intValue() + ' offices');
         if (a.No_of_Office_Contacts__c != null) bits.add(a.No_of_Office_Contacts__c.intValue() + ' contacts');
         if (a.No_of_Won_Office_Opportunities__c != null && a.No_of_Won_Office_Opportunities__c > 0) {

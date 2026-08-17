@@ -59,6 +59,7 @@
                 <template lwc:if={hasQuality}>
                     <template lwc:if={data.quality.grade}><span class="sc-qchip">Grade {data.quality.grade}</span></template>
                     <template lwc:if={data.quality.score}><span class="sc-qchip">Score {data.quality.score}</span></template>
+                    <template lwc:if={data.quality.radarScore}><span class="sc-qchip">Radar fit {data.quality.radarScore}</span></template>
                     <template lwc:if={data.quality.emailStatus}><span class={emailChipClass}>Email: {data.quality.emailStatus}</span></template>
                 </template>
                 <template lwc:if={showNoScore}><span class="sc-qchip sc-q-none">No Pardot score on this lead</span></template>

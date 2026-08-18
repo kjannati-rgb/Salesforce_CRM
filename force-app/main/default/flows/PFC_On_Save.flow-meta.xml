@@ -4,8 +4,8 @@
     <assignments>
         <name>Assign_Campaign</name>
         <label>Set Resolved Campaign</label>
-        <locationX>340</locationX>
-        <locationY>600</locationY>
+        <locationX>1832</locationX>
+        <locationY>1055</locationY>
         <assignmentItems>
             <assignToReference>resolvedCampaignId</assignToReference>
             <operator>Assign</operator>
@@ -20,8 +20,8 @@
     <assignments>
         <name>Assign_Matched_Contact</name>
         <label>Set Matched (Contact)</label>
-        <locationX>140</locationX>
-        <locationY>1320</locationY>
+        <locationX>347</locationX>
+        <locationY>1703</locationY>
         <assignmentItems>
             <assignToReference>matchedId</assignToReference>
             <operator>Assign</operator>
@@ -36,8 +36,8 @@
     <assignments>
         <name>Assign_Matched_Lead</name>
         <label>Set Matched (Lead)</label>
-        <locationX>360</locationX>
-        <locationY>1320</locationY>
+        <locationX>1139</locationX>
+        <locationY>1703</locationY>
         <assignmentItems>
             <assignToReference>matchedId</assignToReference>
             <operator>Assign</operator>
@@ -50,35 +50,10 @@
         </connector>
     </assignments>
     <decisions>
-        <name>Decision_MappingFound</name>
-        <label>Form Name Mapped?</label>
-        <locationX>176</locationX>
-        <locationY>240</locationY>
-        <defaultConnector>
-            <targetReference>Stamp_NoCampaign</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>No mapping</defaultConnectorLabel>
-        <rules>
-            <name>Mapped</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Get_Campaign_Mapping.Id</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Get_Campaign</targetReference>
-            </connector>
-            <label>Mapped</label>
-        </rules>
-    </decisions>
-    <decisions>
         <name>Decision_CampaignFound</name>
         <label>Campaign Exists?</label>
-        <locationX>340</locationX>
-        <locationY>480</locationY>
+        <locationX>2393</locationX>
+        <locationY>947</locationY>
         <defaultConnector>
             <targetReference>Stamp_NoCampaign</targetReference>
         </defaultConnector>
@@ -100,83 +75,12 @@
         </rules>
     </decisions>
     <decisions>
-        <name>Decision_HasBrand</name>
-        <label>Has Linkable Brand?</label>
-        <locationX>240</locationX>
-        <locationY>840</locationY>
-        <defaultConnector>
-            <targetReference>Member_Gate</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>No - skip link</defaultConnectorLabel>
-        <rules>
-            <name>Proceed</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>brandToMatch</leftValueReference>
-                <operator>NotEqualTo</operator>
-                <rightValue>
-                    <stringValue></stringValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>brandToMatch</leftValueReference>
-                <operator>NotEqualTo</operator>
-                <rightValue>
-                    <stringValue>Other</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Decision_Person</targetReference>
-            </connector>
-            <label>Proceed</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Decision_Person</name>
-        <label>Person Type (link)</label>
-        <locationX>240</locationX>
-        <locationY>960</locationY>
-        <defaultConnector>
-            <targetReference>Member_Gate</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Neither</defaultConnectorLabel>
-        <rules>
-            <name>IsContact</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.Contact__c</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Get_Open_PFC_Contact</targetReference>
-            </connector>
-            <label>Is Contact</label>
-        </rules>
-        <rules>
-            <name>IsLead</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.Lead__c</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Get_Open_PFC_Lead</targetReference>
-            </connector>
-            <label>Is Lead</label>
-        </rules>
-    </decisions>
-    <decisions>
         <name>Decision_Found_Contact</name>
         <label>Found Match (Contact)?</label>
-        <locationX>140</locationX>
-        <locationY>1200</locationY>
+        <locationX>479</locationX>
+        <locationY>1595</locationY>
         <defaultConnector>
+            <isGoTo>true</isGoTo>
             <targetReference>Member_Gate</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>No match</defaultConnectorLabel>
@@ -206,9 +110,10 @@
     <decisions>
         <name>Decision_Found_Lead</name>
         <label>Found Match (Lead)?</label>
-        <locationX>360</locationX>
-        <locationY>1200</locationY>
+        <locationX>1271</locationX>
+        <locationY>1595</locationY>
         <defaultConnector>
+            <isGoTo>true</isGoTo>
             <targetReference>Member_Gate</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>No match</defaultConnectorLabel>
@@ -236,46 +141,68 @@
         </rules>
     </decisions>
     <decisions>
-        <name>Member_Gate</name>
-        <label>Campaign + Person present?</label>
-        <locationX>500</locationX>
-        <locationY>1560</locationY>
-        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <name>Decision_HasBrand</name>
+        <label>Has Linkable Brand?</label>
+        <locationX>1832</locationX>
+        <locationY>1271</locationY>
+        <defaultConnector>
+            <targetReference>Member_Gate</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No - skip link</defaultConnectorLabel>
         <rules>
-            <name>HasCampaignAndPerson</name>
-            <conditionLogic>1 AND (2 OR 3)</conditionLogic>
+            <name>Proceed</name>
+            <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>campaignForMember</leftValueReference>
-                <operator>IsNull</operator>
+                <leftValueReference>brandToMatch</leftValueReference>
+                <operator>NotEqualTo</operator>
                 <rightValue>
-                    <booleanValue>false</booleanValue>
+                    <stringValue></stringValue>
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>$Record.Contact__c</leftValueReference>
-                <operator>IsNull</operator>
+                <leftValueReference>brandToMatch</leftValueReference>
+                <operator>NotEqualTo</operator>
                 <rightValue>
-                    <booleanValue>false</booleanValue>
+                    <stringValue>Other</stringValue>
                 </rightValue>
             </conditions>
+            <connector>
+                <targetReference>Decision_Person</targetReference>
+            </connector>
+            <label>Proceed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Decision_MappingFound</name>
+        <label>Form Name Mapped?</label>
+        <locationX>3069</locationX>
+        <locationY>731</locationY>
+        <defaultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Stamp_NoCampaign</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No mapping</defaultConnectorLabel>
+        <rules>
+            <name>Mapped</name>
+            <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>$Record.Lead__c</leftValueReference>
+                <leftValueReference>Get_Campaign_Mapping.Id</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Decision_Member_Person</targetReference>
+                <targetReference>Get_Campaign</targetReference>
             </connector>
-            <label>Yes</label>
+            <label>Mapped</label>
         </rules>
     </decisions>
     <decisions>
         <name>Decision_Member_Person</name>
         <label>Member: Lead or Contact?</label>
-        <locationX>500</locationX>
-        <locationY>1680</locationY>
+        <locationX>1238</locationX>
+        <locationY>2327</locationY>
         <defaultConnectorLabel>Neither</defaultConnectorLabel>
         <rules>
             <name>MemberIsContact</name>
@@ -311,8 +238,8 @@
     <decisions>
         <name>Decision_NoMember_Contact</name>
         <label>Contact not a member?</label>
-        <locationX>420</locationX>
-        <locationY>1920</locationY>
+        <locationX>314</locationX>
+        <locationY>2543</locationY>
         <defaultConnectorLabel>Already member</defaultConnectorLabel>
         <rules>
             <name>NotMemberContact</name>
@@ -333,8 +260,8 @@
     <decisions>
         <name>Decision_NoMember_Lead</name>
         <label>Lead not a member?</label>
-        <locationX>580</locationX>
-        <locationY>1920</locationY>
+        <locationX>1370</locationX>
+        <locationY>2543</locationY>
         <defaultConnectorLabel>Already member</defaultConnectorLabel>
         <rules>
             <name>NotMemberLead</name>
@@ -352,18 +279,124 @@
             <label>Not member</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>Decision_Person</name>
+        <label>Person Type (link)</label>
+        <locationX>1205</locationX>
+        <locationY>1379</locationY>
+        <defaultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Member_Gate</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Neither</defaultConnectorLabel>
+        <rules>
+            <name>IsContact</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Contact__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Open_PFC_Contact</targetReference>
+            </connector>
+            <label>Is Contact</label>
+        </rules>
+        <rules>
+            <name>IsLead</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Lead__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Open_PFC_Lead</targetReference>
+            </connector>
+            <label>Is Lead</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>is_it_MS_task</name>
+        <label>is it MS - task?</label>
+        <locationX>3069</locationX>
+        <locationY>323</locationY>
+        <defaultConnector>
+            <targetReference>Get_Campaign_Mapping</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>MS_task</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Form_Name__c</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <stringValue>MS - Assigned</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Contact_ID__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Contact__r.MS_company_type_user__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_PFC_to_MS_company_user</targetReference>
+            </connector>
+            <label>MS - task</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Member_Gate</name>
+        <label>Campaign + Person present?</label>
+        <locationX>1832</locationX>
+        <locationY>2219</locationY>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>HasCampaignAndPerson</name>
+            <conditionLogic>1 AND (2 OR 3)</conditionLogic>
+            <conditions>
+                <leftValueReference>campaignForMember</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Contact__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Lead__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Decision_Member_Person</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
     <description>REV-57/REV-77: single consolidated PFC after-save flow. Controlled order: (1) Stamp Name/Account/Campaign (absorbs legacy On_Pardot_Form_Creation), (2) cross-link same person+brand open PFCs, (3) add Campaign Member (Registered). Replaces On_Pardot_Form_Creation + PFC_Check_And_Link + PFC_Add_Campaign_Member. Fail-open via PFC_Log_Fault.</description>
     <environments>Default</environments>
-    <formulas>
-        <name>ContactAccount</name>
-        <dataType>String</dataType>
-        <expression>{!$Record.Contact__r.Account.Id}</expression>
-    </formulas>
-    <formulas>
-        <name>FormName2</name>
-        <dataType>String</dataType>
-        <expression>LEFT(({!$Record.Prospect_Name__c} &amp; &quot; | &quot; &amp; TEXT({!$Record.Form_Name__c})), 80)</expression>
-    </formulas>
     <formulas>
         <name>brandToMatch</name>
         <dataType>String</dataType>
@@ -373,6 +406,16 @@
         <name>campaignForMember</name>
         <dataType>String</dataType>
         <expression>IF(NOT(ISBLANK({!resolvedCampaignId})), {!resolvedCampaignId}, {!$Record.Campaign__c})</expression>
+    </formulas>
+    <formulas>
+        <name>ContactAccount</name>
+        <dataType>String</dataType>
+        <expression>{!$Record.Contact__r.Account.Id}</expression>
+    </formulas>
+    <formulas>
+        <name>FormName2</name>
+        <dataType>String</dataType>
+        <expression>LEFT(({!$Record.Prospect_Name__c} &amp; &quot; | &quot; &amp; TEXT({!$Record.Form_Name__c})), 80)</expression>
     </formulas>
     <formulas>
         <name>productBrandToStamp</name>
@@ -387,75 +430,112 @@
             <stringValue>LightningFlowBuilder</stringValue>
         </value>
     </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
-    <recordCreates>
+    <actionCalls>
         <name>Create_Member_Contact</name>
         <label>Add Contact to Campaign</label>
-        <locationX>420</locationX>
-        <locationY>2040</locationY>
+        <locationX>50</locationX>
+        <locationY>2651</locationY>
+        <actionName>PFC_AddCampaignMember</actionName>
+        <actionType>apex</actionType>
         <faultConnector>
+            <isGoTo>true</isGoTo>
             <targetReference>Log_Fault</targetReference>
         </faultConnector>
-        <inputAssignments>
-            <field>CampaignId</field>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>campaignId</name>
             <value>
                 <elementReference>campaignForMember</elementReference>
             </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>ContactId</field>
+        </inputParameters>
+        <inputParameters>
+            <name>contactId</name>
             <value>
                 <elementReference>$Record.Contact__c</elementReference>
             </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Status</field>
+        </inputParameters>
+        <inputParameters>
+            <name>status</name>
             <value>
                 <stringValue>Registered</stringValue>
             </value>
-        </inputAssignments>
-        <object>CampaignMember</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordCreates>
-    <recordCreates>
+        </inputParameters>
+        <nameSegment>PFC_AddCampaignMember</nameSegment>
+    </actionCalls>
+    <actionCalls>
         <name>Create_Member_Lead</name>
         <label>Add Lead to Campaign</label>
-        <locationX>580</locationX>
-        <locationY>2040</locationY>
+        <locationX>1106</locationX>
+        <locationY>2651</locationY>
+        <actionName>PFC_AddCampaignMember</actionName>
+        <actionType>apex</actionType>
         <faultConnector>
             <targetReference>Log_Fault</targetReference>
         </faultConnector>
-        <inputAssignments>
-            <field>CampaignId</field>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>campaignId</name>
             <value>
                 <elementReference>campaignForMember</elementReference>
             </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>LeadId</field>
+        </inputParameters>
+        <inputParameters>
+            <name>leadId</name>
             <value>
                 <elementReference>$Record.Lead__c</elementReference>
             </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Status</field>
+        </inputParameters>
+        <inputParameters>
+            <name>status</name>
             <value>
                 <stringValue>Registered</stringValue>
             </value>
-        </inputAssignments>
-        <object>CampaignMember</object>
+        </inputParameters>
+        <nameSegment>PFC_AddCampaignMember</nameSegment>
+    </actionCalls>
+    <recordLookups>
+        <name>Get_Campaign</name>
+        <label>Get Campaign By Name</label>
+        <locationX>2393</locationX>
+        <locationY>839</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Decision_CampaignFound</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Log_Fault</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Campaign_Mapping.Campaign_Name__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Campaign</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordCreates>
+    </recordLookups>
     <recordLookups>
         <name>Get_Campaign_Mapping</name>
         <label>Get Campaign Mapping</label>
-        <locationX>176</locationX>
-        <locationY>120</locationY>
+        <locationX>3069</locationX>
+        <locationY>623</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Decision_MappingFound</targetReference>
         </connector>
         <faultConnector>
+            <isGoTo>true</isGoTo>
             <targetReference>Log_Fault</targetReference>
         </faultConnector>
         <filterLogic>and</filterLogic>
@@ -478,39 +558,80 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
-        <name>Get_Campaign</name>
-        <label>Get Campaign By Name</label>
-        <locationX>340</locationX>
-        <locationY>360</locationY>
+        <name>Get_Member_Contact</name>
+        <label>Existing Contact Member?</label>
+        <locationX>314</locationX>
+        <locationY>2435</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Decision_CampaignFound</targetReference>
+            <targetReference>Decision_NoMember_Contact</targetReference>
         </connector>
         <faultConnector>
+            <isGoTo>true</isGoTo>
             <targetReference>Log_Fault</targetReference>
         </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>Name</field>
+            <field>CampaignId</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>Get_Campaign_Mapping.Campaign_Name__c</elementReference>
+                <elementReference>campaignForMember</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>ContactId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Contact__c</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>Campaign</object>
+        <object>CampaignMember</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Member_Lead</name>
+        <label>Existing Lead Member?</label>
+        <locationX>1370</locationX>
+        <locationY>2435</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Decision_NoMember_Lead</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Log_Fault</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>CampaignId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>campaignForMember</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>LeadId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Lead__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CampaignMember</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
         <name>Get_Open_PFC_Contact</name>
         <label>Get Open PFC (Contact)</label>
-        <locationX>140</locationX>
-        <locationY>1080</locationY>
+        <locationX>479</locationX>
+        <locationY>1487</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Decision_Found_Contact</targetReference>
         </connector>
         <faultConnector>
+            <isGoTo>true</isGoTo>
             <targetReference>Log_Fault</targetReference>
         </faultConnector>
         <filterLogic>1 AND 2 AND 3 AND 4 AND (5 OR (6 AND 7))</filterLogic>
@@ -572,13 +693,14 @@
     <recordLookups>
         <name>Get_Open_PFC_Lead</name>
         <label>Get Open PFC (Lead)</label>
-        <locationX>360</locationX>
-        <locationY>1080</locationY>
+        <locationX>1271</locationX>
+        <locationY>1487</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Decision_Found_Lead</targetReference>
         </connector>
         <faultConnector>
+            <isGoTo>true</isGoTo>
             <targetReference>Log_Fault</targetReference>
         </faultConnector>
         <filterLogic>1 AND 2 AND 3 AND 4 AND (5 OR (6 AND 7))</filterLogic>
@@ -637,77 +759,49 @@
         <sortOrder>Desc</sortOrder>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
-    <recordLookups>
-        <name>Get_Member_Contact</name>
-        <label>Existing Contact Member?</label>
-        <locationX>420</locationX>
-        <locationY>1800</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+    <recordUpdates>
+        <name>Stamp_NoCampaign</name>
+        <label>Stamp Name/Account</label>
+        <locationX>2954</locationX>
+        <locationY>1055</locationY>
         <connector>
-            <targetReference>Decision_NoMember_Contact</targetReference>
+            <isGoTo>true</isGoTo>
+            <targetReference>Decision_HasBrand</targetReference>
         </connector>
         <faultConnector>
+            <isGoTo>true</isGoTo>
             <targetReference>Log_Fault</targetReference>
         </faultConnector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>CampaignId</field>
-            <operator>EqualTo</operator>
+        <inputAssignments>
+            <field>Account_Contact__c</field>
             <value>
-                <elementReference>campaignForMember</elementReference>
+                <elementReference>ContactAccount</elementReference>
             </value>
-        </filters>
-        <filters>
-            <field>ContactId</field>
-            <operator>EqualTo</operator>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Name</field>
             <value>
-                <elementReference>$Record.Contact__c</elementReference>
+                <elementReference>FormName2</elementReference>
             </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>CampaignMember</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
-    <recordLookups>
-        <name>Get_Member_Lead</name>
-        <label>Existing Lead Member?</label>
-        <locationX>580</locationX>
-        <locationY>1800</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Decision_NoMember_Lead</targetReference>
-        </connector>
-        <faultConnector>
-            <targetReference>Log_Fault</targetReference>
-        </faultConnector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>CampaignId</field>
-            <operator>EqualTo</operator>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Product_Brand__c</field>
             <value>
-                <elementReference>campaignForMember</elementReference>
+                <elementReference>productBrandToStamp</elementReference>
             </value>
-        </filters>
-        <filters>
-            <field>LeadId</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>$Record.Lead__c</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>CampaignMember</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
     <recordUpdates>
         <name>Stamp_WithCampaign</name>
         <label>Stamp Name/Account/Campaign</label>
-        <locationX>340</locationX>
-        <locationY>720</locationY>
+        <locationX>1832</locationX>
+        <locationY>1163</locationY>
         <connector>
             <targetReference>Decision_HasBrand</targetReference>
         </connector>
         <faultConnector>
+            <isGoTo>true</isGoTo>
             <targetReference>Log_Fault</targetReference>
         </faultConnector>
         <inputAssignments>
@@ -723,46 +817,15 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>Product_Brand__c</field>
-            <value>
-                <elementReference>productBrandToStamp</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
             <field>Name</field>
             <value>
                 <elementReference>FormName2</elementReference>
-            </value>
-        </inputAssignments>
-        <inputReference>$Record</inputReference>
-    </recordUpdates>
-    <recordUpdates>
-        <name>Stamp_NoCampaign</name>
-        <label>Stamp Name/Account</label>
-        <locationX>140</locationX>
-        <locationY>600</locationY>
-        <connector>
-            <targetReference>Decision_HasBrand</targetReference>
-        </connector>
-        <faultConnector>
-            <targetReference>Log_Fault</targetReference>
-        </faultConnector>
-        <inputAssignments>
-            <field>Account_Contact__c</field>
-            <value>
-                <elementReference>ContactAccount</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>Product_Brand__c</field>
             <value>
                 <elementReference>productBrandToStamp</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Name</field>
-            <value>
-                <elementReference>FormName2</elementReference>
             </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>
@@ -770,12 +833,13 @@
     <recordUpdates>
         <name>Update_Link</name>
         <label>Set Related Form Completion</label>
-        <locationX>240</locationX>
-        <locationY>1440</locationY>
+        <locationX>1205</locationX>
+        <locationY>1979</locationY>
         <connector>
             <targetReference>Member_Gate</targetReference>
         </connector>
         <faultConnector>
+            <isGoTo>true</isGoTo>
             <targetReference>Log_Fault</targetReference>
         </faultConnector>
         <filterLogic>and</filterLogic>
@@ -794,27 +858,43 @@
         </inputAssignments>
         <object>Pardot_Form_Completion__c</object>
     </recordUpdates>
-    <start>
-        <locationX>50</locationX>
-        <locationY>0</locationY>
+    <recordUpdates>
+        <name>Update_PFC_to_MS_company_user</name>
+        <label>Update PFC to MS company user</label>
+        <locationX>2937</locationX>
+        <locationY>431</locationY>
         <connector>
             <targetReference>Get_Campaign_Mapping</targetReference>
         </connector>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$Record.Contact__r.MS_company_type_user__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>2943</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>is_it_MS_task</targetReference>
+        </connector>
         <filterFormula>AND(
 OR(ISNEW(), ISCHANGED({!$Record.Lead__c}), ISCHANGED({!$Record.Contact__c})),
-NOT(ISPICKVAL({!$Record.Sales_Stage__c}, "Converted")),
-NOT(ISPICKVAL({!$Record.Sales_Stage__c}, "Disqualified"))
+NOT(ISPICKVAL({!$Record.Sales_Stage__c}, &quot;Converted&quot;)),
+NOT(ISPICKVAL({!$Record.Sales_Stage__c}, &quot;Disqualified&quot;))
 )</filterFormula>
         <object>Pardot_Form_Completion__c</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
     <subflows>
         <name>Log_Fault</name>
         <label>Log Fault</label>
-        <locationX>700</locationX>
-        <locationY>120</locationY>
+        <locationX>1370</locationX>
+        <locationY>2759</locationY>
         <flowName>PFC_Log_Fault</flowName>
         <inputAssignments>
             <name>inputContext</name>

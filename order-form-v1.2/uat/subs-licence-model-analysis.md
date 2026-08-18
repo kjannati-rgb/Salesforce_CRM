@@ -38,6 +38,50 @@ Insights editions likewise if they are not sold as subscriptions.
 | GAR - Bespoke License (6) | per-deal manual | rep sets model + values |
 | GAR - Subscription ART (21) | Authorised Users | count = quantity |
 
+## Subs - Specialist Platforms family ruling (Kam 2026-08-14)
+
+The whole family (101 active products: GAR/GBRR/GCR/GDR/GIR/GRR/IAM/LL/WTR x
+Individual/Team/Office/Group/Firmwide/Bespoke License + Print Copies + 4 odd subs) is
+**always list price x quantity** - except Bespoke License, which is a bespoke price.
+Licence scope lives in the product NAME (the tier/licence type); any specifics such as
+team size are captured per deal in **Special Instructions or Special Terms** (now
+sections 6/7 of the Order Form).
+
+**Treatment: NO `License_Model__c` default on any Specialist Platforms product -> the
+licence column prints blank for the whole family.** That is the field's natural unset
+state, so zero seeding work is required for these 101 products. The earlier
+Individual/Team/Office/Group/Firmwide mapping proposals for GAR are superseded.
+
+Licence-model seeding scope therefore narrows to the Lexology Pro and Law.com families
+(per the earlier mapping: Lexology legacy = Authorised Users x quantity; Lexology PRO-IH
+= Benefiting Group; Law.com = Limited Access with Number_of_Seats).
+
+Catalog hygiene: "GCR – Standard – Individual License" (01tTm000000ZYN1IAO) uses
+en-dashes instead of hyphens - flagged to Kam for a PROD name fix.
+
+## Law.com family ruling (Kam 2026-08-18) - IMPLEMENTED
+
+The licence model is REGION-dependent, not product-dependent: sold out of the USA =
+seat-based (Limited Access); sold out of EMEA/APAC(HK) = Benefiting Group. Price is a
+price rule in both cases (pricing mechanics, out of scope for the licence column).
+Region signal = the opportunity's Billing_Entity__c (ALM/LLC = USA; others = EMEA/APAC).
+
+Implemented as before-save flow `QuoteLine_Stamp_License_Model` (KJDEV + FULLUAT):
+for lines in families 'Subs - Law.com' / 'Subs - Law Journal Press' with a blank
+License_Model__c -> ALM/LLC-billed = "Limited Access", otherwise "Benefiting Group";
+plus a write-when-blank copy of Number_of_Seats__c -> Authorised_User_Count__c on any
+Limited Access line. Rep override always wins (blank-only stamping). Verified both
+paths in KJDEV (LBR->Benefiting Group; ALM+894 seats->"Up to 894 authorised users").
+
+Benefiting Group description (all families) assembles in the display formula:
+explicit description > Function_Name__c (+Group_Size__c "comprising approximately N
+individuals") > Benefitting_Group__c picklist (+size) > plain "Benefiting Group" label.
+
+Catalog hygiene for Kam (family-based logic misses these until fixed):
+- "Law.com Pro" (01tTm00000BmSIFIA3): Family is BLANK -> set 'Subs - Law.com'
+- "Law.com Site License" (01tPx00000DWNR0IAP): Family is 'Law.com' (non-standard) -> set 'Subs - Law.com' if in scope
+- "GCR – Standard – Individual License" (01tTm000000ZYN1IAO): en-dash name fix (flagged earlier)
+
 ## Implementation implications (proposals, not yet built)
 
 1. **Product-level defaults (twin-field pattern):** set `License_Model__c` on each subscription

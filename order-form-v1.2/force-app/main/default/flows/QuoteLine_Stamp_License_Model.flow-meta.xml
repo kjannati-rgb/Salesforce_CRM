@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <assignments>
+        <name>Assign_Limited_Access</name>
+        <label>US-sold: Limited Access</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.License_Model__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Limited Access</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Decision_Copy_Seats</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Benefiting_Group</name>
+        <label>EMEA/APAC-sold: Benefiting Group</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.License_Model__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Benefiting Group</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Decision_Copy_Seats</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Copy_Seats</name>
+        <label>Copy seats into authorised user count</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Authorised_User_Count__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Number_of_Seats__c</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <name>Decision_Model_Needed</name>
+        <label>Law.com family line without a licence model?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Decision_Copy_Seats</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Model set or other family</defaultConnectorLabel>
+        <rules>
+            <name>Needs_Model</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.License_Model__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>IsLawcomFamily</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Decision_Region</targetReference>
+            </connector>
+            <label>Needs model</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Decision_Region</name>
+        <label>Sold out of the USA?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Benefiting_Group</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>EMEA / APAC (or unknown)</defaultConnectorLabel>
+        <rules>
+            <name>US_Entity</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>LineBillingEntity</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>ALM</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>LineBillingEntity</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>LLC</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Limited_Access</targetReference>
+            </connector>
+            <label>US entity (ALM / LLC)</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Decision_Copy_Seats</name>
+        <label>Limited Access line missing its count?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>No copy needed</defaultConnectorLabel>
+        <rules>
+            <name>Copy_Seats</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.License_Model__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Limited Access</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Authorised_User_Count__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Number_of_Seats__c</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Copy_Seats</targetReference>
+            </connector>
+            <label>Copy seats</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>IsLawcomFamily</name>
+        <dataType>Boolean</dataType>
+        <expression>OR(TEXT({!$Record.SBQQ__Product__r.Family}) = &quot;Subs - Law.com&quot;, TEXT({!$Record.SBQQ__Product__r.Family}) = &quot;Subs - Law Journal Press&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>LineBillingEntity</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!$Record.SBQQ__Quote__r.SBQQ__Opportunity2__r.Billing_Entity__c})</expression>
+    </formulas>
+    <interviewLabel>Quote Line - Stamp License Model {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Quote Line - Stamp License Model</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Decision_Model_Needed</targetReference>
+        </connector>
+        <object>SBQQ__QuoteLine__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

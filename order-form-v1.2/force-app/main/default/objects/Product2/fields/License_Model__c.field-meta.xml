@@ -29,6 +29,36 @@
                 <default>false</default>
                 <label>Enterprise-Wide Access</label>
             </value>
+            <value>
+                <fullName>Individual License</fullName>
+                <default>false</default>
+                <label>Individual License</label>
+            </value>
+            <value>
+                <fullName>Team License</fullName>
+                <default>false</default>
+                <label>Team License</label>
+            </value>
+            <value>
+                <fullName>Office License</fullName>
+                <default>false</default>
+                <label>Office License</label>
+            </value>
+            <value>
+                <fullName>Group License</fullName>
+                <default>false</default>
+                <label>Group License</label>
+            </value>
+            <value>
+                <fullName>Firmwide License</fullName>
+                <default>false</default>
+                <label>Firmwide License</label>
+            </value>
+            <value>
+                <fullName>Bespoke License</fullName>
+                <default>false</default>
+                <label>Bespoke License</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

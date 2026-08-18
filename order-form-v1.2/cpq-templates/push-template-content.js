@@ -157,13 +157,24 @@ async function upsert(type, extId, fields) {
   console.log("4/4 Line columns");
   const columns = [
     ["OF-V12-L10", "Product Description", 10, "SBQQ__ProductName__c", 26, "Left"],
-    ["OF-V12-L20", "License Model", 20, "License_Model_Display__c", 26, "Left"],
+    ["OF-V12-L20", "License Model", 20, "License_Model_Display__c", 25, "Left"],
+    ["OF-V12-L25", "Qty", 25, "SBQQ__Quantity__c", 5, "Center"],
     ["OF-V12-L30", "Annual fee (excl. tax)", 30, "SBQQ__NetTotal__c", 16, "Right"],
-    ["OF-V12-L40", "Currency", 40, "CurrencyIsoCode", 8, "Center"],
-    ["OF-V12-L50", "Start date", 50, "SBQQ__StartDate__c", 12, "Center"],
-    ["OF-V12-L60", "End date", 60, "SBQQ__EndDate__c", 12, "Center"],
+    ["OF-V12-L50", "Start date", 50, "SBQQ__StartDate__c", 14, "Center"],
+    ["OF-V12-L60", "End date", 60, "SBQQ__EndDate__c", 14, "Center"],
   ];
+  // Retired columns (removed from the design) - deleted from the org if present.
+  // OF-V12-L40 Currency: dropped 2026-08-18 (Kam) - the fee's automatic ISO prefix already
+  // shows the currency, making a separate column redundant.
+  const RETIRED_COLUMNS = ["OF-V12-L40"];
   for (const [suffix, tid] of templates) {
+    for (const ext of RETIRED_COLUMNS) {
+      const gone = await soql(`SELECT Id FROM SBQQ__LineColumn__c WHERE External_Id__c = '${ext}${suffix}'`);
+      for (const g of gone.records || []) {
+        const del = await fetch(`${API}/sobjects/SBQQ__LineColumn__c/${g.Id}`, { method: "DELETE", headers: HEADERS });
+        console.log(`  deleted retired column ${ext}${suffix} -> ${del.status}`);
+      }
+    }
     for (const [ext, name, order, fieldName, width, align] of columns) {
       await upsert("SBQQ__LineColumn__c", ext + suffix, {
         Name: name,

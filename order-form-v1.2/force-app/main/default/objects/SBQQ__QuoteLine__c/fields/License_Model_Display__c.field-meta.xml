@@ -5,9 +5,9 @@
     <formula>CASE(TEXT(License_Model__c),
 "Authorised Users", "Authorised Users - Named individuals as listed in Annex A. Number of authorised users: " &amp; TEXT(Authorised_User_Count__c),
 "Limited Access", "Limited Access - Up to " &amp; TEXT(Authorised_User_Count__c) &amp; " authorised users (as defined in the General Terms).",
-"Benefiting Group", "Benefiting Group - All individuals within the following group: " &amp; Benefiting_Group_Description__c,
+"Benefiting Group", IF(NOT(ISBLANK(Benefiting_Group_Description__c)), "Benefiting Group - All individuals within the following group: " &amp; Benefiting_Group_Description__c, IF(NOT(ISBLANK(Function_Name__c)), "Benefiting Group - All individuals within the following group: " &amp; Function_Name__c &amp; IF(Group_Size__c &gt; 0, ", comprising approximately " &amp; TEXT(Group_Size__c) &amp; " individuals", ""), IF(NOT(ISBLANK(TEXT(Benefitting_Group__c))), "Benefiting Group - All individuals within the following group: the Customer&#39;s " &amp; TEXT(Benefitting_Group__c) &amp; " function" &amp; IF(Group_Size__c &gt; 0, ", comprising approximately " &amp; TEXT(Group_Size__c) &amp; " individuals", ""), "Benefiting Group"))),
 "Enterprise-Wide Access", "Enterprise-Wide Access - All current staff of the Customer and its Affiliates. Customer warrants approximately " &amp; TEXT(Warranted_Headcount__c) &amp; " staff at the Effective Date and will notify the Company promptly if headcount increases by more than 5%.",
-"")</formula>
+TEXT(License_Model__c))</formula>
     <formulaTreatBlanksAs>BlankAsBlank</formulaTreatBlanksAs>
     <label>License Model (Display)</label>
     <required>false</required>

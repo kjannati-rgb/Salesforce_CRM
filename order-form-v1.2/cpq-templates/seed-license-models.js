@@ -26,17 +26,23 @@ const LABELS = ["Individual License", "Team License", "Office License", "Group L
 // Lexology Pro (Kam 2026-08-18): legacy block pricing is history - the licence model NOW is
 // Benefiting Group for all person licences. Machine-access APIs stay blank.
 const LEXOLOGY_API_SKIP = ["Lexology PRO - Intelligence API", "Lexology PRO - Scanner API"];
+// MBL Seminars (Kam 2026-08-18): seat-based subs carry the seat count in Quantity with block
+// pricing -> Limited Access. MBL Credit is a custom price on top of list, no licence dimension.
+const MBL_CREDIT_SKIP = ["MBL Credit"];
 
 function labelFor(p) {
   if (p.Family === "Subs - Lexology Pro") {
     return LEXOLOGY_API_SKIP.includes(p.Name) ? null : "Benefiting Group";
+  }
+  if (p.Family === "Subs - MBL Seminars") {
+    return MBL_CREDIT_SKIP.includes(p.Name) ? null : "Limited Access";
   }
   return LABELS.find(l => p.Name.includes(l)) || null;
 }
 
 (async () => {
   const res = await fetch(`${API}/query?q=${encodeURIComponent(
-    "SELECT Id, Name, Family, License_Model__c FROM Product2 WHERE IsActive = true AND Family IN ('Subs - Specialist Platforms', 'Subs - Lexology Pro')")}`, { headers: H });
+    "SELECT Id, Name, Family, License_Model__c FROM Product2 WHERE IsActive = true AND Family IN ('Subs - Specialist Platforms', 'Subs - Lexology Pro', 'Subs - MBL Seminars')")}`, { headers: H });
   const products = (await res.json()).records || [];
   console.log(`${products.length} active products across seeded families`);
   let set = 0, skipped = 0, unchanged = 0;

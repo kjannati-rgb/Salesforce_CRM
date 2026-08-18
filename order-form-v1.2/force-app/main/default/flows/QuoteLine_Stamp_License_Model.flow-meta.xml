@@ -46,6 +46,19 @@
             </value>
         </assignmentItems>
     </assignments>
+    <assignments>
+        <name>Assign_Copy_Quantity</name>
+        <label>Copy quantity into authorised user count</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Authorised_User_Count__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.SBQQ__Quantity__c</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
     <decisions>
         <name>Decision_Model_Needed</name>
         <label>Law.com family line without a licence model?</label>
@@ -120,6 +133,13 @@
             <name>Copy_Seats</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
+                <leftValueReference>IsLawcomFamily</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
                 <leftValueReference>$Record.License_Model__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
@@ -143,7 +163,43 @@
             <connector>
                 <targetReference>Assign_Copy_Seats</targetReference>
             </connector>
-            <label>Copy seats</label>
+            <label>Copy seats (Law.com)</label>
+        </rules>
+        <rules>
+            <name>Copy_Quantity_MBL</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>IsMblFamily</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.License_Model__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Limited Access</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Authorised_User_Count__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__Quantity__c</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Copy_Quantity</targetReference>
+            </connector>
+            <label>Copy quantity (MBL seat-based)</label>
         </rules>
     </decisions>
     <environments>Default</environments>
@@ -151,6 +207,11 @@
         <name>IsLawcomFamily</name>
         <dataType>Boolean</dataType>
         <expression>OR(TEXT({!$Record.SBQQ__Product__r.Family}) = &quot;Subs - Law.com&quot;, TEXT({!$Record.SBQQ__Product__r.Family}) = &quot;Subs - Law Journal Press&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>IsMblFamily</name>
+        <dataType>Boolean</dataType>
+        <expression>TEXT({!$Record.SBQQ__Product__r.Family}) = &quot;Subs - MBL Seminars&quot;</expression>
     </formulas>
     <formulas>
         <name>LineBillingEntity</name>

@@ -776,15 +776,36 @@ public with sharing class SmartConvertController {
         ];
     }
 
-    /** Guided-create path: build a new Firm + first Office from the lead, then convert into it. */
+    /**
+     * Phase 1 of the guided-create path: build the new Firm and/or first Office in its OWN
+     * transaction. The account inserts fire the managed dedup/enrichment triggers plus our
+     * Account flows; sharing one governor budget with the convert (and the Opportunity master
+     * flow) hit "Too many SOQL queries: 101" in production. The LWC calls convert() as a second
+     * transaction. If that second call fails, nothing is lost: the new firm's match key is
+     * already stamped, so a Restart re-matches it and the retry converges on the same account
+     * instead of creating a duplicate.
+     */
     @AuraEnabled
-    public static ConvertResult createAndConvert(Id leadId, Boolean createOpportunity, String matchConfidence,
-            String currencyIsoCode, Boolean manualSearchUsed, String createReason, String disqualifyReason) {
+    public static ConvertResult createAccountShell(Id leadId, Id firmId) {
         ConvertResult out = new ConvertResult();
-        Lead ld = [SELECT Company, Country, CountryCode, City, Street, Email, Website FROM Lead WHERE Id = :leadId LIMIT 1];
         try {
+            out.accountId = buildShell(leadId, firmId);
+            out.success = true;
+            out.newAccountCreated = true;
+        } catch (Exception e) {
+            out.success = false;
+            out.message = 'Create blocked: ' + e.getMessage();
+        }
+        return out;
+    }
+
+    /** Create the Firm (when firmId is null) + first Office from the lead; returns the Office id. */
+    private static Id buildShell(Id leadId, Id firmId) {
+        Lead ld = [SELECT Company, Country, CountryCode, City, Street, Email, Website FROM Lead WHERE Id = :leadId LIMIT 1];
+        String firmName;
+        if (firmId == null) {
             Id firmRt = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Firm').getRecordTypeId();
-            String firmName = String.isBlank(ld.Company) ? 'New Firm' : ld.Company;
+            firmName = String.isBlank(ld.Company) ? 'New Firm' : ld.Company;
             // Firm is the rollup parent — no address; the address belongs on the Office.
             // Originated_From_Lead__c satisfies the org's Can_Create_Account_only_via_Lead rule —
             // these accounts genuinely originate from a lead (dedup-checked, Data Team notified).
@@ -792,11 +813,25 @@ public with sharing class SmartConvertController {
                 Originated_From_Lead__c = true,
                 Match_Domain__c = LeadMatchSelectService.domainKey(ld.Email, ld.Website));
             insert firm;
-            Account office = buildOffice(firm.Id, firmName, ld);
-            insert office;
-            return convert(leadId, office.Id, null, createOpportunity, matchConfidence, true, currencyIsoCode,
+            firmId = firm.Id;
+        } else {
+            firmName = [SELECT Name FROM Account WHERE Id = :firmId LIMIT 1].Name;
+        }
+        Account office = buildOffice(firmId, firmName, ld);
+        insert office;
+        return office.Id;
+    }
+
+    /** Guided-create in one transaction (kept for API stability; the LWC runs the two-phase path). */
+    @AuraEnabled
+    public static ConvertResult createAndConvert(Id leadId, Boolean createOpportunity, String matchConfidence,
+            String currencyIsoCode, Boolean manualSearchUsed, String createReason, String disqualifyReason) {
+        try {
+            Id officeId = buildShell(leadId, null);
+            return convert(leadId, officeId, null, createOpportunity, matchConfidence, true, currencyIsoCode,
                 null, manualSearchUsed, createReason, disqualifyReason);
         } catch (Exception e) {
+            ConvertResult out = new ConvertResult();
             out.success = false;
             out.message = 'Create blocked: ' + e.getMessage();
             return out;
@@ -808,15 +843,12 @@ public with sharing class SmartConvertController {
     public static ConvertResult createOfficeUnderFirm(Id leadId, Id firmId, Boolean createOpportunity,
             String matchConfidence, String currencyIsoCode, Boolean manualSearchUsed, String createReason,
             String disqualifyReason) {
-        ConvertResult out = new ConvertResult();
-        Lead ld = [SELECT Company, Country, CountryCode, City, Street, Email, Website FROM Lead WHERE Id = :leadId LIMIT 1];
         try {
-            Account firm = [SELECT Name FROM Account WHERE Id = :firmId LIMIT 1];
-            Account office = buildOffice(firmId, firm.Name, ld);
-            insert office;
-            return convert(leadId, office.Id, null, createOpportunity, matchConfidence, true, currencyIsoCode,
+            Id officeId = buildShell(leadId, firmId);
+            return convert(leadId, officeId, null, createOpportunity, matchConfidence, true, currencyIsoCode,
                 null, manualSearchUsed, createReason, disqualifyReason);
         } catch (Exception e) {
+            ConvertResult out = new ConvertResult();
             out.success = false;
             out.message = 'Create blocked: ' + e.getMessage();
             return out;

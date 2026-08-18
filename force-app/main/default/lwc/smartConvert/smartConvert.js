@@ -2,8 +2,7 @@ import { LightningElement, api } from 'lwc';
 import getMatch from '@salesforce/apex/SmartConvertController.getMatch';
 import getOfficesForFirm from '@salesforce/apex/SmartConvertController.getOfficesForFirm';
 import convertLead from '@salesforce/apex/SmartConvertController.convert';
-import createAndConvert from '@salesforce/apex/SmartConvertController.createAndConvert';
-import createOfficeUnderFirm from '@salesforce/apex/SmartConvertController.createOfficeUnderFirm';
+import createAccountShell from '@salesforce/apex/SmartConvertController.createAccountShell';
 import searchFirms from '@salesforce/apex/SmartConvertController.searchFirms';
 import getOwnership from '@salesforce/apex/SmartConvertController.getOwnership';
 import createFollowUpTask from '@salesforce/apex/SmartConvertController.createFollowUpTask';
@@ -710,6 +709,7 @@ export default class SmartConvert extends LightningElement {
         this.converting = true;
         this.convertingStep = 0;
         const timer = setInterval(() => { this.convertingStep += 1; }, 850);
+        let shellCreated = false;
         try {
             const tier = (this.data && this.data.tier) || null;
             // disqualify = convert for the SCV but with NO opportunity + a reason
@@ -717,29 +717,39 @@ export default class SmartConvert extends LightningElement {
             const dqReason = this.disqualifying ? this.disqualifyReason : null;
             const cur = makeOpp ? this.selectedCurrency : null;
             const manual = this.manualMode === true;
-            if (this.isNoMatch) {
-                // build a new Firm + Office, then convert into it
-                this.convertResult = await createAndConvert({
+            if (this.isNoMatch || this.firmNoOffice) {
+                // Two transactions on purpose: the account inserts (managed dedup/enrichment
+                // triggers + Account flows) must not share a governor budget with the convert
+                // and the Opportunity master flow — a combined run blew the SOQL limit in prod.
+                const shell = await createAccountShell({
                     leadId: this.recordId,
-                    createOpportunity: makeOpp,
-                    matchConfidence: tier,
-                    currencyIsoCode: cur,
-                    manualSearchUsed: manual,
-                    createReason: this.createReason,
-                    disqualifyReason: dqReason
+                    firmId: this.isNoMatch ? null : this.effectiveFirmId
                 });
-            } else if (this.firmNoOffice) {
-                // firm exists but no office -> create the first office under it, then convert
-                this.convertResult = await createOfficeUnderFirm({
-                    leadId: this.recordId,
-                    firmId: this.effectiveFirmId,
-                    createOpportunity: makeOpp,
-                    matchConfidence: tier,
-                    currencyIsoCode: cur,
-                    manualSearchUsed: manual,
-                    createReason: null,
-                    disqualifyReason: dqReason
-                });
+                if (!shell || !shell.success) {
+                    this.convertResult = shell || { success: false, message: 'Create blocked.' };
+                } else {
+                    shellCreated = true;
+                    this.convertResult = await convertLead({
+                        leadId: this.recordId,
+                        officeId: shell.accountId,
+                        contactId: null,
+                        createOpportunity: makeOpp,
+                        matchConfidence: tier,
+                        newAccountCreated: true,
+                        currencyIsoCode: cur,
+                        recommendedOfficeId: null,
+                        manualSearchUsed: manual,
+                        createReason: this.isNoMatch ? this.createReason : null,
+                        disqualifyReason: dqReason
+                    });
+                    if (this.convertResult && this.convertResult.success === false) {
+                        this.convertResult = {
+                            ...this.convertResult,
+                            message: (this.convertResult.message || 'Convert failed.') +
+                                ' The new account was still created — fix the named issue, then Restart: the lead will match it (no duplicate will be made).'
+                        };
+                    }
+                }
             } else if (this.selectedOffice && this.selectedOffice.id) {
                 // resolved firm (including after the ambiguous picker) -> convert into the chosen office
                 this.convertResult = await convertLead({
@@ -762,7 +772,13 @@ export default class SmartConvert extends LightningElement {
                 });
             }
         } catch (e) {
-            this.convertResult = { success: false, message: (e && e.body && e.body.message) || 'Convert failed.' };
+            this.convertResult = {
+                success: false,
+                message: ((e && e.body && e.body.message) || 'Convert failed.') +
+                    (shellCreated
+                        ? ' The new account was still created — fix the named issue, then Restart: the lead will match it (no duplicate will be made).'
+                        : '')
+            };
         }
         clearInterval(timer);
         this.converting = false;

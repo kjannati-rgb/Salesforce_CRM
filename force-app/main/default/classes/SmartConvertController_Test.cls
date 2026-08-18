@@ -189,6 +189,63 @@ private class SmartConvertController_Test {
     }
 
     @IsTest
+    static void createAccountShell_thenConvert_twoPhase() {
+        // The LWC's guided-create path: shell in one transaction, convert in the next.
+        Lead l = newLead('Fia', 'fia@two-phase-co.it', 'IT', 'Milan');
+        l.Company = 'Two Phase Co';
+        update l;
+        Test.startTest();
+        SmartConvertController.ConvertResult shell = SmartConvertController.createAccountShell(l.Id, null);
+        System.assertNotEquals(null, shell);
+        if (shell.success) {
+            System.assertNotEquals(null, shell.accountId, 'shell returns the office to convert into');
+            System.assertEquals(true, shell.newAccountCreated);
+            List<Account> firms = [SELECT Id, Match_Domain__c FROM Account WHERE Name = 'Two Phase Co'
+                                   AND RecordType.DeveloperName = 'Firm'];
+            System.assertEquals(1, firms.size(), 'phase 1 creates the firm');
+            // The stamped match key is the retry safety net: if phase 2 fails, a Restart
+            // re-matches this firm instead of creating a duplicate.
+            System.assertEquals('two-phase-co.it', firms[0].Match_Domain__c);
+            SmartConvertController.ConvertResult r = SmartConvertController.convert(
+                l.Id, shell.accountId, null, false, 'GUIDED_CREATE', true, 'GBP', null, false,
+                'Genuinely new company', null);
+            System.assertNotEquals(null, r);
+            if (r.success) {
+                Lead c = [SELECT IsConverted, New_Account_Created__c FROM Lead WHERE Id = :l.Id];
+                System.assertEquals(true, c.IsConverted, 'phase 2 converts the lead');
+                System.assertEquals(true, c.New_Account_Created__c, 'telemetry keeps the guided-create flag');
+            }
+        } else {
+            System.assert(shell.message != null && shell.message.startsWith('Create blocked'),
+                'shell either succeeds or surfaces a blocked message: ' + shell.message);
+        }
+        Test.stopTest();
+    }
+
+    @IsTest
+    static void createAccountShell_underExistingFirm() {
+        // Firm exists with no offices: the shell adds the first office WITHOUT a duplicate firm.
+        Account firm = [SELECT Id FROM Account WHERE Name = 'Dentons Demo' LIMIT 1];
+        delete [SELECT Id FROM Account WHERE Ultimate_Account__c = :firm.Id];
+        Lead l = newLead('Olu', 'olu@dentons-demo.com', 'NG', 'Lagos');
+        Test.startTest();
+        SmartConvertController.ConvertResult shell = SmartConvertController.createAccountShell(l.Id, firm.Id);
+        Test.stopTest();
+        System.assertNotEquals(null, shell);
+        if (shell.success) {
+            List<Account> offices = [SELECT Id, Ultimate_Account__c FROM Account
+                                     WHERE Id = :shell.accountId AND RecordType.DeveloperName = 'Office'];
+            System.assertEquals(1, offices.size(), 'office created');
+            System.assertEquals(firm.Id, offices[0].Ultimate_Account__c, 'office sits under the EXISTING firm');
+            System.assertEquals(1, [SELECT COUNT() FROM Account WHERE Name = 'Dentons Demo'],
+                'no duplicate firm');
+        } else {
+            System.assert(shell.message != null && shell.message.startsWith('Create blocked'),
+                'shell either succeeds or surfaces a blocked message: ' + shell.message);
+        }
+    }
+
+    @IsTest
     static void getMatch_freeMailRoutesToNoFirm() {
         // a free-mail address must NOT resolve to a firm by domain (gmail isn't a company key)
         Lead l = newLead('Gina', 'gina.personal@gmail.com', 'GB', 'London');

@@ -303,3 +303,10 @@ Full record in `uat/subs-licence-model-analysis.md`. Three mechanisms, one per f
 - **MBL Seminars (added 2026-08-18, Kam ruling)**: 4 seat-based subs products (MBL+ Seat Based / MBL+ / Annual Webinar / Seat Based Annual Webinar) seeded **"Limited Access"** - block pricing is a pricing mechanic, out of scope for the licence column. Seat count lives in `SBQQ__Quantity__c` (PROD 180d: 747 MBL+ lines, qty 1-1,000; `Number_of_Seats__c` always 1 = dead for MBL). **MBL Credit prints a blank licence column** (custom editable price on top of list, no licence dimension).
 
 Flow change for MBL: the count-copy in `QuoteLine_Stamp_License_Model` is now FAMILY-AWARE - Law.com lines copy `Number_of_Seats__c`, MBL lines copy `SBQQ__Quantity__c` (write-when-blank in both cases; rep override wins). Without the family guard, the old rule would have stamped the constant seats=1 onto every MBL Limited Access line - caught before shipping. Verified KJDEV 2026-08-18: MBL+ qty 50 -> "Limited Access - Up to 50 authorised users"; MBL Credit blank; ALM Law.com regression (250 seats) intact. Seeder now covers three families (`seed-license-models.js --org <alias>`); re-run in Phase 6 with CONFIRM_PROD=YES.
+
+## ALM registration number resolved (2026-08-19)
+
+Kam supplied the ALM GLOBAL, LLC registration number: **13-3273851** (US EIN). Deployed to the
+`Legal_Entity_Document_Config.ALM` CMDT record as "13-3273851 (United States)" in KJDEV + FULLUAT
+and verified by query. The legal entity table is now COMPLETE - no blank rows remain. Last decision-3
+residue closed; Phase 6 needs no extra step (the record deploys with the rest of the metadata).

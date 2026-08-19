@@ -16,7 +16,7 @@
     </values>
     <values>
         <field>Registration_Number__c</field>
-        <value xsi:nil="true"/>
+        <value xsi:type="xsd:string">13-3273851 (United States)</value>
     </values>
     <values>
         <field>Registered_Office__c</field>

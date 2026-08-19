@@ -1,12 +1,12 @@
-# Order Form v1.2 - go-live checklist (as of 2026-08-13)
+﻿# Order Form v1.2 - go-live checklist (as of 2026-08-13)
 
 Build phases 0-5 complete; full stack deployed to FULLUAT. Shareable version:
 https://claude.ai/code/artifact/026330c1-3dc7-45e4-b033-7cf24975afab
 
-**Critical path: §2.1 (Adobe re-link) and §1.1 (entity table) - everything else can run in parallel.**
+**Critical path: Â§2.1 (Adobe re-link) and Â§1.1 (entity table) - everything else can run in parallel.**
 
 ## 1. Business decisions (Shinae / Finance / Kam)
-- [x] **Decision 3 - legal entity table: RESOLVED 2026-08-13.** Kam supplied the Billing Entity mapping (LBR/ALM/GHK/LLC/MBL) with legal names, reg numbers, offices; deployed to KJDEV + FULLUAT, keyed on Opportunity.Billing_Entity__c with sales-rep fallback. Governing law resolved same day: Americas entities (ALM, LLC) -> New York; LBR, GHK, MBL -> English law; final clauses deployed, draft markers removed. Only residue: ALM GLOBAL, LLC registration number (renders blank).
+- [x] **Decision 3 - legal entity table: RESOLVED 2026-08-13.** Kam supplied the Billing Entity mapping (LBR/ALM/GHK/LLC/MBL) with legal names, reg numbers, offices; deployed to KJDEV + FULLUAT, keyed on Opportunity.Billing_Entity__c with sales-rep fallback. Governing law resolved same day: Americas entities (ALM, LLC) -> New York; LBR, GHK, MBL -> English law; final clauses deployed, draft markers removed. ALM GLOBAL, LLC registration number supplied 2026-08-19 (13-3273851) and deployed - the entity table is COMPLETE.
 - [x] Decision 1 - RESOLVED 2026-08-13: optional Contact lookup on Quote, entered per quote (built as such; needs layout placement with the quick action).
 - [x] Decision 2 - RESOLVED by v1.3 (2026-08-13): missing section was Special Instructions; governing law renumbered 6->5, new section 6 renders Special_Instructions__c. Implemented both sandboxes.
 - [x] Decision 4 - CONFIRMED 2026-08-13: Net Total is the per-line annual fee.
@@ -42,3 +42,4 @@ https://claude.ai/code/artifact/026330c1-3dc7-45e4-b033-7cf24975afab
 - [ ] Smoke test: one internal quote end-to-end with an internal test signer.
 - [ ] Cutover decision: template ships non-default; confirm org-default flip vs subs-team selection (runbook says flip - affects all business lines). Announce to sales ops.
 - Rollback at any point: template non-default + `Order_Form_Settings.Default.Active__c` kill switch + pull quick action from layout.
+

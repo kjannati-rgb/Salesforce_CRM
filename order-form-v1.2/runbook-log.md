@@ -372,3 +372,26 @@ sentence: with a count -> "Authorised Users - N named authorised users (as defin
 Terms)."; count blank -> same sentence without the number. Deployed KJDEV + FULLUAT, verified (qty 9
 legacy Lexology line renders "Authorised Users - 9 named authorised users..."). Customer-facing legal
 wording -> include in Shinae's sign-off list alongside the +Qty/-Currency/label deviations.
+
+## Conditional PO row (2026-08-20, Kam)
+
+Kam filled the PO on a quote and expected to see it on the PDF; the signer-fillable design only
+shows the value inside the Adobe signing session. Ruled: print the value when known. New formula
+field `SBQQ__Quote__c.Order_Form_PO_Tag__c` emits the {{PO_Number_es_:signer1}} tag ONLY when
+PO_Number__c is blank; section 4 cell renders `{!quote.PO_Number__c}` + the tag field. Behaviour:
+PO known -> prints as document text, no Adobe field placed (signer cannot overwrite; Adobe merge
+mapping finds no field and skips harmlessly); PO blank -> signer-fillable field as before, with
+write-back. Deployed KJDEV + FULLUAT, template re-pushed, verified on Q-206385 ("KJ00001" prints).
+VAT still tag-only - same conditional treatment available if ruled.
+Sandbox note: FULLUAT contact emails print with the ".invalid" masking suffix on documents -
+sandbox email protection, not a template defect; PROD prints real addresses.
+
+## Conditional VAT row (2026-08-20, Kam - "yes for VAT please")
+
+Same pattern as the PO row: new formula field `SBQQ__Quote__c.Order_Form_VAT_Tag__c` emits the
+{{VAT_Number_es_:signer1}} tag ONLY when Customer_VAT_Number__c (Account.Sales_Tax_Number__c) is
+blank; section 1 cell renders `{!quote.Customer_VAT_Number__c}` + the tag field. Known VAT prints
+as document text (no Adobe field, no signer overwrite); blank VAT keeps the signer-fillable field
+with the Account write-back via the sync flow. Deployed KJDEV + FULLUAT, template re-pushed,
+verified both paths (KJDEV demo prints "GB 123 4567 89"; FULLUAT Q-206385 blank-VAT account shows
+the tag). All four signer-tag placements now: signature block always fillable; VAT/PO conditional.

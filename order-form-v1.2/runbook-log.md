@@ -395,3 +395,38 @@ as document text (no Adobe field, no signer overwrite); blank VAT keeps the sign
 with the Account write-back via the sync flow. Deployed KJDEV + FULLUAT, template re-pushed,
 verified both paths (KJDEV demo prints "GB 123 4567 89"; FULLUAT Q-206385 blank-VAT account shows
 the tag). All four signer-tag placements now: signature block always fillable; VAT/PO conditional.
+
+## FULLUAT Adobe probe - LINK WORKS, three E2E fixes (2026-08-20)
+
+Kam linked the Adobe account; first live send on Q-206385 surfaced and fixed:
+1. **Attachment resolution**: "Quote Document from Master Quote" threw "No quote document found on
+   the master record" - CPQ stores the PDF as a classic Document (zero ContentDocumentLinks) which
+   that type cannot resolve. Switched to PROD's proven pattern: attachment type **Runtime Variable**
+   ('quoteDocument'); OrderFormSignatureService passes the latest quote document's SBQQ__DocumentId__c
+   via `AgreementTemplateService.load(templateId, masterId, Map<String, AgreementTemplateVariable>)`
+   (real signatures from the package symbol table: ctor is (name, value); the List overload does not
+   exist). Also blank-DocumentId guard + test Document setup (FolderId = UserInfo.getUserId()).
+2. **Quote__c anchor**: the package does not populate custom lookups - the agreement was created with
+   Quote__c null, which would orphan the write-back data mapping. Service now stamps Quote__c right
+   after load; probe agreement backfilled.
+3. **Script idempotency**: create-agreement-template.js re-runs failed PATCHing master-detail parents
+   (Data_Mapping/Object_Mapping etc. not writable on update) - now stripped on the update path.
+PROBE RESULT: agreement a3GAd0000016EyzMAE created, PDF attached (runtime variable verified), Adobe
+Document Key issued (CBJCHBCA...) = reached Adobe; email to kamyar.jannati@lbresearch.com (signatory
+contact email unmasked from .invalid - sandbox masking gotcha for all UAT contacts). Local status
+stuck at "Created" because the **Callback User is not linked** - automatic status updates cannot
+arrive, so signing/write-back proof is gated on Kam linking it + Enable Automatic Status Updates.
+
+## Status-sync / write-backs PARKED mid-investigation (2026-08-20, Kam)
+
+Round-trip state when parked: OUTBOUND FULLY PROVEN (agreement created, correct PDF attached via
+runtime variable, Adobe Document Key issued, email delivered to the real address, Kam completed
+signing in the Adobe session - form fields placed and fillable). INBOUND NOT ARRIVING: agreements
+stay "Created"; no signed-status, signed date, PDF filing, or PO/VAT write-backs have landed.
+Callback User was linked; prime suspect is the separate "Enable Automatic Status Updates" step
+(Resources > Account Settings on the Adobe Admin tab) - unconfirmed. Next debugging steps when
+revived: confirm that step ran; then check callback user permissions + connected-app OAuth policy.
+UAT cells for status flow, write-backs, and signed-PDF filing remain OPEN. Also ruled (Kam): signer
+Position/Title stays document-only, no Contact write-back mapping.
+Three stale probe agreements on Q-206385 (2x .invalid-content PDFs superseded) - cancel via Adobe
+Manage when convenient.

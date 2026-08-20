@@ -64,8 +64,21 @@ public with sharing class OrderFormSignatureService {
         if (quote.Signatory_Contact__c == null) {
             return fail('No Signatory Contact is set on the quote.');
         }
-        if ([SELECT COUNT() FROM SBQQ__QuoteDocument__c WHERE SBQQ__Quote__c = :quoteId] == 0) {
+        // CPQ stores the PDF as a classic Document (SBQQ__DocumentId__c), which the package's
+        // "Quote Document from Master Quote" attachment type cannot resolve in this org - the
+        // proven PROD pattern is a Runtime Variable attachment with the Document id passed in.
+        List<SBQQ__QuoteDocument__c> docs = [
+            SELECT Id, SBQQ__DocumentId__c
+            FROM SBQQ__QuoteDocument__c
+            WHERE SBQQ__Quote__c = :quoteId
+            ORDER BY LastModifiedDate DESC
+            LIMIT 1
+        ];
+        if (docs.isEmpty()) {
             return fail('No generated quote document exists. Generate the Order Form PDF first.');
+        }
+        if (String.isBlank(docs[0].SBQQ__DocumentId__c)) {
+            return fail('The latest quote document has no stored PDF. Regenerate the Order Form.');
         }
 
         List<echosign_dev1__Agreement_Template__c> templates = [
@@ -82,8 +95,19 @@ public with sharing class OrderFormSignatureService {
         Result result = new Result();
         try {
             if (!bypassTemplateService) {
+                Map<String, echosign_dev1.AgreementTemplateVariable> templateVars =
+                    new Map<String, echosign_dev1.AgreementTemplateVariable>{
+                        'quoteDocument' => new echosign_dev1.AgreementTemplateVariable(
+                            'quoteDocument', docs[0].SBQQ__DocumentId__c)
+                    };
                 result.agreementId = echosign_dev1.AgreementTemplateService.load(
-                    String.valueOf(templates[0].Id), String.valueOf(quoteId));
+                    String.valueOf(templates[0].Id), String.valueOf(quoteId), templateVars);
+                if (result.agreementId != null) {
+                    // the package does not populate custom lookups - Quote__c anchors the
+                    // write-back data mapping and the agreement-to-quote related list
+                    update new echosign_dev1__SIGN_Agreement__c(
+                        Id = result.agreementId, Quote__c = quoteId);
+                }
             }
             result.success = true;
             result.message = 'Agreement created and sent for signature.';

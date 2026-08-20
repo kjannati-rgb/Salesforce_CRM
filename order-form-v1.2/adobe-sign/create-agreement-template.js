@@ -32,7 +32,10 @@ async function upsertWhere(type, label, where, fields, setName = true) {
   const existing = await soql(`SELECT Id FROM ${type} WHERE ${where} LIMIT 1`);
   if (existing.records && existing.records.length) {
     const id = existing.records[0].Id;
-    const res = await fetch(`${API}/sobjects/${type}/${id}`, { method: "PATCH", headers: H, body: JSON.stringify(fields) });
+    // master-detail parents are not writable on update - strip them for idempotent re-runs
+    const MASTER_DETAIL_RE = /^echosign_dev1__(SIGN_)?(Data_Mapping|Object_Mapping|Field_Mapping|Form_Field_Mapping|Merge_Mapping|Agreement_Template)__c$/;
+    const patchFields = Object.fromEntries(Object.entries(fields).filter(([k]) => !MASTER_DETAIL_RE.test(k)));
+    const res = await fetch(`${API}/sobjects/${type}/${id}`, { method: "PATCH", headers: H, body: JSON.stringify(patchFields) });
     if (res.status !== 204) { console.error(`FAILED update ${type} ${label}:`, await res.text()); process.exit(1); }
     console.log(`  updated ${type} "${label}" -> ${id}`);
     return id;
@@ -103,8 +106,12 @@ async function upsertWhere(type, label, where, fields, setName = true) {
   await upsertWhere("echosign_dev1__Recipient_Template__c", "signer 1",
     `echosign_dev1__Agreement_Template__c = '${tmplId}' AND echosign_dev1__Index__c = 1`,
     { echosign_dev1__Agreement_Template__c: tmplId, echosign_dev1__Type__c: "Look Up Based on Master Object Field", echosign_dev1__Recipient_Type__c: "Contact", echosign_dev1__Recipient_Role__c: "Signer", echosign_dev1__Recipient_Field__c: "Signatory_Contact__c", echosign_dev1__Index__c: 1 }, false);
+  // Runtime Variable attachment (2026-08-20): "Quote Document from Master Quote" cannot resolve
+  // CPQ's classic-Document storage in this org (first live FULLUAT send failed with "No quote
+  // document found on the master record"). PROD's working template uses a Runtime Variable;
+  // OrderFormSignatureService passes the latest quote document's Document id as 'quoteDocument'.
   await upsertWhere("echosign_dev1__Attachment_Template__c", "quote document",
     `echosign_dev1__Agreement_Template__c = '${tmplId}' AND echosign_dev1__Index__c = 0`,
-    { echosign_dev1__Agreement_Template__c: tmplId, echosign_dev1__Type__c: "Quote Document from Master Quote", echosign_dev1__Quote_Document_Selection_Type__c: "Latest Document", echosign_dev1__Quote_Document_Selection_Field__c: "Last Modified Date", echosign_dev1__Index__c: 0 }, false);
+    { echosign_dev1__Agreement_Template__c: tmplId, echosign_dev1__Type__c: "Runtime Variable", echosign_dev1__Variable_Name__c: "quoteDocument", echosign_dev1__Quote_Document_Selection_Type__c: null, echosign_dev1__Quote_Document_Selection_Field__c: null, echosign_dev1__Index__c: 0 }, false);
   console.log("Done. Template Id:", tmplId);
 })().catch(e => { console.error(e); process.exit(1); });

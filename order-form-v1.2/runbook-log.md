@@ -430,3 +430,22 @@ UAT cells for status flow, write-backs, and signed-PDF filing remain OPEN. Also 
 Position/Title stays document-only, no Contact write-back mapping.
 Three stale probe agreements on Q-206385 (2x .invalid-content PDFs superseded) - cancel via Adobe
 Manage when convenient.
+
+## Licence model made FULLY AUTOMATIC (2026-08-20, Kam: "it should not be manual")
+
+QuoteLine_Stamp_License_Model rebuilt as AUTHORITATIVE: recomputes License_Model__c on EVERY line
+save (create + update), no blank-only guard, no rep override. Law.com family -> region rule (US =
+Limited Access + count := Number_of_Seats; else Benefiting Group); all other lines -> model :=
+product's License_Model__c read via formula traversal (no more twin-copy dependence - raw API
+inserts resolve too); Authorised Users / non-Law.com Limited Access -> count := quantity, every
+save (stays in sync with qty edits). Display hardened: Limited Access with no count prints the
+plain label, not a broken sentence. Verified KJDEV: raw insert derives label; corrupt value heals
+on the same save; MBL qty 25 -> count 25.
+**Backfill sweep** (sweep-license-models.js --org X [--apply], client-side field comparison since
+SOQL cannot compare two fields): all mismatches were blank->value (pre-seeding lines). KJDEV
+127/127 healed; FULLUAT 7,364/7,410 healed over two passes (25-line composite batches - 200-line
+transactions blow CPQ trigger limits; UNABLE_TO_LOCK_ROW stragglers healed on pass 2). 25 lines
+UNFIXABLE: their quotes fail a pre-existing org VR ("multi year deal... expected segments = 4,
+created = 3") - blocked for any editor until deal owners fix segments; list reproducible via the
+sweep dry run. Playbook artifact + md updated: nothing manual except BG description + US seats.
+Phase 6 addition: run the sweep in PROD (CONFIRM_PROD=YES) after seeding.

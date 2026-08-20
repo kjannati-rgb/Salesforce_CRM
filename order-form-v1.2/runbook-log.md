@@ -477,3 +477,13 @@ Kam enabled Automatic Status Updates and signed twice. Results:
   account data; PO can be typed by the rep pre-send.
 Also: signer title->Contact write-back ruled out by Kam. Signatory_Contact justified vs Primary
 (defaults from it; override exists for authorised-signer cases).
+
+## Straggler error email silenced (2026-08-20 21:44)
+
+Kam received one more data-mapping error email after the unhook. Cause: the package stamps
+echosign_dev1__Process_Template__c on EVERY agreement at creation (from the template Data_Mapping
+link) - that per-agreement pointer survives unlinking the template, and any inbound event re-runs
+the broken mapping. Cleared Process_Template__c + Trigger_Process_Template__c on all 6 of today's
+agreements; verified template link null + default flag false. Nothing can run the package data
+mapping any more. (Mechanism note for the future: template Data_Mapping -> stamped per agreement
+as Process_Template at load; unhook must cover BOTH.)

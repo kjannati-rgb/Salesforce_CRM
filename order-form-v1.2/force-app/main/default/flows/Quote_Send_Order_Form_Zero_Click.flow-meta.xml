@@ -19,6 +19,28 @@
     </actionCalls>
     <apiVersion>62.0</apiVersion>
     <decisions>
+        <name>Decision_BG_Complete</name>
+        <label>Benefiting Group wording complete?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Get_Quote_Document</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>All BG lines defined</defaultConnectorLabel>
+        <rules>
+            <name>BG_Incomplete</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Incomplete_BG_Line</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>BG line without a group definition - no auto send</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Decision_Document_Exists</name>
         <label>Quote document exists?</label>
         <locationX>0</locationX>
@@ -57,6 +79,55 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordLookups>
+        <name>Get_Incomplete_BG_Line</name>
+        <label>Get a Benefiting Group line without wording</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Decision_BG_Complete</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SBQQ__Quote__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>License_Model__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Benefiting Group</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Benefiting_Group_Description__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Function_Name__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Benefitting_Group__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>SBQQ__QuoteLine__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>Get_Quote_Document</name>
         <label>Get latest quote document</label>
         <locationX>0</locationX>
@@ -83,7 +154,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_Quote_Document</targetReference>
+            <targetReference>Get_Incomplete_BG_Line</targetReference>
         </connector>
         <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
         <filterLogic>and</filterLogic>

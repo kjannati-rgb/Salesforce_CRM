@@ -166,6 +166,35 @@
             <label>Copy seats (Law.com)</label>
         </rules>
         <rules>
+            <name>Copy_Quantity_Authorised_Users</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.License_Model__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Authorised Users</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Authorised_User_Count__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__Quantity__c</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Copy_Quantity</targetReference>
+            </connector>
+            <label>Copy quantity (Authorised Users, any family)</label>
+        </rules>
+        <rules>
             <name>Copy_Quantity_MBL</name>
             <conditionLogic>and</conditionLogic>
             <conditions>

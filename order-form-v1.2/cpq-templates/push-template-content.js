@@ -160,8 +160,11 @@ async function upsert(type, extId, fields) {
     ["OF-V12-L20", "License Model", 20, "License_Model_Display__c", 25, "Left"],
     ["OF-V12-L25", "Qty", 25, "SBQQ__Quantity__c", 5, "Center"],
     ["OF-V12-L30", "Annual fee (excl. tax)", 30, "SBQQ__NetTotal__c", 16, "Right"],
-    ["OF-V12-L50", "Start date", 50, "SBQQ__StartDate__c", 14, "Center"],
-    ["OF-V12-L60", "End date", 60, "SBQQ__EndDate__c", 14, "Center"],
+    // Date source switched 2026-08-19 (Kam): real QLE lines leave SBQQ__Start/EndDate__c null
+    // and carry term dates in the finance-canonical SUN Report formulas (0.4% null on 180d
+    // PROD subs lines vs 100% null raw dates on QLE-built quotes).
+    ["OF-V12-L50", "Start date", 50, "Start_Date_SUN_Report__c", 14, "Center"],
+    ["OF-V12-L60", "End date", 60, "End_Date_SUN_Report__c", 14, "Center"],
   ];
   // Retired columns (removed from the design) - deleted from the org if present.
   // OF-V12-L40 Currency: dropped 2026-08-18 (Kam) - the fee's automatic ISO prefix already

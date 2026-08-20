@@ -310,3 +310,65 @@ Kam supplied the ALM GLOBAL, LLC registration number: **13-3273851** (US EIN). D
 `Legal_Entity_Document_Config.ALM` CMDT record as "13-3273851 (United States)" in KJDEV + FULLUAT
 and verified by query. The legal entity table is now COMPLETE - no blank rows remain. Last decision-3
 residue closed; Phase 6 needs no extra step (the record deploys with the rest of the metadata).
+
+## Brand logo question - PARKED (2026-08-19, Kam)
+
+Kam raised replacing the Centellic logo with product-brand logos on agreements; complication is
+mixed-brand contracts. Proposed design (not built): one template per brand, auto-selected -
+single-brand quote gets its brand logo, mixed-brand falls back to Centellic as the umbrella;
+legal paper (entity block, footer, governing law) stays the contracting entity regardless.
+Finance/Legal CONFIRMED happy with "Company (Centellic)" + entity block on brand-logoed paper.
+**Kam ruled: PARK the branding work for now.** Centellic logo stays on the single template.
+If revived: needs the brand ruling per family, official logo assets per brand, and a
+brand-derivation step in the send automation (offer stands to size single- vs mixed-brand
+quotes from 6 months of subs data first).
+
+## First real-quote render fixes (2026-08-19, from Kam's FULLUAT Q-206385)
+
+Kam generated the form on a real QLE-built quote; three defects surfaced and were fixed same day
+(deployed KJDEV + FULLUAT, template re-pushed, verified on a regenerated Q-206385):
+1. **Line date columns blank** - real QLE lines leave SBQQ__Start/EndDate__c null (term lives in
+   Subscription Term). Columns repointed to the finance-canonical **Start/End_Date_SUN_Report__c**
+   formulas per Kam (0.4% null on 180d PROD subs lines vs 5.6% for End_Date__c).
+2. **"Initial term X to [blank]"** - quote End Date null on real quotes. New formula field
+   `SBQQ__Quote__c.Order_Form_Term_End__c` = BLANKVALUE(EndDate, ADDMONTHS(StartDate, term) - 1);
+   section 4 row repointed; field added to the permset (Phase 6 deploy picks it up automatically).
+3. **Billing/invoice contact row blank** - per Kam, falls back to the main/commercial contact when
+   Invoice_Contact__c is unset. Done DISPLAY-ONLY inside the two Billing_Contact_* formulas -
+   deliberately NOT writing Invoice_Contact__c (finance processes consume that lookup).
+
+Also proven by this quote (deferred UAT cells): real AA approval cleared the watermark; QLE
+twin-copy delivered product-default licence models. Open from the same render: bare "Benefiting
+Group" on the legacy Lexology Pro - In House line (9 users, no group capture) - proposal pending
+with Kam to re-seed the two legacy per-user products to Authorised Users + count from quantity.
+Data note: Kam's Contact title ("...DPO") is outdated and prints on customer paper.
+
+## Benefiting Group capture system - layers 1-3 built (2026-08-20, Kam "lets do it")
+
+From the world-class recommendation set; deployed KJDEV + FULLUAT:
+1. **Legacy auto-derivation**: "Lexology Pro - In House" / "Lexology Pro - Law Firm" re-seeded
+   from Benefiting Group to **Authorised Users** (they are quantity-priced user licences; 2 products
+   per org). New generic flow rule in QuoteLine_Stamp_License_Model: Authorised Users + blank count +
+   qty>0 -> count = quantity (any family, write-when-blank). Verified in KJDEV: qty 9 -> "Number of
+   authorised users: 9". WORDING FLAG for Shinae: the ruled sentence references "Annex A", which the
+   Order Form does not carry - fine for named-user deals with an annex, questionable for legacy counts.
+2. **Renewal inheritance**: 6 twin fields created on SBQQ__Subscription__c (License_Model, Authorised
+   _User_Count, Function_Name, Group_Size, Benefiting_Group_Description, Benefitting_Group_Type) so CPQ
+   same-name field migration carries licence wording QuoteLine -> Subscription -> renewal QuoteLine.
+   Deliberately NOT twinned: Benefitting_Group__c (legacy value set polluted with ~200 countries).
+   FLS added to the permset. **UAT cell: needs a real contract -> renewal cycle in FULLUAT to prove
+   the end-to-end carry** (cannot be simulated by API inserts).
+3. **Send-gate**: both send flows now refuse a Benefiting Group line with no description/function/group
+   value. One-click shows a new error screen naming the offending line; zero-click quietly declines to
+   auto-send (rep falls back to one-click and sees why). UAT cell added.
+Parked pending Legal: CMDT phrase library + "wording defaulted" flag (needs approved wording);
+General Terms fallback sentence (Shinae).
+
+## Annex A removed from Authorised Users wording (2026-08-20, Kam: "there is no annex")
+
+The v1.2/v1.3 Authorised Users sentence referenced "Named individuals as listed in Annex A" but the
+Order Form carries no annex. Reworded in License_Model_Display__c, styled like the Limited Access
+sentence: with a count -> "Authorised Users - N named authorised users (as defined in the General
+Terms)."; count blank -> same sentence without the number. Deployed KJDEV + FULLUAT, verified (qty 9
+legacy Lexology line renders "Authorised Users - 9 named authorised users..."). Customer-facing legal
+wording -> include in Shinae's sign-off list alongside the +Qty/-Currency/label deviations.

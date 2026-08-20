@@ -26,13 +26,18 @@ const LABELS = ["Individual License", "Team License", "Office License", "Group L
 // Lexology Pro (Kam 2026-08-18): legacy block pricing is history - the licence model NOW is
 // Benefiting Group for all person licences. Machine-access APIs stay blank.
 const LEXOLOGY_API_SKIP = ["Lexology PRO - Intelligence API", "Lexology PRO - Scanner API"];
+// Carve-out (Kam 2026-08-20): the LEGACY per-user products are quantity-priced user licences -
+// "Authorised Users" is derivable with zero capture (count = quantity, copied by the flow),
+// unlike Benefiting Group which needs a group description the legacy deals never carry.
+const LEXOLOGY_LEGACY_PER_USER = ["Lexology Pro - In House", "Lexology Pro - Law Firm"];
 // MBL Seminars (Kam 2026-08-18): seat-based subs carry the seat count in Quantity with block
 // pricing -> Limited Access. MBL Credit is a custom price on top of list, no licence dimension.
 const MBL_CREDIT_SKIP = ["MBL Credit"];
 
 function labelFor(p) {
   if (p.Family === "Subs - Lexology Pro") {
-    return LEXOLOGY_API_SKIP.includes(p.Name) ? null : "Benefiting Group";
+    if (LEXOLOGY_API_SKIP.includes(p.Name)) return null;
+    return LEXOLOGY_LEGACY_PER_USER.includes(p.Name) ? "Authorised Users" : "Benefiting Group";
   }
   if (p.Family === "Subs - MBL Seminars") {
     return MBL_CREDIT_SKIP.includes(p.Name) ? null : "Limited Access";

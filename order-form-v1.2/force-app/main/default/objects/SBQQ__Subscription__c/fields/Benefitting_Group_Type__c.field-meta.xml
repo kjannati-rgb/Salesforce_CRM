@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Benefitting_Group_Type__c</fullName>
+    <description>Twin of SBQQ__QuoteLine__c.Benefitting_Group_Type__c for renewal inheritance of the group-type capture. Deliberately NOT twinning Benefitting_Group__c: its value set is a polluted legacy country list; the clean fields carry everything the document prints.</description>
+    <externalId>false</externalId>
+    <label>Benefitting Group Type</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Corporate</fullName>
+                <default>false</default>
+                <label>Corporate</label>
+            </value>
+            <value>
+                <fullName>Law Firm</fullName>
+                <default>false</default>
+                <label>Law Firm</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

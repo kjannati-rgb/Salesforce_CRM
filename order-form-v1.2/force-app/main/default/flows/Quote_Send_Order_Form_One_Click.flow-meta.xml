@@ -30,7 +30,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Get_Quote_Document</targetReference>
+            <targetReference>Get_Incomplete_BG_Line</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Status and signatory OK</defaultConnectorLabel>
         <rules>
@@ -62,6 +62,31 @@
                 <targetReference>Screen_No_Signatory</targetReference>
             </connector>
             <label>No signatory</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Decision_BG_Complete</name>
+        <label>Benefiting Group wording complete?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Get_Quote_Document</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>All BG lines defined</defaultConnectorLabel>
+        <rules>
+            <name>BG_Incomplete</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Incomplete_BG_Line</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Screen_BG_Incomplete</targetReference>
+            </connector>
+            <label>BG line without a group definition</label>
         </rules>
     </decisions>
     <decisions>
@@ -127,6 +152,55 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
+        <name>Get_Incomplete_BG_Line</name>
+        <label>Get a Benefiting Group line without wording</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Decision_BG_Complete</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SBQQ__Quote__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>License_Model__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Benefiting Group</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Benefiting_Group_Description__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Function_Name__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Benefitting_Group__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>SBQQ__QuoteLine__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>Get_Quote_Document</name>
         <label>Get latest quote document</label>
         <locationX>0</locationX>
@@ -176,6 +250,22 @@
         <fields>
             <name>NoSignatoryText</name>
             <fieldText>&lt;p&gt;&lt;b&gt;No Signatory Contact is set on this quote.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Set the Signatory Contact field (the person who will sign the Order Form) and try again.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Screen_BG_Incomplete</name>
+        <label>Benefiting Group wording missing</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>BGIncompleteText</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;A Benefiting Group licence has no group definition.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Line: {!Get_Incomplete_BG_Line.SBQQ__ProductName__c}&lt;/p&gt;&lt;p&gt;The Order Form would print a bare "Benefiting Group" with no description of who is covered. On the quote line, fill in the Benefiting Group Description (preferred) or the Function Name and Group Size, regenerate the document, and try again.&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>

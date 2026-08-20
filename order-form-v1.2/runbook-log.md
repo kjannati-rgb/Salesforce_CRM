@@ -449,3 +449,31 @@ UNFIXABLE: their quotes fail a pre-existing org VR ("multi year deal... expected
 created = 3") - blocked for any editor until deal owners fix segments; list reproducible via the
 sweep dry run. Playbook artifact + md updated: nothing manual except BG description + US seats.
 Phase 6 addition: run the sweep in PROD (CONFIRM_PROD=YES) after seeding.
+
+## ROUND TRIP COMPLETE + package data mapping replaced (2026-08-20 evening)
+
+Kam enabled Automatic Status Updates and signed twice. Results:
+- **Status sync WORKS**: UI-sent agreement synced to Signed within seconds. Agreements sent BEFORE
+  the webhook existed never update (no event replay) - the stale "Created" probes are cancellable
+  noise, not defects.
+- **Merge mapping (VAT/PO pre-fill) FIXED and Completes**: entries need Object_Reference_Path__c =
+  "Quote__r" (blank path reads fields off the agreement itself).
+- **Package DATA mapping is unusable for our custom Quote__c lookup** (v24.35): the object-mapping
+  stage uses Fully_Qualified_API__c both as an object describe AND as the literal query-path prefix.
+  Empirical matrix: "SBQQ__Quote__c" -> QueryException (relationship SBQQ__Quote__c); "Quote__r" ->
+  NPE line 710 (describe); "Quote__c" -> QueryException; blank -> fields queried on the agreement.
+  No value can satisfy both uses. Retrigger for testing = Trigger_Process_Template__c := true (the
+  Sync_Data_Mapping flag route NPEs independently - red herring that cost an hour).
+- **Replacement (deployed KJDEV + FULLUAT, tested)**: Agreement_Signed_Writeback flow (after-save,
+  Status = Signed + Quote__c set) -> OrderFormSignedWriteback invocable: stamps Customer_Signed_
+  Date__c and copies the package-attached "...- signed.pdf" Attachment to the quote as a File
+  (idempotent, name-guarded). Verified live on Q-206385: signed date 2026-08-20 + signed PDF filed.
+  Data mapping unlinked from the template + default flag cleared (stops per-signing error noise);
+  records kept as documentation.
+- **Remaining open leg**: signer-typed PO/VAT values (Adobe FormData) have no write-back path -
+  the package FormData fetch also failed ("missing Document Key value") and the conditional rows
+  mean fields only exist for blank-value customers. Options if wanted later: direct Adobe REST
+  formData call from our service, or revisit after a package upgrade. VAT largely self-cures via
+  account data; PO can be typed by the rep pre-send.
+Also: signer title->Contact write-back ruled out by Kam. Signatory_Contact justified vs Primary
+(defaults from it; override exists for authorised-signer cases).

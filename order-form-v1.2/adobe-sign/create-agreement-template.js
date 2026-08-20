@@ -59,13 +59,15 @@ async function upsertWhere(type, label, where, fields, setName = true) {
     { echosign_dev1__Data_Mapping__c: mergeId, echosign_dev1__Form_Field_Name__c: "VAT_Number", echosign_dev1__Input_Type__c: "Text", echosign_dev1__Index__c: 1 }, false);
   await upsertWhere("echosign_dev1__SIGN_Form_Field_Mapping_Entry__c", "VAT from Quote",
     `echosign_dev1__Form_Field_Mapping__c = '${ffmVat}'`,
-    { echosign_dev1__Form_Field_Mapping__c: ffmVat, echosign_dev1__Type__c: "Salesforce Object Field", echosign_dev1__Field_Reference_Name__c: "Customer_VAT_Number__c", echosign_dev1__Index__c: 1 }, false);
+    // Object_Reference_Path is REQUIRED - without it the package reads the field off the
+    // agreement itself ("Invalid field Customer_VAT_Number__c for SIGN_Agreement", 2026-08-20).
+    { echosign_dev1__Form_Field_Mapping__c: ffmVat, echosign_dev1__Type__c: "Salesforce Object Field", echosign_dev1__Field_Reference_Name__c: "Customer_VAT_Number__c", echosign_dev1__Object_Reference_Path__c: "Quote__r", echosign_dev1__Index__c: 1 }, false);
   const ffmPo = await upsertWhere("echosign_dev1__SIGN_Form_Field_Mapping__c", "PO_Number",
     `echosign_dev1__Data_Mapping__c = '${mergeId}' AND echosign_dev1__Form_Field_Name__c = 'PO_Number'`,
     { echosign_dev1__Data_Mapping__c: mergeId, echosign_dev1__Form_Field_Name__c: "PO_Number", echosign_dev1__Input_Type__c: "Text", echosign_dev1__Index__c: 2 }, false);
   await upsertWhere("echosign_dev1__SIGN_Form_Field_Mapping_Entry__c", "PO from Quote",
     `echosign_dev1__Form_Field_Mapping__c = '${ffmPo}'`,
-    { echosign_dev1__Form_Field_Mapping__c: ffmPo, echosign_dev1__Type__c: "Salesforce Object Field", echosign_dev1__Field_Reference_Name__c: "PO_Number__c", echosign_dev1__Index__c: 1 }, false);
+    { echosign_dev1__Form_Field_Mapping__c: ffmPo, echosign_dev1__Type__c: "Salesforce Object Field", echosign_dev1__Field_Reference_Name__c: "PO_Number__c", echosign_dev1__Object_Reference_Path__c: "Quote__r", echosign_dev1__Index__c: 1 }, false);
 
   console.log("2/3 Data mapping (signed values -> Salesforce)");
   const dataId = await upsertWhere("echosign_dev1__SIGN_Data_Mapping__c",
@@ -74,7 +76,10 @@ async function upsertWhere(type, label, where, fields, setName = true) {
   });
   const omQuote = await upsertWhere("echosign_dev1__SIGN_Object_Mapping__c", "Quote",
     `echosign_dev1__SIGN_Data_Mapping__c = '${dataId}' AND Name = 'Quote'`,
-    { echosign_dev1__SIGN_Data_Mapping__c: dataId, echosign_dev1__Display_Label__c: "Quote", echosign_dev1__Field_API_Name__c: "Quote__c", echosign_dev1__Fully_Qualified_API__c: "SBQQ__Quote__c" });
+    // Fully_Qualified_API is used by the package as the RELATIONSHIP in its query path -
+    // "SBQQ__Quote__c" threw "Didn't understand relationship" on the first live signing
+    // (2026-08-20); the relationship form from the agreement is required.
+    { echosign_dev1__SIGN_Data_Mapping__c: dataId, echosign_dev1__Display_Label__c: "Quote", echosign_dev1__Field_API_Name__c: "Quote__c", echosign_dev1__Fully_Qualified_API__c: "Quote__r" });
   await upsertWhere("echosign_dev1__SIGN_Field_Mapping__c", "PO_Number__c",
     `echosign_dev1__SIGN_Object_Mapping__c = '${omQuote}' AND Name = 'PO_Number__c'`,
     { echosign_dev1__SIGN_Object_Mapping__c: omQuote, echosign_dev1__Type__c: "EchoSign Form Field", echosign_dev1__Source__c: "PO_Number", echosign_dev1__Do_Not_Write_Empty__c: true, echosign_dev1__Index__c: 1, echosign_dev1__Map_on_Events__c: "Signed" });
@@ -100,7 +105,13 @@ async function upsertWhere(type, label, where, fields, setName = true) {
     echosign_dev1__Signature_Flow__c: "Recipients sign in order",
     echosign_dev1__Language__c: "English (United Kingdom)",
     echosign_dev1__Merge_Mapping__c: mergeId,
-    echosign_dev1__Data_Mapping__c: dataId,
+    // Data mapping deliberately NOT linked (2026-08-20): the package's object-mapping stage
+    // cannot traverse the custom Quote__c lookup in this version (every Fully_Qualified_API
+    // form fails - object name breaks the query path, relationship name NPEs the describe).
+    // Signed-date + signed-PDF write-backs are handled by Agreement_Signed_Writeback flow +
+    // OrderFormSignedWriteback Apex instead. The data mapping records below are kept as
+    // config documentation should a package upgrade fix the traversal.
+    echosign_dev1__Data_Mapping__c: null,
     echosign_dev1__Message__c: "Please review and sign the attached Order Form.",
   });
   await upsertWhere("echosign_dev1__Recipient_Template__c", "signer 1",

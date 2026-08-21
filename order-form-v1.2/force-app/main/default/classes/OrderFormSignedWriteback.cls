@@ -79,5 +79,13 @@ public with sharing class OrderFormSignedWriteback {
         if (!files.isEmpty()) {
             insert files;
         }
+
+        // signer-typed PO -> quote, via a direct Adobe REST call (needs a callout, so queued);
+        // silently skipped until an integration key is configured in Order_Form_Adobe_Settings__c
+        if (OrderFormPoWriteback.isConfigured()) {
+            for (echosign_dev1__SIGN_Agreement__c ag : agreements) {
+                System.enqueueJob(new OrderFormPoWriteback(ag.Id));
+            }
+        }
     }
 }

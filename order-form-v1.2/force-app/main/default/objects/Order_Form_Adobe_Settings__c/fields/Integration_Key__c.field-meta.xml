@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Integration_Key__c</fullName>
+    <description>Adobe Acrobat Sign integration key (Account Settings > Adobe Sign API > API Information > Integration Key, agreement_read scope). Used as a Bearer token for GET /agreements/{id}/formData.</description>
+    <externalId>false</externalId>
+    <label>Integration Key</label>
+    <length>255</length>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

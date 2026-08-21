@@ -509,3 +509,19 @@ obliges the customer to keep BG membership current. No "Annex A" exists anywhere
 the de-annexed sentence was correct. "Limited Access"/"Enterprise-Wide Access" are not defined
 terms but function as the Order Form's "type of access" under 3.7 - defensible; on Shinae's list.
 No fallback clause for an unspecified BG (the Layer-5 proposal for Shinae stands).
+
+## Signer-typed PO write-back built (2026-08-21, Kam: "PO should write back. VAT no for now")
+
+Direct Adobe REST call replaces the package's broken form-data engine:
+- `OrderFormPoWriteback` (Queueable + callouts): GET {apiAccessPoint}api/rest/v6/agreements/{Document_Key}/formData
+  (CSV), picks the `PO_Number` column, writes Quote.PO_Number__c WRITE-WHEN-BLANK (the signer field only
+  existed because it was blank). VAT deliberately not written. Base URI from settings or discovered via
+  /baseUris. Enqueued by OrderFormSignedWriteback after the date/PDF work; silently skipped while unconfigured.
+- `Order_Form_Adobe_Settings__c` (protected hierarchy custom setting): Integration_Key__c + API_Base_URI__c -
+  values live in the org ONLY (never the repo). Remote sites for api.echosign.com + eu1/eu2/na1-na4.
+- Tests: 4 (mocked formData incl. quoted comma value, no-overwrite, unconfigured skip, CSV parser) + the 2
+  signed-writeback tests = 6/6 green in FULLUAT. Deployed KJDEV too.
+ACTIVATION (Kam/Sergio): Adobe account > Account Settings > Adobe Sign API > API Information > Integration
+Key (scope agreement_read) -> paste into Setup > Custom Settings > Order Form Adobe Settings > Manage >
+org default. Optional API Base URI from the same page. Then sign one blank-PO test quote to prove it.
+Phase 6: same setting must be entered in PROD by hand (secret, not deployed).

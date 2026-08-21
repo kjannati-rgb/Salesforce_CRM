@@ -487,3 +487,25 @@ the broken mapping. Cleared Process_Template__c + Trigger_Process_Template__c on
 agreements; verified template link null + default flag false. Nothing can run the package data
 mapping any more. (Mechanism note for the future: template Data_Mapping -> stamped per agreement
 as Process_Template at load; unhook must cover BOTH.)
+
+## BG sentence from REAL capture data + General Terms verified (2026-08-21)
+
+Kam challenged the assembled Benefiting Group wording with "send me a test order with sample data
+(dont hardcode)". Finding: in 433 real Lexology PRO - IH CW lines (PROD, 365d) reps capture ONLY
+Benefitting_Group_Type__c ("Corporate") + Group_Size__c (avg ~13) - the description/Function_Name
+fields are OURS (sandbox-only, do not exist in PROD), and Benefitting_Group__c is always blank. The
+display fallback chain therefore produced a bare label on real data. FIX: added a Type+Size branch
+to License_Model_Display__c - "Corporate" -> "All individuals within the Customer's in-house legal
+function[, comprising approximately N individuals]"; other types -> "the Customer's organisation".
+DRAFT WORDING - on Shinae's sign-off list. Deployed both sandboxes; test order rendered on Q-206385
+from an actual deal's values (Corporate/3/GBP3,045) with zero hand-written text; test line removed
+after render.
+
+**General Terms alignment CHECKED (Kam asked; fetched centellic.com/general-subscription-terms-of-
+business via browser - 403s plain fetches):** "Authorised Users" and "Benefiting Group" are both
+DEFINED TERMS; BG members are expressly treated as Authorised Users; clause 3.7 says the access
+type, user count and BG definition "are as specified in the Order Form" (= Permitted Scope); 3.9
+obliges the customer to keep BG membership current. No "Annex A" exists anywhere in the Terms -
+the de-annexed sentence was correct. "Limited Access"/"Enterprise-Wide Access" are not defined
+terms but function as the Order Form's "type of access" under 3.7 - defensible; on Shinae's list.
+No fallback clause for an unspecified BG (the Layer-5 proposal for Shinae stands).

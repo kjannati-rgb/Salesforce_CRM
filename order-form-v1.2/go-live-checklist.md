@@ -30,14 +30,15 @@ blockers remain.**
 - [x] Product-default licence models on QLE lines - superseded: the flow now derives on every save regardless of entry route.
 - [x] **Inbound round trip PROVEN (2026-08-20 evening):** status -> Signed within seconds; signed date stamped on the quote; signed PDF filed on the quote (first-party Agreement_Signed_Writeback flow + Apex - the package's data mapping is unusable with the custom Quote lookup, see runbook). Merge-mapping pre-fill fixed and completing.
 - [ ] One-click UI walk incl. error screens (now also the BG send-gate screen); zero-click via opt-in checkbox.
-- [ ] Pre-fill check on a blank-VAT test quote: signer sees VAT/PO pre-populated / fillable in the Adobe session.
+- [ ] Pre-fill check on a blank-VAT test quote: signer sees the VAT box fillable in the Adobe session.
+- [ ] PO question "No" path: answer No at signing -> PO box hides, signing completes, quote gets PO_Required = No.
 - [ ] Regression: existing default template unchanged; renewal automation unaffected; renewal inheritance of licence fields (needs a contract -> renewal cycle).
 - [ ] **Gate: sign-off from Kam + one rep + one Finance reviewer on the PDF output.**
 
 ## 4. Finalisation after testing (Claude Code)
 - [ ] Flip Adobe tags black 8px -> white 5px in sections 01/04/08 + re-push (placement looked right in Kam's signing session - flip on his word).
 - [ ] Apply Legal/UAT wording tweaks from the sign-off sitting.
-- [ ] Commit + push the PO write-back BOM fix and 22 Aug docs.
+- [x] Branch current: all work through 2026-08-22 committed and pushed to order-form-v1.2 (50e98ab).
 
 ## 5. Production go-live (gated)
 - [ ] **Kam types: DEPLOY TO PRODUCTION CONFIRMED.**

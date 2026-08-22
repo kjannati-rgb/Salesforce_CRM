@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Order_Form_PO_Req_Yes_Label__c</fullName>
+    <description>Visible label next to the Yes radio; when the quote already holds a PO it prints the implicit answer instead.</description>
+    <externalId>false</externalId>
+    <formula>IF(ISBLANK(PO_Number__c), "Yes", "Yes (PO number below)")</formula>
+    <formulaTreatBlanksAs>BlankAsBlank</formulaTreatBlanksAs>
+    <label>Order Form PO Required Yes Label</label>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

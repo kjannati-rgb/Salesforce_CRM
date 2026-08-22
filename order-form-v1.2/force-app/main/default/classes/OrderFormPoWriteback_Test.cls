@@ -8,8 +8,9 @@ private class OrderFormPoWriteback_Test {
             if (req.getEndpoint().endsWith('/baseUris')) {
                 res.setBody('{"apiAccessPoint":"https://api.eu2.echosign.com/"}');
             } else {
-                res.setBody('"completed","email","role","first","last","title","company","agreementId","VAT_Number","PO_Number"\n'
-                    + '"2026-08-21 10:00:00","k@x.com","SIGNER","Kam","J","Head","LBR","CBJCHBCA","","PO-4471, rev 2"\n');
+                res.setBody(String.fromCharArray(new List<Integer>{ 65279 })
+                    + '"completed","email","role","first","last","title","company","agreementId","VAT_Number","PO_Required","PO_Number"\n'
+                    + '"2026-08-21 10:00:00","k@x.com","SIGNER","Kam","J","Head","LBR","CBJCHBCA","","Yes","PO-4471, rev 2"\n');
             }
             return res;
         }
@@ -38,7 +39,9 @@ private class OrderFormPoWriteback_Test {
         Test.startTest();
         System.enqueueJob(new OrderFormPoWriteback(ag.Id));
         Test.stopTest();
-        System.assertEquals('PO-4471, rev 2', [SELECT PO_Number__c FROM SBQQ__Quote__c WHERE Id = :ag.Quote__c].PO_Number__c);
+        SBQQ__Quote__c q = [SELECT PO_Number__c, PO_Required__c FROM SBQQ__Quote__c WHERE Id = :ag.Quote__c];
+        System.assertEquals('PO-4471, rev 2', q.PO_Number__c);
+        System.assertEquals('Yes', q.PO_Required__c, 'signer answer to the PO-required question captured');
     }
 
     @IsTest
@@ -50,7 +53,9 @@ private class OrderFormPoWriteback_Test {
         Test.startTest();
         System.enqueueJob(new OrderFormPoWriteback(ag.Id));
         Test.stopTest();
-        System.assertEquals('KJ00001', [SELECT PO_Number__c FROM SBQQ__Quote__c WHERE Id = :ag.Quote__c].PO_Number__c);
+        SBQQ__Quote__c q = [SELECT PO_Number__c, PO_Required__c FROM SBQQ__Quote__c WHERE Id = :ag.Quote__c];
+        System.assertEquals('KJ00001', q.PO_Number__c);
+        System.assertEquals('Yes', q.PO_Required__c, 'answer still captured even when the PO itself stands');
     }
 
     @IsTest
@@ -65,7 +70,7 @@ private class OrderFormPoWriteback_Test {
 
     @IsTest
     static void csvParsingHandlesQuotesAndCommas() {
-        String csv = '"a","PO_Number","c"\n"1","x, ""y""","3"\n';
+        String csv = String.fromCharArray(new List<Integer>{ 65279 }) + '"a","PO_Number","c"\n"1","x, ""y""","3"\n';
         System.assertEquals('x, "y"', OrderFormPoWriteback.csvField(csv, 'PO_Number'));
         System.assertEquals(null, OrderFormPoWriteback.csvField(csv, 'missing'));
         System.assertEquals(null, OrderFormPoWriteback.csvField('"only header"', 'a'));

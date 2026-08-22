@@ -10,6 +10,7 @@
 public with sharing class OrderFormPoWriteback implements Queueable, Database.AllowsCallouts {
 
     @TestVisible private static final String FORM_FIELD = 'PO_Number';
+    @TestVisible private static final String REQUIRED_FIELD = 'PO_Required';
     private final Id agreementId;
 
     public OrderFormPoWriteback(Id agreementId) {
@@ -26,7 +27,7 @@ public with sharing class OrderFormPoWriteback implements Queueable, Database.Al
             return;
         }
         List<echosign_dev1__SIGN_Agreement__c> ags = [
-            SELECT Id, Quote__c, echosign_dev1__Document_Key__c, Quote__r.PO_Number__c
+            SELECT Id, Quote__c, echosign_dev1__Document_Key__c, Quote__r.PO_Number__c, Quote__r.PO_Required__c
             FROM echosign_dev1__SIGN_Agreement__c
             WHERE Id = :agreementId AND Quote__c != null
             LIMIT 1
@@ -35,18 +36,32 @@ public with sharing class OrderFormPoWriteback implements Queueable, Database.Al
             return;
         }
         echosign_dev1__SIGN_Agreement__c ag = ags[0];
-        if (String.isNotBlank(ag.Quote__r.PO_Number__c)) {
-            return; // rep-entered PO stands; the signer field only existed when it was blank
+        Map<String, String> form = fetchFormRow(ag.echosign_dev1__Document_Key__c);
+        if (form == null) {
+            return;
         }
-        String po = fetchFormField(ag.echosign_dev1__Document_Key__c, FORM_FIELD);
-        if (String.isNotBlank(po)) {
-            update new SBQQ__Quote__c(Id = ag.Quote__c, PO_Number__c = po.left(255));
+        SBQQ__Quote__c q = new SBQQ__Quote__c(Id = ag.Quote__c);
+        Boolean changed = false;
+        // rep-entered PO stands; the signer field only existed when it was blank
+        String po = form.get(FORM_FIELD.toLowerCase());
+        if (String.isBlank(ag.Quote__r.PO_Number__c) && String.isNotBlank(po)) {
+            q.PO_Number__c = po.left(255);
+            changed = true;
+        }
+        // the signer's Yes/No answer to "Does your organisation require a PO number on invoices?"
+        String required = form.get(REQUIRED_FIELD.toLowerCase());
+        if (String.isBlank(ag.Quote__r.PO_Required__c) && (required == 'Yes' || required == 'No')) {
+            q.PO_Required__c = required;
+            changed = true;
+        }
+        if (changed) {
+            update q;
         }
     }
 
-    /** Returns the value of one form field from the agreement's form-data CSV, or null. */
+    /** Fetches the agreement's form-data CSV and returns the first data row keyed by lower-cased header. */
     @TestVisible
-    private static String fetchFormField(String documentKey, String fieldName) {
+    private static Map<String, String> fetchFormRow(String documentKey) {
         Order_Form_Adobe_Settings__c s = Order_Form_Adobe_Settings__c.getOrgDefaults();
         String base = String.isNotBlank(s.API_Base_URI__c) ? s.API_Base_URI__c : discoverBaseUri(s.Integration_Key__c);
         if (String.isBlank(base)) {
@@ -64,7 +79,7 @@ public with sharing class OrderFormPoWriteback implements Queueable, Database.Al
         if (res.getStatusCode() != 200) {
             return null;
         }
-        return csvField(res.getBody(), fieldName);
+        return csvRow(res.getBody());
     }
 
     private static String discoverBaseUri(String key) {
@@ -81,11 +96,16 @@ public with sharing class OrderFormPoWriteback implements Queueable, Database.Al
         return (String) body.get('apiAccessPoint');
     }
 
-    /** Minimal CSV reader: header row + first data row, quoted fields with commas supported. */
+    /** Minimal CSV reader: header row + first data row (quoted fields with commas supported), keyed by lower-cased header. */
     @TestVisible
-    private static String csvField(String csv, String fieldName) {
+    private static Map<String, String> csvRow(String csv) {
         if (String.isBlank(csv)) {
             return null;
+        }
+        // Adobe prefixes the CSV with a UTF-8 byte-order mark (seen live 2026-08-21)
+        String bom = String.fromCharArray(new List<Integer>{ 65279 });
+        if (csv.startsWith(bom)) {
+            csv = csv.substring(1);
         }
         List<String> lines = csv.replace('\r\n', '\n').replace('\r', '\n').split('\n');
         if (lines.size() < 2) {
@@ -93,13 +113,18 @@ public with sharing class OrderFormPoWriteback implements Queueable, Database.Al
         }
         List<String> headers = splitCsvLine(lines[0]);
         List<String> values = splitCsvLine(lines[1]);
+        Map<String, String> row = new Map<String, String>();
         for (Integer i = 0; i < headers.size() && i < values.size(); i++) {
-            if (headers[i].trim().equalsIgnoreCase(fieldName)) {
-                String v = values[i].trim();
-                return String.isBlank(v) ? null : v;
-            }
+            String v = values[i].trim();
+            row.put(headers[i].trim().toLowerCase(), String.isBlank(v) ? null : v);
         }
-        return null;
+        return row;
+    }
+
+    @TestVisible
+    private static String csvField(String csv, String fieldName) {
+        Map<String, String> row = csvRow(csv);
+        return row == null ? null : row.get(fieldName.toLowerCase());
     }
 
     private static List<String> splitCsvLine(String line) {

@@ -1,7 +1,7 @@
-# Order Form v1.2 - go-live checklist (as of 2026-08-20 evening)
+# Order Form v1.2 - go-live checklist (as of 2026-08-22)
 
 Build phases 0-5 complete; **full Adobe round trip PROVEN live** (send -> sign -> status sync ->
-signed date stamped -> signed PDF filed on the quote, Q-206385).
+signed date stamped -> signed PDF filed -> signer-typed PO written back, Q-206385).
 Shareable version: https://claude.ai/code/artifact/026330c1-3dc7-45e4-b033-7cf24975afab
 Licence model playbook: https://claude.ai/code/artifact/80330212-c87a-485c-a9f3-b918678d0185
 
@@ -16,7 +16,8 @@ blockers remain.**
 - [x] **General Terms alignment VERIFIED (2026-08-21):** "Authorised Users" + "Benefiting Group" are defined terms; BG members are treated as Authorised Users; clause 3.7 anchors the Order Form counts; NO Annex A exists (de-annexing correct). Notes in runbook.
 - [ ] **Shinae sign-off (narrowed):** the assembled Benefiting Group sentences - especially the new Type-based draft wording ("Corporate" -> "the Customer's in-house legal function" + size, built from what reps actually capture) - plus the de-annexed Authorised Users sentence, and a nod that "Limited Access"/"Enterprise-Wide Access" work as Order Form access-type labels (not defined terms; defensible via clause 3.7). Suggested Terms addition when she next edits them: a fallback defining an unspecified Benefiting Group.
 - [ ] Parked (Kam 2026-08-19/20): per-brand logos; BG phrase library + General Terms fallback sentence (need Legal); signer title write-back (ruled out).
-- [ ] **Decide: signer-typed PO/VAT write-back.** Values a signer types land in the signed PDF only (the package's form-data engine is broken for our setup). If wanted: Kam/Sergio create an Adobe integration key (Account Settings > Adobe Sign API > API Information, agreement_read scope) and Claude builds the REST callout into the existing write-back service. Only affects blank-value customers; manual fallback = rep reads the signed PDF.
+- [x] **"Does this order need a PO?" question (required Yes/No; PO box required only on Yes) - PROVEN LIVE 2026-08-22**: answer -> Quote.PO_Required__c, PO -> PO_Number__c. UAT cell: the No path (box hides).
+- [x] **Signer-typed PO write-back - PROVEN LIVE 2026-08-22** (Kam: PO yes, VAT no for now). Direct Adobe REST form-data call from OrderFormPoWriteback; integration key (agreement_read) entered in Order_Form_Adobe_Settings__c. Phase 6: key must be hand-entered in PROD.
 
 ## 2. FULLUAT setup (Kam / admin)
 - [x] **Adobe fully wired (2026-08-20):** account + Callback User linked, Automatic Status Updates enabled and proven (status pushes arrive within seconds). Note: agreements sent BEFORE enablement never update - the stale "Created" probes on Q-206385 can be cancelled in Adobe Manage.
@@ -36,12 +37,13 @@ blockers remain.**
 ## 4. Finalisation after testing (Claude Code)
 - [ ] Flip Adobe tags black 8px -> white 5px in sections 01/04/08 + re-push (placement looked right in Kam's signing session - flip on his word).
 - [ ] Apply Legal/UAT wording tweaks from the sign-off sitting.
-- [x] Branch current: all work through 2026-08-20 evening committed and pushed to order-form-v1.2 (ae72d73).
+- [ ] Commit + push the PO write-back BOM fix and 22 Aug docs.
 
 ## 5. Production go-live (gated)
 - [ ] **Kam types: DEPLOY TO PRODUCTION CONFIRMED.**
-- [ ] Deploy metadata with RunSpecifiedTests = OrderFormSignatureService_Test (PROD has pre-existing red tests).
-- [ ] Activate the 4 flows post-deploy (PROD deploys flows as Draft - org setting).
+- [ ] Deploy metadata with RunSpecifiedTests = OrderFormSignatureService_Test, OrderFormSignedWriteback_Test, OrderFormPoWriteback_Test (PROD has pre-existing red tests).
+- [ ] Activate the 6 flows post-deploy (PROD deploys flows as Draft): Quote_Stamp_Order_Form_Fields, QuoteLine_Stamp_License_Model, Quote_Send_Order_Form_One_Click, Quote_Send_Order_Form_Zero_Click, Quote_Sync_Captured_VAT_to_Account, Agreement_Signed_Writeback.
+- [ ] Hand-enter the Adobe integration key in PROD: Setup > Custom Settings > Order Form Adobe Settings (secret - never deployed). Verify PROD Adobe automatic status updates are enabled.
 - [ ] Run in order with CONFIRM_PROD=YES: `upload-brand-assets.js` -> `push-template-content.js` -> `create-agreement-template.js` -> `seed-license-models.js` -> `sweep-license-models.js --apply` (backfills open-deal lines; expect segment-VR stragglers).
 - [ ] Permission set to subs sales group; quick action onto PROD layout.
 - [ ] Smoke test: one internal quote end-to-end with an internal test signer.

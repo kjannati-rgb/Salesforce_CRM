@@ -525,3 +525,32 @@ ACTIVATION (Kam/Sergio): Adobe account > Account Settings > Adobe Sign API > API
 Key (scope agreement_read) -> paste into Setup > Custom Settings > Order Form Adobe Settings > Manage >
 org default. Optional API Base URI from the same page. Then sign one blank-PO test quote to prove it.
 Phase 6: same setting must be entered in PROD by hand (secret, not deployed).
+
+## PO write-back PROVEN LIVE (2026-08-22)
+
+Kam created the Adobe integration key (Adobe UI now files it under Account > Personal/Account
+Settings > Access Tokens > Integration Key; scope agreement_read only) and entered it in
+Order_Form_Adobe_Settings__c. Connectivity probe: baseUris -> api.eu1.echosign.com (pre-authorised
+remote site), formData 200. Fix found live: Adobe prefixes the CSV with a UTF-8 BOM - parser now
+strips it (4/4 tests). Live test: PO cleared on Q-206385 -> regenerated (fillable PO box back) ->
+sent a3GAd0000016KBZMA2 -> Kam signed typing a PO -> OrderFormPoWriteback job Completed, quote PO
+= the exact value Adobe holds in the agreement form data ("1000000", verbatim). Signed date also
+re-stamped. ALL Adobe legs now proven: send, status sync, signed date, signed PDF, signer PO.
+Sandbox note: Kam's Contact email gets RE-MASKED to .invalid periodically - unmask before each
+test send (probe script does it).
+Phase 6: enter the integration key by hand in PROD's Order_Form_Adobe_Settings__c (never deployed).
+
+## "Does this order need a PO?" question - BUILT + PROVEN (2026-08-22, Kam: "BUILD IT")
+
+When the quote has no PO, section 4 now carries a REQUIRED Yes/No radio in the signing session
+("Does your organisation require a PO number on invoices?") and the PO box is required + shown only
+on Yes (Adobe text tags: {{*PO_Required_es_:signer1:radio(Yes|No)}} and
+{{*PO_Number_es_:signer1:showif(PO_Required=Yes)}}). When the quote already holds a PO the row
+prints "Yes (PO number below)". Four new quote formula fields drive the tags/labels (Order_Form_
+PO_Req_Yes/No_Tag__c, _Yes/No_Label__c); Order_Form_PO_Tag__c now emits the required+showif form.
+New picklist SBQQ__Quote__c.PO_Required__c (Yes/No) captured by OrderFormPoWriteback (refactored to
+read the whole form-data row; write-when-blank for both PO and the answer). Tests 4/4 (mock CSV now
+carries the BOM + PO_Required column). Live: a3GAd0000016KEnMAM -> Kam answered Yes + PO-TEST-2 ->
+quote PO_Required = Yes, PO_Number = PO-TEST-2. Finance signal: PO_Required = Yes means invoices
+must carry a PO (optional future guard on invoicing). Not yet exercised live: the No path (box
+hidden) - UAT cell. Wording of the question is operational, not contractual; flag to Shinae FYI.

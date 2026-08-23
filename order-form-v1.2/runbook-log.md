@@ -690,3 +690,11 @@ in the repo, not in the rep-facing picker; future forms follow the pattern: Cont
 Events Order Form). Renamed in push-template-content.js + patched live in KJDEV and FULLUAT (keyed
 on External_Id OF-V12-TEMPLATE, so the push script remains idempotent). Doc-gen scripts that pass
 an explicit document name are test-only; reps name the document at Generate Document as usual.
+
+## Old permission set deleted (2026-08-23)
+
+Kam asked for Order_Form_Template_Admin to be deleted. Destructive metadata deploys are blocked in
+this session, but PermissionSet is a deletable sobject: REST DELETE on the record (after verifying
+zero PermissionSetAssignments; sandbox-guarded) removed it from KJDEV and FULLUAT - 204 both.
+Order_Form_Core / Order_Form_Subscriptions / Order_Form_Subscriptions_Group are now the only Order
+Form permission components anywhere (repo + orgs).

@@ -43,7 +43,7 @@ residues (2, 4). Nothing technical remains before the gate phrase.**
 ## 4. Finalisation after testing (Claude Code)
 - [x] Adobe tags flipped to invisible white (8px kept for field geometry) 2026-08-23; Kam signed the white-tag document - all fields present.
 - [ ] Apply any wording tweaks that come out of the 3-person sign-off (none outstanding from Shinae).
-- [x] Branch current: all work through 2026-08-23 committed and pushed to order-form-v1.2 (5f4d92e).
+- [x] Branch current: all work through 2026-08-23 committed and pushed to order-form-v1.2 (4cc9a16).
 
 ## 5. Production go-live (gated)
 - [ ] **Kam types: DEPLOY TO PRODUCTION CONFIRMED.**

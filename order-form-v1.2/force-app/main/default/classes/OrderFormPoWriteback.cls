@@ -4,13 +4,18 @@
  * (see runbook 2026-08-20), so this calls the Adobe Acrobat Sign REST API directly:
  *   GET {apiAccessPoint}api/rest/v6/agreements/{documentKey}/formData  -> CSV
  * Auth = integration key from Order_Form_Adobe_Settings__c (entered in the org, never in
- * the repo). Blank key = nothing happens. Only PO is written (Kam 2026-08-21: VAT not for
- * now); write-when-blank so a PO already on the quote is never overwritten.
+ * the repo). Blank key = nothing happens. Writes, all write-when-blank:
+ *   PO_Number__c + PO_Required__c (signer question, 2026-08-22)
+ *   Customer_VAT_Number_Captured__c + VAT_Registered__c (2026-08-23); the
+ *   Quote_Sync_Captured_VAT_to_Account flow relays to Account.Sales_Tax_Number__c only
+ *   when the account holds none, with a Sales_Tax_Number_Source__c provenance note.
  */
 public with sharing class OrderFormPoWriteback implements Queueable, Database.AllowsCallouts {
 
     @TestVisible private static final String FORM_FIELD = 'PO_Number';
     @TestVisible private static final String REQUIRED_FIELD = 'PO_Required';
+    @TestVisible private static final String VAT_FIELD = 'VAT_Number';
+    @TestVisible private static final String VAT_REGISTERED_FIELD = 'VAT_Registered';
     private final Id agreementId;
 
     public OrderFormPoWriteback(Id agreementId) {
@@ -27,7 +32,10 @@ public with sharing class OrderFormPoWriteback implements Queueable, Database.Al
             return;
         }
         List<echosign_dev1__SIGN_Agreement__c> ags = [
-            SELECT Id, Quote__c, echosign_dev1__Document_Key__c, Quote__r.PO_Number__c, Quote__r.PO_Required__c
+            SELECT Id, Quote__c, echosign_dev1__Document_Key__c, Quote__r.Name,
+                   Quote__r.PO_Number__c, Quote__r.PO_Required__c,
+                   Quote__r.Customer_VAT_Number_Captured__c, Quote__r.VAT_Registered__c,
+                   Quote__r.SBQQ__Account__c, Quote__r.SBQQ__Account__r.Sales_Tax_Number__c
             FROM echosign_dev1__SIGN_Agreement__c
             WHERE Id = :agreementId AND Quote__c != null
             LIMIT 1
@@ -54,6 +62,19 @@ public with sharing class OrderFormPoWriteback implements Queueable, Database.Al
             q.PO_Required__c = required;
             changed = true;
         }
+        // VAT / GST / sales tax (Kam 2026-08-23): the signer's registered Yes/No and the number.
+        String vatRegistered = form.get(VAT_REGISTERED_FIELD.toLowerCase());
+        if (String.isBlank(ag.Quote__r.VAT_Registered__c) && (vatRegistered == 'Yes' || vatRegistered == 'No')) {
+            q.VAT_Registered__c = vatRegistered;
+            changed = true;
+        }
+        String vat = form.get(VAT_FIELD.toLowerCase());
+        if (String.isBlank(ag.Quote__r.Customer_VAT_Number_Captured__c) && String.isNotBlank(vat)) {
+            q.Customer_VAT_Number_Captured__c = vat.left(255);
+            changed = true;
+        }
+        // The Account (permanent home of the number) is written by the
+        // Quote_Sync_Captured_VAT_to_Account flow ONLY when it holds none, with a provenance note.
         if (changed) {
             update q;
         }

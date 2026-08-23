@@ -16,6 +16,7 @@ blockers remain.**
 - [x] **General Terms alignment VERIFIED (2026-08-21):** "Authorised Users" + "Benefiting Group" are defined terms; BG members are treated as Authorised Users; clause 3.7 anchors the Order Form counts; NO Annex A exists (de-annexing correct). Notes in runbook.
 - [ ] **Shinae sign-off (narrowed):** the assembled Benefiting Group sentences - especially the new Type-based draft wording ("Corporate" -> "the Customer's in-house legal function" + size, built from what reps actually capture) - plus the de-annexed Authorised Users sentence, and a nod that "Limited Access"/"Enterprise-Wide Access" work as Order Form access-type labels (not defined terms; defensible via clause 3.7). Suggested Terms addition when she next edits them: a fallback defining an unspecified Benefiting Group.
 - [ ] Parked (Kam 2026-08-19/20): per-brand logos; BG phrase library + General Terms fallback sentence (need Legal); signer title write-back (ruled out).
+- [x] **VAT question + guarded Account write-back - PROVEN LIVE 2026-08-23** (Kam reversed "VAT no for now"): required Yes/No "registered for VAT / GST / sales tax?", number box required on Yes; quote gets VAT_Registered__c + captured number; Account.Sales_Tax_Number__c filled ONLY when blank with a Sales_Tax_Number_Source__c provenance note for Finance review.
 - [x] **"Does this order need a PO?" question (required Yes/No; PO box required only on Yes) - PROVEN LIVE 2026-08-22**: answer -> Quote.PO_Required__c, PO -> PO_Number__c. UAT cell: the No path (box hides).
 - [x] **Signer-typed PO write-back - PROVEN LIVE 2026-08-22** (Kam: PO yes, VAT no for now). Direct Adobe REST form-data call from OrderFormPoWriteback; integration key (agreement_read) entered in Order_Form_Adobe_Settings__c. Phase 6: key must be hand-entered in PROD.
 
@@ -30,8 +31,8 @@ blockers remain.**
 - [x] Product-default licence models on QLE lines - superseded: the flow now derives on every save regardless of entry route.
 - [x] **Inbound round trip PROVEN (2026-08-20 evening):** status -> Signed within seconds; signed date stamped on the quote; signed PDF filed on the quote (first-party Agreement_Signed_Writeback flow + Apex - the package's data mapping is unusable with the custom Quote lookup, see runbook). Merge-mapping pre-fill fixed and completing.
 - [ ] One-click UI walk incl. error screens (now also the BG send-gate screen); zero-click via opt-in checkbox.
-- [ ] Pre-fill check on a blank-VAT test quote: signer sees the VAT box fillable in the Adobe session.
-- [ ] PO question "No" path: answer No at signing -> PO box hides, signing completes, quote gets PO_Required = No.
+- [x] Blank-VAT quote: superseded 2026-08-23 by the VAT question + write-back (proven).
+- [x] PO question "No" path: box hides, signing completes. PASS 2026-08-22 (Kam).
 - [ ] Regression: existing default template unchanged; renewal automation unaffected; renewal inheritance of licence fields (needs a contract -> renewal cycle).
 - [ ] **Gate: sign-off from Kam + one rep + one Finance reviewer on the PDF output.**
 

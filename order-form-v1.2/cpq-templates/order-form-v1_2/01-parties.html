@@ -1,5 +1,5 @@
 <!-- Section 1 + document masthead. Section number literal per ground rule 6.
-     VAT: signer-fillable Adobe field, PRE-FILLED from Quote > Account > Sales Tax Number via merge mapping (Customer_VAT_Number__c), signer can overwrite, written back to Account.Sales_Tax_Number__c on signing. PLACEMENT MODE black 8px, final white 5px. -->
+     VAT (2026-08-23): when the account holds no Sales Tax Number, a REQUIRED Yes/No radio "Is your organisation registered for VAT / GST / sales tax?" appears and the number box is required + shown only on Yes (showif). Answers write back via OrderFormPoWriteback: VAT_Registered__c + Customer_VAT_Number_Captured__c on the quote, and Account.Sales_Tax_Number__c ONLY when blank (+ Sales_Tax_Number_Source__c provenance note). When known, the number prints and the question reads "Yes (number below)". PLACEMENT MODE black 8px, final white 5px. -->
 <table style="width:100%;border-collapse:collapse;"><tr>
   <td style="width:55%;vertical-align:bottom;"><span style="color:#003340;font-size:22px;font-weight:bold;">Order Form</span></td>
   <td style="width:45%;vertical-align:bottom;">
@@ -24,6 +24,7 @@
 <tr><td colspan="2" style="border:1px solid #C9D9DD;background-color:#003340;color:#FFFFFF;font-weight:bold;padding:5px 6px;">Customer</td></tr>
 <tr><td style="border:1px solid #C9D9DD;background-color:#EAF3F4;color:#003340;width:30%;padding:5px 6px;">Legal entity name</td><td style="border:1px solid #C9D9DD;padding:5px 6px;">{!quote.SBQQ__BillingName__c}</td></tr>
 <tr><td style="border:1px solid #C9D9DD;background-color:#EAF3F4;color:#003340;width:30%;padding:5px 6px;">Registration number</td><td style="border:1px solid #C9D9DD;padding:5px 6px;">{!quote.Customer_Registration_Number__c}</td></tr>
+<tr><td style="border:1px solid #C9D9DD;background-color:#EAF3F4;color:#003340;width:30%;padding:5px 6px;">Is your organisation registered for VAT / GST / sales tax?</td><td style="border:1px solid #C9D9DD;padding:5px 6px;"><span style="color:#000000;font-size:8px;">{!quote.Order_Form_VAT_Req_Yes_Tag__c}</span> {!quote.Order_Form_VAT_Req_Yes_Label__c}&#160;&#160;&#160;&#160;<span style="color:#000000;font-size:8px;">{!quote.Order_Form_VAT_Req_No_Tag__c}</span> {!quote.Order_Form_VAT_Req_No_Label__c}</td></tr>
 <tr><td style="border:1px solid #C9D9DD;background-color:#EAF3F4;color:#003340;width:30%;padding:5px 6px;">VAT/GST/Sales Tax No. (if applicable)</td><td style="border:1px solid #C9D9DD;padding:5px 6px;">{!quote.Customer_VAT_Number__c}<span style="color:#000000;font-size:8px;">{!quote.Order_Form_VAT_Tag__c}</span></td></tr>
 <tr><td style="border:1px solid #C9D9DD;background-color:#EAF3F4;color:#003340;width:30%;padding:5px 6px;">Registered / principal address</td><td style="border:1px solid #C9D9DD;padding:5px 6px;">{!quote.SBQQ__BillingStreet__c}, {!quote.SBQQ__BillingCity__c} {!quote.SBQQ__BillingState__c} {!quote.SBQQ__BillingPostalCode__c}, {!quote.SBQQ__BillingCountry__c}</td></tr>
 </table>

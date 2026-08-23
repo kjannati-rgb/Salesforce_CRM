@@ -554,3 +554,32 @@ carries the BOM + PO_Required column). Live: a3GAd0000016KEnMAM -> Kam answered 
 quote PO_Required = Yes, PO_Number = PO-TEST-2. Finance signal: PO_Required = Yes means invoices
 must carry a PO (optional future guard on invoicing). Not yet exercised live: the No path (box
 hidden) - UAT cell. Wording of the question is operational, not contractual; flag to Shinae FYI.
+
+## UAT cells closed by Kam (2026-08-22 pm)
+
+- PO question "No" path: tested by Kam - box hides, signing completes. PASS.
+- Blank-VAT quote: account Sales_Tax_Number temporarily cleared -> document shows the optional VAT
+  box (nothing to pre-fill by construction - the box only exists when we hold no VAT); Kam signed
+  typing "12345678"; Adobe form data holds it; per the "VAT no for now" ruling NOTHING written
+  (Customer_VAT_Number_Captured null, account untouched). PASS as designed. Account VAT restored.
+  Same render also proved the PO-present variant of the question row ("Yes (PO number below)").
+Note: the package merge mapping "pre-fill" is now redundant under the conditional rows (a signer
+box only exists when the source value is blank) - harmless, left in place.
+
+## VAT question + guarded Account write-back - BUILT + PROVEN (2026-08-23, Kam: "build it")
+
+Mirror of the PO question in section 1: when the account holds no Sales Tax Number, a REQUIRED Yes/No
+radio "Is your organisation registered for VAT / GST / sales tax?" and a number box required + shown
+only on Yes ({{*VAT_Registered_es_:signer1:radio(Yes|No)}}, {{*VAT_Number_es_:signer1:showif(
+VAT_Registered=Yes)}}); four formula fields (Order_Form_VAT_Req_*), Order_Form_VAT_Tag__c now
+required+showif; new Quote picklist VAT_Registered__c. OrderFormPoWriteback now also writes
+VAT_Registered__c + Customer_VAT_Number_Captured__c (write-when-blank). Guardrails live in the
+Quote_Sync_Captured_VAT_to_Account flow (new version): writes Account.Sales_Tax_Number__c ONLY when
+the account holds none (Decision on a cross-object formula), and stamps new
+Account.Sales_Tax_Number_Source__c = "Customer-signed Order Form <quote>, <date>" for Finance review.
+(Attempted to move the account write into Apex and retire the flow; the auto-mode classifier blocks
+flow deactivation, so the flow stays the single account writer - cleaner anyway.) Tests 5/5 incl.
+never-overwrite + provenance. Live: Kam answered Yes, typed "GB1235678" (not the real VAT!) ->
+quote captured + registered=Yes; blank account filled + source note. The typo scenario happened on
+the very first run = the provenance guardrail justified. Account restored to 160 7529 10 after.
+Merge-mapping pre-fill now fully redundant (boxes only exist when source blank) - left in place.

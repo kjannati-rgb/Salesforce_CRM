@@ -26,7 +26,7 @@ residues (2, 4). Nothing technical remains before the gate phrase.**
 ## 2. FULLUAT setup (Kam / admin)
 - [x] **Adobe fully wired (2026-08-20):** account + Callback User linked, Automatic Status Updates enabled and proven (status pushes arrive within seconds). Note: agreements sent BEFORE enablement never update - the stale "Created" probes on Q-206385 can be cancelled in Adobe Manage.
 - [x] "Send for Signature" quick action placed and used by Kam (UI send worked end to end). Confirm Signatory Contact field placement on the subs layouts.
-- [ ] Assign `Order_Form_Template_Admin` to UAT testers. Test-contact rule: internal signers only; unmask the Contact email (.invalid) AND regenerate the document after.
+- [ ] Assign permission set group `Order_Form_Subscriptions_Group` (= `Order_Form_Core` + `Order_Form_Subscriptions`) to UAT testers; `Order_Form_Template_Admin` split 2026-08-23 (repo copy removed, Kam reassigned to the group in both sandboxes) - delete the orphaned old set in Setup in KJDEV + FULLUAT (destructive deploy blocked for Claude). Future businesses: Core + their own pack in their own group. Test-contact rule: internal signers only; unmask the Contact email (.invalid) AND regenerate the document after.
 
 ## 3. FULLUAT testing (UAT team)
 - [x] Outbound send: agreement + attached PDF (runtime variable) + Adobe document key + delivered email + signing session with correctly placed fields - PROVEN 2026-08-20 (Q-206385, Kam signed).

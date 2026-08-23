@@ -665,3 +665,19 @@ service. Re-run with the wait: standard agreement a3GAd0000016NHVMA2, key-accoun
 PDFs pulled from the agreements and intro text verified; Kam confirmed both correct. Not a product
 risk (reps generate then send; zero-click checks a document exists). Stale agreements NEHMA2/NFtMAM
 are ignorable probes.
+
+## Permission set split for multi-business templates (2026-08-23)
+
+Kam: subscriptions is the first Order Form; events / contributor templates will follow. The single
+Order_Form_Template_Admin set (57 FLS grants + OrderFormSignatureService, no object/system perms)
+was split into Order_Form_Core (42 grants: signatory + auto-send, entity / governing-law / terms
+stamps, PO + VAT capture and tag formulas, contact display formulas, Agreement.Quote__c, the
+invocable, template External_Ids) and Order_Form_Subscriptions (15 grants: licence-model, AU count,
+Benefiting Group, headcount on Product2 / QuoteLine / Subscription), bundled by permission set
+group Order_Form_Subscriptions_Group. Deployed KJDEV + FULLUAT (description max 255 chars; the
+group cannot deploy in the same request as a brand-new set unless both are in the package - they
+were); Kam reassigned from the old set to the group in both orgs (group Status=Updated first);
+old set is now unassigned but still present - destructive deploy blocked for Claude, delete by hand
+in Setup. Repo copy removed. Phase 6 manifest: Core + Subscriptions + group, NOT Template_Admin.
+Pattern for a new business: new template HTML + line columns + Order_Form_Terms_Config__mdt rows +
+a selector in the send flow, plus Order_Form_<Business> set + group (Core + pack).

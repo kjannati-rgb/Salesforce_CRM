@@ -88,7 +88,7 @@ async function upsert(type, extId, fields) {
     SBQQ__PageNumberAlignment__c: "Right",
   };
   const templateId = await upsert("SBQQ__QuoteTemplate__c", "OF-V12-TEMPLATE", {
-    ...shell, Name: "Order Form v1.2 - Subscriptions", SBQQ__WatermarkId__c: watermarkId });
+    ...shell, Name: "Subscription Order Form", SBQQ__WatermarkId__c: watermarkId });
   const templates = [["", templateId]];
 
   console.log("2/4 Template content");

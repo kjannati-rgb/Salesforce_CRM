@@ -681,3 +681,12 @@ old set is now unassigned but still present - destructive deploy blocked for Cla
 in Setup. Repo copy removed. Phase 6 manifest: Core + Subscriptions + group, NOT Template_Admin.
 Pattern for a new business: new template HTML + line columns + Order_Form_Terms_Config__mdt rows +
 a selector in the send flow, plus Order_Form_<Business> set + group (Core + pack).
+
+## Template renamed for the business (2026-08-23)
+
+Kam: the template name should be something the business is receptive to. SBQQ__QuoteTemplate__c
+Name changed "Order Form v1.2 - Subscriptions" -> "Subscription Order Form" (version numbers stay
+in the repo, not in the rep-facing picker; future forms follow the pattern: Contributor Order Form,
+Events Order Form). Renamed in push-template-content.js + patched live in KJDEV and FULLUAT (keyed
+on External_Id OF-V12-TEMPLATE, so the push script remains idempotent). Doc-gen scripts that pass
+an explicit document name are test-only; reps name the document at Generate Document as usual.

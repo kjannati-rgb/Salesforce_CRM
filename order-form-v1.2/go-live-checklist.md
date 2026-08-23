@@ -1,12 +1,13 @@
 # Order Form v1.2 - go-live checklist (as of 2026-08-23)
 
-Build phases 0-5 complete; **full Adobe round trip PROVEN live** (send -> sign -> status sync ->
-signed date stamped -> signed PDF filed -> signer-typed PO written back, Q-206385).
+Build phases 0-5 complete; **full Adobe round trip PROVEN live** and **every technical UAT cell PASSED**
+(2026-08-23): send, sign, status sync, signed date, signed PDF, signer PO + VAT with their questions,
+one-click screens, zero-click, regression, renewal inheritance.
 Shareable version: https://claude.ai/code/artifact/026330c1-3dc7-45e4-b033-7cf24975afab
 Licence model playbook: https://claude.ai/code/artifact/80330212-c87a-485c-a9f3-b918678d0185
 
-**Critical path: the remaining UAT cells (3) and Shinae's wording sign-off (1) - no technical
-blockers remain.**
+**Critical path: the 3-person sign-off on the PDF output (3), the labels check (1), and the setup
+residues (2, 4). Nothing technical remains before the gate phrase.**
 
 ## 1. Business decisions (Shinae / Finance / Kam)
 - [x] **Decision 3 - legal entity table COMPLETE.** Billing Entity mapping (LBR/ALM/GHK/LLC/MBL) live in both sandboxes; governing law: ALM/LLC -> New York, LBR/GHK/MBL -> English. ALM reg number 13-3273851 added 2026-08-19.
@@ -41,7 +42,7 @@ blockers remain.**
 ## 4. Finalisation after testing (Claude Code)
 - [ ] Flip Adobe tags black 8px -> white 5px in sections 01/04/08 + re-push (placement looked right in Kam's signing session - flip on his word).
 - [ ] Apply Legal/UAT wording tweaks from the sign-off sitting.
-- [x] Branch current: all work through 2026-08-23 committed and pushed to order-form-v1.2 (86fd00d).
+- [x] Branch current: all work through 2026-08-23 committed and pushed to order-form-v1.2 (29642bb).
 
 ## 5. Production go-live (gated)
 - [ ] **Kam types: DEPLOY TO PRODUCTION CONFIRMED.**

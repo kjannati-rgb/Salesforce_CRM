@@ -624,3 +624,12 @@ driven actively:
 Test-data residue (sandbox): the test opp is now Closed Won + contracted; Contract 00044252 and
 renewal opp/quote Q-206386 exist. Harmless; note for anyone reusing Q-206385.
 UAT matrix now: all technical cells PASS. Remaining gate = 3-person sign-off on the PDF output.
+
+## Adobe tags flipped to invisible (2026-08-23)
+
+All seven signer-tag spans in 01-parties / 04-payment-terms / 08-execution changed from black to
+WHITE, font size deliberately kept at 8px (Adobe sizes each field from the tag text - 8px is the
+geometry proven in every UAT signing; the original plan's 5px would have shrunk the fields).
+Pushed both sandboxes. Rendered Q-206385: page shows clean signing lines, no tag text; tags remain
+in the PDF text layer for Adobe. Kam signed the white-tag agreement: all fields present and placed.
+Template is now in its customer-facing final state.

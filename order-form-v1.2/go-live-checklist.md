@@ -40,7 +40,7 @@ residues (2, 4). Nothing technical remains before the gate phrase.**
 - [ ] **Gate: sign-off from Kam + one rep + one Finance reviewer on the PDF output.**
 
 ## 4. Finalisation after testing (Claude Code)
-- [ ] Flip Adobe tags black 8px -> white 5px in sections 01/04/08 + re-push (placement looked right in Kam's signing session - flip on his word).
+- [x] Adobe tags flipped to invisible white (8px kept for field geometry) 2026-08-23; Kam signed the white-tag document - all fields present.
 - [ ] Apply Legal/UAT wording tweaks from the sign-off sitting.
 - [x] Branch current: all work through 2026-08-23 committed and pushed to order-form-v1.2 (29642bb).
 

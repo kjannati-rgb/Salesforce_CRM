@@ -43,7 +43,8 @@ residues (2, 4). Nothing technical remains before the gate phrase.**
 ## 4. Finalisation after testing (Claude Code)
 - [x] Adobe tags flipped to invisible white (8px kept for field geometry) 2026-08-23; Kam signed the white-tag document - all fields present.
 - [ ] Apply any wording tweaks that come out of the 3-person sign-off (none outstanding from Shinae).
-- [x] Branch current: all work through 2026-08-23 committed and pushed to order-form-v1.2 (1b5ba8a; full-content diff vs origin clean).
+- [x] Template renamed for the business (2026-08-23): rep-facing picker name is now "Subscription Order Form" (was "Order Form v1.2 - Subscriptions"); live in both sandboxes, PROD picks it up at Phase 6 via the push script. Future forms follow the pattern: Contributor Order Form, Events Order Form (both confirmed coming, on CPQ Quotes, each with its own line table + terms; contributor signal = Expert Insight product families).
+- [x] Branch current: all work through 2026-08-23 committed and pushed to order-form-v1.2 (167d40e; full-content diff vs origin clean).
 
 ## 5. Production go-live (gated)
 - [ ] **Kam types: DEPLOY TO PRODUCTION CONFIRMED.**

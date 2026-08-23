@@ -583,3 +583,17 @@ never-overwrite + provenance. Live: Kam answered Yes, typed "GB1235678" (not the
 quote captured + registered=Yes; blank account filled + source note. The typo scenario happened on
 the very first run = the provenance guardrail justified. Account restored to 160 7529 10 after.
 Merge-mapping pre-fill now fully redundant (boxes only exist when source blank) - left in place.
+
+## One-click UI walk - ALL SCREENS PASS (2026-08-23, Kam clicking, Claude staging Q-206385)
+
+Not Approved (status Draft) -> blocked with status shown. No Signatory -> UNREACHABLE by construction:
+org VR "Quote not in Draft Status requires a Primary Contact" + the stamp flow's signatory default
+from Primary Contact mean an approved quote always has a signatory (screen = belt and braces).
+Benefiting Group gate (undescribed Lexology PRO - IH line) -> blocked, line named, remedy stated.
+No document (all 11 test quote documents deleted) -> blocked with instruction. Happy path proven
+twice earlier in the week from the UI. Gotchas met while staging: API status flips do NOT move the
+org's watermark flag (known); "Approval Status" (AA) and the Record Type still read Approved while
+SBQQ__Status__c = Draft - the gate deliberately keys on SBQQ__Status__c (what the document and
+watermark logic use); Lightning record pages need a refresh to show API-side changes.
+Q-206385 left Approved, two original lines, signatory set, NO quote document (regenerate before any
+further send test).

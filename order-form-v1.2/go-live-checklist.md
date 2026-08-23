@@ -31,7 +31,8 @@ blockers remain.**
 - [x] Real AA approval clears the DRAFT watermark - proven on Q-206385.
 - [x] Product-default licence models on QLE lines - superseded: the flow now derives on every save regardless of entry route.
 - [x] **Inbound round trip PROVEN (2026-08-20 evening):** status -> Signed within seconds; signed date stamped on the quote; signed PDF filed on the quote (first-party Agreement_Signed_Writeback flow + Apex - the package's data mapping is unusable with the custom Quote lookup, see runbook). Merge-mapping pre-fill fixed and completing.
-- [ ] One-click UI walk incl. error screens (now also the BG send-gate screen); zero-click via opt-in checkbox.
+- [x] One-click UI walk - all screens PASS 2026-08-23 (not approved, BG gate, no document, happy path; no-signatory unreachable by construction).
+- [ ] Zero-click via the opt-in checkbox on a real AA approval.
 - [x] Blank-VAT quote: superseded 2026-08-23 by the VAT question + write-back (proven).
 - [x] PO question "No" path: box hides, signing completes. PASS 2026-08-22 (Kam).
 - [ ] Regression: existing default template unchanged; renewal automation unaffected; renewal inheritance of licence fields (needs a contract -> renewal cycle).

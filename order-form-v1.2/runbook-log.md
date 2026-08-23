@@ -654,3 +654,14 @@ URL (merge field inside href works). Verified live: Kam-owned -> standard; owner
 -> "General Subscription Terms of Business (Key Account)" + key-account URL; owner reverted.
 Adding a team later = one CMDT record. Note for reps: terms follow the deal OWNER's role at the
 time of the last quote save.
+
+## Key Accounts terms - email confirmation (2026-08-23)
+
+Sent both variants to Kam's inbox from FULLUAT on Q-206385 (owner temporarily Shawn Harlan for the
+key-account run, reverted after). First attempt attached the wrong PDF to both: CPQ doc gen is
+ASYNC (ServiceRouter returns an AsyncApexJob id) and the send service attaches the LATEST quote
+document - scripted sends must wait for the new SBQQ__QuoteDocument__c record before invoking the
+service. Re-run with the wait: standard agreement a3GAd0000016NHVMA2, key-account a3GAd0000016NJ7MAM;
+PDFs pulled from the agreements and intro text verified; Kam confirmed both correct. Not a product
+risk (reps generate then send; zero-click checks a document exists). Stale agreements NEHMA2/NFtMAM
+are ignorable probes.

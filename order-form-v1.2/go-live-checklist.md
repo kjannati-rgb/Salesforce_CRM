@@ -1,4 +1,4 @@
-# Order Form v1.2 - go-live checklist (as of 2026-08-22)
+# Order Form v1.2 - go-live checklist (as of 2026-08-23)
 
 Build phases 0-5 complete; **full Adobe round trip PROVEN live** (send -> sign -> status sync ->
 signed date stamped -> signed PDF filed -> signer-typed PO written back, Q-206385).
@@ -14,7 +14,8 @@ blockers remain.**
 - [x] **Licence models - FULLY AUTOMATIC (2026-08-20).** All four subs families derive on every line save (product rules; Law.com region rule; counts from qty/seats); 7,491 open-deal lines backfilled across both sandboxes; send-gate blocks undescribed Benefiting Group lines. Reps supply ONLY: BG description + US Law.com seats. See playbook.
 - [x] **Kam sign-off (2026-08-21):** +Qty column, -Currency column (table columns are Kam's call), licence-type labels, conditional PO/VAT rows - all confirmed fine.
 - [x] **General Terms alignment VERIFIED (2026-08-21):** "Authorised Users" + "Benefiting Group" are defined terms; BG members are treated as Authorised Users; clause 3.7 anchors the Order Form counts; NO Annex A exists (de-annexing correct). Notes in runbook.
-- [ ] **Shinae sign-off (narrowed):** the assembled Benefiting Group sentences - especially the new Type-based draft wording ("Corporate" -> "the Customer's in-house legal function" + size, built from what reps actually capture) - plus the de-annexed Authorised Users sentence, and a nod that "Limited Access"/"Enterprise-Wide Access" work as Order Form access-type labels (not defined terms; defensible via clause 3.7). Suggested Terms addition when she next edits them: a fallback defining an unspecified Benefiting Group.
+- [x] **Shinae approvals (2026-08-23):** assembled Benefiting Group sentences incl. "in-house legal function" - approved; annex-free Authorised Users sentence - approved.
+- [ ] **Access-type labels** ("Limited Access"/"Enterprise-Wide Access" as headings, not defined terms) - Kam checking. Kam will raise the Terms fallback clause (unspecified Benefiting Group) with Shinae.
 - [ ] Parked (Kam 2026-08-19/20): per-brand logos; BG phrase library + General Terms fallback sentence (need Legal); signer title write-back (ruled out).
 - [x] **VAT question + guarded Account write-back - PROVEN LIVE 2026-08-23** (Kam reversed "VAT no for now"): required Yes/No "registered for VAT / GST / sales tax?", number box required on Yes; quote gets VAT_Registered__c + captured number; Account.Sales_Tax_Number__c filled ONLY when blank with a Sales_Tax_Number_Source__c provenance note for Finance review.
 - [x] **"Does this order need a PO?" question (required Yes/No; PO box required only on Yes) - PROVEN LIVE 2026-08-22**: answer -> Quote.PO_Required__c, PO -> PO_Number__c. UAT cell: the No path (box hides).
@@ -39,7 +40,7 @@ blockers remain.**
 ## 4. Finalisation after testing (Claude Code)
 - [ ] Flip Adobe tags black 8px -> white 5px in sections 01/04/08 + re-push (placement looked right in Kam's signing session - flip on his word).
 - [ ] Apply Legal/UAT wording tweaks from the sign-off sitting.
-- [x] Branch current: all work through 2026-08-22 committed and pushed to order-form-v1.2 (50e98ab).
+- [x] Branch current: all work through 2026-08-23 committed and pushed to order-form-v1.2 (86fd00d).
 
 ## 5. Production go-live (gated)
 - [ ] **Kam types: DEPLOY TO PRODUCTION CONFIRMED.**

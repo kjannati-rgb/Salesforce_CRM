@@ -17,6 +17,7 @@ residues (2, 4). Nothing technical remains before the gate phrase.**
 - [x] **General Terms alignment VERIFIED (2026-08-21):** "Authorised Users" + "Benefiting Group" are defined terms; BG members are treated as Authorised Users; clause 3.7 anchors the Order Form counts; NO Annex A exists (de-annexing correct). Notes in runbook.
 - [x] **Shinae approvals (2026-08-23):** assembled Benefiting Group sentences incl. "in-house legal function" - approved; annex-free Authorised Users sentence - approved.
 - [ ] **Access-type labels** ("Limited Access"/"Enterprise-Wide Access" as headings, not defined terms) - Kam checking. Kam will raise the Terms fallback clause (unspecified Benefiting Group) with Shinae.
+- [x] **Key Accounts terms (2026-08-23):** one template; terms label + URL derived from the deal owner's role via Order_Form_Terms_Config__mdt (Key Account branch -> key-account Terms, labelled on the document). Verified both ways.
 - [ ] Parked (Kam 2026-08-19/20): per-brand logos; BG phrase library + General Terms fallback sentence (need Legal); signer title write-back (ruled out).
 - [x] **VAT question + guarded Account write-back - PROVEN LIVE 2026-08-23** (Kam reversed "VAT no for now"): required Yes/No "registered for VAT / GST / sales tax?", number box required on Yes; quote gets VAT_Registered__c + captured number; Account.Sales_Tax_Number__c filled ONLY when blank with a Sales_Tax_Number_Source__c provenance note for Finance review.
 - [x] **"Does this order need a PO?" question (required Yes/No; PO box required only on Yes) - PROVEN LIVE 2026-08-22**: answer -> Quote.PO_Required__c, PO -> PO_Number__c. UAT cell: the No path (box hides).
@@ -47,7 +48,7 @@ residues (2, 4). Nothing technical remains before the gate phrase.**
 ## 5. Production go-live (gated)
 - [ ] **Kam types: DEPLOY TO PRODUCTION CONFIRMED.**
 - [ ] Deploy metadata with RunSpecifiedTests = OrderFormSignatureService_Test, OrderFormSignedWriteback_Test, OrderFormPoWriteback_Test (PROD has pre-existing red tests).
-- [ ] Activate the 6 flows post-deploy (PROD deploys flows as Draft): Quote_Stamp_Order_Form_Fields, QuoteLine_Stamp_License_Model, Quote_Send_Order_Form_One_Click, Quote_Send_Order_Form_Zero_Click, Quote_Sync_Captured_VAT_to_Account, Agreement_Signed_Writeback.
+- [ ] Activate the 7 flows post-deploy (PROD deploys flows as Draft): Quote_Stamp_Order_Form_Fields, Quote_Stamp_Terms, QuoteLine_Stamp_License_Model, Quote_Send_Order_Form_One_Click, Quote_Send_Order_Form_Zero_Click, Quote_Sync_Captured_VAT_to_Account, Agreement_Signed_Writeback.
 - [ ] Hand-enter the Adobe integration key in PROD: Setup > Custom Settings > Order Form Adobe Settings (secret - never deployed). Verify PROD Adobe automatic status updates are enabled.
 - [ ] Run in order with CONFIRM_PROD=YES: `upload-brand-assets.js` -> `push-template-content.js` -> `create-agreement-template.js` -> `seed-license-models.js` -> `sweep-license-models.js --apply` (backfills open-deal lines; expect segment-VR stragglers).
 - [ ] Permission set to subs sales group; quick action onto PROD layout.

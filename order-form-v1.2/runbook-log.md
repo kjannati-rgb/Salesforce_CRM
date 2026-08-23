@@ -633,3 +633,24 @@ geometry proven in every UAT signing; the original plan's 5px would have shrunk 
 Pushed both sandboxes. Rendered Q-206385: page shows clean signing lines, no tag text; tags remain
 in the PDF text layer for Adobe. Kam signed the white-tag agreement: all fields present and placed.
 Template is now in its customer-facing final state.
+
+## Key Accounts terms - ONE template, terms reference derived from deal owner role (2026-08-23)
+
+Kam: Shawn Harlan's Key Accounts team uses the same Order Form but the key-account Terms
+(centellic.com/general-subscription-terms-of-business-key-account/). Read both Terms pages via the
+browser: definitions (Authorised Users, Benefiting Group, Permitted Scope 3.7) and title IDENTICAL;
+differences are commercial (e.g. 8.3 renewal uplift: standard = 7.5%/CPI minimum; key account =
+"then-current standard pricing"). So: ONE template, dynamic terms reference (Kam agreed; label
+printed per Claude's recommendation so the 8.3 difference is visible on the signed document).
+Team signal: Shawn's Team__c is the broad "ALM Legal - Info Services"; the clean signal is the ROLE
+branch "ALM Legal - IS - Global Enterprise Solutions & Memberships" (Sales Director + 11 Sales
+Executives, 29 CW opps/180d).
+Built (KJDEV + FULLUAT): CMDT Order_Form_Terms_Config__mdt (Role_Pattern/Terms_URL/Terms_Label/
+Is_Default) with Standard (default) + Key_Account records; before-save flow Quote_Stamp_Terms
+(loops configs sorted default-last, CONTAINS(owner role, pattern), default fallback) stamps
+Terms_Label__c/Terms_URL__c on every quote save; display formulas Order_Form_Terms_Label/URL__c
+fall back to the standard terms for quotes not yet re-saved; 01-parties intro prints label + linked
+URL (merge field inside href works). Verified live: Kam-owned -> standard; owner temporarily Shawn
+-> "General Subscription Terms of Business (Key Account)" + key-account URL; owner reverted.
+Adding a team later = one CMDT record. Note for reps: terms follow the deal OWNER's role at the
+time of the last quote save.

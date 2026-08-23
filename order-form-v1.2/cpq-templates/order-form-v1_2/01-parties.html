@@ -1,4 +1,5 @@
 <!-- Section 1 + document masthead. Section number literal per ground rule 6.
+     Terms reference (2026-08-23): label + URL stamped by Quote_Stamp_Terms from Order_Form_Terms_Config__mdt (deal owner role: Key Account branch -> key-account terms; default -> standard).
      VAT (2026-08-23): when the account holds no Sales Tax Number, a REQUIRED Yes/No radio "Is your organisation registered for VAT / GST / sales tax?" appears and the number box is required + shown only on Yes (showif). Answers write back via OrderFormPoWriteback: VAT_Registered__c + Customer_VAT_Number_Captured__c on the quote, and Account.Sales_Tax_Number__c ONLY when blank (+ Sales_Tax_Number_Source__c provenance note). When known, the number prints and the question reads "Yes (number below)". Tags FINAL: white 8px (invisible; 8px kept so field geometry matches the UAT signing sessions). Flipped 2026-08-23. -->
 <table style="width:100%;border-collapse:collapse;"><tr>
   <td style="width:55%;vertical-align:bottom;"><span style="color:#003340;font-size:22px;font-weight:bold;">Order Form</span></td>
@@ -11,7 +12,7 @@
     </table>
   </td>
 </tr></table>
-<p style="font-size:9px;color:#212B2E;margin-top:10px;">This Order Form is entered into under the General Subscription Terms of Business found at: <a href="https://www.centellic.com/general-subscription-terms-of-business/" style="color:#008CA6;font-weight:bold;text-decoration:underline;white-space:nowrap;">https://www.centellic.com/general-subscription-terms-of-business/</a> and the applicable Product Schedule(s), all of which together constitute the Agreement. In the event of conflict, this Order Form prevails, then the applicable Product Schedule, then the General Terms.</p>
+<p style="font-size:9px;color:#212B2E;margin-top:10px;">This Order Form is entered into under the {!quote.Order_Form_Terms_Label__c} found at: <a href="{!quote.Order_Form_Terms_URL__c}" style="color:#008CA6;font-weight:bold;text-decoration:underline;white-space:nowrap;">{!quote.Order_Form_Terms_URL__c}</a> and the applicable Product Schedule(s), all of which together constitute the Agreement. In the event of conflict, this Order Form prevails, then the applicable Product Schedule, then the General Terms.</p>
 <table style="width:100%;border-collapse:collapse;margin-top:14px;margin-bottom:6px;"><tr><td style="border-bottom:2px solid #00C8A7;color:#003340;font-size:12px;font-weight:bold;padding:2px 0 3px 0;">1. Parties</td></tr></table>
 <table style="width:100%;font-size:9px;border-collapse:collapse;color:#212B2E;">
 <tr><td colspan="2" style="border:1px solid #C9D9DD;background-color:#003340;color:#FFFFFF;font-weight:bold;padding:5px 6px;">Company (Centellic)</td></tr>

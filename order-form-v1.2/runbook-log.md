@@ -597,3 +597,30 @@ SBQQ__Status__c = Draft - the gate deliberately keys on SBQQ__Status__c (what th
 watermark logic use); Lightning record pages need a refresh to show API-side changes.
 Q-206385 left Approved, two original lines, signatory set, NO quote document (regenerate before any
 further send test).
+
+## Zero-click PASS (2026-08-23)
+
+Q-206385: document regenerated, set Draft + Auto_Send_For_Signature__c = true (flow silent - not
+Approved), then Status -> Approved: Quote_Send_Order_Form_Zero_Click fired on the transition and
+created agreement a3GAd0000016MoTMAU, Out for Signature within seconds, no click. Transition was
+API-driven; Advanced Approvals sets the same field so the behaviour is identical - optional
+full-fidelity repeat on a fresh quote through a real AA approval during UAT.
+
+## Regression + renewal inheritance - ALL PASS (2026-08-23)
+
+FULLUAT is quiet (1 quote saved by others since 20 Aug, 0 subscriptions, 0 docs) so checks were
+driven actively:
+- Templates: the org has NO default quote template (users pick per customer - hundreds of per-customer
+  templates); ours is non-default and the only template modified since April. A legacy template
+  ("Lexology Pro - Corporate UK No name") rendered on Q-206385 with all our fields present: job
+  Completed, 0 errors.
+- Renewal automation: re-saved a line on open Renewal quote Q-190686 (3 GAR Firmwide lines) through
+  the authoritative flow - line net 32,717.45 and quote net 98,152.35 unchanged, model intact.
+- Inheritance cycle on Kam's test opp (006Ad00000Tu9vxIAB): Closed Won + SBQQ__Contracted -> Contract
+  00044252 whose Subscriptions carry the twin fields (Firmwide License; Authorised Users + count 9) ->
+  SBQQ__RenewalForecast/RenewalQuoted -> CPQ renewal quote Q-206386 created with lines carrying
+  License_Model + count and the display sentence ready ("Authorised Users - 9 named authorised
+  users..."). Both halves of QuoteLine -> Subscription -> renewal QuoteLine proven.
+Test-data residue (sandbox): the test opp is now Closed Won + contracted; Contract 00044252 and
+renewal opp/quote Q-206386 exist. Harmless; note for anyone reusing Q-206385.
+UAT matrix now: all technical cells PASS. Remaining gate = 3-person sign-off on the PDF output.

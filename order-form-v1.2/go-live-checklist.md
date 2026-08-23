@@ -43,7 +43,7 @@ residues (2, 4). Nothing technical remains before the gate phrase.**
 ## 4. Finalisation after testing (Claude Code)
 - [x] Adobe tags flipped to invisible white (8px kept for field geometry) 2026-08-23; Kam signed the white-tag document - all fields present.
 - [ ] Apply any wording tweaks that come out of the 3-person sign-off (none outstanding from Shinae).
-- [x] Branch current: all work through 2026-08-23 committed and pushed to order-form-v1.2 (51d9222; full-content diff vs origin clean).
+- [x] Branch current: all work through 2026-08-23 committed and pushed to order-form-v1.2 (1b5ba8a; full-content diff vs origin clean).
 
 ## 5. Production go-live (gated)
 - [ ] **Kam types: DEPLOY TO PRODUCTION CONFIRMED.**
@@ -51,7 +51,7 @@ residues (2, 4). Nothing technical remains before the gate phrase.**
 - [ ] Activate the 7 flows post-deploy (PROD deploys flows as Draft): Quote_Stamp_Order_Form_Fields, Quote_Stamp_Terms, QuoteLine_Stamp_License_Model, Quote_Send_Order_Form_One_Click, Quote_Send_Order_Form_Zero_Click, Quote_Sync_Captured_VAT_to_Account, Agreement_Signed_Writeback.
 - [ ] Hand-enter the Adobe integration key in PROD: Setup > Custom Settings > Order Form Adobe Settings (secret - never deployed). Verify PROD Adobe automatic status updates are enabled.
 - [ ] Run in order with CONFIRM_PROD=YES: `upload-brand-assets.js` -> `push-template-content.js` -> `create-agreement-template.js` -> `seed-license-models.js` -> `sweep-license-models.js --apply` (backfills open-deal lines; expect segment-VR stragglers).
-- [ ] Permission set to subs sales group; quick action onto PROD layout.
+- [ ] Assign Order_Form_Subscriptions_Group to the subs sales teams; quick action onto PROD layout.
 - [ ] Smoke test: one internal quote end-to-end with an internal test signer.
 - [ ] Cutover decision: template ships non-default; confirm org-default flip vs subs-team selection. Announce to sales ops.
 - Rollback at any point: template non-default + `Order_Form_Settings.Default.Active__c` kill switch + pull quick action from layout.

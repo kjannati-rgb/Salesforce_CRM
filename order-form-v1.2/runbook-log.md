@@ -723,3 +723,15 @@ E2E proven on Q-206385: flag test product -> resave -> sentence + line marker in
 both gone, zero "API" mentions. FLS added to Order_Form_Core (cross-business machinery).
 DEPENDENCY: the API Terms page is EMPTY (just the H1) - Legal/web team must publish the actual
 terms before PROD go-live references the URL.
+
+## API Terms - contract proofs to Kam's inbox (2026-08-24)
+
+Two Adobe sends on Q-206385: first used GAR Premium temporarily flagged as a stand-in (reverted;
+Kam rightly challenged it - GAR has no API access). Proper proof: line 1 swapped to the genuinely
+seeded "Lexology Pro - In House With API" + BG description (send gate needs it - person product ->
+Benefiting Group), agreement a3GAd0000016Ov7MAE Out for Signature; line swapped back, clean doc
+regenerated. Kam also asked why the main terms URL is not the API one - confirmed design: API Terms
+are ADDITIVE Product-Specific Terms; the governing sentence keeps General/Key Account, the API
+sentence carries the API URL; flipping the main URL would leave non-API lines ungoverned on mixed
+orders. Product-swap note: raw PATCH of SBQQ__Product__c keeps prices (no calc invoked) and the
+authoritative licence flow recomputes the model on the line save - clean revert both ways.

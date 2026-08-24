@@ -768,3 +768,41 @@ exceptions are Guest/PaymentPortal/eSignGlobal integration profiles on the gener
 human impact. The in-flow Approved gate stays as backstop for non-layout routes. NOTE: the flow
 gate keys on SBQQ__Status__c; the layout hide keys on record type - AA moves both, and the
 record-type route is what reps see.
+
+## Phase 6 - PROD deployment day 1 (2026-08-24, gate phrase given; go-live 1 Sep)
+
+Kam confirmed with the gate phrase; empty API Terms page accepted (published before 1 Sep).
+Pre-flight for Kam's "existing Adobe contracts" question: PROD has 3 agreement templates + 687
+agreements/30d; everything we ship is additive; the signed-writeback flow requires Quote__c
+(new field, null on all existing agreements) so it is structurally inert for them.
+
+LANDED IN PROD: 77 base components (fields/CMDT/custom setting/remote sites); trimmed Core +
+Subscriptions permsets (assigned to Kam); brand assets; "Subscription Order Form" template +
+columns; Adobe agreement template a2wPx0000002ymTIAQ (recipient, runtime-variable attachment,
+merge mappings, signed-PDF mapping); 101 licence labels + 5 API flags; 4 stamping/sync flows
+deployed AND activated (Tooling FlowDefinition PATCH activeVersionNumber - activate-flows.js);
+sweep 10,031/10,084 open-deal lines (53 multi-year-segment-VR stragglers, active flow catches
+them on next save). Adobe integration key entered by Kam (org-wide default, FULLUAT key reused,
+base URI blank = auto-discover; presence verified without reading the value).
+
+PROD-DEPLOY GOTCHAS (cost real time today):
+1. Protected custom settings are REJECTED by production deploys - visibility flipped to Public
+   (Protected only means anything in managed packages; restrict-custom-settings covers access).
+2. Formula fields referencing fields created in the SAME deploy fail "unable to obtain exclusive
+   access to this record" in PROD (sandboxes tolerate it) - stage: base fields first, dependent
+   formulas second.
+3. PROD schema THROTTLE: after ~27 new fields, ANY further field create on the big CPQ objects
+   fails "limit exceeded" ("background process - try again in 3-4 hours" on Subscription).
+   13 dependent Quote formulas + 6 Subscription twins waiting; timer armed to resume.
+4. Newly deployed fields have NO FLS for anyone (incl. sysadmin) - deploy permsets before running
+   scripts or every query shows "field not accessible" / silently returns nothing.
+5. The sweep heals by NULLING the field so the before-save flow restamps - the flow MUST be active
+   first. Ran it early once: harmlessly nulled already-blank fields (all mismatches were blank).
+6. upload-brand-assets needs explicit --logo/--watermark args (argless run misread and hit the
+   52MB request cap).
+
+REMAINING: throttled field passes; classes + 3 tests; One_Click/Zero_Click/Agreement_Signed_
+Writeback flows + activation; quick action; full (untrimmed) permsets; Approved-layout patch;
+smoke render + live send. DO NOT generate Order Forms in PROD until the fields land - the
+template cites the 13 missing formulas. Kam remaining: assign Order_Form_Subscriptions_Group
+to the sales teams for 1 Sep.

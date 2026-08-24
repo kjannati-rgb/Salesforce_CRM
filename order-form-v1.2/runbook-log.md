@@ -865,3 +865,18 @@ new column. Built + deployed KJDEV/FULLUAT/PROD, content pushed to all three, ve
 - License_Model_Display__c appends " Geography: <value>." when QuoteLine.Geography__c is set
   (sparse but real: GLOBAL/APAC/... ~1% of recent lines; legacy form printed it as a column).
 Remaining gap decisions (Kam/Shinae): counter-signature, inline T&Cs, appendix bundling, Ship To.
+
+## LIVE END-TO-END PROVEN IN PROD + cleanups (2026-08-24 evening)
+
+Kam signed agreement a3GPx000001YONVMA4 (Q-219317, sent with the day's full template: Other Terms,
+licence sentences, PO/VAT questions). ALL write-backs landed in PROD within seconds: Signed status
+sync; Customer_Signed_Date 2026-08-24; signed PDF filed on the quote (+5s); PO_Required=Yes +
+PO-TEST-3; VAT_Registered=Yes + Test123456; Account.Sales_Tax_Number filled from blank with the
+provenance note. PHASE 6 IS FULLY PROVEN END TO END.
+Cleanups: test values reverted from the REAL Freudenberg account (Sales_Tax_Number + Source) and
+quote (PO/VAT/signed date); signatory restored to the customer contact. The signed test PDF stays
+filed on the quote (harmless, titled as Q-219317); the two superseded agreements (OIfMAO, OKHMA4)
+remain Out for Signature - Kam cancels in Adobe with the other probes.
+Kam ruling on seeing the signed render: Account Manager row REMOVED from section 2 (added earlier
+today as gap #4) - row deleted from the template in all three orgs; the flow-stamped AM fields
+remain on the quote for ops/future use.

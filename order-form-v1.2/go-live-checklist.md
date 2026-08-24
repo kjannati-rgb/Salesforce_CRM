@@ -1,4 +1,4 @@
-# Order Form v1.2 - go-live checklist (as of 2026-08-23)
+# Order Form v1.2 - go-live checklist (as of 2026-08-24 - PHASE 6 IN PROGRESS)
 
 Build phases 0-5 complete; **full Adobe round trip PROVEN live** and **every technical UAT cell PASSED**
 (2026-08-23): send, sign, status sync, signed date, signed PDF, signer PO + VAT with their questions,
@@ -50,12 +50,12 @@ residues (2, 4). Nothing technical remains before the gate phrase.**
 - [x] Branch current: all work through 2026-08-24 committed and pushed to order-form-v1.2 (35c6f89; full-content diff vs origin clean).
 
 ## 5. Production go-live (gated)
-- [ ] **Kam types: DEPLOY TO PRODUCTION CONFIRMED.**
-- [ ] Deploy metadata with RunSpecifiedTests = OrderFormSignatureService_Test, OrderFormSignedWriteback_Test, OrderFormPoWriteback_Test (PROD has pre-existing red tests).
-- [ ] Activate the 7 flows post-deploy (PROD deploys flows as Draft): Quote_Stamp_Order_Form_Fields, Quote_Stamp_Terms, QuoteLine_Stamp_License_Model, Quote_Send_Order_Form_One_Click, Quote_Send_Order_Form_Zero_Click, Quote_Sync_Captured_VAT_to_Account, Agreement_Signed_Writeback.
+- [x] **Kam typed DEPLOY TO PRODUCTION CONFIRMED (2026-08-24). Go-live 1 Sep; API Terms page to be published before then (Kam).**
+- [~] Deploy metadata: PARTIAL 2026-08-24. Landed: 77 base components (fields/CMDT/setting/remote sites) + trimmed Core & Subscriptions permsets (assigned to Kam). WAITING on a PROD schema throttle (platform background process, ~3-4h): 13 dependent Quote formula fields + 6 Subscription twins, then classes with RunSpecifiedTests = OrderFormSignatureService_Test, OrderFormSignedWriteback_Test, OrderFormPoWriteback_Test (PROD has pre-existing red tests).
+- [~] Flows: 4 of 7 deployed AND ACTIVATED 2026-08-24 (Quote_Stamp_Order_Form_Fields, Quote_Stamp_Terms, QuoteLine_Stamp_License_Model, Quote_Sync_Captured_VAT_to_Account). Remaining 3 (One_Click, Zero_Click, Agreement_Signed_Writeback) wait on the Apex classes (throttled pass).
 - [ ] Hand-enter the Adobe integration key in PROD: Setup > Custom Settings > Order Form Adobe Settings (secret - never deployed). Verify PROD Adobe automatic status updates are enabled.
-- [ ] Run in order with CONFIRM_PROD=YES: `upload-brand-assets.js` -> `push-template-content.js` -> `create-agreement-template.js` -> `seed-license-models.js` -> `sweep-license-models.js --apply` (backfills open-deal lines; expect segment-VR stragglers).
+- [x] Scripts ALL RUN 2026-08-24: brand assets (logo+watermark); "Subscription Order Form" template + columns; Adobe agreement template a2wPx0000002ymTIAQ (existing 3 templates + live agreement stream untouched); 101 licence labels + 5 API flags; sweep 10,031/10,084 open-deal lines (53 segment-VR stragglers, flow catches them on next save). LESSON: activate QuoteLine_Stamp_License_Model BEFORE the sweep - it heals by null-then-restamp.
 - [ ] Assign Order_Form_Subscriptions_Group to the subs sales teams; run scripts/patch-approved-layout.py against a FRESHLY RETRIEVED PROD Approved layout (Send for Signature hidden until approval via record-type layout, like Generate Document; done in KJDEV+FULLUAT 2026-08-24).
-- [ ] Smoke test: one internal quote end-to-end with an internal test signer.
+- [ ] Smoke test: one internal quote end-to-end with an internal test signer. DO NOT generate Order Forms in PROD until the throttled fields land (template cites them).
 - [ ] Cutover decision: template ships non-default; confirm org-default flip vs subs-team selection. Announce to sales ops.
 - Rollback at any point: template non-default + `Order_Form_Settings.Default.Active__c` kill switch + pull quick action from layout.

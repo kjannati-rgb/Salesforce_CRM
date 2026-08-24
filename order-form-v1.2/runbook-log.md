@@ -880,3 +880,24 @@ remain Out for Signature - Kam cancels in Adobe with the other probes.
 Kam ruling on seeing the signed render: Account Manager row REMOVED from section 2 (added earlier
 today as gap #4) - row deleted from the template in all three orgs; the flow-stamped AM fields
 remain on the quote for ops/future use.
+
+## ALM sub sold in EMEA / HK - cross-entity render test (2026-08-24, Kam request)
+
+FULLUAT, Q-206385, line temporarily swapped to Law.com (Subs - Law.com family), fully reverted
+after. Three billing entities exercised; entity block, governing law and the region-based licence
+rule all flip correctly:
+- LBR (EMEA): LBR entity + English law + Benefiting Group (with description).
+- GHK (Hong Kong): HK entity (reg 1701157, Jubilee Centre Wan Chai) + English law + Benefiting Group.
+- ALM (US control): ALM GLOBAL, LLC (13-3273851, NY) + New York law + Limited Access "up to 25
+  authorised users" (from Number of Seats).
+PDFs delivered to Kam.
+FINDING (cross-feature): the REV-60 dispatch-code validation rule ("1 ALM line(s) still need a
+required code: LAWM...") fires on EVERY quote save while an ALM line lacks its dispatch code -
+which also blocks the Order Form stamping flows (before-save can't run if the save is rejected),
+so entity/terms stamps go stale on such quotes. No real-world exposure: the same rule forces reps
+to enter codes at QLE save, so genuine ALM quotes always carry them - only API-built lines skip it
+(fix in tests: set Dispatch_Method_Code__c, e.g. "OS"). Confirms the REV-60 collision memo's
+"VRs gate all quote saves" dynamic - remember when REV-60's Calculate-time automation is built.
+Sequencing for entity tests: set opp Billing_Entity FIRST is not enough - line DML can re-derive
+it; order used = line DML, set entity, touch line (licence restamp reads entity at line save),
+quote resave (entity/terms stamp), verify both before doc gen.

@@ -735,3 +735,20 @@ are ADDITIVE Product-Specific Terms; the governing sentence keeps General/Key Ac
 sentence carries the API URL; flipping the main URL would leave non-API lines ungoverned on mixed
 orders. Product-swap note: raw PATCH of SBQQ__Product__c keeps prices (no calc invoked) and the
 authoritative licence flow recomputes the model on the line save - clean revert both ways.
+
+## API Terms URL hyperlinked (2026-08-24, Kam feedback on the emailed contract)
+
+Kam: the API URL must be a bold teal hyperlink like the General one. Three engine gotchas found:
+1. The doc engine ESCAPES HTML in body-text merges - a formula emitting an anchor prints the raw
+   markup. Anchors must live in the template HTML; merges can only fill text/attributes.
+2. An anchor whose href merges to EMPTY 400s the whole render ("Error generating document: Bad
+   Request" queueables - same class as the empty-img gotcha). Fix: hardcode the href.
+3. An anchor with EMPTY TEXT auto-prints its href as the visible text (so the URL appeared on
+   non-API orders even with all merge fields blank). Fix: permanent zero-width space (&#8203;)
+   inside the anchor so it is never empty.
+Final markup in 01-parties.html: conditional prefix merge + static-href anchor styled like the
+General link, anchor text = conditional URL merge + &#8203;, conditional full-stop merge.
+Fields: Order_Form_API_Terms_Sentence__c (prefix), _URL__c (link text), _End__c (full stop), all
+blank when Includes_API_Access__c is false. Residue on non-API orders: an invisible zero-width
+link annotation (no visible or practically clickable artefact). Proven both ways on fresh renders;
+Q-206385 left clean.

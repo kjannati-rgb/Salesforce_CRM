@@ -8,6 +8,16 @@
     <description>Shared by every Order Form template (any business): signatory + auto-send, entity/governing-law/terms stamps, PO + VAT capture and Adobe tags, contact display formulas, Adobe agreement link, Send-for-Signature invocable, template push external ids.</description>
     <hasActivationRequired>false</hasActivationRequired>
     <fieldPermissions>
+        <editable>false</editable>
+        <field>SBQQ__Quote__c.Order_Form_API_Terms_URL__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>SBQQ__Quote__c.Order_Form_API_Terms_End__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>Product2.API_Access__c</field>
         <readable>true</readable>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>API_Access__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>This product includes API access, so the Order Form additionally cites the Product-Specific Terms (API Terms). Product names cannot be used as the signal (LIKE matches e.g. Capital). Seeded by seed-license-models.js; tick for future API SKUs.</description>
+    <externalId>false</externalId>
+    <label>API Access</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Checkbox</type>
+</CustomField>

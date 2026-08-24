@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Order_Form_API_Terms_Sentence__c</fullName>
+    <description>Conditional Order Form intro sentence: printed only when the quote includes an API-access product. The API Terms are Product-Specific Terms - additive to the governing General/Key Account Terms, scoped to the marked lines.</description>
+    <externalId>false</externalId>
+    <formula>IF(Includes_API_Access__c, 'Products marked &quot;Includes API access&quot; are additionally subject to the Product-Specific Terms (API Terms) found at: https://www.centellic.com/product-specific-terms-api-terms/.', '')</formula>
+    <formulaTreatBlanksAs>BlankAsBlank</formulaTreatBlanksAs>
+    <label>Order Form API Terms Sentence</label>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

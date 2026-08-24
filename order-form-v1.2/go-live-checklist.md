@@ -43,8 +43,10 @@ residues (2, 4). Nothing technical remains before the gate phrase.**
 ## 4. Finalisation after testing (Claude Code)
 - [x] Adobe tags flipped to invisible white (8px kept for field geometry) 2026-08-23; Kam signed the white-tag document - all fields present.
 - [ ] Apply any wording tweaks that come out of the 3-person sign-off (none outstanding from Shinae).
+- [x] API Terms flagging built + proven (2026-08-24): API-access products (5: Lexology Pro With API x2, Intelligence/Scanner API, Inform Analytics API) print "Includes API access (API Terms apply)" on the line and a conditional intro sentence citing the Product-Specific Terms (API Terms). Additive to General/Key Account terms, scoped to API lines - mixed contracts need no special handling. Explicit Product2 checkbox (name matching unsafe - "Capital" contains "api").
+- [ ] **DEPENDENCY (Legal/web):** the API Terms page https://www.centellic.com/product-specific-terms-api-terms/ is EMPTY (heading only). Publish the actual terms before PROD go-live - the Order Form cites this URL whenever an API product is on the order.
 - [x] Template renamed for the business (2026-08-23): rep-facing picker name is now "Subscription Order Form" (was "Order Form v1.2 - Subscriptions"); live in both sandboxes, PROD picks it up at Phase 6 via the push script. Future forms follow the pattern: Contributor Order Form, Events Order Form (both confirmed coming, on CPQ Quotes, each with its own line table + terms; contributor signal = Expert Insight product families).
-- [x] Branch current: all work through 2026-08-23 committed and pushed to order-form-v1.2 (9c031a7; full-content diff vs origin clean).
+- [x] Branch current: all work through 2026-08-23 committed and pushed to order-form-v1.2 (see latest push; full-content diff vs origin clean).
 
 ## 5. Production go-live (gated)
 - [ ] **Kam types: DEPLOY TO PRODUCTION CONFIRMED.**

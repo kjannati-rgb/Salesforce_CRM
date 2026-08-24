@@ -54,6 +54,22 @@
             <targetReference>Loop_Configs</targetReference>
         </connector>
     </assignments>
+    <assignments>
+        <name>Set_API_Flag</name>
+        <label>Stamp Includes API Access</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Includes_API_Access__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>HasApiLine</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Configs</targetReference>
+        </connector>
+    </assignments>
     <decisions>
         <name>Decision_Config_Match</name>
         <label>Does this config apply?</label>
@@ -110,6 +126,11 @@
     </decisions>
     <environments>Default</environments>
     <formulas>
+        <name>HasApiLine</name>
+        <dataType>Boolean</dataType>
+        <expression>NOT(ISBLANK({!Get_API_Line.Id}))</expression>
+    </formulas>
+    <formulas>
         <name>OwnerRoleName</name>
         <dataType>String</dataType>
         <expression>{!$Record.SBQQ__Opportunity2__r.Owner.UserRole.Name}</expression>
@@ -141,6 +162,34 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordLookups>
+        <name>Get_API_Line</name>
+        <label>Get one API-access quote line</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Set_API_Flag</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SBQQ__Quote__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>API_Access__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>SBQQ__QuoteLine__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>Get_Configs</name>
         <label>Get terms configs</label>
         <locationX>0</locationX>
@@ -159,7 +208,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_Configs</targetReference>
+            <targetReference>Get_API_Line</targetReference>
         </connector>
         <object>SBQQ__Quote__c</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>

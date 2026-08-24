@@ -698,3 +698,28 @@ this session, but PermissionSet is a deletable sobject: REST DELETE on the recor
 zero PermissionSetAssignments; sandbox-guarded) removed it from KJDEV and FULLUAT - 204 both.
 Order_Form_Core / Order_Form_Subscriptions / Order_Form_Subscriptions_Group are now the only Order
 Form permission components anywhere (repo + orgs).
+
+## API Terms (third subscriptions terms document) - additive, product-driven (2026-08-24)
+
+Kam: products sold with API access (Lexology Pro among them) are also subject to
+centellic.com/product-specific-terms-api-terms/. Key design point: these are PRODUCT-SPECIFIC
+terms - ADDITIVE to whichever base terms govern (General or Key Account), scoped to the API lines
+only - so mixed API/non-API contracts are the normal case, handled by scope language, not a choice.
+Signal gotcha: name matching is unusable (SOQL LIKE '%API%' matches every "Capital" product).
+True API catalog = 5 products: Lexology Pro In House/Law Firm With API, Lexology PRO
+Intelligence/Scanner API, Lexology Inform Analytics API (note: Analytics API lives in the
+Lexology Intelligence family, outside the licence-seeding families - the seed script queries the
+API list by Name, not Family).
+Build (deployed KJDEV + FULLUAT, seeded 5/5 both): Product2.API_Access__c checkbox (explicit,
+product-ops-maintained); QuoteLine.API_Access__c formula checkbox (flow-filterable);
+Quote.Includes_API_Access__c recomputed on every quote save by Quote_Stamp_Terms (new Get Records
+on the line formula field + assignment - before-save flows CAN Get Records; they cannot filter on
+cross-object paths, hence the line-level formula field); License_Model_Display__c appends
+"Includes API access (API Terms apply)." (wrapped in TRIM for licence-blank API-only products);
+Order_Form_API_Terms_Sentence__c conditional intro sentence (single-quoted formula string - &quot;
+entities inside a double-quoted formula string decode into real quotes and break compilation);
+01-parties.html prints the sentence after the conflict-order sentence (blank merge prints nothing).
+E2E proven on Q-206385: flag test product -> resave -> sentence + line marker in the PDF; revert ->
+both gone, zero "API" mentions. FLS added to Order_Form_Core (cross-business machinery).
+DEPENDENCY: the API Terms page is EMPTY (just the H1) - Legal/web team must publish the actual
+terms before PROD go-live references the URL.

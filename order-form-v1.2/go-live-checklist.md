@@ -50,7 +50,7 @@ residues (2, 4). Nothing technical remains before the gate phrase.**
 - [x] Gap items #4 + #6 built (2026-08-24); #4 then REVERSED by Kam on seeing the signed render - the Account manager row is removed from the document (flow-stamped AM fields stay on the quote for ops). Originally: "Account manager (Centellic)" row in section 2 (flow-stamped from the quote Sales Rep; User.Name is compound - flow formulas need FirstName+LastName); Geography folds into the Licence Model column (" Geography: Global.") when set - no new column, per Kam. Live in all three orgs, verified on render.
 - [ ] Legacy-contract gap decisions remaining (Kam/Shinae): company counter-signature (single vs dual signer)? T&Cs inline vs URL reference (confirm)? customer-appendix bundling into the signed PDF (build)? Ship To address?
 - [x] Send for Signature hidden until approval (2026-08-24): the action lives only on the Approved record-type layout, exactly like Generate Document (AA flips the record type on approval). Live in KJDEV + FULLUAT; all human profiles verified on the Approved-layout assignment; flow gate stays as backstop.
-- [x] Branch current: all work through 2026-08-24 committed and pushed to order-form-v1.2 (35c6f89; full-content diff vs origin clean).
+- [x] Branch current: all work through 2026-08-24 evening committed and pushed to order-form-v1.2 (acdefed; full-content diff vs origin clean).
 
 ## 5. Production go-live (gated)
 - [x] **Kam typed DEPLOY TO PRODUCTION CONFIRMED (2026-08-24). Go-live 1 Sep; API Terms page to be published before then (Kam).**

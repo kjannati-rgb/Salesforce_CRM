@@ -752,3 +752,19 @@ Fields: Order_Form_API_Terms_Sentence__c (prefix), _URL__c (link text), _End__c 
 blank when Includes_API_Access__c is false. Residue on non-API orders: an invisible zero-width
 link annotation (no visible or practically clickable artefact). Proven both ways on fresh renders;
 Q-206385 left clean.
+
+## Send for Signature hidden until approval - record-type layout, like Generate Document (2026-08-24)
+
+Kam asked whether to hide Send for Signature when the quote is not approved, then pointed at the
+Generate Document button's logic. That logic = RECORD-TYPE LAYOUTS, not dynamic actions: AA flips
+the quote record type Draft -> Pending -> Approved and each record type has its own page layout
+(Quote Layout / Pending / Approved); Generate_Quote_Doc sits only on the Approved layout. Done the
+same: Send_for_Signature quick action inserted into the Approved layout's platformActionList right
+after SBQQ__GenerateDocument (scripts/patch-approved-layout.py patches a FRESHLY RETRIEVED layout -
+never keep an org layout copy in the repo, stale-layout deploys delete live elements). Deployed
+KJDEV + FULLUAT; action confirmed absent from Pending/Quote Layout. Assignment check (Tooling
+ProfileLayout): Approved RT -> Approved layout for all 38 human profiles incl. sysadmin; the only
+exceptions are Guest/PaymentPortal/eSignGlobal integration profiles on the generic layout - no
+human impact. The in-flow Approved gate stays as backstop for non-layout routes. NOTE: the flow
+gate keys on SBQQ__Status__c; the layout hide keys on record type - AA moves both, and the
+record-type route is what reps see.

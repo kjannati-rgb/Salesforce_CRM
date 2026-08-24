@@ -54,7 +54,7 @@ residues (2, 4). Nothing technical remains before the gate phrase.**
 - [ ] Activate the 7 flows post-deploy (PROD deploys flows as Draft): Quote_Stamp_Order_Form_Fields, Quote_Stamp_Terms, QuoteLine_Stamp_License_Model, Quote_Send_Order_Form_One_Click, Quote_Send_Order_Form_Zero_Click, Quote_Sync_Captured_VAT_to_Account, Agreement_Signed_Writeback.
 - [ ] Hand-enter the Adobe integration key in PROD: Setup > Custom Settings > Order Form Adobe Settings (secret - never deployed). Verify PROD Adobe automatic status updates are enabled.
 - [ ] Run in order with CONFIRM_PROD=YES: `upload-brand-assets.js` -> `push-template-content.js` -> `create-agreement-template.js` -> `seed-license-models.js` -> `sweep-license-models.js --apply` (backfills open-deal lines; expect segment-VR stragglers).
-- [ ] Assign Order_Form_Subscriptions_Group to the subs sales teams; quick action onto PROD layout.
+- [ ] Assign Order_Form_Subscriptions_Group to the subs sales teams; run scripts/patch-approved-layout.py against a FRESHLY RETRIEVED PROD Approved layout (Send for Signature hidden until approval via record-type layout, like Generate Document; done in KJDEV+FULLUAT 2026-08-24).
 - [ ] Smoke test: one internal quote end-to-end with an internal test signer.
 - [ ] Cutover decision: template ships non-default; confirm org-default flip vs subs-team selection. Announce to sales ops.
 - Rollback at any point: template non-default + `Order_Form_Settings.Default.Active__c` kill switch + pull quick action from layout.

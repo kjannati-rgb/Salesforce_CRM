@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Account_Manager_Email_Phone__c</fullName>
+    <description>Order Form section 2: the Centellic account manager (quote Sales Rep) email / phone. Flow-stamped (see Account_Manager_Name__c for why not a formula).</description>
+    <externalId>false</externalId>
+    <label>Account Manager Email/Phone (Display)</label>
+    <length>255</length>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

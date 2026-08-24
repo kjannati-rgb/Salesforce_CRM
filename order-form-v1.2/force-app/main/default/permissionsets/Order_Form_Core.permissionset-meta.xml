@@ -9,6 +9,16 @@
     <hasActivationRequired>false</hasActivationRequired>
     <fieldPermissions>
         <editable>false</editable>
+        <field>SBQQ__Quote__c.Account_Manager_Name__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>SBQQ__Quote__c.Account_Manager_Email_Phone__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>SBQQ__Quote__c.Other_Terms_Display__c</field>
         <readable>true</readable>
     </fieldPermissions>

@@ -204,6 +204,9 @@
                 <stringValue>None</stringValue>
             </value>
         </assignmentItems>
+    <connector>
+            <targetReference>Set_Account_Manager</targetReference>
+        </connector>
     </assignments>
     <assignments>
         <name>Assign_Other_Terms_Copy</name>
@@ -215,6 +218,29 @@
             <operator>Assign</operator>
             <value>
                 <elementReference>$Record.Product_Specific_Terms__c</elementReference>
+            </value>
+        </assignmentItems>
+    <connector>
+            <targetReference>Set_Account_Manager</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Set_Account_Manager</name>
+        <label>Stamp account manager name + email/phone</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Account_Manager_Name__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>AMName</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Account_Manager_Email_Phone__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>AMEmailPhone</elementReference>
             </value>
         </assignmentItems>
     </assignments>
@@ -376,6 +402,16 @@
         </rules>
     </decisions>
     <environments>Default</environments>
+    <formulas>
+        <name>AMName</name>
+        <dataType>String</dataType>
+        <expression>IF(ISBLANK({!$Record.SBQQ__SalesRep__c}), "", TRIM({!$Record.SBQQ__SalesRep__r.FirstName} &amp; " " &amp; {!$Record.SBQQ__SalesRep__r.LastName}))</expression>
+    </formulas>
+    <formulas>
+        <name>AMEmailPhone</name>
+        <dataType>String</dataType>
+        <expression>IF(ISBLANK({!$Record.SBQQ__SalesRep__c}), "", {!$Record.SBQQ__SalesRep__r.Email} &amp; IF(ISBLANK({!$Record.SBQQ__SalesRep__r.Phone}), "", " / " &amp; {!$Record.SBQQ__SalesRep__r.Phone}))</expression>
+    </formulas>
     <formulas>
         <name>BillingEntityText</name>
         <dataType>String</dataType>

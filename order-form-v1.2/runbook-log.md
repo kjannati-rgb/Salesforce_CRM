@@ -852,3 +852,16 @@ PDF (Freudenberg security doc) - our send attaches only the Order Form; buildabl
 agreement attachments; (4) Account Manager + email printed; (5) Ship To address; (6) per-line
 Geography column; (7) product-brand logo (already ruled: Centellic umbrella). NOTE: the live
 write-back test is still open - both test agreements remain Out for Signature.
+
+## Gap items built: Account Manager row + Geography in the licence column (2026-08-24)
+
+Kam: build gap #4 (Account Manager) and fold #6 (Geography) into the Licence Model column - no
+new column. Built + deployed KJDEV/FULLUAT/PROD, content pushed to all three, verified on render:
+- Section 2 gains an "Account manager (Centellic)" row between Main and Billing: two flow-stamped
+  text fields Account_Manager_Name__c / Account_Manager_Email_Phone__c from SBQQ__SalesRep__r.
+  Deliberately NOT formulas (PROD Quote is at the 15-relationship formula-spanning cap).
+  GOTCHA: User.Name is a COMPOUND field - flow formulas silently return blank for
+  {!$Record.SBQQ__SalesRep__r.Name}; use FirstName & " " & LastName.
+- License_Model_Display__c appends " Geography: <value>." when QuoteLine.Geography__c is set
+  (sparse but real: GLOBAL/APAC/... ~1% of recent lines; legacy form printed it as a column).
+Remaining gap decisions (Kam/Shinae): counter-signature, inline T&Cs, appendix bundling, Ship To.

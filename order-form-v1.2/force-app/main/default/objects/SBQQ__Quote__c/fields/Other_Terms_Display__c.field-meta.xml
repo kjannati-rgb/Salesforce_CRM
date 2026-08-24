@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Other_Terms_Display__c</fullName>
+    <description>Order Form section 8 "Other Terms": flow-stamped copy of Product_Specific_Terms__c (the per-deal product commitments CS/reps already capture, ~7.6% of quotes), or the literal "None" when blank. Stamped by Quote - Stamp Order Form Fields on every save.</description>
+    <externalId>false</externalId>
+    <label>Other Terms (Display)</label>
+    <length>32768</length>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>LongTextArea</type>
+    <visibleLines>5</visibleLines>
+</CustomField>

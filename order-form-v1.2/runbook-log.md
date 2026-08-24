@@ -825,3 +825,30 @@ Kam. Template renamed back to "Subscription Order Form".
 REMAINING: one live end-to-end send with an internal signer (proves key/status-sync/write-backs in
 PROD); Kam assigns Order_Form_Subscriptions_Group to sales teams for 1 Sep; Legal publishes the
 API Terms page before 1 Sep.
+
+## Section 8 "Other Terms" - Product Specific Terms now print (2026-08-24)
+
+Kam (during the PROD live-test review): the quote's Product Specific Terms must print, named
+"Other Terms" - and the legacy signed contract for Q-219317 confirms the name: the old Lexology
+PRO order form has an OTHER TERMS section carrying exactly this content. PROD usage: 2,790 of
+36,683 quotes in the last 365d (7.6%) carry real per-deal commitments (long-text fields cannot be
+SOQL-filtered; counted client-side).
+Build (pattern of section 6): Other_Terms_Display__c (LTA 32768) stamped by
+Quote_Stamp_Order_Form_Fields ("None" when blank); 07b-other-terms.html (OF-V12-C07B/S85);
+Execution renumbered 8 -> 9; FLS in Core. Deployed KJDEV + FULLUAT + PROD; content pushed to all
+three; verified both ways on a FULLUAT render. Gotchas: KJDEV deploys from inside the sfdx
+project hit source-tracking conflicts (use --ignore-conflicts; staged-dir deploys bypass
+tracking); quotes not yet re-saved print the section blank until their next save.
+
+## Gap analysis vs the legacy signed contract (2026-08-24)
+
+Kam shared Q-219317's ORIGINAL signed contract (legacy Lexology PRO form + inline T&Cs + LBR
+countersignature + Freudenberg security appendix; scanned, no text layer - pages read as images).
+Covered/better: Other Terms (new), PO/VAT questions, entity/governing-law, licence sentences.
+Open gaps (decisions, not defects): (1) company COUNTER-SIGNATURE - legacy dual-signed, ours
+single-signer by v1.2 design (Adobe supports a second internal signer); (2) T&Cs INLINE vs our
+URL reference - deliberate, confirm with Shinae; (3) CUSTOMER APPENDIX bundling into the signed
+PDF (Freudenberg security doc) - our send attaches only the Order Form; buildable via additional
+agreement attachments; (4) Account Manager + email printed; (5) Ship To address; (6) per-line
+Geography column; (7) product-brand logo (already ruled: Centellic umbrella). NOTE: the live
+write-back test is still open - both test agreements remain Out for Signature.

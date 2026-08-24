@@ -103,6 +103,7 @@ async function upsert(type, extId, fields) {
     ["OF-V12-C06", "OF v1.2 - 05 Governing law", "HTML", "05-governing-law.html"],
     ["OF-V12-C06B", "OF v1.2 - 06 Special instructions", "HTML", "06-special-instructions.html"],
     ["OF-V12-C07", "OF v1.2 - 07 Special terms", "HTML", "07-special-terms.html"],
+    ["OF-V12-C07B", "OF v1.2 - 08 Other terms", "HTML", "07b-other-terms.html"],
     ["OF-V12-C08", "OF v1.2 - 08 Execution", "HTML", "08-execution.html"],
     ["OF-V12-CLINES", "OF v1.2 - Line items", "Line Items", null],
   ];
@@ -139,7 +140,8 @@ async function upsert(type, extId, fields) {
     ["OF-V12-S70", "5 Governing law", 70, "OF-V12-C06"],
     ["OF-V12-S75", "6 Special instructions", 75, "OF-V12-C06B"],
     ["OF-V12-S80", "7 Special terms", 80, "OF-V12-C07"],
-    ["OF-V12-S90", "8 Execution", 90, "OF-V12-C08"],
+    ["OF-V12-S85", "8 Other terms", 85, "OF-V12-C07B"],
+    ["OF-V12-S90", "9 Execution", 90, "OF-V12-C08"],
   ];
   for (const [suffix, tid] of templates) {
     for (const [ext, name, order, contentExt] of sections) {

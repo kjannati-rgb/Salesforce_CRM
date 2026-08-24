@@ -172,6 +172,9 @@
                 <stringValue>None</stringValue>
             </value>
         </assignmentItems>
+    <connector>
+            <targetReference>Decision_Other_Terms</targetReference>
+        </connector>
     </assignments>
     <assignments>
         <name>Assign_Special_Instructions_Copy</name>
@@ -185,7 +188,61 @@
                 <elementReference>$Record.Special_Instructions__c</elementReference>
             </value>
         </assignmentItems>
+    <connector>
+            <targetReference>Decision_Other_Terms</targetReference>
+        </connector>
     </assignments>
+    <assignments>
+        <name>Assign_Other_Terms_None</name>
+        <label>Other Terms - None</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Other_Terms_Display__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>None</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Assign_Other_Terms_Copy</name>
+        <label>Other Terms - copy Product Specific Terms</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Other_Terms_Display__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Product_Specific_Terms__c</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <name>Decision_Other_Terms</name>
+        <label>Product Specific Terms present?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Other_Terms_None</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Blank - print None</defaultConnectorLabel>
+        <rules>
+            <name>Other_Terms_Present</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Product_Specific_Terms__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Other_Terms_Copy</targetReference>
+            </connector>
+            <label>Has Product Specific Terms</label>
+        </rules>
+    </decisions>
     <decisions>
         <name>Decision_Billing_Found</name>
         <label>Billing entity config found?</label>

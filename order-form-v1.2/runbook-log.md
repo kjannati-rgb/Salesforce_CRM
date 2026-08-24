@@ -806,3 +806,22 @@ Writeback flows + activation; quick action; full (untrimmed) permsets; Approved-
 smoke render + live send. DO NOT generate Order Forms in PROD until the fields land - the
 template cites the 13 missing formulas. Kam remaining: assign Order_Form_Subscriptions_Group
 to the sales teams for 1 Sep.
+
+## Phase 6 - PROD deployment COMPLETE (2026-08-24 evening)
+
+Throttle cleared ~17:10 UK (Kam's "try again" probe caught it). Landed in order: 6 Subscription
+twins (6/6); 13-formula pass revealed a REAL limit once the throttle noise cleared -
+Legal_Contact_Email_Phone/Name_Title exceed PROD Quote's 15-unique-relationship formula-spanning
+cap ("16 unique relationships while only 15 are allowed"). Both SKIPPED IN PROD: the v1.3 document
+dropped the Legal/notices row so nothing consumes them (SF support can raise the cap if ever
+needed; sandboxes accepted them - never trust sandbox for spanning headroom). GOTCHA: prod deploys
+are ATOMIC - the "11/13" pass rolled back entirely; redeploy of the clean 11 succeeded.
+Then: classes + 3 test classes 16/16 green (cov 93-94%), quick action, full permission sets +
+group; One_Click/Zero_Click/Agreement_Signed_Writeback deployed + ACTIVATED (all 7 now active);
+Approved layout patched (fresh retrieve + patch-approved-layout.py). Smoke render PASSED on
+Q-219317 - the exact quote Kam's Bad Request came from: entity block, terms link, licence sentence,
+real term dates 31/08/2026-30/08/2028, live payment terms Net 45, conditional PO tags. PDF sent to
+Kam. Template renamed back to "Subscription Order Form".
+REMAINING: one live end-to-end send with an internal signer (proves key/status-sync/write-backs in
+PROD); Kam assigns Order_Form_Subscriptions_Group to sales teams for 1 Sep; Legal publishes the
+API Terms page before 1 Sep.

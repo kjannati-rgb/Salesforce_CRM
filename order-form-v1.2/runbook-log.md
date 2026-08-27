@@ -988,3 +988,22 @@ Quote_AfterSave_MasterFlow sync path - flagged to him to move to his async path.
 BUDGET AFTER TODAY (rep-save transaction): rh2 ~-17, REV-60 opp -1 sync (+ quote-side -9 pending
 Saurabh), Order Form diet -3 (26 Aug). Remaining big rocks: OpportunityTrigger 32 (Saurabh audit),
 quote master sync path. Trace-on-rep + no-op A/B measurement technique now standard.
+
+## REV-60 engine: transaction idempotency cache (2026-08-27 evening)
+
+Kam: "Quote_ALM_PromoDispatch_Stamp - what can we do?" Full async RULED OUT: the quote master
+chain ends in the save-blocking Custom Error (Err_ALM_Codes_Required) fed by the engine's gap
+verdict - live enforcement (it blocked my own API save on 26 Aug), and the engine already yields
+on saturated transactions (hasQueryHeadroom). The real waste = REPEAT invocations: CPQ saves the
+same quote 3-4x per transaction and Layer 1 re-ran its full query+derive each time.
+BUILT: transaction idempotency cache in ALMPromoDispatchEngine.stampQuote - static per-transaction
+result+signature maps; repeat invocations run ONE probe query (lines + quote derivation inputs);
+unchanged signature -> cached FlowResult returned (gap verdict intact); any change -> full fresh
+run; cache disabled in tests by default (txnCacheEnabled) with a dedicated cache test (fresh ->
+cached-reuse -> poisoned-signature -> rerun). Cost ~9-10 -> ~4-5 per transaction, behaviour
+identical. Gotchas: SBQQ__ProductCode__c not writeable in tests; bare QuoteLine inserts blow up on
+CPQ QuoteLineAfter trigger in test context - poison-the-signature is the testable change-path.
+47/47 tests green KJDEV. FULLUAT needed the ALM_Code_Engine_Settings CMDT fields deployed first
+(its REV-60 config schema was behind repo). PROD deploy queued behind another (failed) deploy -
+landing pending; note a third-party PROD deploy failed 16:03 with 35 test errors (someone else
+deploying - possibly Saurabh mid-work).

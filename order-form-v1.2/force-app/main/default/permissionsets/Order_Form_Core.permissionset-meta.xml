@@ -49,6 +49,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>SBQQ__Quote__c.Order_Form_Brand_Logo_URL__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>SBQQ__Quote__c.Order_Form_API_Terms_Sentence__c</field>
         <readable>true</readable>
     </fieldPermissions>

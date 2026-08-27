@@ -1,10 +1,13 @@
-<!-- Page header, rendered on every page. {{LOGO_URL}} is substituted by
-     push-template-content.js with the target org's instance URL + the
-     'Centellic_Logo_2026' Document id (upload-brand-assets.js creates it).
-     NOTE: the image URL must be ABSOLUTE - a relative /servlet path makes the
-     doc engine fail the whole render with "Bad Request". -->
+<!-- Page header, rendered on every page. The logo is BRAND-AWARE: the merged
+     quote field Order_Form_Brand_Logo_URL__c carries the absolute ImageServer URL
+     of the lead brand's logo Document (stamped by Quote_Stamp_Order_Form_Fields
+     from Order_Form_Brand_Logo__mdt; Centellic is the default row). The field must
+     never be blank on a quote that renders - an empty src fails the whole render
+     with "Bad Request", so PROD rollout requires the stamp flow live + a backfill
+     sweep BEFORE this header version is pushed. upload-brand-logos.js loads the
+     per-brand Documents. -->
 <table style="width:100%;border-collapse:collapse;"><tr>
-  <td style="width:60%;vertical-align:bottom;"><img src="{{LOGO_URL}}" alt="Centellic" height="24"/></td>
+  <td style="width:60%;vertical-align:bottom;"><img src="{!quote.Order_Form_Brand_Logo_URL__c}" alt="" height="24"/></td>
   <td style="width:40%;text-align:right;vertical-align:bottom;color:#5A6E74;font-size:8px;">Order Form | {!quote.Name}</td>
 </tr></table>
 <table style="width:100%;border-collapse:collapse;margin-top:4px;"><tr>

@@ -1014,3 +1014,39 @@ Section 1 Customer block gains "Shipping / delivery address" under the registere
 straight from the quote's standard CPQ shipping fields (SBQQ__ShippingStreet/City/State/
 PostalCode/Country - CPQ auto-copies them from the Account; no new fields, no flow work).
 Pushed to all three orgs; verified on a FULLUAT render.
+
+## Brand-aware header logos (2026-08-27 evening, Kam: "invoices are brand specific")
+
+Kam supplied the BrandHub SharePoint logo library (globebpcrm/sites/BH/Logos) - 12 brand folders.
+Pulled 11 positive (on-white) master PNGs via his Chrome session -> localhost relay (SharePoint
+REST GetFileByServerRelativeUrl; folders each have a master subfolder; GAR's is "Full & Short
+version"). Selection: <Brand>_RGB_full/long version_positive.png; Lexology=logo_blue; Index/PRO=
+single line. Centellic doc already existed.
+
+DESIGN (single template, brand-aware header - NOT template-per-brand):
+- Feasibility: header already merges {!quote.Name}, so header merges substitute; proven img-src
+  attribute merges work too (GAR PNG embedded 1608x288 in rendered PDF).
+- Lead brand = Brand__c of the HIGHEST SBQQ__NetTotal__c line that has a brand (flow two-variable
+  max loop; family can't split GAR/GCR/GIR - Brand__c is a CPQ twin field from Product2, brand-
+  granular, ~75% filled). "Lexology Pro" products carry Brand=Lexology -> Lexology logo (PRO logo
+  uploaded but unmapped, in reserve).
+- Order_Form_Brand_Logo__mdt (Brand_Value__c exact match / Logo_Document_Name__c / Is_Default__c):
+  13 rows - GAR GCR GIR GRR IAM WTR LACCA, LL->Latin_Lawyer, Lexology + In-Depth + Panoramic ->
+  Lexology, Lexology Index, Default->Centellic_Logo_2026. All Text fields (long-text CMDT field
+  voids the SOQL exemption).
+- Quote_Stamp_Order_Form_Fields v16 KJDEV / v9 FULLUAT: after API-line get -> Get_Brand_Lines (all
+  lines) -> max loop -> CMDT loop -> Get_Logo_Document (Document IS flow-queryable) -> stamp
+  Order_Form_Brand_Logo_URL__c. URL formula: LEFT($Api.Enterprise_Server_URL_140 to '/services')
+  + /servlet/servlet.ImageServer?id=<doc>&oid=LEFT($Organization.Id,15) - org-agnostic, $Api works
+  in flow formulas. Not-found doc -> keep existing value (never stamp blank). +2 SOQL per quote save.
+- Header img: src="{!quote.Order_Form_Brand_Logo_URL__c}" replaces push-time {{LOGO_URL}}.
+  CRITICAL: blank src = whole render 400s -> PROD ORDER IS field+flow+docs FIRST, activate, backfill
+  -touch any quote that might render with the v1.2 template, THEN push header. FULLUAT checked: zero
+  existing v1.2 QuoteDocuments -> no backfill needed there.
+- upload-brand-logos.js (cpq-templates/) uploads Brand_Logo_<key> Documents idempotently from a
+  folder of <key>.png; needs Order_Form_Brand_Assets folder (upload-brand-assets.js) + CONFIRM_PROD.
+E2E KJDEV: GAR(5000)+Lexology Index(1000) lines -> GAR logo stamped + embedded in PDF; unbranded
+quote -> Centellic fallback. GOTCHA (again): KJDEV org-default AND Kam's user row had
+Disable_Autolaunch_Lightning_Flow__c=true - flipped Kam's row for the test, restored after.
+PROD: NOT deployed - awaiting Kam sign-off (brand guidance angle: BrandHub logos are the approved
+assets; Order Forms lead with the deal's lead brand, Centellic only as fallback).

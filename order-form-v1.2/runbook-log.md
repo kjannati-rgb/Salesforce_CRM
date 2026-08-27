@@ -960,3 +960,31 @@ bypass + entry conditions everywhere; measure with FINEST traces, not opinions.
 Current state: Order Form stamps/zero-click/VAT sync DEACTIVATED (licence stamp, one-click,
 signed-writeback active). Re-activation = P0 decision with the async move. Trace flag on Hannah
 expires ~2h; log saved as scratchpad hannah-101.log.
+
+## P0 executed: rh2 async flip + REV-60 async + rollup census (2026-08-27 afternoon)
+
+SAURABH VETO on moving Opportunity_Renewal_New_Records to async (his flow, accepted); his counter
+"move the new quote flows to schedule path" is a platform impossibility for before-save stamps
+(no scheduled paths on before-save; converting to async after-save would ADD a quote-update
+transaction per save - counterproductive) - declined with evidence.
+RH2 CENSUS (Kam: "do we need them?"): 44 active rollups (UI); dependency-API census of ~77 target
+fields: ~60 have ZERO metadata consumers; 4 confirmed live (Account.No_of/CFY_No_of_Won_Office_
+Opportunities - layouts+Apex; Active_Subscription_Specialist_Plt - flow; Docket_Navigator_Total_
+Sale_Value - CRM Analytics recipe). CAVEAT: dependency API does not see reports/dashboards.
+SCHEDULING DEAD END: per-rollup full recalc = 787,018 Accounts, ~8 days per rollup - hourly
+schedules unviable. THE ACTUAL FIX: rh2__PS_Object_Realtime__c per-object Asynchronous flag -
+OLI has run async since Apr 2025 (why RHX_OLI cost only 3 queries vs RHX_Opportunity 22).
+FLIPPED opportunity -> async (one field, via Kam's session + Chrome takeover after Kam could not
+find the setting - it is NOT rendered anywhere in the Rollup Helper UI). Controlled no-op A/B:
+RHX_Opportunity 8 -> 5 queries; real saves (full recalc deferred) expected ~22 -> ~5. Rollback =
+flag to false.
+REV-60/71 ASYNC: Opp_ALM_Code_AfterSave (REV-71) was ALREADY async (AsyncAfterCommit path).
+Opp_ALM_PromoDispatch_AfterSave (REV-60) converted to the same pattern and ACTIVATED (v2).
+Platform rules learned: async paths need IsChanged-operator filters or changed-to-meet flag, and
+filterFormula+ISCHANGED is INVALID with the flag - the working shape is Update trigger + IsChanged
+filters (creates carry no lines to stamp, so nothing lost). Quote-side stamps
+(Quote_ALM_PromoDispatch_Stamp, 9 queries in the trace) are subflows on Saurabh's
+Quote_AfterSave_MasterFlow sync path - flagged to him to move to his async path.
+BUDGET AFTER TODAY (rep-save transaction): rh2 ~-17, REV-60 opp -1 sync (+ quote-side -9 pending
+Saurabh), Order Form diet -3 (26 Aug). Remaining big rocks: OpportunityTrigger 32 (Saurabh audit),
+quote master sync path. Trace-on-rep + no-op A/B measurement technique now standard.

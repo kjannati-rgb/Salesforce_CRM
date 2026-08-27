@@ -325,7 +325,7 @@
             <assignToReference>LeadBrand</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Loop_Brand_Lines.Brand__c</elementReference>
+                <elementReference>EffectiveBrand</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -771,6 +771,11 @@
         <name>EntityText</name>
         <dataType>String</dataType>
         <expression>TEXT({!$Record.SBQQ__SalesRep__r.LBR_Legal_Entity__c})</expression>
+    </formulas>
+    <formulas>
+        <name>EffectiveBrand</name>
+        <dataType>String</dataType>
+        <expression>IF({!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Subs - Lexology Pro', 'Lexology Pro', TEXT({!Loop_Brand_Lines.Brand__c}))</expression>
     </formulas>
     <formulas>
         <name>LogoURL</name>

@@ -1074,3 +1074,16 @@ Executed in the strict order and E2E-verified:
 ACCEPTED RESIDUAL: a pre-27-Aug quote rendered with the v1.2 template with NO save since the field
 existed would 400 on doc-gen; any save heals; go-live is 1 Sep so all real quotes will be saved
 post-flow. New scratchpad tools: gen-doc-prod.js / fetch-doc-prod.js (PROD render + fetch).
+
+## Lexology PRO gets its own logo (2026-08-27, Kam challenge on the test send)
+
+Kam reviewed the Q-219317 test send and linked the BrandHub Lexology PRO folder - the doc showed
+the Lexology MASTER logo because CPQ brands all Pro products Brand__c='Lexology'. The BrandHub
+treats PRO as its own brand, so Pro deals now override: new flow formula EffectiveBrand maps
+product family 'Subs - Lexology Pro' -> synthetic brand 'Lexology Pro' (else TEXT(Brand__c));
+Assign_Lead_Brand uses it; new CMDT row Lexology_Pro -> Brand_Logo_Lexology_PRO (already uploaded
+everywhere). Deployed all 3 orgs, PROD flow v5 activated. E2E: Q-219317 re-stamped ->
+Brand_Logo_Lexology_PRO URL; render embeds the 3486x339 PRO PNG; test doc deleted, stamp kept.
+Also: first Adobe test agreement (a3GPx000001ZAS9MAO, unsigned) Cancelled then deleted at Kam's
+request. NOTE the CMDT Brand_Value__c is now "effective brand" (picklist value OR the synthetic
+'Lexology Pro') - the family override lives in the flow formula, the map stays in CMDT.

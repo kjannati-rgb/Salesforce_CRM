@@ -929,3 +929,12 @@ Terms/AM). TO ACTIVATE IN PROD after Saurabh's OK: Quote_Stamp_Order_Form_Fields
 Quote_Send_Order_Form_Zero_Click v1, Quote_Sync_Captured_VAT_to_Account v1 (entry-gated,
 innocent), and Quote_Stamp_Terms v2 ONLY IF wanted (inert stub; can also stay deactivated).
 Flow count for docs: 6 active + 1 retired stub.
+
+## Re-activation (2026-08-27, Kam's call - Saurabh reports to him)
+
+Kam authorised re-activation. PROD final state: 6 active flows - Quote_Stamp_Order_Form_Fields v3
+(merged, near-zero SOQL), Zero_Click, VAT sync, QuoteLine_Stamp_License_Model, One_Click,
+Agreement_Signed_Writeback; Quote_Stamp_Terms stays INACTIVE (retired, stub is latest). Verified:
+one PROD quote resave stamps everything (terms/entity/governing law from the new Text field/Other
+Terms/API flag) with zero errors. Saurabh should be told: the merged v3 costs ~0 countable SOQL,
+zero-click/VAT never start in bulk transactions, and his own bypass switch now gates our flow too.

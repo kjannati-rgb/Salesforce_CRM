@@ -938,3 +938,25 @@ Agreement_Signed_Writeback; Quote_Stamp_Terms stays INACTIVE (retired, stub is l
 one PROD quote resave stamps everything (terms/entity/governing law from the new Text field/Other
 Terms/API flag) with zero errors. Saurabh should be told: the merged v3 costs ~0 countable SOQL,
 zero-click/VAT never start in bulk transactions, and his own bypass switch now gates our flow too.
+
+## FINEST-trace league table + org-wide automation plan (2026-08-27 afternoon)
+
+Saurabh deactivated the 4 Order Form flows AGAIN (14:34) after Hannah Mason's saves kept failing;
+at 14:37 the SWOOGO INTEGRATION user hit the same 101 WITH OUR FLOWS OFF - the controlled
+experiment that closes attribution. Debug trace (Database=FINEST) on Hannah captured a full
+failing save (8MB, ends in LIMIT_EXCEEDED). League table of 82 attributed queries:
+OpportunityTrigger (org Apex) 32; rh2 Rollup Helper 25 (RHX_Opportunity 22 + RHX_OLI 3);
+ALMPromoDispatchEngine (REV-60) 10; org flows 9; flow engine 4; OUR FLOWS 2 (2.4%).
+Landscape (FlowDefinitionView): 14 active record-triggered flows on Opportunity, 8 Quote,
+7 Opportunity Product, 5 Quote Line + triggers/packages, all one transaction on rep saves
+(admin/finance profiles skip the heavy branch - why admins cannot reproduce).
+Long-term plan authored (Kam: "world class solution"), artifact "One Save, 101 Queries"
+(fb01c8e9-10fe-46ab-81cb-95c29e6124f4): P0 stabilise (renewal subflows -> async path, entry-gate
+master chain, re-activate Order Form flows); P1 OpportunityTrigger bulkification + rh2 retirement
+via Firm Sales Summary (already built; 4 consumers to repoint) + REV-60 query diet; P2 flow
+consolidation to one before/after-save per object + automation intake checklist + limit telemetry.
+Principles: 70-query budget with an owner; async by default; no CMDT long-text selections;
+bypass + entry conditions everywhere; measure with FINEST traces, not opinions.
+Current state: Order Form stamps/zero-click/VAT sync DEACTIVATED (licence stamp, one-click,
+signed-writeback active). Re-activation = P0 decision with the async move. Trace flag on Hannah
+expires ~2h; log saved as scratchpad hannah-101.log.

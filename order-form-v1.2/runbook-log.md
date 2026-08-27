@@ -1050,3 +1050,27 @@ quote -> Centellic fallback. GOTCHA (again): KJDEV org-default AND Kam's user ro
 Disable_Autolaunch_Lightning_Flow__c=true - flipped Kam's row for the test, restored after.
 PROD: NOT deployed - awaiting Kam sign-off (brand guidance angle: BrandHub logos are the approved
 assets; Order Forms lead with the deal's lead brand, Centellic only as fallback).
+
+## Brand logos -> PROD (2026-08-27 late evening, Kam: "lets push to production and test")
+
+Executed in the strict order and E2E-verified:
+1. Deploy 20/20 (0AfPx000001JpkbKAC): CMDT object+13 records, quote field, flow, permset - the
+   PROD permset was deploy-time trimmed of Legal_Contact_Email_Phone/Name_Title (those fields were
+   never created in PROD - 16th-relationship cap). Repo file keeps them for sandboxes.
+2. Flow arrived Draft (PROD setting) -> activate-flows.js Tooling PATCH -> v4 active.
+3. upload-brand-logos.js CONFIRM_PROD=YES: 11 Brand_Logo_* Documents created (Lexology =
+   015Px00000B3UeLIAV etc).
+4. Backfill check: ZERO SBQQ__QuoteDocuments against the PROD v1.2 template (24 Aug test docs were
+   reverted) -> empty backfill set.
+5. Header pushed LAST (CONFIRM_PROD). Scare + resolution: push logs said "created" for the 6 line
+   columns but the logged ids MATCH the existing 24-Aug records - the script's log label says
+   created on upsert-found; 6 columns confirmed, no duplication. Header markup verified to carry
+   {!quote.Order_Form_Brand_Logo_URL__c} and no {{LOGO_URL}} remnant.
+6. LIVE TEST on Q-219317 (Approved, 2x Lexology PRO lines, Brand=Lexology): one-field touch ->
+   flow stamped the Lexology ImageServer URL (public 200, image/png, exact byte size); ServiceRouter
+   doc-gen 200 -> PDF embeds the 12520x1667 Lexology PNG on both pages (no DRAFT watermark - quote
+   is Approved, correct). Test QuoteDocument a19Px000003bRqjIAE + its PDF Document deleted after
+   verification; the stamped URL stays (correct live value).
+ACCEPTED RESIDUAL: a pre-27-Aug quote rendered with the v1.2 template with NO save since the field
+existed would 400 on doc-gen; any save heals; go-live is 1 Sep so all real quotes will be saved
+post-flow. New scratchpad tools: gen-doc-prod.js / fetch-doc-prod.js (PROD render + fetch).

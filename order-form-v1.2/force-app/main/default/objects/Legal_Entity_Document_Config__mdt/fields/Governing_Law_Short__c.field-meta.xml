@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Governing_Law_Short__c</fullName>
+    <description>Text(255) copy of the governing-law clause. The stamp flow reads THIS field, never Governing_Law_Clause__c (LongTextArea): CMDT queries are SOQL-limit-exempt only while no long-text field is selected - selecting the clause made both entity lookups count and contributed to the 2026-08-27 "Too many SOQL 101" incident on the Opportunity master flow.</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Governing Law (Short)</label>
+    <length>255</length>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

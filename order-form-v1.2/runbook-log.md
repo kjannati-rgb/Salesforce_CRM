@@ -901,3 +901,31 @@ to enter codes at QLE save, so genuine ALM quotes always carry them - only API-b
 Sequencing for entity tests: set opp Billing_Entity FIRST is not enough - line DML can re-derive
 it; order used = line DML, set entity, touch line (licence restamp reads entity at line save),
 quote resave (entity/terms stamp), verify both before doc gen.
+
+## SOQL-101 incident: flows deactivated by Saurabh, optimised package built (2026-08-27)
+
+10:07 the Opportunity master flow chain hit "Too many SOQL queries: 101" on a renewal update; the
+failing element was THEIR OWN Get (Opportunity_Renewal_New_Records / Get Previous Opportunity
+Product) - the chain runs at ~98-100 without us. Saurabh deactivated 4 of our quote flows
+(Stamp Terms, Stamp Order Form Fields, Zero Click, VAT sync) - users could not save quotes.
+Verified footprint of ours per quote save: 3 countable SOQL, not "errors":
+- Stamp Order Form Fields: 2 - because the entity CMDT gets selected Governing_Law_Clause__c
+  (LongTextArea). KEY GOTCHA: CMDT queries are SOQL-limit-EXEMPT only while no long-text field is
+  selected; selecting one makes the query count.
+- Stamp Terms: 1 (the API quote-line lookup; terms CMDT is text-only = exempt).
+- Zero Click / VAT sync: 0 in bulk transactions (entry-gated; never start).
+OPTIMISED PACKAGE (footprint 3 -> ~0, deployed KJDEV+FULLUAT active, PROD AS DRAFT - activation
+deliberately left for Kam/Saurabh since Saurabh pulled the flows):
+1. New CMDT Text(255) Governing_Law_Short__c, values copied into the 5 records; the flow reads it
+   instead of the long-text clause -> both entity gets exempt again (-2).
+2. Terms + API stamping MERGED into Quote_Stamp_Order_Form_Fields (one before-save flow per
+   object/timing - Salesforce Well-Architected). Quote_Stamp_Terms replaced by an inert stub
+   version (filterFormula false; sandboxes deploy flows active so the stub supersedes behaviour).
+3. The one remaining line query gated by SBQQ__LineItemCount__c > 0 AND the whole flow behind the
+   org-standard Application_Settings__c.Disable_Autolaunch_Lightning_Flow__c bypass - Saurabh can
+   exempt automation users without touching us.
+Verified in FULLUAT: blanked every stamp, one resave restored all (terms/entity/law/API/Other
+Terms/AM). TO ACTIVATE IN PROD after Saurabh's OK: Quote_Stamp_Order_Form_Fields v3,
+Quote_Send_Order_Form_Zero_Click v1, Quote_Sync_Captured_VAT_to_Account v1 (entry-gated,
+innocent), and Quote_Stamp_Terms v2 ONLY IF wanted (inert stub; can also stay deactivated).
+Flow count for docs: 6 active + 1 retired stub.

@@ -31,7 +31,7 @@
             <assignToReference>$Record.Governing_Law_Text__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Get_Billing_Config.Governing_Law_Clause__c</elementReference>
+                <elementReference>Get_Billing_Config.Governing_Law_Short__c</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -68,7 +68,7 @@
             <assignToReference>$Record.Governing_Law_Text__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Get_Entity_Config.Governing_Law_Clause__c</elementReference>
+                <elementReference>Get_Entity_Config.Governing_Law_Short__c</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -243,7 +243,158 @@
                 <elementReference>AMEmailPhone</elementReference>
             </value>
         </assignmentItems>
+        <connector>
+            <targetReference>Decision_Has_Lines</targetReference>
+        </connector>
     </assignments>
+    <assignments>
+        <name>Set_API_Flag</name>
+        <label>Stamp Includes API Access</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Includes_API_Access__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>HasApiLine</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Configs</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Terms_From_Config</name>
+        <label>Stamp terms from matched config</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Terms_URL__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Configs.Terms_URL__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Terms_Label__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Configs.Terms_Label__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>TermsMatched</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Configs</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Terms_Default</name>
+        <label>Stamp terms from the default config</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Terms_URL__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Configs.Terms_URL__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Terms_Label__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Configs.Terms_Label__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Configs</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Decision_Has_Lines</name>
+        <label>Quote has lines? (skip the line query otherwise)</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Set_API_Flag</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No lines - skip query</defaultConnectorLabel>
+        <rules>
+            <name>Has_Lines</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__LineItemCount__c</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_API_Line</targetReference>
+            </connector>
+            <label>Has lines</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Decision_Terms_Config_Match</name>
+        <label>Does this terms config apply?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Loop_Configs</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No match</defaultConnectorLabel>
+        <rules>
+            <name>Terms_Role_Matches</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Configs.Role_Pattern__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OwnerRoleName</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <elementReference>Loop_Configs.Role_Pattern__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Terms_From_Config</targetReference>
+            </connector>
+            <label>Owner role matches pattern</label>
+        </rules>
+        <rules>
+            <name>Terms_Default_And_Unmatched</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Configs.Is_Default__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>TermsMatched</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Terms_Default</targetReference>
+            </connector>
+            <label>Default (nothing matched yet)</label>
+        </rules>
+    </decisions>
     <decisions>
         <name>Decision_Other_Terms</name>
         <label>Product Specific Terms present?</label>
@@ -403,6 +554,16 @@
     </decisions>
     <environments>Default</environments>
     <formulas>
+        <name>HasApiLine</name>
+        <dataType>Boolean</dataType>
+        <expression>NOT(ISBLANK({!Get_API_Line.Id}))</expression>
+    </formulas>
+    <formulas>
+        <name>OwnerRoleName</name>
+        <dataType>String</dataType>
+        <expression>{!$Record.SBQQ__Opportunity2__r.Owner.UserRole.Name}</expression>
+    </formulas>
+    <formulas>
         <name>AMName</name>
         <dataType>String</dataType>
         <expression>IF(ISBLANK({!$Record.SBQQ__SalesRep__c}), "", TRIM({!$Record.SBQQ__SalesRep__r.FirstName} &amp; " " &amp; {!$Record.SBQQ__SalesRep__r.LastName}))</expression>
@@ -424,6 +585,17 @@
     </formulas>
     <interviewLabel>Quote - Stamp Order Form Fields {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Quote - Stamp Order Form Fields</label>
+    <loops>
+        <name>Loop_Configs</name>
+        <label>Each terms config (default record sorted last)</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>Get_Configs</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Decision_Terms_Config_Match</targetReference>
+        </nextValueConnector>
+    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -437,6 +609,49 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_API_Line</name>
+        <label>Get one API-access quote line</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Set_API_Flag</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SBQQ__Quote__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>API_Access__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>SBQQ__QuoteLine__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Configs</name>
+        <label>Get terms configs</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Loop_Configs</targetReference>
+        </connector>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Order_Form_Terms_Config__mdt</object>
+        <sortField>Is_Default__c</sortField>
+        <sortOrder>Asc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <recordLookups>
         <name>Get_Billing_Config</name>
         <label>Get config by opportunity billing entity</label>
@@ -485,9 +700,20 @@
         <connector>
             <targetReference>Get_Billing_Config</targetReference>
         </connector>
+        <filterFormula>NOT({!$Setup.Application_Settings__c.Disable_Autolaunch_Lightning_Flow__c})</filterFormula>
         <object>SBQQ__Quote__c</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordBeforeSave</triggerType>
     </start>
     <status>Active</status>
+    <variables>
+        <name>TermsMatched</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
 </Flow>

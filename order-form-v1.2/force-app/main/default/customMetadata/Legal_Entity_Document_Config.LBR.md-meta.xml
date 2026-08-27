@@ -26,4 +26,8 @@
         <field>Governing_Law_Clause__c</field>
         <value xsi:type="xsd:string">This Order Form and the Agreement are governed by English law, and the courts of England and Wales have exclusive jurisdiction over any dispute arising out of or in connection with them.</value>
     </values>
+    <values>
+        <field>Governing_Law_Short__c</field>
+        <value xsi:type="xsd:string">This Order Form and the Agreement are governed by English law, and the courts of England and Wales have exclusive jurisdiction over any dispute arising out of or in connection with them.</value>
+    </values>
 </CustomMetadata>

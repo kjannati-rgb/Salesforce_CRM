@@ -1007,3 +1007,10 @@ CPQ QuoteLineAfter trigger in test context - poison-the-signature is the testabl
 (its REV-60 config schema was behind repo). PROD deploy queued behind another (failed) deploy -
 landing pending; note a third-party PROD deploy failed 16:03 with 35 test errors (someone else
 deploying - possibly Saurabh mid-work).
+
+## Shipping address row (2026-08-28, Kam request - legacy gap #5 closed)
+
+Section 1 Customer block gains "Shipping / delivery address" under the registered address, merged
+straight from the quote's standard CPQ shipping fields (SBQQ__ShippingStreet/City/State/
+PostalCode/Country - CPQ auto-copies them from the Account; no new fields, no flow work).
+Pushed to all three orgs; verified on a FULLUAT render.

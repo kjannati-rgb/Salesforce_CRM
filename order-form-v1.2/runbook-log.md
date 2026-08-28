@@ -1105,3 +1105,14 @@ by design; apex touch fires the line stamp flow). Result: Pro -> Authorised User
 Firmwide License; GAR - Subscription ART (0-value add-on) stays blank = product has no licence type
 configured (product-data gap, not template). Classifier blocked the compound push command - split
 per-org pushes worked (recurring pattern).
+
+## "Included" licence model for bundled add-ons (2026-08-28, Kam: ART should say included)
+
+New restricted-picklist value "Included" on Product2.License_Model__c + line License_Model__c, and
+a brand-aware display branch: "Included as part of the <Product Brand> subscription." (generic
+fallback when the product has no brand). Deployed all 3 orgs. GAR - Subscription ART
+(01t6g000004OUZHAA4) set to Included in PROD + FULLUAT; Q-187142 ART lines re-touched via the
+anonymous-apex no-op update -> "Included as part of the GAR subscription." Other 0-value add-on
+products can adopt the same value as found. Both Adobe test agreements on Q-187142 cancelled at
+Kam's request (status->Cancelled sends the Adobe-side revocation, then record deleted); all test
+QuoteDocuments removed.

@@ -188,6 +188,31 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Decision_Have_Doc</name>
+        <label>Any document at all? (null-guard before template lookup)</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Reason_No_Doc</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No document</defaultConnectorLabel>
+        <rules>
+            <name>Have_Doc</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Quote_Document</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Decision_Document_Exists</targetReference>
+            </connector>
+            <label>Document exists</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Decision_Document_Exists</name>
         <label>Quote document exists?</label>
         <locationX>0</locationX>
@@ -207,7 +232,7 @@
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>Get_Doc_Template.Name</leftValueReference>
+                <leftValueReference>Get_Quote_Document.SBQQ__Template__c</leftValueReference>
                 <operator>NotEqualTo</operator>
                 <rightValue>
                     <stringValue>Subscription Order Form</stringValue>
@@ -229,7 +254,7 @@
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>Get_Doc_Template.Name</leftValueReference>
+                <leftValueReference>Get_Quote_Document.SBQQ__Template__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Subscription Order Form</stringValue>
@@ -333,34 +358,13 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
-        <name>Get_Doc_Template</name>
-        <label>Get the latest document's template</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Decision_Document_Exists</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>Get_Quote_Document.SBQQ__Template__c</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>SBQQ__QuoteTemplate__c</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
-    <recordLookups>
         <name>Get_Quote_Document</name>
         <label>Get latest quote document</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Get_Doc_Template</targetReference>
+            <targetReference>Decision_Have_Doc</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>

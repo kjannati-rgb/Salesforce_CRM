@@ -1325,3 +1325,19 @@ v3, zero-click v4, VAT sync v1. Verified live on Q-187142: logo re-stamped, Incl
 correctly false via the merged loop derivation, AM stamped, clean transaction. Saurabh evidence
 note drafted for Kam (third 101 at the chain's own commit; fault flow itself died at 101;
 OF footprint now 2 queries). Tuesday go-live back on track.
+
+## Training recordings + transcripts; wrong-template guard BUG fixed (2026-08-28 late)
+
+Kam: "record the video and transcripts". Recorded LIVE screen-capture GIFs in PROD via Chrome
+takeover (gif_creator; safe refusal paths only): orderform-renewal-guard.gif (Q-187142 renewal
+message) and orderform-wrong-template-guard.gif (Q-212323). Chrome saves exports under GUID names
+in Downloads. Full voiceover transcripts: training/order-form-video-transcripts.md.
+BUG CAUGHT ON CAMERA + FIXED: the template check faulted ("unhandled fault") because
+SBQQ__QuoteDocument__c.SBQQ__Template__c is a TEXT field holding the template NAME, not a lookup -
+my Get_Doc_Template filtered Id='ALM Enterprise...' -> INVALID_QUERY_FILTER_OPERATOR (found via
+FINER-workflow TraceFlag + /aura log; decision null-guard added en route was right but not the
+cause). FIX: compare Get_Quote_Document.SBQQ__Template__c to 'Subscription Order Form' directly -
+Get_Doc_Template lookup REMOVED (template check now costs ZERO queries), null-guard decision kept.
+One-click v5 / zero-click v6 active all orgs; guard verified live on camera (names the offending
+doc+template). Also learned: Q-212323 had a LEGACY doc all along ("ALM Enterprise without T&Cs")
+- the guard's exact reason to exist. Trace flag 7tfPx00000021eLIAQ expires ~30min.

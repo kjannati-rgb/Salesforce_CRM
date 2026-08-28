@@ -1368,3 +1368,14 @@ every test worked). Fixed in KJDEV/FULLUAT/PROD + push-template-content.js now a
 Deployed. Also: org has NO default template (SBQQ__Default__c all false) and reps historically
 navigate template-per-deal; License_Model_Override__c is NOT on the line record layout (QLE
 Subscriptions field set only) - fine, noted accurately in video 3.
+
+## Override made VISIBLE on the line page (2026-08-28 night, Kam: "users will need to see this")
+
+New "Licence Model (Order Form)" section added to the SBQQ__QuoteLine__c-SBQQ__Quote Line Layout
+(the org's single line layout; retrieve name needs the SBQQ__ prefix TWICE): License Model
+(read-only) + License Model Override (edit) + Benefiting Group Description (edit) left column;
+License Model Display (read) + Authorised User Count (edit) right. Deployed all 3 orgs; PROD
+render confirmed via accessibility find. Video 3 narration + Academy decoder updated to name both
+surfaces (line page section + QLE). NOTE: direct VF /apex/EditQuoteLines is deprecated in this org
+("use Edit Lines from the record home") - modern LWC QLE only; per-family field sets (Subscriptions
+etc.) are likely QCP-driven drawers.

@@ -1291,3 +1291,29 @@ mechanism is Adobe-specific) and their write-backs do not run; quote Customer_Si
 NOT stamped by the eSign webhook (it stamps the agreement record instead) - optional follow-up to
 extend the webhook. NOT E2E TESTED: needs a real eSign Global envelope; the sender-view review
 step shows field placement before sending, so the first China Order Form send self-verifies.
+
+## Third SOQL-101 + doc-name overflow; Kam deactivated the 5 OF flows (2026-08-28 ~17:40)
+
+TWO separate incidents, neither an Order Form defect:
+1. FLOW 17:40: Opportunity_AfterUpdate_MasterFlow died AGAIN at ITS OWN element
+   (Opportunity_AL_FieldUpdates > Commit_Opportunity_Updates, LIMIT_EXCEEDED 101) on Kam's own
+   save of a Lexology Index Repeat Business opp (006Tm00000H2NZrIAN, SBQQ__Renewal__c=true so CPQ
+   renewal-quote sync pulls QUOTE saves - and our stamp flow - into the opp transaction). Even the
+   fault-notification flow's Get_Custom_notification then 101'd. Same failing element as the
+   27-Aug recurrence: the master chain saturates ON ITS OWN; Saurabh's refactor remains the
+   structural fix. Our contribution: the brand-logo build added +2 countable queries to every
+   quote save (Get_API_Line + Get_Brand_Lines + Get_Logo_Document = 3 total) - margin, not cause.
+   MITIGATION SHIPPED: Get_API_Line MERGED into the brand loop (API flag now derived while
+   scanning lines; HasApiLineV var replaces the formula) -> OF quote-save footprint = 2 countable
+   (lines + logo Document). Deployed all 3 orgs; PROD v6 sits DRAFT (Kam deactivated all 5 OF
+   flows 17:39-17:40; reactivation is his call).
+2. APEX 17:44: SBQQ.QueueableQuoteDocumentService STRING_TOO_LONG - the SBQQ__QuoteDocument__c
+   NAME (80-char cap) from CPQ's own Generate Document screen: "Q-222798- Lexology In-Depth
+   Virtual Currency + Privacy, Data Protection (Venezuela)" (~85). Field-length system validation
+   runs BEFORE any flow/trigger - cannot be truncated by automation. Pre-existing CPQ behaviour,
+   any template, rep-guidance item (keep the Document Name under 80 chars). Not related to today's
+   changes; the failing user was a rep, not the OF pipeline (our API sends name docs "Order Form
+   v1.2", 15 chars).
+REACTIVATION CASE FOR KAM: failing element is the master chain's own commit (3rd occurrence);
+with flows OFF, no Order Form stamps/sends and Tuesday go-live is blocked; with the merge shipped
+our footprint is 2 queries. Recommend reactivate all 5 + hand Saurabh this new evidence email.

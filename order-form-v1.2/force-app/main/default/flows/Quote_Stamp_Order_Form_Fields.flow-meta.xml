@@ -256,7 +256,7 @@
             <assignToReference>$Record.Includes_API_Access__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>HasApiLine</elementReference>
+                <elementReference>HasApiLineV</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -314,6 +314,22 @@
         </assignmentItems>
         <connector>
             <targetReference>Loop_Configs</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Has_API</name>
+        <label>Line has API access</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>HasApiLineV</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Decision_Line_Is_Lead</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -407,7 +423,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Get_API_Line</targetReference>
+                <targetReference>Get_Brand_Lines</targetReference>
             </connector>
             <label>Has lines</label>
         </rules>
@@ -624,6 +640,38 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Decision_Line_API</name>
+        <label>API-access line? (flag once)</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Decision_Line_Is_Lead</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Not API / already flagged</defaultConnectorLabel>
+        <rules>
+            <name>Line_Has_API</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Brand_Lines.API_Access__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>HasApiLineV</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Has_API</targetReference>
+            </connector>
+            <label>API line found</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Decision_Line_Is_Lead</name>
         <label>Line has brand and beats current max?</label>
         <locationX>0</locationX>
@@ -743,11 +791,6 @@
     </decisions>
     <environments>Default</environments>
     <formulas>
-        <name>HasApiLine</name>
-        <dataType>Boolean</dataType>
-        <expression>NOT(ISBLANK({!Get_API_Line.Id}))</expression>
-    </formulas>
-    <formulas>
         <name>OwnerRoleName</name>
         <dataType>String</dataType>
         <expression>{!$Record.SBQQ__Opportunity2__r.Owner.UserRole.Name}</expression>
@@ -803,7 +846,7 @@
         <collectionReference>Get_Brand_Lines</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Decision_Line_Is_Lead</targetReference>
+            <targetReference>Decision_Line_API</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
             <targetReference>Get_Brand_Rows</targetReference>
@@ -836,34 +879,6 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
-    <recordLookups>
-        <name>Get_API_Line</name>
-        <label>Get one API-access quote line</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Get_Brand_Lines</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>SBQQ__Quote__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>$Record.Id</elementReference>
-            </value>
-        </filters>
-        <filters>
-            <field>API_Access__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>SBQQ__QuoteLine__c</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
     <recordLookups>
         <name>Get_Brand_Lines</name>
         <label>Get quote lines for brand derivation</label>
@@ -988,6 +1003,16 @@
         <triggerType>RecordBeforeSave</triggerType>
     </start>
     <status>Active</status>
+    <variables>
+        <name>HasApiLineV</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
     <variables>
         <name>LeadBrand</name>
         <dataType>String</dataType>

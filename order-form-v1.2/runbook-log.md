@@ -1239,3 +1239,14 @@ layout, but the template check makes it unusable for other business lines - thei
 with THEIR templates, so the send refuses (and now tells them why). When the events template is
 ready, the intended pattern is a per-business send config (template name + terms per business in
 CMDT) or a sibling service - Core + per-business permission packs were designed for exactly that.
+
+## Law.com joins the brand-logo map (2026-08-28, Kam's SubscriptionMarketing SharePoint link)
+
+The "add a brand" recipe, exercised for real: Marketing's Law.com logo folder (SubscriptionMarketing
+site) contained ONLY mislabeled files - the .svg AND the .png are actually PDFs (vector). Fix:
+pypdfium2 rasterise page 1 at 6x with transparent fill + PIL alpha-bbox crop -> clean 3504x562 blue
+LAW.COM wordmark PNG. Uploaded Brand_Logo_Law_com all 3 orgs (upload-brand-logos.js); one CMDT row
+Brand_Value='Law.com'. PROD E2E: real NB quote Q-222634 stamped the Law.com URL on touch. Zero flow
+or template changes - exactly the designed one-row extension. GOTCHA for future logo pulls: check
+magic bytes, marketing folders lie about extensions; SharePoint REST works with item-level link
+access even when the site UI shows AccessDenied.

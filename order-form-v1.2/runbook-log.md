@@ -1130,3 +1130,18 @@ the long-standing "cancel stale Adobe probes" item); today's Milbank test QuoteD
 (the customer's genuine 2025 renewal doc untouched); zero open agreements addressed to Kam
 remain. Q-187142 left with: stamped GAR logo URL, healed licence displays, signatory Paula
 Prudenti (flow default).
+
+## Price-based firmwide flag for qty-1 Lexology Pro (2026-08-28, Kam: "one user can signify
+## just one user or an enterprise subscription... look at the block price and determine")
+
+DATA: Lexology PRO uses CPQ block prices (1-4 users = 7.5-10.5k list, 4-7 = 12-16.8k, 7-11 =
+19-27k). 390 qty-1 Pro lines (12mo, net>0): median net/list ratio 1.0; clean enterprise tail at
+4.4-5.6x list (39-48k). HEURISTIC in License_Model_Display__c: Authorised Users + count 1 +
+family 'Subs - Lexology Pro' + NetTotal >= 2 x SBQQ__ListPrice__c -> prints "Firmwide License"
+(existing label, no new legal wording) instead of "1 named authorised user". ~30 lines/yr flip at
+the 2x threshold (ratio>1.2: 63, >1.5: 51, >2: 30, >3: 15 - threshold is one literal in the
+formula, tune on Kam's word). Formula field = retroactive + instant everywhere, no flow/gate
+change, rep-invisible. Live all 3 orgs; proven on Q-187142: 24k line (2.3x list) -> Firmwide
+License, 10k line (0.95x) -> 1 named authorised user. RESIDUAL: a genuine single seat sold at
+>=2x list would misprint Firmwide (data shows that band is thin); the flag is Pro-family-scoped
+so GAR/IAM etc. unaffected.

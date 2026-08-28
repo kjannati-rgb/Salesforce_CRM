@@ -1263,3 +1263,31 @@ the doc engine (verified by render) - real fix is SBQQ__TemplateSection__c.SBQQ_
 'Before' on the Execution section (OF-V12-S90), now set by push-template-content.js: Execution
 always opens its own page. Pushed all 3 orgs; verified render. Two interim agreements cancelled;
 final resend a3GPx000001ZJSDMA4 with healed licence + clean signature page.
+
+## eSign Global (China) compatibility (2026-08-28, Kam: "we also send agreements to china via
+## esign Global via the same templates")
+
+DISCOVERY: China e-signing = custom-built integration (astreait consultants): eSignGlobal_Agreement__c
+(lookup to SBQQ__QuoteDocument__c + webhook-updated Envelope_Status__c), ESignGlobalApiCallout
+(openapi-as2.esignglobal.com; OAuth client-credentials from eSignGlobal_Configuration__c),
+ESignGlobalAgrViewCtrl (Aura view: upload PDF -> KEYWORD-POSITION search anchors the signing
+fields -> sender view -> send), ESignGlobalWebhookReceiver (status events; on completion downloads
+signed zip, files Signed_*.pdf on agreement + opportunity, stamps Date_of_Signature__c). Field
+placement = text search for Adobe-style tag strings; FALLBACK when not found = signature at page 1
+bottom-left (that is what an Order Form would have done).
+GAP: Order Form tags differ from the legacy keywords in 2 of 3 (our required-marker signature tag
+{{*Sig...}} vs their {{Sig...}}; our name tag {{N_es_...}} vs their {{*Name1_es_...}}; date shared).
+FIX (additive, deployed all 3 orgs, 11/11 eSign tests green incl. PROD RunSpecifiedTests):
+- Helper: OF_SIGNER_1 / OF_SIGNER_1_Name / OF_SIGNER_1_Title constants (Order Form tag strings).
+- Callout: 3 extra keywords in the position search (legacy keywords untouched -> old templates fine).
+- Ctrl: OF signature/name keywords normalised onto the legacy map keys; NEW title fill field
+  (Signer1Title) - the Position/title line is now signer-filled, parity with Adobe.
+- Ctrl: signer = quote Signatory_Contact__c when it has an email, else primary contact (legacy
+  behaviour) - channel-consistent with Adobe.
+Classes now VERSIONED in order-form-v1.2/force-app (they were org-only before) - note the eSign
+build is consultant-maintained; coordinate future edits.
+DISCLOSED GAPS (China sends): PO/VAT questions print as static text (no interactive fields - that
+mechanism is Adobe-specific) and their write-backs do not run; quote Customer_Signed_Date__c is
+NOT stamped by the eSign webhook (it stamps the agreement record instead) - optional follow-up to
+extend the webhook. NOT E2E TESTED: needs a real eSign Global envelope; the sender-view review
+step shows field placement before sending, so the first China Order Form send self-verifies.

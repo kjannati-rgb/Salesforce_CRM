@@ -1175,3 +1175,19 @@ the same verdict WITHOUT cross-line aggregation (formula fields can't see siblin
 line-local avoids per-line queries in the bulkified line flow). Verified: both Milbank Pro
 segments now Firmwide (24000 vs 2x10500; 10000 vs 2x4375). Non-segmented lines: ProratedList =
 List, behaviour unchanged, prior 390-line analysis holds. All 3 orgs.
+
+## Renewal soft gate + phasing decision (2026-08-28, Kam: "From Jan 1st it does, but for now
+## it is just new business")
+
+SCOPE DECIDED: new business from 1 Sep 2026; renewals + template-default from 1 Jan 2027.
+Enforced by construction: both send flows gained a scope check on
+SBQQ__Opportunity2__r.RecordType.DeveloperName = 'Renewals' (opp RTs are exactly New_Business /
+Renewals; 90-day quote split 5,164 / 4,451). One Click (screen flow): first precondition rule ->
+Screen_Renewal_Scope ("renewals move to the Order Form on 1 January 2027... contact the CRM team"
+- exception path is an ask, not a workaround). Zero Click (record-triggered): Decision_Scope first,
+renewal rule has NO connector = silent end. Both v2 active in PROD (deploy Draft -> Tooling
+activate). 1-JAN FLIP CHECKLIST: remove/invert the two scope rules, set the template default for
+subs quotes, wave-two announcement; runway = Oct gap decisions with Legal (counter-signature,
+inline T&Cs, appendix bundling - renewal customers hold the old format), Nov build, early-Dec
+renewal dry-run (renewal-inheritance UAT cell already green). Launch pack updated (gate table,
+rep + manager drafts carry the phasing).

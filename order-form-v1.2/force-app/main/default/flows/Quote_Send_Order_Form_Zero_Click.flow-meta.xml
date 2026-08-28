@@ -19,6 +19,28 @@
     </actionCalls>
     <apiVersion>62.0</apiVersion>
     <decisions>
+        <name>Decision_Scope</name>
+        <label>In scope? (new business only until 1 Jan 2027)</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Get_Incomplete_BG_Line</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>New business - proceed</defaultConnectorLabel>
+        <rules>
+            <name>Scope_Renewal</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__Opportunity2__r.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Renewals</stringValue>
+                </rightValue>
+            </conditions>
+            <label>Renewal - no auto send until 1 Jan</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Decision_BG_Complete</name>
         <label>Benefiting Group wording complete?</label>
         <locationX>0</locationX>
@@ -154,7 +176,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_Incomplete_BG_Line</targetReference>
+            <targetReference>Decision_Scope</targetReference>
         </connector>
         <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
         <filterLogic>and</filterLogic>

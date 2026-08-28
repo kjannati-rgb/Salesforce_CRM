@@ -34,6 +34,21 @@
         </defaultConnector>
         <defaultConnectorLabel>Status and signatory OK</defaultConnectorLabel>
         <rules>
+            <name>Is_Renewal</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Quote.SBQQ__Opportunity2__r.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Renewals</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Screen_Renewal_Scope</targetReference>
+            </connector>
+            <label>Renewal opportunity - out of scope until 1 Jan</label>
+        </rules>
+        <rules>
             <name>Not_Approved</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
@@ -223,6 +238,22 @@
         <sortOrder>Desc</sortOrder>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <screens>
+        <name>Screen_Renewal_Scope</name>
+        <label>Renewals join on 1 January</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>RenewalScopeText</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;The Order Form covers new business for now.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;This quote belongs to a renewal opportunity. Renewals continue on the current process and move to the Order Form on &lt;b&gt;1 January 2027&lt;/b&gt;. Nothing has been sent.&lt;/p&gt;&lt;p&gt;If this deal genuinely needs the Order Form sooner, contact the CRM team.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
     <screens>
         <name>Screen_Not_Approved</name>
         <label>Quote not approved</label>

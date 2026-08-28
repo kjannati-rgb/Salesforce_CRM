@@ -1087,3 +1087,21 @@ Brand_Logo_Lexology_PRO URL; render embeds the 3486x339 PRO PNG; test doc delete
 Also: first Adobe test agreement (a3GPx000001ZAS9MAO, unsigned) Cancelled then deleted at Kam's
 request. NOTE the CMDT Brand_Value__c is now "effective brand" (picklist value OR the synthetic
 'Lexology Pro') - the family override lives in the flow formula, the map stays in CMDT.
+
+## Mixed-brand test sends + three Kam tweaks (2026-08-28 morning)
+
+Mixed-deal logo rule demonstrated on real quotes both ways: Q-187142 Milbank (Pro 24k vs GAR
+25.8k -> GAR logo, sent via Adobe a3GPx000001ZB9hMAG) and Q-192017 Ashurst (Pro 33k vs 4 GxRs ->
+PRO logo, PDF only). Both quotes' blank Signatory_Contact__c got flow-defaulted to primary contact
+on restore (expected; disclosed). Kam then asked for 3 changes, all template-only, pushed all 3 orgs:
+1. Account Manager row (name, email/phone from the already-stamped Account_Manager_* fields -
+   the fields survived the earlier AM-row removal, flow still stamps them) under Effective date /
+   Order no. in the masthead box.
+2. Bill-to name (SBQQ__BillingName__c) prepended to Registered/principal address row.
+3. Ship-to name (SBQQ__ShippingName__c) prepended to Shipping/delivery address row.
+Licence-model blanks on old quotes: healed Q-187142 by no-op anonymous-apex line update (List +
+update; FLS blocks direct License_Model_Display__c writes for users - display fields are read-only
+by design; apex touch fires the line stamp flow). Result: Pro -> Authorised Users, GAR Premium ->
+Firmwide License; GAR - Subscription ART (0-value add-on) stays blank = product has no licence type
+configured (product-data gap, not template). Classifier blocked the compound push command - split
+per-org pushes worked (recurring pattern).

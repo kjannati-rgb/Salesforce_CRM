@@ -1317,3 +1317,11 @@ TWO separate incidents, neither an Order Form defect:
 REACTIVATION CASE FOR KAM: failing element is the master chain's own commit (3rd occurrence);
 with flows OFF, no Order Form stamps/sends and Tuesday go-live is blocked; with the merge shipped
 our footprint is 2 queries. Recommend reactivate all 5 + hand Saurabh this new evidence email.
+
+## Reactivation (2026-08-28 evening, Kam: "reactivate all of them and go with your recommendation")
+
+All 5 flows reactivated in PROD at latest versions: stamp v6 (leaner), line stamp v2, one-click
+v3, zero-click v4, VAT sync v1. Verified live on Q-187142: logo re-stamped, Includes_API_Access
+correctly false via the merged loop derivation, AM stamped, clean transaction. Saurabh evidence
+note drafted for Kam (third 101 at the chain's own commit; fault flow itself died at 101;
+OF footprint now 2 queries). Tuesday go-live back on track.

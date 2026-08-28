@@ -1161,3 +1161,17 @@ files - "element fullName missing" otherwise). E2E PROD both ways on the Milbank
 override=Authorised Users -> "1 named authorised user"; cleared -> heuristic returns "Firmwide
 License". Recommendation locked: 2x threshold, label-not-gate, no send-gate; flagged example goes
 through the 3-person sign-off for Legal's blessing.
+
+## Segment-aware firmwide flag (2026-08-28, Kam: "the two lex pro lines are part of the same
+## subscription... 14-16 month deal... segment index or other ID that combines them")
+
+Kam caught the flaw in the first test send: Q-187142 is a 17-month deal (Dec25-Apr27) and CPQ
+splits each subscription into SEGMENTS sharing SBQQ__SegmentKey__c (seg 1 = full year, seg 2 =
+5-month stub, SBQQ__ProrateMultiplier__c 0.4167). The heuristic compared the stub's prorated net
+(10k) to the FULL-YEAR list (10.5k) -> "1 user" while its sibling said Firmwide - inconsistent
+within one subscription. FIX: test basis is now SBQQ__ProratedListPrice__c (fallback ListPrice
+when 0) - proration cancels out of the >= 2x comparison, so all segments of a subscription reach
+the same verdict WITHOUT cross-line aggregation (formula fields can't see siblings; keeping it
+line-local avoids per-line queries in the bulkified line flow). Verified: both Milbank Pro
+segments now Firmwide (24000 vs 2x10500; 10000 vs 2x4375). Non-segmented lines: ProratedList =
+List, behaviour unchanged, prior 390-line analysis holds. All 3 orgs.

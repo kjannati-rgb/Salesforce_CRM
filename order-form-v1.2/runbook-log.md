@@ -1191,3 +1191,16 @@ subs quotes, wave-two announcement; runway = Oct gap decisions with Legal (count
 inline T&Cs, appendix bundling - renewal customers hold the old format), Nov build, early-Dec
 renewal dry-run (renewal-inheritance UAT cell already green). Launch pack updated (gate table,
 rep + manager drafts carry the phasing).
+
+
+## Legacy-contract gap decisions closed (2026-08-28, Kam mid-flight ruling)
+
+"no counter signature - but if we wanted one how would we add. It would always be optional.
+T&C's are via URL now. The rest is fine." -> counter-signature NOT built; optional design on
+record: Counter_Signature_Required__c checkbox on quote -> conditional Adobe signer2 tags via
+white-8px formula fields (same mechanism as the VAT question tags - static HTML cannot
+conditionally render, formulas emitting tag text can) -> OrderFormSignatureService adds a second
+ordered recipient (customer signs first, company counter-signs) -> write-back chain unchanged
+(Adobe reports Signed only when all recipients complete). ~0.5 day when wanted. T&Cs confirmed
+URL-reference; appendix bundling not needed. With these closed, the 1-Jan runway reduces to the
+early-Dec renewal dry-run + the two-change flip.

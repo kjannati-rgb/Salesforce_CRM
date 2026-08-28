@@ -1352,3 +1352,19 @@ regeneration pipeline (edit narration text, rerun). Durations 1:37 / 1:06 / 0:45
 GIFs committed to training/; all three EMBEDDED as data-URI <video> in the Academy artifact
 (page now 5.6MB, well under the 16MB artifact cap). Human voice re-record optional - transcripts
 section retitled accordingly.
+
+## Videos v2 + TEMPLATE PICKER BLOCKER found & fixed (2026-08-28 night)
+
+Kam feedback on v1 videos: monotone voice, wants real how-to footage, Milbank contract page shows
+Pro as "Firmwide License" (correct behaviour, confusing as training material). V2: narration =
+edge-tts en-GB-SoniaNeural (neural; corporate TLS interception fixed via truststore.inject_into_ssl),
+new real footage of the Generate Document screen WITH "Subscription Order Form" selected (direct VF
+URL /apex/GenerateDocument?id= dodges the Lightning iframe; form_input works there), licence
+segment now uses the healed Antheros page ("Limited Access - Up to 5"). Durations 1:29/0:55/0:37.
+GO-LIVE BLOCKER CAUGHT ON CAMERA: Generate Document showed "No templates were found" - the
+Subscription Order Form template was SBQQ__DeploymentStatus__c='In Development' in ALL THREE ORGS;
+the picker only lists Deployed templates (all API generation bypassed the picker, which is why
+every test worked). Fixed in KJDEV/FULLUAT/PROD + push-template-content.js now always sets
+Deployed. Also: org has NO default template (SBQQ__Default__c all false) and reps historically
+navigate template-per-deal; License_Model_Override__c is NOT on the line record layout (QLE
+Subscriptions field set only) - fine, noted accurately in video 3.

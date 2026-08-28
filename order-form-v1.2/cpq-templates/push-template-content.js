@@ -120,6 +120,9 @@ async function upsert(type, extId, fields) {
     await fetch(`${API}/sobjects/SBQQ__QuoteTemplate__c/${tid}`, { method: "PATCH", headers: HEADERS, body: JSON.stringify({
       SBQQ__HeaderContent__c: contentIds["OF-V12-CHEAD"],
       SBQQ__FooterContent__c: contentIds["OF-V12-CFOOT"],
+      // The Generate Document picker only lists Deployed templates - "In Development"
+      // makes the template invisible to reps (caught on camera 28 Aug).
+      SBQQ__DeploymentStatus__c: "Deployed",
     }) });
     // The CPQ package auto-creates default line columns (QTY, PART #, ...) on template insert.
     const strays = await soql(`SELECT Id, Name FROM SBQQ__LineColumn__c WHERE SBQQ__Template__c = '${tid}' AND External_Id__c = null`);

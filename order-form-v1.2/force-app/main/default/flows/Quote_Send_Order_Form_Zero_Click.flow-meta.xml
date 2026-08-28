@@ -78,10 +78,17 @@
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>Get_Doc_Template.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Subscription Order Form</stringValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Send_For_Signature</targetReference>
             </connector>
-            <label>Document found</label>
+            <label>Order Form document found</label>
         </rules>
     </decisions>
     <environments>Default</environments>
@@ -150,13 +157,34 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
+        <name>Get_Doc_Template</name>
+        <label>Get the latest document's template</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Decision_Document_Exists</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Quote_Document.SBQQ__Template__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>SBQQ__QuoteTemplate__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>Get_Quote_Document</name>
         <label>Get latest quote document</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Decision_Document_Exists</targetReference>
+            <targetReference>Get_Doc_Template</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>

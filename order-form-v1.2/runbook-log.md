@@ -1204,3 +1204,24 @@ ordered recipient (customer signs first, company counter-signs) -> write-back ch
 (Adobe reports Signed only when all recipients complete). ~0.5 day when wanted. T&Cs confirmed
 URL-reference; appendix bundling not needed. With these closed, the 1-Jan runway reduces to the
 early-Dec renewal dry-run + the two-change flip.
+## Template verification on send (2026-08-28, Kam: "how do I know I am using the correct template?")
+
+GAP: Send for Signature attaches the LATEST QuoteDocument regardless of which template rendered it
+(template choice happens at Generate Document, whose picker lists hundreds of templates). FIX: both
+send flows now verify the latest document's template Name = 'Subscription Order Form' - One Click
+shows Screen_Wrong_Template naming the offending doc + template with regenerate instructions;
+Zero Click sends only when the check passes. GOTCHA: cross-object references
+(Get_Quote_Document.SBQQ__Template__r.Name) are $Record-only in flow conditions - "element doesn't
+exist" on deploy; fixed with an explicit Get_Doc_Template lookup by id (+1 query on the send path
+only). v3 active PROD/all orgs. NOTE for future businesses: the check is name-scoped to the subs
+template; an events send service would carry its own name.
+
+## Invoice contact question (2026-08-28, Q-222536)
+
+Kam: why is the invoice contact blank? BY DESIGN: Invoice_Contact__c (quote lookup) is optional;
+the document's Billing/invoice row uses formula Billing_Contact_Name_Title__c/Email_Phone__c which
+falls back to SBQQ__PrimaryContact__c when the lookup is blank. Q-222536 prints "Louise Bates,
+Director" (primary) despite the blank lookup - page field empty, document complete. No automation
+populates Invoice_Contact__c for subs (contact-consolidation Phase-0: invoice roles ~46% fill,
+manual, ALM-events-centric). Optional future: default it from the opp's Billing/Invoice contact
+role like the signatory default.

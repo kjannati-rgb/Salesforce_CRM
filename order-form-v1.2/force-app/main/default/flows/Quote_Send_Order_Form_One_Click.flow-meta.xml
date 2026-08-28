@@ -114,6 +114,28 @@
         </defaultConnector>
         <defaultConnectorLabel>No document</defaultConnectorLabel>
         <rules>
+            <name>Wrong_Template</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Quote_Document</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Doc_Template.Name</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Subscription Order Form</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Screen_Wrong_Template</targetReference>
+            </connector>
+            <label>Latest document is not the Subscription Order Form</label>
+        </rules>
+        <rules>
             <name>Document_Found</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
@@ -216,13 +238,34 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
+        <name>Get_Doc_Template</name>
+        <label>Get the latest document's template</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Decision_Document_Exists</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Quote_Document.SBQQ__Template__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>SBQQ__QuoteTemplate__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>Get_Quote_Document</name>
         <label>Get latest quote document</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Decision_Document_Exists</targetReference>
+            <targetReference>Get_Doc_Template</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -297,6 +340,22 @@
         <fields>
             <name>BGIncompleteText</name>
             <fieldText>&lt;p&gt;&lt;b&gt;A Benefiting Group licence has no group definition.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Line: {!Get_Incomplete_BG_Line.SBQQ__ProductName__c}&lt;/p&gt;&lt;p&gt;The Order Form would print a bare "Benefiting Group" with no description of who is covered. On the quote line, fill in the Benefiting Group Description (preferred) or the Function Name and Group Size, regenerate the document, and try again.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Screen_Wrong_Template</name>
+        <label>Latest document is not the Order Form</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>WrongTemplateText</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;The most recent document on this quote was not generated with the Subscription Order Form template.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Latest document: {!Get_Quote_Document.Name} (template: {!Get_Doc_Template.Name}). Nothing has been sent.&lt;/p&gt;&lt;p&gt;Open &lt;b&gt;Generate Document&lt;/b&gt;, pick the &lt;b&gt;Subscription Order Form&lt;/b&gt; template, generate, and try again.&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>

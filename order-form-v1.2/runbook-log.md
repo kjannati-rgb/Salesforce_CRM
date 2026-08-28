@@ -1341,3 +1341,14 @@ Get_Doc_Template lookup REMOVED (template check now costs ZERO queries), null-gu
 One-click v5 / zero-click v6 active all orgs; guard verified live on camera (names the offending
 doc+template). Also learned: Q-212323 had a LEGACY doc all along ("ALM Enterprise without T&Cs")
 - the guard's exact reason to exist. Trace flag 7tfPx00000021eLIAQ expires ~30min.
+
+## The three training videos PRODUCED (2026-08-28 night, Kam: "can you do the 3 videos?")
+
+Real narrated MP4s, not just scripts: slideshow assembly of real assets (PROD guard-GIF frames,
+Milbank 6-page render, PIL-drawn Centellic-palette slides) + baked subtitle bars + Windows SAPI
+TTS narration (Microsoft Hazel Desktop, British) muxed per-segment via imageio-ffmpeg bundled
+ffmpeg (loop-image + wav -> h264 segments -> concat). make-videos.py in scratchpad is the
+regeneration pipeline (edit narration text, rerun). Durations 1:37 / 1:06 / 0:45. Videos + guard
+GIFs committed to training/; all three EMBEDDED as data-URI <video> in the Academy artifact
+(page now 5.6MB, well under the 16MB artifact cap). Human voice re-record optional - transcripts
+section retitled accordingly.

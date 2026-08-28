@@ -1225,3 +1225,17 @@ Director" (primary) despite the blank lookup - page field empty, document comple
 populates Invoice_Contact__c for subs (contact-consolidation Phase-0: invoice roles ~46% fill,
 manual, ALM-events-centric). Optional future: default it from the opp's Billing/Invoice contact
 role like the signatory default.
+
+## No silent refusals (2026-08-28, Kam: "quietly refuses too - so they wont know?")
+
+Zero Click v4 (all orgs; PROD activated): every refused auto-send now sends a BELL NOTIFICATION
+to the sales rep (owner fallback via NotifyUserId formula) - new CustomNotificationType
+Order_Form_Notice, flow queries it by DeveloperName (org-agnostic), customNotificationAction with
+target = the quote. Four reason bodies: renewal scope (until 1 Jan 2027), BG description missing,
+no generated document, wrong template. Pattern: reason assignments converge on Assign_Recipient ->
+Get_Notif_Type -> Send_Block_Notification. One Click already informs via screens - unchanged.
+Answer to "can events use Send for Signature?": the button is visible org-wide on the Approved
+layout, but the template check makes it unusable for other business lines - their documents render
+with THEIR templates, so the send refuses (and now tells them why). When the events template is
+ready, the intended pattern is a per-business send config (template name + terms per business in
+CMDT) or a sibling service - Core + per-business permission packs were designed for exactly that.

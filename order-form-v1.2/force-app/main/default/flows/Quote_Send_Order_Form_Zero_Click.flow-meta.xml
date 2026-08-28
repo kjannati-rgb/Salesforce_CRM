@@ -17,7 +17,126 @@
         <nameSegment>OrderFormSignatureService</nameSegment>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
+    <actionCalls>
+        <name>Send_Block_Notification</name>
+        <label>Tell the rep the auto-send was refused</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>customNotificationAction</actionName>
+        <actionType>customNotificationAction</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>customNotifTypeId</name>
+            <value>
+                <elementReference>Get_Notif_Type.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientIds</name>
+            <value>
+                <elementReference>RecipientIds</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>title</name>
+            <value>
+                <stringValue>Order Form not sent</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>body</name>
+            <value>
+                <elementReference>NotifBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>targetId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+    </actionCalls>
     <apiVersion>62.0</apiVersion>
+    <assignments>
+        <name>Assign_Reason_Renewal</name>
+        <label>Reason - renewal scope</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>NotifBody</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Auto-send is on, but this quote belongs to a renewal opportunity. The Order Form covers new business until 1 January 2027 - renewals continue on the current process.</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Assign_Recipient</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Reason_BG</name>
+        <label>Reason - BG wording missing</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>NotifBody</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Auto-send is on, but a Benefiting Group licence line has no group description. Fill it in on the quote line, regenerate the document, and save again to send.</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Assign_Recipient</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Reason_No_Doc</name>
+        <label>Reason - no document</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>NotifBody</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Auto-send is on, but no generated document exists on this quote. Generate the Order Form (Subscription Order Form template), then save again to send.</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Assign_Recipient</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Reason_Wrong_Template</name>
+        <label>Reason - wrong template</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>NotifBody</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Auto-send is on, but the latest document on this quote was not generated with the Subscription Order Form template. Regenerate with that template and save again to send.</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Assign_Recipient</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Recipient</name>
+        <label>Notify the sales rep (or owner)</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>RecipientIds</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>NotifyUserId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Notif_Type</targetReference>
+        </connector>
+    </assignments>
     <decisions>
         <name>Decision_Scope</name>
         <label>In scope? (new business only until 1 Jan 2027)</label>
@@ -37,6 +156,9 @@
                     <stringValue>Renewals</stringValue>
                 </rightValue>
             </conditions>
+            <connector>
+                <targetReference>Assign_Reason_Renewal</targetReference>
+            </connector>
             <label>Renewal - no auto send until 1 Jan</label>
         </rules>
     </decisions>
@@ -59,6 +181,9 @@
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
+            <connector>
+                <targetReference>Assign_Reason_BG</targetReference>
+            </connector>
             <label>BG line without a group definition - no auto send</label>
         </rules>
     </decisions>
@@ -67,7 +192,32 @@
         <label>Quote document exists?</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Reason_No_Doc</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>No document - do not send</defaultConnectorLabel>
+        <rules>
+            <name>Wrong_Template</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Quote_Document</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Doc_Template.Name</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Subscription Order Form</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Reason_Wrong_Template</targetReference>
+            </connector>
+            <label>Latest document is not the Subscription Order Form</label>
+        </rules>
         <rules>
             <name>Document_Found</name>
             <conditionLogic>and</conditionLogic>
@@ -92,6 +242,11 @@
         </rules>
     </decisions>
     <environments>Default</environments>
+    <formulas>
+        <name>NotifyUserId</name>
+        <dataType>String</dataType>
+        <expression>IF(ISBLANK({!$Record.SBQQ__SalesRep__c}), {!$Record.OwnerId}, {!$Record.SBQQ__SalesRep__c})</expression>
+    </formulas>
     <interviewLabel>Quote - Send Order Form (Zero Click) {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Quote - Send Order Form (Zero Click)</label>
     <processMetadataValues>
@@ -107,6 +262,27 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Notif_Type</name>
+        <label>Get the Order Form notification type</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Send_Block_Notification</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Order_Form_Notice</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CustomNotificationType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <recordLookups>
         <name>Get_Incomplete_BG_Line</name>
         <label>Get a Benefiting Group line without wording</label>
@@ -234,4 +410,18 @@
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
+    <variables>
+        <name>NotifBody</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>RecipientIds</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
 </Flow>

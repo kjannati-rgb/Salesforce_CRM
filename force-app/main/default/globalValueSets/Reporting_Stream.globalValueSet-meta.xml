@@ -1,0 +1,789 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>Advertising - GAR</fullName>
+        <default>false</default>
+        <label>Advertising - GAR</label>
+    </customValue>
+    <customValue>
+        <fullName>Advertising - GBRR</fullName>
+        <default>false</default>
+        <label>Advertising - GBRR</label>
+    </customValue>
+    <customValue>
+        <fullName>Advertising - GCR</fullName>
+        <default>false</default>
+        <label>Advertising - GCR</label>
+    </customValue>
+    <customValue>
+        <fullName>Advertising - GDR</fullName>
+        <default>false</default>
+        <label>Advertising - GDR</label>
+    </customValue>
+    <customValue>
+        <fullName>Advertising - GIR</fullName>
+        <default>false</default>
+        <label>Advertising - GIR</label>
+    </customValue>
+    <customValue>
+        <fullName>Advertising - GRR</fullName>
+        <default>false</default>
+        <label>Advertising - GRR</label>
+    </customValue>
+    <customValue>
+        <fullName>Advertising - IAM</fullName>
+        <default>false</default>
+        <label>Advertising - IAM</label>
+    </customValue>
+    <customValue>
+        <fullName>Advertising - LACCA</fullName>
+        <default>false</default>
+        <label>Advertising - LACCA</label>
+    </customValue>
+    <customValue>
+        <fullName>Advertising - Lexology</fullName>
+        <default>false</default>
+        <label>Advertising - Lexology</label>
+    </customValue>
+    <customValue>
+        <fullName>Advertising - LL</fullName>
+        <default>false</default>
+        <label>Advertising - LL</label>
+    </customValue>
+    <customValue>
+        <fullName>Advertising - WTR</fullName>
+        <default>false</default>
+        <label>Advertising - WTR</label>
+    </customValue>
+    <customValue>
+        <fullName>AllHires</fullName>
+        <default>false</default>
+        <label>AllHires</label>
+    </customValue>
+    <customValue>
+        <fullName>ALM - Regional Publication</fullName>
+        <default>false</default>
+        <label>ALM - Regional Publication</label>
+    </customValue>
+    <customValue>
+        <fullName>ALM - Subscription</fullName>
+        <default>false</default>
+        <label>ALM - Subscription</label>
+    </customValue>
+    <customValue>
+        <fullName>Consulting</fullName>
+        <default>false</default>
+        <label>Consulting</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - CCF</fullName>
+        <default>false</default>
+        <label>Events - CCF</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - GAR</fullName>
+        <default>false</default>
+        <label>Events - GAR</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - GAR Masterclass</fullName>
+        <default>false</default>
+        <label>Events - GAR Masterclass</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - GBRR</fullName>
+        <default>false</default>
+        <label>Events - GBRR</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - GBRR Masterclass</fullName>
+        <default>false</default>
+        <label>Events - GBRR Masterclass</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - GCC</fullName>
+        <default>false</default>
+        <label>Events - GCC</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - GCR</fullName>
+        <default>false</default>
+        <label>Events - GCR</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - GCR Masterclass</fullName>
+        <default>false</default>
+        <label>Events - GCR Masterclass</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - GDR</fullName>
+        <default>false</default>
+        <label>Events - GDR</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - GDR Masterclass</fullName>
+        <default>false</default>
+        <label>Events - GDR Masterclass</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - GE</fullName>
+        <default>false</default>
+        <label>Events - GE</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - GIL</fullName>
+        <default>false</default>
+        <label>Events - GIL</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - GILFF</fullName>
+        <default>false</default>
+        <label>Events - GILFF</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - GIR</fullName>
+        <default>false</default>
+        <label>Events - GIR</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - GIR Masterclass</fullName>
+        <default>false</default>
+        <label>Events - GIR Masterclass</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - GLC</fullName>
+        <default>false</default>
+        <label>Events - GLC</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - GLL</fullName>
+        <default>false</default>
+        <label>Events - GLL</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - GRR</fullName>
+        <default>false</default>
+        <label>Events - GRR</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - GRR Masterclass</fullName>
+        <default>false</default>
+        <label>Events - GRR Masterclass</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - iam</fullName>
+        <default>false</default>
+        <label>Events - iam</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - IAM Masterclass</fullName>
+        <default>false</default>
+        <label>Events - IAM Masterclass</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - Innovation Awards</fullName>
+        <default>false</default>
+        <label>Events - Innovation Awards</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - IPBC</fullName>
+        <default>false</default>
+        <label>Events - IPBC</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - IP Masterclass</fullName>
+        <default>false</default>
+        <label>Events - IP Masterclass</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - LACCA</fullName>
+        <default>false</default>
+        <label>Events - LACCA</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - Lawyer Awards</fullName>
+        <default>false</default>
+        <label>Events - Lawyer Awards</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - Leadership</fullName>
+        <default>false</default>
+        <label>Events - Leadership</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - Legal Awards</fullName>
+        <default>false</default>
+        <label>Events - Legal Awards</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - Legal Week</fullName>
+        <default>false</default>
+        <label>Events - Legal Week</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - Lex Masterclass</fullName>
+        <default>false</default>
+        <label>Events - Lex Masterclass</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - Lexology</fullName>
+        <default>false</default>
+        <label>Events - Lexology</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - Lexology Index</fullName>
+        <default>false</default>
+        <label>Events - Lexology Index</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - LIL</fullName>
+        <default>false</default>
+        <label>Events - LIL</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - LL</fullName>
+        <default>false</default>
+        <label>Events - LL</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - LL Masterclass</fullName>
+        <default>false</default>
+        <label>Events - LL Masterclass</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - PCE</fullName>
+        <default>false</default>
+        <label>Events - PCE</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - PCGE</fullName>
+        <default>false</default>
+        <label>Events - PCGE</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - Roundtable</fullName>
+        <default>false</default>
+        <label>Events - Roundtable</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - STF</fullName>
+        <default>false</default>
+        <label>Events - STF</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - Tech Awards</fullName>
+        <default>false</default>
+        <label>Events - Tech Awards</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - WIPL</fullName>
+        <default>false</default>
+        <label>Events - WIPL</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - Women&apos;s Legal Awards</fullName>
+        <default>false</default>
+        <label>Events - Women&apos;s Legal Awards</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - WTR</fullName>
+        <default>false</default>
+        <label>Events - WTR</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - WTR Masterclass</fullName>
+        <default>false</default>
+        <label>Events - WTR Masterclass</label>
+    </customValue>
+    <customValue>
+        <fullName>Expert Insight - GAR</fullName>
+        <default>false</default>
+        <label>Expert Insight - GAR</label>
+    </customValue>
+    <customValue>
+        <fullName>Expert Insight - GCR</fullName>
+        <default>false</default>
+        <label>Expert Insight - GCR</label>
+    </customValue>
+    <customValue>
+        <fullName>Expert Insight - GDR</fullName>
+        <default>false</default>
+        <label>Expert Insight - GDR</label>
+    </customValue>
+    <customValue>
+        <fullName>Expert Insight - GIR</fullName>
+        <default>false</default>
+        <label>Expert Insight - GIR</label>
+    </customValue>
+    <customValue>
+        <fullName>Expert Insight - GRR</fullName>
+        <default>false</default>
+        <label>Expert Insight - GRR</label>
+    </customValue>
+    <customValue>
+        <fullName>Expert Insight - iam</fullName>
+        <default>false</default>
+        <label>Expert Insight - iam</label>
+    </customValue>
+    <customValue>
+        <fullName>Expert Insight - Lacca</fullName>
+        <default>false</default>
+        <label>Expert Insight - Lacca</label>
+    </customValue>
+    <customValue>
+        <fullName>Expert Insight - Latin Lawyer</fullName>
+        <default>false</default>
+        <label>Expert Insight - Latin Lawyer</label>
+    </customValue>
+    <customValue>
+        <fullName>Expert Insight - Lexology In-Depth</fullName>
+        <default>false</default>
+        <label>Expert Insight - Lexology In-Depth</label>
+    </customValue>
+    <customValue>
+        <fullName>Expert Insight - Lexology Panoramic</fullName>
+        <default>false</default>
+        <label>Expert Insight - Lexology Panoramic</label>
+    </customValue>
+    <customValue>
+        <fullName>Expert Insight - Lexology Panoramic License Agreements</fullName>
+        <default>false</default>
+        <label>Expert Insight - Lexology Panoramic License Agreements</label>
+    </customValue>
+    <customValue>
+        <fullName>Expert Insight - WTR</fullName>
+        <default>false</default>
+        <label>Expert Insight - WTR</label>
+    </customValue>
+    <customValue>
+        <fullName>Instruct Counsel</fullName>
+        <default>false</default>
+        <label>Instruct Counsel</label>
+    </customValue>
+    <customValue>
+        <fullName>LawCareers.Net</fullName>
+        <default>false</default>
+        <label>LawCareers.Net</label>
+    </customValue>
+    <customValue>
+        <fullName>Not Applicable</fullName>
+        <default>false</default>
+        <label>Not Applicable</label>
+    </customValue>
+    <customValue>
+        <fullName>Other - Lex (Advertising &amp; CCdirectory)</fullName>
+        <default>false</default>
+        <label>Other - Lex (Advertising &amp; CCdirectory)</label>
+    </customValue>
+    <customValue>
+        <fullName>Performance Data - GAR</fullName>
+        <default>false</default>
+        <label>Performance Data - GAR</label>
+    </customValue>
+    <customValue>
+        <fullName>Performance Data - GBRR</fullName>
+        <default>false</default>
+        <label>Performance Data - GBRR</label>
+    </customValue>
+    <customValue>
+        <fullName>Performance Data - GCR</fullName>
+        <default>false</default>
+        <label>Performance Data - GCR</label>
+    </customValue>
+    <customValue>
+        <fullName>Performance Data - GDR</fullName>
+        <default>false</default>
+        <label>Performance Data - GDR</label>
+    </customValue>
+    <customValue>
+        <fullName>Performance Data - GIR</fullName>
+        <default>false</default>
+        <label>Performance Data - GIR</label>
+    </customValue>
+    <customValue>
+        <fullName>Performance Data - GRR</fullName>
+        <default>false</default>
+        <label>Performance Data - GRR</label>
+    </customValue>
+    <customValue>
+        <fullName>Performance Data - iam</fullName>
+        <default>false</default>
+        <label>Performance Data - iam</label>
+    </customValue>
+    <customValue>
+        <fullName>Performance Data - Lexology</fullName>
+        <default>false</default>
+        <label>Performance Data - Lexology</label>
+    </customValue>
+    <customValue>
+        <fullName>Performance Data - Lexology Index</fullName>
+        <default>false</default>
+        <label>Performance Data - Lexology Index</label>
+    </customValue>
+    <customValue>
+        <fullName>Performance Data - LL</fullName>
+        <default>false</default>
+        <label>Performance Data - LL</label>
+    </customValue>
+    <customValue>
+        <fullName>Performance Data - WTR</fullName>
+        <default>false</default>
+        <label>Performance Data - WTR</label>
+    </customValue>
+    <customValue>
+        <fullName>Placeholder</fullName>
+        <default>false</default>
+        <label>Placeholder</label>
+    </customValue>
+    <customValue>
+        <fullName>POS - LJP</fullName>
+        <default>false</default>
+        <label>POS - LJP</label>
+    </customValue>
+    <customValue>
+        <fullName>POS - Reports</fullName>
+        <default>false</default>
+        <label>POS - Reports</label>
+    </customValue>
+    <customValue>
+        <fullName>POS - VSROC</fullName>
+        <default>false</default>
+        <label>POS - VSROC</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - CLE</fullName>
+        <default>false</default>
+        <label>Subs - CLE</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - CLP</fullName>
+        <default>false</default>
+        <label>Subs - CLP</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - Docket Navigator</fullName>
+        <default>false</default>
+        <label>Subs - Docket Navigator</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - DRA</fullName>
+        <default>false</default>
+        <label>Subs - DRA</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - ILO</fullName>
+        <default>false</default>
+        <label>Subs - ILO</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - Law.com</fullName>
+        <default>false</default>
+        <label>Subs - Law.com</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - Legal Monitor</fullName>
+        <default>false</default>
+        <label>Subs - Legal Monitor</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - Lexology Academic</fullName>
+        <default>false</default>
+        <label>Subs - Lexology Academic</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - Lexology Compete</fullName>
+        <default>false</default>
+        <label>Subs - Lexology Compete</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - Lexology Intelligence</fullName>
+        <default>false</default>
+        <label>Subs - Lexology Intelligence</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - Lexology Pro</fullName>
+        <default>false</default>
+        <label>Subs - Lexology Pro</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - Lexology Pro LMI</fullName>
+        <default>false</default>
+        <label>Subs - Lexology Pro LMI</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - Licences Lexology Panoramic</fullName>
+        <default>false</default>
+        <label>Subs - Licences Lexology Panoramic</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - LJN</fullName>
+        <default>false</default>
+        <label>Subs - LJN</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - LJP</fullName>
+        <default>false</default>
+        <label>Subs - LJP</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - MBL Seminars</fullName>
+        <default>false</default>
+        <label>Subs - MBL Seminars</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - Memberships</fullName>
+        <default>false</default>
+        <label>Subs - Memberships</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - Regional</fullName>
+        <default>false</default>
+        <label>Subs - Regional</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - Reports</fullName>
+        <default>false</default>
+        <label>Subs - Reports</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - Specialist Platforms GAR</fullName>
+        <default>false</default>
+        <label>Subs - Specialist Platforms GAR</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - Specialist Platforms GBRR</fullName>
+        <default>false</default>
+        <label>Subs - Specialist Platforms GBRR</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - Specialist Platforms GCR</fullName>
+        <default>false</default>
+        <label>Subs - Specialist Platforms GCR</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - Specialist Platforms GDR</fullName>
+        <default>false</default>
+        <label>Subs - Specialist Platforms GDR</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - Specialist Platforms GIR</fullName>
+        <default>false</default>
+        <label>Subs - Specialist Platforms GIR</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - Specialist Platforms GRR</fullName>
+        <default>false</default>
+        <label>Subs - Specialist Platforms GRR</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - Specialist Platforms iam</fullName>
+        <default>false</default>
+        <label>Subs - Specialist Platforms iam</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - Specialist Platforms LL</fullName>
+        <default>false</default>
+        <label>Subs - Specialist Platforms LL</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - Specialist Platforms WTR</fullName>
+        <default>false</default>
+        <label>Subs - Specialist Platforms WTR</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - VS</fullName>
+        <default>false</default>
+        <label>Subs - VS</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - Law Awards</fullName>
+        <default>false</default>
+        <label>Events - Law Awards</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - Journal Awards</fullName>
+        <default>false</default>
+        <label>Events - Journal Awards</label>
+    </customValue>
+    <customValue>
+        <fullName>POS - Law.com</fullName>
+        <default>false</default>
+        <label>POS - Law.com</label>
+    </customValue>
+    <customValue>
+        <fullName>Other - WW</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Other - WW</label>
+    </customValue>
+    <customValue>
+        <fullName>Benchmarking - WW</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Benchmarking - WW</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - GTDT</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Events - GTDT</label>
+    </customValue>
+    <customValue>
+        <fullName>Other</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Other</label>
+    </customValue>
+    <customValue>
+        <fullName>Other - WTR</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Other - WTR</label>
+    </customValue>
+    <customValue>
+        <fullName>Other - Globe Unbranded</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Other - Globe Unbranded</label>
+    </customValue>
+    <customValue>
+        <fullName>Other - iam</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Other - iam</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - WWL</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Events - WWL</label>
+    </customValue>
+    <customValue>
+        <fullName>Subscriptions - Lexology</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Subscriptions - Lexology</label>
+    </customValue>
+    <customValue>
+        <fullName>Other - TLR</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Other - TLR</label>
+    </customValue>
+    <customValue>
+        <fullName>Other - Lexology Panoramic</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Other - Lexology Panoramic</label>
+    </customValue>
+    <customValue>
+        <fullName>Other - LL</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Other - LL</label>
+    </customValue>
+    <customValue>
+        <fullName>Other - GRR</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Other - GRR</label>
+    </customValue>
+    <customValue>
+        <fullName>Other - GIR</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Other - GIR</label>
+    </customValue>
+    <customValue>
+        <fullName>Other - GDR</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Other - GDR</label>
+    </customValue>
+    <customValue>
+        <fullName>Other - GCR</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Other - GCR</label>
+    </customValue>
+    <customValue>
+        <fullName>Other - Lexology</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Other - Lexology</label>
+    </customValue>
+    <customValue>
+        <fullName>Webinars - LL</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Webinars - LL</label>
+    </customValue>
+    <customValue>
+        <fullName>Other - GAR</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Other - GAR</label>
+    </customValue>
+    <customValue>
+        <fullName>Expert Insight - Globe Unbranded</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Expert Insight - Globe Unbranded</label>
+    </customValue>
+    <customValue>
+        <fullName>Expert Insight - LL</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Expert Insight - LL</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - ILO</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Events - ILO</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - Content LexGTDT (renewed to Pro)</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Subs - Content LexGTDT (renewed to Pro)</label>
+    </customValue>
+    <customValue>
+        <fullName>Other - WWL</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Other - WWL</label>
+    </customValue>
+    <customValue>
+        <fullName>Events - Legal Training</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Events - Legal Training</label>
+    </customValue>
+    <customValue>
+        <fullName>Subs - TLR</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Subs - TLR</label>
+    </customValue>
+    <customValue>
+        <fullName>Expert Insight - TLR</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Expert Insight - TLR</label>
+    </customValue>
+    <customValue>
+        <fullName>Webinars - GCR</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Webinars - GCR</label>
+    </customValue>
+    <customValue>
+        <fullName>Webinars - GTDT</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Webinars - GTDT</label>
+    </customValue>
+    <masterLabel>Reporting Stream</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>

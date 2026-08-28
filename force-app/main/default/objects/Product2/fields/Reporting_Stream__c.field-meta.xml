@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reporting_Stream__c</fullName>
+    <description>This field is used for reporting purposes.</description>
+    <inlineHelpText>This field is used for reporting purposes.</inlineHelpText>
+    <label>Reporting Stream</label>
+    <required>true</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Division__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetName>Reporting_Stream</valueSetName>
+        <valueSettings>
+            <controllingFieldValue>Practice Intelligence</controllingFieldValue>
+            <valueName>Subs - Docket Navigator</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Practice Intelligence</controllingFieldValue>
+            <valueName>Subs - Lexology Academic</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Practice Intelligence</controllingFieldValue>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Subs - Lexology Pro</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Practice Intelligence</controllingFieldValue>
+            <valueName>Subs - Specialist Platforms GAR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Practice Intelligence</controllingFieldValue>
+            <valueName>Subs - Specialist Platforms GBRR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Practice Intelligence</controllingFieldValue>
+            <valueName>Subs - Specialist Platforms GCR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Practice Intelligence</controllingFieldValue>
+            <valueName>Subs - Specialist Platforms GDR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Practice Intelligence</controllingFieldValue>
+            <valueName>Subs - Specialist Platforms GIR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Practice Intelligence</controllingFieldValue>
+            <valueName>Subs - Specialist Platforms GRR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Practice Intelligence</controllingFieldValue>
+            <valueName>Subs - Specialist Platforms iam</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Practice Intelligence</controllingFieldValue>
+            <valueName>Subs - Specialist Platforms LL</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Practice Intelligence</controllingFieldValue>
+            <valueName>Subs - Specialist Platforms WTR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>ALM</controllingFieldValue>
+            <valueName>ALM - Regional Publication</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>ALM</controllingFieldValue>
+            <valueName>ALM - Subscription</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>ALM</controllingFieldValue>
+            <valueName>Consulting</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>ALM</controllingFieldValue>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Placeholder</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>ALM</controllingFieldValue>
+            <valueName>POS - LJP</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>ALM</controllingFieldValue>
+            <valueName>POS - Reports</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>ALM</controllingFieldValue>
+            <valueName>POS - VSROC</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>ALM</controllingFieldValue>
+            <valueName>Subs - CLE</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>ALM</controllingFieldValue>
+            <valueName>Subs - CLP</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>ALM</controllingFieldValue>
+            <valueName>Subs - DRA</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>ALM</controllingFieldValue>
+            <valueName>Subs - Law.com</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>ALM</controllingFieldValue>
+            <valueName>Subs - LJN</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>ALM</controllingFieldValue>
+            <valueName>Subs - LJP</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>ALM</controllingFieldValue>
+            <valueName>Subs - Memberships</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>ALM</controllingFieldValue>
+            <valueName>Subs - Regional</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>ALM</controllingFieldValue>
+            <valueName>Subs - Reports</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>ALM</controllingFieldValue>
+            <valueName>Subs - VS</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>ALM</controllingFieldValue>
+            <valueName>POS - Law.com</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - CCF</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - GAR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - GAR Masterclass</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - GBRR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - GBRR Masterclass</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - GCC</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - GCR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - GCR Masterclass</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - GDR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - GDR Masterclass</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - GE</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - GIL</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - GILFF</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - GIR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - GIR Masterclass</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - GLC</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - GLL</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - GRR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - GRR Masterclass</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - iam</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - IAM Masterclass</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - Innovation Awards</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - IPBC</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - IP Masterclass</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - LACCA</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - Lawyer Awards</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - Leadership</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - Legal Awards</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - Legal Week</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - Lex Masterclass</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - Lexology</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - Lexology Index</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - LIL</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - LL</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - LL Masterclass</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - PCE</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - PCGE</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - Roundtable</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - STF</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - Tech Awards</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - WIPL</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - Women&apos;s Legal Awards</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - WTR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - WTR Masterclass</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Not Applicable</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - Law Awards</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Events</controllingFieldValue>
+            <valueName>Events - Journal Awards</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>MBL Seminars</controllingFieldValue>
+            <valueName>Subs - MBL Seminars</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Advertising - GAR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Advertising - GBRR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Advertising - GCR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Advertising - GDR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Advertising - GIR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Advertising - GRR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Advertising - IAM</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Advertising - LACCA</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Advertising - Lexology</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Advertising - LL</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Advertising - WTR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>AllHires</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Expert Insight - GAR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Expert Insight - GCR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Expert Insight - GDR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Expert Insight - GIR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Expert Insight - GRR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Expert Insight - iam</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Expert Insight - Lacca</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Expert Insight - Latin Lawyer</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Expert Insight - Lexology In-Depth</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Expert Insight - Lexology Panoramic</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Expert Insight - Lexology Panoramic License Agreements</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Expert Insight - WTR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Instruct Counsel</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>LawCareers.Net</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Other - Lex (Advertising &amp; CCdirectory)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Performance Data - GAR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Performance Data - GBRR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Performance Data - GCR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Performance Data - GDR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Performance Data - GIR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Performance Data - GRR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Performance Data - iam</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Performance Data - Lexology</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Performance Data - Lexology Index</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Performance Data - LL</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Performance Data - WTR</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Subs - Legal Monitor</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Subs - Lexology Compete</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Subs - Lexology Intelligence</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Subs - Lexology Pro LMI</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Market Intelligence</controllingFieldValue>
+            <valueName>Subs - Licences Lexology Panoramic</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

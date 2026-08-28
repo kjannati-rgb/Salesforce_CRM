@@ -18,6 +18,10 @@ private class OpportunityBillingEntityHandler_Test {
             AccountId=a.Id
         ); insert prev;
 
+        // Previous_Opportunity__c lookup filter only accepts closed-won opportunities
+        prev.StageName='Closed Won';
+        update prev;
+
         Opportunity cur = new Opportunity(
             Name='Cur',
             StageName='Prospecting',
@@ -26,9 +30,19 @@ private class OpportunityBillingEntityHandler_Test {
             Previous_Opportunity__c=prev.Id,
             AccountId=a.Id
         ); insert cur;
-        
-        
 
+        // Second renewal referencing the same previous opp in the same transaction:
+        // exercises the per-transaction previous-opportunity cache (no repeat query).
+        Opportunity cur2 = new Opportunity(
+            Name='Cur2',
+            StageName='Prospecting',
+            CloseDate=Date.today(),
+            Type='Renewal',
+            Previous_Opportunity__c=prev.Id,
+            AccountId=a.Id
+        ); insert cur2;
+        System.assert(OpportunityBillingEntityHandler.prevOppCacheIds.contains(prev.Id),
+            'Previous opportunity must be memoized for the transaction');
     }
     
     @IsTest

@@ -280,19 +280,18 @@ public without sharing class OpportunityAnalyticsCreate {
 
     /**
      * Returns whether the feature is switched on via Opportunity_Analytics_Settings__mdt.
-     * Queries into a List so a missing CMDT record is a graceful "off" rather than a
-     * QueryException (assigning [SELECT ... LIMIT 1] to a single sObject throws on no rows).
-     * The activeOverride test hook lets tests exercise both the on and off paths.
+     * Reads the designated 'Switch' record explicitly — the org holds more than one record
+     * of this type, so a bare LIMIT 1 picked an arbitrary row. getInstance() reads the
+     * cached CMDT registry (no SOQL) and returns null when the record is missing, which is
+     * a graceful "off". The activeOverride test hook lets tests exercise both paths.
      */
     @TestVisible
     private static Boolean isFeatureActive() {
         if (activeOverride != null) {
             return activeOverride;
         }
-        List<Opportunity_Analytics_Settings__mdt> settings = [
-            SELECT IsActive__c FROM Opportunity_Analytics_Settings__mdt LIMIT 1
-        ];
-        return !settings.isEmpty() && settings[0].IsActive__c == true;
+        Opportunity_Analytics_Settings__mdt setting = Opportunity_Analytics_Settings__mdt.getInstance('Switch');
+        return setting != null && setting.IsActive__c == true;
     }
 
     /**

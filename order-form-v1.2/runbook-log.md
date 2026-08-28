@@ -1116,3 +1116,17 @@ anonymous-apex no-op update -> "Included as part of the GAR subscription." Other
 products can adopt the same value as found. Both Adobe test agreements on Q-187142 cancelled at
 Kam's request (status->Cancelled sends the Adobe-side revocation, then record deleted); all test
 QuoteDocuments removed.
+
+## Final sign-off round + Adobe cleanup (2026-08-28)
+
+Kam approved the final Milbank render ("happy with this one"). Same-session polish: singular
+grammar at count 1 ("1 named authorised user"; also "Up to 1 authorised user") - formula change so
+every existing quote corrected instantly, all 3 orgs; AM email-overflow fix attempted (two-line
+cell) but Kam preferred the original -> reverted to single-line, overflow accepted on long
+email+phone combos (widening the masthead box 45%->55% is the fallback if it ever grates).
+ADOBE SWEEP at Kam's request ("cancel all the adobe's"): all 3 out-for-signature test agreements
+to Kam cancelled-then-deleted (today's Milbank + the two stale 24-Aug Q-219317 probes - closing
+the long-standing "cancel stale Adobe probes" item); today's Milbank test QuoteDocument deleted
+(the customer's genuine 2025 renewal doc untouched); zero open agreements addressed to Kam
+remain. Q-187142 left with: stamped GAR logo URL, healed licence displays, signatory Paula
+Prudenti (flow default).

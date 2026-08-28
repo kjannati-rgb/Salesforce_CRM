@@ -63,6 +63,47 @@
             </value>
         </assignmentItems>
     </assignments>
+    <assignments>
+        <name>Assign_From_Override</name>
+        <label>Model from the manual override</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.License_Model__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.License_Model_Override__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Decision_Count</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Decision_Override</name>
+        <label>Manual override set?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Decision_Family</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No override - derive</defaultConnectorLabel>
+        <rules>
+            <name>Override_Set</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.License_Model_Override__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_From_Override</targetReference>
+            </connector>
+            <label>Override set</label>
+        </rules>
+    </decisions>
     <decisions>
         <name>Decision_Family</name>
         <label>Which rule set?</label>
@@ -184,7 +225,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Decision_Family</targetReference>
+            <targetReference>Decision_Override</targetReference>
         </connector>
         <object>SBQQ__QuoteLine__c</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>

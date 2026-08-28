@@ -1145,3 +1145,19 @@ change, rep-invisible. Live all 3 orgs; proven on Q-187142: 24k line (2.3x list)
 License, 10k line (0.95x) -> 1 named authorised user. RESIDUAL: a genuine single seat sold at
 >=2x list would misprint Firmwide (data shows that band is thin); the flag is Pro-family-scoped
 so GAR/IAM etc. unaffected.
+
+## Override valve (2026-08-28, "build the override valve and go with your recommendation")
+
+License_Model_Override__c picklist on QuoteLine (same 11 values + Included, restricted). Wins over
+BOTH derivations: QuoteLine_Stamp_License_Model v2 (PROD) checks it first and copies it into
+License_Model__c (still flows into Decision_Count so AU/LA counts derive); the display formula's
+qty-1 Pro price heuristic gained an ISBLANK(override) guard so an explicit "Authorised Users"
+override suppresses the Firmwide relabel. Surfaced in the QLE via the Subscriptions FieldSet
+(where BG-era fields live; BG description itself turned out to live in the send-flow screens -
+found via MetadataComponentDependency, layouts reference it nowhere). FLS: edit in
+Order_Form_Subscriptions, read in Order_Form_Core (PROD Core deploy = trimmed staging copy again).
+GOTCHA: standalone .fieldSet-meta.xml REQUIRES <fullName> as first child (unlike most source-format
+files - "element fullName missing" otherwise). E2E PROD both ways on the Milbank 24k line:
+override=Authorised Users -> "1 named authorised user"; cleared -> heuristic returns "Firmwide
+License". Recommendation locked: 2x threshold, label-not-gate, no send-gate; flagged example goes
+through the 3-person sign-off for Legal's blessing.

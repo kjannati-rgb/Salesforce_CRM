@@ -152,6 +152,9 @@ async function upsert(type, extId, fields) {
         SBQQ__DisplayOrder__c: order,
       };
       if (ext === "OF-V12-S40") fields.SBQQ__QuoteTotalsPrinted__c = true;
+      // Execution starts on its own page: the doc engine ignores page-break-inside CSS,
+      // so signatures were straddling page breaks (Antheros review 28 Aug).
+      if (ext === "OF-V12-S90") fields.SBQQ__PageBreak__c = "Before";
       await upsert("SBQQ__TemplateSection__c", ext + suffix, fields);
     }
   }

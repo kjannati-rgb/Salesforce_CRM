@@ -1,7 +1,13 @@
-<!-- Section 8. Adobe Sign text tags per Appendix B - Tags FINAL: white 8px (invisible; 8px kept so field geometry matches the UAT signing sessions). Flipped 2026-08-23. -->
+<!-- Section 8. Adobe Sign text tags per Appendix B - Tags FINAL: white 8px (invisible; 8px kept so field geometry matches the UAT signing sessions). Flipped 2026-08-23.
+     NOTE: the doc engine IGNORES page-break-inside CSS (verified 28 Aug) - the real
+     keep-together is the template section's Page Break = Before (set by push-template-content.js
+     on OF-V12-S90), which gives Execution its own page. The CSS below is left as documentation
+     of the attempt; it is inert. -->
+<div style="page-break-inside:avoid;">
 <table style="width:100%;border-collapse:collapse;margin-top:14px;margin-bottom:6px;"><tr><td style="border-bottom:2px solid #00C8A7;color:#003340;font-size:12px;font-weight:bold;padding:2px 0 3px 0;">9. Execution</td></tr></table>
 <p style="font-size:9px;color:#212B2E;">By signing below, the Customer confirms it has read, understood and agrees to be bound by this Order Form and the Agreement. The signatory warrants that they are duly authorised to execute this Order Form on behalf of the Customer.</p>
 <p style="font-size:9px;color:#003340;font-weight:bold;">Signed for and on behalf of the Customer</p>
-<table style="width:100%;font-size:9px;border-collapse:collapse;color:#212B2E;">
+<table style="width:100%;font-size:9px;border-collapse:collapse;color:#212B2E;page-break-inside:avoid;">
 <tr><td style="width:25%;color:#003340;padding:8px 6px 2px 0;">Signature:</td><td style="width:75%;border-bottom:1px solid #003340;padding:8px 6px 2px 6px;"><span style="color:#FFFFFF;font-size:8px;">{{*Sig_es_:signer1:signature}}</span></td></tr><tr><td style="width:25%;color:#003340;padding:8px 6px 2px 0;">Name (print):</td><td style="width:75%;border-bottom:1px solid #003340;padding:8px 6px 2px 6px;"><span style="color:#FFFFFF;font-size:8px;">{{N_es_:signer1:fullname}}</span></td></tr><tr><td style="width:25%;color:#003340;padding:8px 6px 2px 0;">Position / title:</td><td style="width:75%;border-bottom:1px solid #003340;padding:8px 6px 2px 6px;"><span style="color:#FFFFFF;font-size:8px;">{{*Ttl_es_:signer1:title}}</span></td></tr><tr><td style="width:25%;color:#003340;padding:8px 6px 2px 0;">Date:</td><td style="width:75%;border-bottom:1px solid #003340;padding:8px 6px 2px 6px;"><span style="color:#FFFFFF;font-size:8px;">{{Dte_es_:signer1:date}}</span></td></tr>
 </table>
+</div>

@@ -1250,3 +1250,16 @@ Brand_Value='Law.com'. PROD E2E: real NB quote Q-222634 stamped the Law.com URL 
 or template changes - exactly the designed one-row extension. GOTCHA for future logo pulls: check
 magic bytes, marketing folders lie about extensions; SharePoint REST works with item-level link
 access even when the site UI shows AccessDenied.
+
+## Antheros review fixes (2026-08-28, Kam: "confirm what is missing")
+
+Full-page review of the Law.com test render (pypdfium2 rasterise -> visual check; the tooling to
+READ rendered PDFs now exists locally). ONE real defect: License Model blank - pre-automation line
+outside the open-deal sweep; healed by apex no-op touch -> "Limited Access - Up to 5 authorised
+users" (US entity rule, seats=5). Cannot occur on post-automation quotes. All other blanks by
+design (customer reg no data, signer-filled VAT/PO/signature, no watermark on Approved).
+PAGINATION: signature rows straddled the page break. page-break-inside:avoid CSS is IGNORED by
+the doc engine (verified by render) - real fix is SBQQ__TemplateSection__c.SBQQ__PageBreak__c =
+'Before' on the Execution section (OF-V12-S90), now set by push-template-content.js: Execution
+always opens its own page. Pushed all 3 orgs; verified render. Two interim agreements cancelled;
+final resend a3GPx000001ZJSDMA4 with healed licence + clean signature page.

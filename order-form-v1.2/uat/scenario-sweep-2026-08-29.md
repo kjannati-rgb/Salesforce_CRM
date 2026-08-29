@@ -32,7 +32,7 @@ and re-stamped before rendering; all test documents were deleted after download.
 | ALM GLOBAL, LLC entity (US) | Q-222930/Q-222928 | "ALM GLOBAL, LLC" + New York law | PASS |
 | LBR entity | multiple | "Law Business Research Limited (Trading as "Centellic")" | PASS |
 | MBL entity | Q-222934 | "MBL Seminars Limited (Trading as "Centellic")" | PASS |
-| GHK billing entity | Q-222935 | **"Law Business Research Limited" (no Trading-as)** — see finding 2 | REVIEW |
+| GHK billing entity | Q-222935 | Initially "Law Business Research Limited" — config defect, FIXED same day (see finding 2) | FIXED |
 
 ## Licence wording observed across the set
 
@@ -49,10 +49,12 @@ real quote encountered — untested against live data.**
    Daily Business Review Online, and event-sponsorship items. Products data gap, not a template
    defect — same class as the GAR ART case (fixed via the "Included" model). Recommend: product
    owners assign License_Model__c defaults (or "Included") to these families as encountered.
-2. **GHK entity block prints "Law Business Research Limited"** without the Trading-as suffix — that
-   is exactly what the approved GHK config row contains (Legal_Entity_Name__c). If HK contracts
-   should name a Hong Kong entity (the rep's own entity field says "Law Business Research (Asia)
-   Ltd."), the CMDT row needs Legal's corrected wording. Config change only; flagged, not changed.
+2. **GHK entity block printed "Law Business Research Limited"** — config defect in the GHK CMDT
+   row: the matcher field (Entity_Value__c) correctly said the Asia entity but the display field
+   (Legal_Entity_Name__c) held the UK name. **FIXED 29 Aug on Kam's ruling** to "Law Business
+   Research (Asia) Limited"; deployed to KJDEV/FULLUAT/PROD and re-verified live on Q-222935.
+   Registration number, registered office (Hong Kong) and English governing law were already
+   correct and unchanged.
 3. Several brand-lead quotes found were **events sponsorship deals** (IAM/LACCA/LL) — they rendered
    fine for logo validation, but events deals will use their own template when that lane is built;
    their blank licence cells are expected.

@@ -12,7 +12,7 @@
     </values>
     <values>
         <field>Legal_Entity_Name__c</field>
-        <value xsi:type="xsd:string">Law Business Research Limited</value>
+        <value xsi:type="xsd:string">Law Business Research (Asia) Limited</value>
     </values>
     <values>
         <field>Registration_Number__c</field>

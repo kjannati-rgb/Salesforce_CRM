@@ -62,19 +62,28 @@ as captions.
 
 ---
 
-## Video 3 — "The override" (~45 seconds, for managers)
+<!-- Voice: en-US-AndrewMultilingualNeural (v3 rebuild, 2026-08-29). Video 3 gained two segments of real QLE footage. -->
+## Video 3 — "The override" (~56 seconds, for managers; includes real line-editor footage)
 
-**Screen:** a quote line where the licence wording doesn't fit the deal.
+**Screen:** title slide, then two real production frames of the quote line editor.
 
-> The licence wording is automatic and it's right almost every time. This is for the exception.
+> The licence wording on the Order Form is automatic, and it is right almost every time. This
+> video is for the exception.
 >
-> This deal prints "Firmwide License", but what we actually sold is one named user. On the quote
-> line, I open the **License Model Override**, pick "Authorised Users", and save. Regenerate the
-> document — and the wording now matches the deal.
+> When the wording doesn't match the deal, you have two places to fix it: the Licence Model
+> section on the quote line page, or the quote line editor, where you already work. Let me show
+> you the editor.
 >
-> The override beats everything: the product default and the automatic pricing check. Use it when
-> the deal is genuinely unusual; clear it to go back to automatic. Ten seconds, no admin, no
-> ticket.
+> **[QLE frame 1]** This is a real quote in the line editor, on the Subscriptions view. Look to
+> the right: License Model Override is just another column, sitting next to the finance code.
+>
+> **[QLE frame 2]** Click the cell, pick the model that matches the deal — here, Firmwide License
+> — and the change lights up orange until you save. Save, regenerate the document, and the
+> wording follows.
+>
+> The override beats everything: the product default and the automatic pricing check, in both
+> directions. Use it when the deal is genuinely unusual, and clear it to go back to automatic.
+> Ten seconds, no admin, no ticket.
 
 ---
 

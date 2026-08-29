@@ -327,7 +327,7 @@
         <allowPause>false</allowPause>
         <fields>
             <name>NoSignatoryText</name>
-            <fieldText>&lt;p&gt;&lt;b&gt;We don't know who signs this Order Form.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;The signer comes from the quote's Primary Contact. Check the Primary Contact is set, save the quote (any save refreshes the signer), and try again. If someone other than your main contact should sign, ask the CRM team.&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;b&gt;We don't know who signs this Order Form.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;The signer is the quote's Signatory Contact, which fills itself from the Primary Contact on save. Check the Primary Contact is set, save the quote, and try again — or set the Signatory Contact directly if someone else signs (a director, GC, procurement).&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>

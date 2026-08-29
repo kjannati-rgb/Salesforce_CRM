@@ -54,8 +54,9 @@ as captions.
 >
 > You might also see: quote not approved yet — get it approved; we don't know who signs — set the
 > Primary Contact on the quote; a Benefiting Group line with no description — fill it in on the
-> line. (The signer and the invoice row both come from the Primary Contact; if a different person
-> should sign or be invoiced, that's a CRM-team ask.)
+> line. (The signer and the invoice row both default from the Primary Contact; if a different
+> person should sign or be invoiced, set the Signatory Contact or Invoice Contact on the quote —
+> they sit just under the Primary Contact.)
 >
 > Every message is the fix. Read it, do it, send again. No ticket needed.
 

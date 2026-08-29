@@ -128,3 +128,7 @@ Fixes applied (KJDEV verified):
 - Net 90 end-to-end test: blocked under GBP 7.5k; justification required; days=90; routes to the chain (step 1 Requested / step 2 Assigned); excluded from the old Finance rule by the carve-out. ALL PASS.
 
 Decision for Lina (added to playback doc + interactive playbook): (a) deactivate Net 75/90/120 at go-live = true 60-day cap, zero operational impact; or (b) keep them behind the same chain per the doc's 120-day row. If (a), the deactivation joins the go-live change window alongside the ALM rule retirement.
+
+## Decision recorded - 29 Aug 2026: Net 75/90/120 KEPT (option b)
+
+Kamyar's call: the three extended values stay available for the process document's "extremely rare circumstances", policed by the same VRs + two-step chain (the >30-days condition already covers them - no build change needed). Go-live change window is unchanged: activate 2 new rules + retire the ALM rule only; NO picklist deactivation. Comms follow-up: Lina's process document should soften the "60 days is the absolute maximum" guardrail line to match its own approvals table before cascade.

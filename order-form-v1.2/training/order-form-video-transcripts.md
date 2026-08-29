@@ -32,7 +32,7 @@ as captions.
 >
 > **Screen: the quote after signing.** And when they sign? Signed date on the quote. Signed PDF
 > filed. Their PO and VAT answers written back. Automatically. You did three things: described
-> the group, checked the signatory, clicked send.
+> the group, checked the Primary Contact, clicked send.
 
 ---
 
@@ -52,8 +52,10 @@ as captions.
 > old template. The message names the document, names the template, and tells me the fix: open
 > Generate Document, pick Subscription Order Form, generate, try again. Thirty seconds.
 >
-> You might also see: quote not approved yet — get it approved; no signatory — set the Signatory
-> Contact; a Benefiting Group line with no description — fill it in on the line.
+> You might also see: quote not approved yet — get it approved; we don't know who signs — set the
+> Primary Contact on the quote; a Benefiting Group line with no description — fill it in on the
+> line. (The signer and the invoice row both come from the Primary Contact; if a different person
+> should sign or be invoiced, that's a CRM-team ask.)
 >
 > Every message is the fix. Read it, do it, send again. No ticket needed.
 

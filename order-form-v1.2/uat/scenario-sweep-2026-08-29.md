@@ -44,11 +44,15 @@ real quote encountered — untested against live data.**
 
 ## Findings for review (none block go-live)
 
-1. **Products with no licence model default print a blank Licence Model cell.** Seen on: GCR 100 /
-   GRR 100 Firm Profiles, Lexology Panoramic edition products, Lexology Index country reports,
-   Daily Business Review Online, and event-sponsorship items. Products data gap, not a template
-   defect — same class as the GAR ART case (fixed via the "Included" model). Recommend: product
-   owners assign License_Model__c defaults (or "Included") to these families as encountered.
+1. **Products with no licence model default print a blank Licence Model cell.** Kam's scope ruling
+   29 Aug: GCR 100 / GRR 100 Firm Profiles, Lexology Panoramic editions and Lexology Index country
+   reports are **not subscriptions — out of scope**, as are event-sponsorship items. The one
+   in-scope case left is **Daily Business Review Online** (Family "Subs - Regional", Brand
+   Law.com): the Law.com region rule in QuoteLine_Stamp_License_Model is keyed on family
+   ("Subs - Law.com" / "Subs - Law Journal Press") so "Subs - Regional" falls through to an empty
+   product default. Fix options: add "Subs - Regional" to the IsLawcomFamily formula (regional
+   titles then behave like other Law.com subs — Limited Access with seats on ALM deals) or set
+   License_Model__c defaults on the regional products. Awaiting Kam's call.
 2. **GHK entity block printed "Law Business Research Limited"** — config defect in the GHK CMDT
    row: the matcher field (Entity_Value__c) correctly said the Asia entity but the display field
    (Legal_Entity_Name__c) held the UK name. **FIXED 29 Aug on Kam's ruling** to "Law Business

@@ -132,3 +132,7 @@ Decision for Lina (added to playback doc + interactive playbook): (a) deactivate
 ## Decision recorded - 29 Aug 2026: Net 75/90/120 KEPT (option b)
 
 Kamyar's call: the three extended values stay available for the process document's "extremely rare circumstances", policed by the same VRs + two-step chain (the >30-days condition already covers them - no build change needed). Go-live change window is unchanged: activate 2 new rules + retire the ALM rule only; NO picklist deactivation. Comms follow-up: Lina's process document should soften the "60 days is the absolute maximum" guardrail line to match its own approvals table before cascade.
+
+## Scope confirmed - 29 Aug 2026
+
+Nick F has confirmed the unified all-contracts scope (including ALM). Production deployment is unblocked; per protocol each prod step still executes only on Kamyar's explicit go. NOTE for step 1: the two validation rules deploy ACTIVE by default - decide whether to deploy them inactive and activate in the change window, or accept early policy enforcement on terms *changes* from the moment of deploy.

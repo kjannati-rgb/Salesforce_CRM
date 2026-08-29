@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Payment_Terms_Days__c</fullName>
+    <label>Payment Terms (Days)</label>
+    <description>Numeric equivalent of SBQQ Payment Terms. Immediate/prepay values resolve to 0. Used by the payment term extension validation rules and Advanced Approvals conditions. Part of the Centellic Payment Term Extension Process (Aug 2026).</description>
+    <formula>CASE( TEXT(SBQQ__PaymentTerms__c),
+  "Net 15", 15,
+  "Net 30", 30,
+  "Net 45", 45,
+  "Net 60", 60,
+  0
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <precision>3</precision>
+    <scale>0</scale>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

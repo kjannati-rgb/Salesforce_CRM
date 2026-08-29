@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>SBQQ__Quote__c.Payment_Terms_Days__c</members>
+        <members>SBQQ__Quote__c.ACV_GBP__c</members>
+        <members>SBQQ__Quote__c.Payment_Terms_Justification__c</members>
+        <name>CustomField</name>
+    </types>
+    <types>
+        <members>SBQQ__Quote__c.Extended_Terms_Blocked_Under_10k_ACV</members>
+        <members>SBQQ__Quote__c.Extended_Terms_Justification_Required</members>
+        <name>ValidationRule</name>
+    </types>
+    <version>64.0</version>
+</Package>

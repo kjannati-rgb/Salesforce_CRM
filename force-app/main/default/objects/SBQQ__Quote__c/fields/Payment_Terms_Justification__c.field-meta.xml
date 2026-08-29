@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Payment_Terms_Justification__c</fullName>
+    <label>Payment Terms Justification</label>
+    <description>Required from Sales when requesting payment terms above 30 days. Should cover deal size, contract length, company size and any credit context, per the Centellic Payment Term Extension Process (Aug 2026). Reviewed by Credit Control and the Director of Financial Control.</description>
+    <inlineHelpText>Why does this customer need terms above 30 days? Cover deal size, contract length, company size and any credit context. Finance will review against the payment terms criteria.</inlineHelpText>
+    <type>TextArea</type>
+    <required>false</required>
+</CustomField>

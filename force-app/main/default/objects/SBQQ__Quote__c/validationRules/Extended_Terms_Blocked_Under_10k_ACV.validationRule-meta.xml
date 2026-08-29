@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Extended_Terms_Blocked_Under_10k_ACV</fullName>
+    <active>true</active>
+    <description>Global payment terms process: customers under USD 10,000 (GBP 7,500) annual contract value may not be offered payment terms above 30 days. Fires only when Payment Terms is changed so CPQ renewal automation inheriting legacy terms is not broken on insert.</description>
+    <errorConditionFormula>AND(
+  ISCHANGED(SBQQ__PaymentTerms__c),
+  Payment_Terms_Days__c &gt; 30,
+  ACV_GBP__c &lt; 7500
+)</errorConditionFormula>
+    <errorDisplayField>SBQQ__PaymentTerms__c</errorDisplayField>
+    <errorMessage>Payment terms above 30 days are not permitted for customers under USD 10,000 (GBP 7,500) annual contract value, per the Centellic global payment terms process. Please select Net 30 or shorter terms.</errorMessage>
+</ValidationRule>

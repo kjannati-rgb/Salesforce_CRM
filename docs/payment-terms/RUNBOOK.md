@@ -117,3 +117,14 @@ KJDEV test records: account `001Ae000012vi18IAA`, opp `006Ae00000qKEnFIAW`, quot
 ## Formula carve-out - APPROVED & deployed to KJDEV, 29 Aug 2026
 
 Kamyar approved the carve-out: `Payment_Terms_Days__c <= 30` appended to the two payment-terms branches of `Quote_Finance_Terms_Approval_Check__c` (PROD formula text as base - KJDEV's stale copy was overwritten by this deploy). Verified in KJDEV on a DN/Annual quote: Net 45 -> checkbox FALSE (carved out), Net 15 -> checkbox TRUE (preserved). Repo copy: `force-app/main/default/objects/SBQQ__Quote__c/fields/Quote_Finance_Terms_Approval_Check__c.field-meta.xml` - this exact file deploys to prod in the change window. Open question for Lina: prod's non-DN branch still routes Net 30 to the old Finance rule (deliberately preserved); relieve later if policy says so.
+
+## Net 75/90/120 hardening - 29 Aug 2026 (post-screenshot from Kamyar)
+
+The pack's claim that the prod picklist stops at Net 60 was WRONG: prod actively offers Net 75, Net 90 and Net 120 (default is "Due Upon Receipt of Invoice"; "Due on receipt" no longer active). Usage check: ZERO quotes on any of the three values in 730 days. Without a fix these values resolved to 0 days in `Payment_Terms_Days__c` and would have bypassed the block, the justification gate and the chain entirely.
+
+Fixes applied (KJDEV verified):
+- `Payment_Terms_Days__c` CASE extended: Net 75 -> 75, Net 90 -> 90, Net 120 -> 120. Deployed KJDEV; same file goes to prod.
+- KJDEV `SBQQ__PaymentTerms__c` picklist aligned to prod (was stale: only Net 15-60, "Due on receipt" default).
+- Net 90 end-to-end test: blocked under GBP 7.5k; justification required; days=90; routes to the chain (step 1 Requested / step 2 Assigned); excluded from the old Finance rule by the carve-out. ALL PASS.
+
+Decision for Lina (added to playback doc + interactive playbook): (a) deactivate Net 75/90/120 at go-live = true 60-day cap, zero operational impact; or (b) keep them behind the same chain per the doc's 120-day row. If (a), the deactivation joins the go-live change window alongside the ALM rule retirement.

@@ -8,6 +8,9 @@
   "Net 30", 30,
   "Net 45", 45,
   "Net 60", 60,
+  "Net 75", 75,
+  "Net 90", 90,
+  "Net 120", 120,
   0
 )</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>

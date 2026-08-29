@@ -9,5 +9,5 @@
   ACV_GBP__c &lt; 7500
 )</errorConditionFormula>
     <errorDisplayField>SBQQ__PaymentTerms__c</errorDisplayField>
-    <errorMessage>Payment terms above 30 days are not permitted for customers under USD 10,000 (GBP 7,500) annual contract value, per the Centellic global payment terms process. Please select Net 30 or shorter terms.</errorMessage>
+    <errorMessage>Payment terms above 30 days are not permitted for customers under USD 10,000 (GBP 7,500 / EUR 8,600) annual contract value, per the Centellic global payment terms process. Please select Net 30 or shorter terms.</errorMessage>
 </ValidationRule>

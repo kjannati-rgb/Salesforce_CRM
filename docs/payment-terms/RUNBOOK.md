@@ -136,3 +136,7 @@ Kamyar's call: the three extended values stay available for the process document
 ## Scope confirmed - 29 Aug 2026
 
 Nick F has confirmed the unified all-contracts scope (including ALM). Production deployment is unblocked; per protocol each prod step still executes only on Kamyar's explicit go. NOTE for step 1: the two validation rules deploy ACTIVE by default - decide whether to deploy them inactive and activate in the change window, or accept early policy enforcement on terms *changes* from the moment of deploy.
+
+## EUR added to the block message - 29 Aug 2026
+
+Kamyar's catch: the under-threshold VR message quoted only USD/GBP but Centellic also sells in EUR. Message now reads "under USD 10,000 (GBP 7,500 / EUR 8,600)". Deployed to KJDEV and verified: EUR 8,000 quote (= GBP 6,958) blocked with the new message; EUR 10,000 (= GBP 8,698) permitted with justification. Threshold evaluation itself was already currency-correct (GBP conversion) - this is message clarity only. EUR 8,600 constant derives from the org's 1.1497 rate; revisit alongside the GBP 7,500 constant if FX moves.

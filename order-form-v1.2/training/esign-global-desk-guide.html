@@ -1,0 +1,78 @@
+<title>eSign Global Desk Guide</title>
+<style>
+  :root {
+    --ink: #143641; --ink-soft: #48626b; --ground: #fbfdfd; --surface: #eef5f6;
+    --line: #ccdce0; --navy: #003340; --green: #00c8a7; --green-ink: #007a66;
+    --teal: #008ca6; --amber: #9a6a12; --amber-bg: #f6ecd8; --done-bg: #ddf4ee;
+  }
+  :root:not([data-theme="light"]) { }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #dcebee; --ink-soft: #9bb4bb; --ground: #0c2028; --surface: #122a33;
+      --line: #24424c; --navy: #cfe6ea; --green: #00c8a7; --green-ink: #4fd9bf;
+      --teal: #5bc0d5; --amber: #e3b45e; --amber-bg: #33291a; --done-bg: #103a32;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #dcebee; --ink-soft: #9bb4bb; --ground: #0c2028; --surface: #122a33;
+    --line: #24424c; --navy: #cfe6ea; --green: #00c8a7; --green-ink: #4fd9bf;
+    --teal: #5bc0d5; --amber: #e3b45e; --amber-bg: #33291a; --done-bg: #103a32;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--ground); color: var(--ink); font: 15px/1.6 Arial, Helvetica, sans-serif; }
+  .wrap { max-width: 740px; margin: 0 auto; padding: 40px 22px 70px; }
+  .brandbar { height: 3px; background: var(--green); border-radius: 2px; margin-bottom: 26px; }
+  .eyebrow { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--teal); font-weight: bold; }
+  h1 { font-size: 27px; line-height: 1.2; color: var(--navy); margin: 6px 0 8px; text-wrap: balance; }
+  .lede { color: var(--ink-soft); margin: 0 0 8px; max-width: 62ch; }
+  h2 { font-size: 17px; color: var(--navy); border-bottom: 2px solid var(--green); padding-bottom: 5px; margin: 36px 0 12px; }
+  p { margin: 8px 0; max-width: 70ch; }
+  ol.steps { list-style: none; margin: 14px 0; padding: 0; counter-reset: s; display: flex; flex-direction: column; gap: 10px; }
+  ol.steps li { counter-increment: s; display: grid; grid-template-columns: 34px 1fr; gap: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; }
+  ol.steps li::before { content: counter(s); width: 28px; height: 28px; border-radius: 50%; background: var(--green); color: #003340; font-weight: bold; display: flex; align-items: center; justify-content: center; }
+  ol.steps b { color: var(--navy); }
+  ol.steps .sub { display: block; font-size: 13.5px; color: var(--ink-soft); margin-top: 3px; }
+  .callout { margin: 14px 0; padding: 11px 14px; border-left: 3px solid var(--amber); background: var(--amber-bg); border-radius: 0 8px 8px 0; font-size: 14px; }
+  .callout b { color: var(--navy); }
+  .auto { margin: 14px 0; padding: 11px 14px; border-left: 3px solid var(--green); background: var(--done-bg); border-radius: 0 8px 8px 0; font-size: 14px; }
+  .auto b { color: var(--green-ink); }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; margin: 12px 0; }
+  th { text-align: left; padding: 7px 10px; border-bottom: 2px solid var(--green); color: var(--navy); }
+  td { padding: 7px 10px; border-bottom: 1px solid var(--line); color: var(--ink-soft); vertical-align: top; }
+  td b { color: var(--navy); }
+  footer { margin-top: 44px; font-size: 12px; color: var(--ink-soft); border-top: 1px solid var(--line); padding-top: 12px; }
+</style>
+
+<div class="wrap">
+  <div class="brandbar"></div>
+  <p class="eyebrow">Centellic &middot; subscriptions sales &middot; China desk</p>
+  <h1>eSign Global Desk Guide</h1>
+  <p class="lede">Adobe Sign emails don't reliably reach mainland China, so China-bound agreements go through <b>eSign Global</b> instead. Same Order Form, same automation on signature &mdash; only the signing rail changes. Five steps.</p>
+
+  <h2>When to use this route</h2>
+  <p>The customer's signer is in mainland China (or their firm requires a China-accessible signing platform). Hong Kong signers on international email can usually stay on the normal Adobe route &mdash; use your judgement on the firm.</p>
+
+  <h2>The five steps</h2>
+  <ol class="steps">
+    <li><div><b>Prepare the quote exactly as normal.</b><span class="sub">Approved quote, Primary Contact right, Benefiting Group descriptions filled, seats checked &mdash; everything in the Order Form Academy applies unchanged.</span></div></li>
+    <li><div><b>Generate the document with the Subscription Order Form template.</b><span class="sub">Generate Document on the quote, pick <b>Subscription Order Form</b>, keep the default name. The brand logo, legal entity, licence wording and terms all derive as usual.</span></div></li>
+    <li><div><b>Create the eSignGlobal Agreement.</b><span class="sub">On the quote, open the <b>ESign Agreements</b> tab &rarr; New. Link the <b>Quote Document</b> you just generated and set <b>Contact</b> to the person who signs. Account and Opportunity link the deal.</span></div></li>
+    <li><div><b>Click Send for Signature on the agreement.</b><span class="sub">The document uploads to eSign Global and the signature, name and title fields place themselves automatically. The sender view opens for a final look &mdash; review, then confirm the send. The customer gets a China-accessible signing email.</span></div></li>
+    <li><div><b>They sign &mdash; you're done.</b><span class="sub">The signed PDF files itself against the quote and the Customer Signed Date stamps automatically, exactly like the Adobe route. Nothing to download or upload.</span></div></li>
+  </ol>
+
+  <div class="auto"><b>Also automatic:</b> chasing and withdrawing. <b>Send Reminder</b> re-prompts the signer; <b>Cancel Agreement</b> (with a reason) withdraws it &mdash; both are buttons on the agreement record.</div>
+
+  <div class="callout"><b>One check the system won't do for you:</b> the Adobe route's send button verifies the quote is Approved and the document came from the right template before anything leaves. The eSign Global route trusts <i>you</i> on those two checks &mdash; so confirm the quote is <b>Approved</b> and the linked document was generated with the <b>Subscription Order Form</b> template before you hit Send for Signature.</div>
+
+  <h2>If something looks wrong</h2>
+  <table>
+    <tr><th>Symptom</th><th>What it means &amp; what to do</th></tr>
+    <tr><td><b>Agreement shows an Error</b></td><td>The Error field on the agreement says what failed. Most often the linked Quote Document is missing its PDF &mdash; regenerate the document, relink, send again. Still stuck: post in the CRM support channel.</td></tr>
+    <tr><td><b>Signer never received the email</b></td><td>Check the Contact's email address, then use <b>Send Reminder</b>. eSign Global delivery inside China is reliable once the address is right.</td></tr>
+    <tr><td><b>Wrong document went out</b></td><td><b>Cancel Agreement</b> with a reason, regenerate the Order Form, create a fresh agreement, send again.</td></tr>
+    <tr><td><b>Signed date didn't appear on the quote</b></td><td>The stamp normally lands within a minute of signing. If it hasn't after ten, tell the CRM team &mdash; the signed PDF is safe either way.</td></tr>
+  </table>
+
+  <footer>eSign Global Desk Guide &middot; part of the Order Form v1.2 launch materials &middot; questions to the CRM support channel</footer>
+</div>

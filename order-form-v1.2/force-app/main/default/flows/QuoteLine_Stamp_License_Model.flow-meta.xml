@@ -194,7 +194,7 @@
     <formulas>
         <name>IsLawcomFamily</name>
         <dataType>Boolean</dataType>
-        <expression>OR(TEXT({!$Record.SBQQ__Product__r.Family}) = &quot;Subs - Law.com&quot;, TEXT({!$Record.SBQQ__Product__r.Family}) = &quot;Subs - Law Journal Press&quot;)</expression>
+        <expression>OR(TEXT({!$Record.SBQQ__Product__r.Family}) = &quot;Subs - Law.com&quot;, TEXT({!$Record.SBQQ__Product__r.Family}) = &quot;Subs - Law Journal Press&quot;, TEXT({!$Record.SBQQ__Product__r.Family}) = &quot;Subs - Regional&quot;)</expression>
     </formulas>
     <formulas>
         <name>LineBillingEntity</name>

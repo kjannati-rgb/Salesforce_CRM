@@ -50,9 +50,11 @@ real quote encountered — untested against live data.**
    in-scope case left is **Daily Business Review Online** (Family "Subs - Regional", Brand
    Law.com): the Law.com region rule in QuoteLine_Stamp_License_Model is keyed on family
    ("Subs - Law.com" / "Subs - Law Journal Press") so "Subs - Regional" falls through to an empty
-   product default. Fix options: add "Subs - Regional" to the IsLawcomFamily formula (regional
-   titles then behave like other Law.com subs — Limited Access with seats on ALM deals) or set
-   License_Model__c defaults on the regional products. Awaiting Kam's call.
+   product default. **FIXED 29 Aug (Kam chose the formula route):** "Subs - Regional" added to
+   the IsLawcomFamily formula in QuoteLine_Stamp_License_Model (v3, all 3 orgs, PROD activated) —
+   regional titles now behave like other Law.com subs. Verified live: the DBR Online line on
+   Q-222928 stamps "Limited Access - Up to 152 authorised users (as defined in the General
+   Terms)."
 2. **GHK entity block printed "Law Business Research Limited"** — config defect in the GHK CMDT
    row: the matcher field (Entity_Value__c) correctly said the Asia entity but the display field
    (Legal_Entity_Name__c) held the UK name. **FIXED 29 Aug on Kam's ruling** to "Law Business

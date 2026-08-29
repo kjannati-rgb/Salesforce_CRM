@@ -278,10 +278,10 @@
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>$Profile.Name</leftValueReference>
-                <operator>EqualTo</operator>
+                <leftValueReference>$Record.Swoogo_Registrant_ID__c</leftValueReference>
+                <operator>StartsWith</operator>
                 <rightValue>
-                    <stringValue>Salesforce API Only System Integrations</stringValue>
+                    <stringValue>LBR</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -314,20 +314,6 @@
                 <operator>EqualTo</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Profile.Name</leftValueReference>
-                <operator>NotEqualTo</operator>
-                <rightValue>
-                    <stringValue>Custom: Data Management</stringValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Profile.Name</leftValueReference>
-                <operator>NotEqualTo</operator>
-                <rightValue>
-                    <stringValue>System Administrator</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -430,10 +416,10 @@
             <name>ALM</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>$Record.Owner.Team__c</leftValueReference>
+                <leftValueReference>$Record.Owner.LBR_Legal_Entity__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>ALM Legal - Info Services</stringValue>
+                    <stringValue>ALM Global, LLC</stringValue>
                 </rightValue>
             </conditions>
             <conditions>
@@ -699,6 +685,15 @@
     <description>This is a master flow for Opportunity object, all after insert and after update process should be linked to this tree using sub flows</description>
     <environments>Default</environments>
     <formulas>
+        <name>missing_fields_list</name>
+        <dataType>String</dataType>
+        <expression>MID(
+IF(ISBLANK({!$Record.Account.BillingCountry}), &quot;, Billing Country&quot;, &quot;&quot;) &amp;
+IF(ISBLANK({!$Record.Account.BillingCity}), &quot;, Billing City&quot;, &quot;&quot;) &amp;
+IF(ISBLANK({!$Record.Account.BillingStreet}), &quot;, Billing Street&quot;, &quot;&quot;),
+3, 255)</expression>
+    </formulas>
+    <formulas>
         <name>account_info_missing</name>
         <dataType>Boolean</dataType>
         <expression>(ISBLANK ({!$Record.Account.BillingCity}) ||
@@ -741,15 +736,6 @@ ISCHANGED({!$Record.Type}),true,false)</expression>
         <name>isNew_check</name>
         <dataType>Boolean</dataType>
         <expression>isNew()</expression>
-    </formulas>
-    <formulas>
-        <name>missing_fields_list</name>
-        <dataType>String</dataType>
-        <expression>MID(
-IF(ISBLANK({!$Record.Account.BillingCountry}), &quot;, Billing Country&quot;, &quot;&quot;) &amp;
-IF(ISBLANK({!$Record.Account.BillingCity}), &quot;, Billing City&quot;, &quot;&quot;) &amp;
-IF(ISBLANK({!$Record.Account.BillingStreet}), &quot;, Billing Street&quot;, &quot;&quot;),
-3, 255)</expression>
     </formulas>
     <formulas>
         <name>Production_contact</name>
@@ -808,6 +794,19 @@ IF(ISBLANK({!$Record.Account.BillingStreet}), &quot;, Billing Street&quot;, &quo
             <field>Forecast_Status__c</field>
             <value>
                 <elementReference>Forecast_status</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_flow_to_flag_Do_Not_Invoice</name>
+        <label>Update flow to flag Do Not Invoice</label>
+        <locationX>4010</locationX>
+        <locationY>2220</locationY>
+        <inputAssignments>
+            <field>Invoice_Internal_Comments__c</field>
+            <value>
+                <stringValue>Do Not Invoice</stringValue>
             </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>
@@ -894,6 +893,9 @@ IF(ISBLANK({!$Record.Account.BillingStreet}), &quot;, Billing Street&quot;, &quo
         <label>Create Schedules</label>
         <locationX>4010</locationX>
         <locationY>2112</locationY>
+        <connector>
+            <targetReference>Update_flow_to_flag_Do_Not_Invoice</targetReference>
+        </connector>
         <flowName>ScheduleCreationFlow</flowName>
         <inputAssignments>
             <name>fault_notificaiton_recipients</name>

@@ -62,7 +62,7 @@ as captions.
 
 ---
 
-<!-- Voice: en-US-AndrewMultilingualNeural (v3 rebuild, 2026-08-29). Video 3 gained two segments of real QLE footage. -->
+<!-- Voice: ElevenLabs George (JBFqnCBsd6RMkjVDRZzb, eleven_multilingual_v2), v4 rebuild 2026-08-29; key file C:/Users/Kamyar.Jannati/.elevenlabs_api_key (never commit). Video 3 has two segments of real QLE footage. -->
 ## Video 3 — "The override" (~56 seconds, for managers; includes real line-editor footage)
 
 **Screen:** title slide, then two real production frames of the quote line editor.

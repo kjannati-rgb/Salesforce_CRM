@@ -46,6 +46,19 @@ private class DealContactsController_Test {
         return acc;
     }
 
+    // A second Office under the same Firm as an existing Office - for family-search tests.
+    private static Account makeSiblingOffice(String name, Id firmId) {
+        Account acc = new Account(
+            Name = name,
+            BillingStreet = '1 Fleet Street',
+            BillingCity = 'London',
+            BillingCountry = 'United Kingdom',
+            Ultimate_Account__c = firmId
+        );
+        insert acc;
+        return acc;
+    }
+
     // Email/Title/Mailing fields set unconditionally so any Contact used as a primary
     // Contact Role satisfies Check_Completeness_of_Contact_Roles' required-field checks.
     private static Contact makeContact(String firstName, String lastName, Id accountId) {
@@ -290,5 +303,58 @@ private class DealContactsController_Test {
         Test.stopTest();
 
         System.assertEquals(true, threw, 'an unrecognised role key should be rejected, not silently ignored');
+    }
+
+    @isTest
+    static void searchFamilyContacts_prioritizesSameOfficeOverRestOfFirm() {
+        Account office = makeAccount('Farrow & Sinclair LLP');
+        Account sibling = makeSiblingOffice('Farrow & Sinclair LLP - New York', office.Ultimate_Account__c);
+        Contact sameOfficeMatch = makeContact('Aiden', 'Foster', office.Id);
+        Contact siblingOfficeMatch = makeContact('Amara', 'Foster', sibling.Id);
+        Opportunity opp = makeOpportunity('Global Research Platform', office.Id, null);
+        SBQQ__Quote__c quote = makeQuote(opp.Id, office.Id, 'Quote');
+
+        Test.startTest();
+        List<DealContactsController.ContactSearchResult> results = DealContactsController.searchFamilyContacts(quote.Id, 'Foster');
+        Test.stopTest();
+
+        System.assertEquals(2, results.size(), 'should find the match at this office and the match at the sibling office');
+        System.assertEquals(sameOfficeMatch.Id, results[0].contactId, 'same-office match must come first');
+        System.assertEquals(true, results[0].sameOffice);
+        System.assertEquals(siblingOfficeMatch.Id, results[1].contactId, 'sibling-office match still included, just after');
+        System.assertEquals(false, results[1].sameOffice);
+        System.assertEquals(sibling.Name, results[1].accountName, 'result should surface which office the contact sits at');
+    }
+
+    @isTest
+    static void searchFamilyContacts_excludesContactsAtUnrelatedFirms() {
+        Account office = makeAccount('Farrow & Sinclair LLP');
+        Opportunity opp = makeOpportunity('Global Research Platform', office.Id, null);
+        SBQQ__Quote__c quote = makeQuote(opp.Id, office.Id, 'Quote');
+
+        Account unrelatedOffice = makeAccount('Meridian & Cole LLP');
+        makeContact('Rosa', 'Foster', unrelatedOffice.Id);
+
+        Test.startTest();
+        List<DealContactsController.ContactSearchResult> results = DealContactsController.searchFamilyContacts(quote.Id, 'Foster');
+        Test.stopTest();
+
+        System.assertEquals(0, results.size(), 'a same-named contact at a completely different firm must not appear');
+    }
+
+    @isTest
+    static void searchFamilyContacts_blankTermReturnsWholeFamily() {
+        Account office = makeAccount('Farrow & Sinclair LLP');
+        Account sibling = makeSiblingOffice('Farrow & Sinclair LLP - New York', office.Ultimate_Account__c);
+        makeContact('Elena', 'Whitfield', office.Id);
+        makeContact('Wes', 'Okafor', sibling.Id);
+        Opportunity opp = makeOpportunity('Global Research Platform', office.Id, null);
+        SBQQ__Quote__c quote = makeQuote(opp.Id, office.Id, 'Quote');
+
+        Test.startTest();
+        List<DealContactsController.ContactSearchResult> results = DealContactsController.searchFamilyContacts(quote.Id, '');
+        Test.stopTest();
+
+        System.assertEquals(2, results.size(), 'a blank search term should default to the whole firm family, same-office first');
     }
 }

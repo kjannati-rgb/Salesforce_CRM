@@ -39,6 +39,14 @@ public with sharing class DealContactsController {
         @AuraEnabled public Map<String, ContactRoleInfo> roles;
     }
 
+    public class ContactSearchResult {
+        @AuraEnabled public Id contactId;
+        @AuraEnabled public String name;
+        @AuraEnabled public String title;
+        @AuraEnabled public String accountName;
+        @AuraEnabled public Boolean sameOffice;
+    }
+
     @AuraEnabled(cacheable=true)
     public static PanelData getPanelData(Id quoteId) {
         SBQQ__Quote__c q = queryQuote(quoteId);
@@ -130,6 +138,85 @@ public with sharing class DealContactsController {
         }
 
         return applied;
+    }
+
+    /**
+     * Scoped to the Quote's own Office account plus its Firm (Ultimate_Account__c)
+     * and every other Office under that same Firm - not just the one Office the
+     * Quote sits on. Same-office matches are returned first, then the rest of the
+     * firm family, so a rep at a 200-office firm sees the relevant person without
+     * wading through every sibling office.
+     */
+    @AuraEnabled(cacheable=true)
+    public static List<ContactSearchResult> searchFamilyContacts(Id quoteId, String searchTerm) {
+        SBQQ__Quote__c q = [
+            SELECT SBQQ__Account__c, SBQQ__Account__r.Ultimate_Account__c
+            FROM SBQQ__Quote__c
+            WHERE Id = :quoteId
+            WITH SECURITY_ENFORCED
+            LIMIT 1
+        ];
+
+        Id officeId = q.SBQQ__Account__c;
+        Id firmId = q.SBQQ__Account__r != null ? q.SBQQ__Account__r.Ultimate_Account__c : null;
+
+        if (officeId == null) {
+            return new List<ContactSearchResult>();
+        }
+
+        String likeTerm = '%' + (String.isBlank(searchTerm) ? '' : searchTerm.trim()) + '%';
+        List<ContactSearchResult> results = new List<ContactSearchResult>();
+        Set<Id> seenContactIds = new Set<Id>();
+
+        for (Contact c : [
+            SELECT Id, Name, Title, Account.Name
+            FROM Contact
+            WHERE AccountId = :officeId
+            AND (Name LIKE :likeTerm OR Email LIKE :likeTerm)
+            WITH SECURITY_ENFORCED
+            ORDER BY Name ASC
+            LIMIT 10
+        ]) {
+            results.add(toSearchResult(c, true));
+            seenContactIds.add(c.Id);
+        }
+
+        Set<Id> restOfFamily = new Set<Id>();
+        if (firmId != null) {
+            restOfFamily.add(firmId);
+            for (Account sibling : [
+                SELECT Id FROM Account WHERE Ultimate_Account__c = :firmId AND Id != :officeId WITH SECURITY_ENFORCED
+            ]) {
+                restOfFamily.add(sibling.Id);
+            }
+        }
+
+        if (!restOfFamily.isEmpty()) {
+            for (Contact c : [
+                SELECT Id, Name, Title, Account.Name
+                FROM Contact
+                WHERE AccountId IN :restOfFamily
+                AND (Name LIKE :likeTerm OR Email LIKE :likeTerm)
+                AND Id NOT IN :seenContactIds
+                WITH SECURITY_ENFORCED
+                ORDER BY Name ASC
+                LIMIT 40
+            ]) {
+                results.add(toSearchResult(c, false));
+            }
+        }
+
+        return results;
+    }
+
+    private static ContactSearchResult toSearchResult(Contact c, Boolean sameOffice) {
+        ContactSearchResult r = new ContactSearchResult();
+        r.contactId = c.Id;
+        r.name = c.Name;
+        r.title = c.Title;
+        r.accountName = c.Account != null ? c.Account.Name : null;
+        r.sameOffice = sameOffice;
+        return r;
     }
 
     // ---- internals ----

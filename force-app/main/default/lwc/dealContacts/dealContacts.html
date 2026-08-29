@@ -76,14 +76,33 @@
                         </div>
                         <template if:true={row.isPickerOpen}>
                             <div class="slds-box slds-box_x-small slds-theme_shade slds-m-top_xx-small">
-                                <lightning-record-picker
+                                <lightning-input
+                                    type="search"
                                     label={row.label}
-                                    placeholder="Search this account's contacts…"
-                                    object-api-name="Contact"
-                                    filter={accountFilter}
+                                    variant="label-hidden"
+                                    placeholder="Search this office, or anyone else at the firm…"
                                     data-role={row.key}
-                                    onchange={handlePick}
-                                ></lightning-record-picker>
+                                    onkeyup={handleSearchInput}
+                                ></lightning-input>
+                                <template if:true={row.isSearching}>
+                                    <div class="slds-p-around_small slds-align_absolute-center">
+                                        <lightning-spinner size="x-small" alternative-text="Searching" variant="brand"></lightning-spinner>
+                                    </div>
+                                </template>
+                                <ul class="search-results slds-m-top_xx-small">
+                                    <template for:each={row.searchResults} for:item="result">
+                                        <li
+                                            key={result.contactId}
+                                            class="search-result"
+                                            data-role={row.key}
+                                            data-contact-id={result.contactId}
+                                            onclick={handleSearchResultClick}
+                                        >
+                                            <div class="slds-text-body_regular slds-text-heading_small">{result.name}</div>
+                                            <div class="slds-text-body_small slds-text-color_weak">{result.subtitle}</div>
+                                        </li>
+                                    </template>
+                                </ul>
                             </div>
                         </template>
                     </div>

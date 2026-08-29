@@ -4,6 +4,7 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getPanelData from '@salesforce/apex/DealContactsController.getPanelData';
 import setRoleContact from '@salesforce/apex/DealContactsController.setRoleContact';
 import copyFromPreviousQuote from '@salesforce/apex/DealContactsController.copyFromPreviousQuote';
+import searchFamilyContacts from '@salesforce/apex/DealContactsController.searchFamilyContacts';
 
 const ROLE_META = {
     primary: { label: 'Primary Contact', icon: 'utility:user', alwaysRequired: true },
@@ -19,6 +20,8 @@ const SOURCE_META = {
     manual: { label: 'Manually set', variant: 'inverse' }
 };
 
+const SEARCH_DEBOUNCE_MS = 300;
+
 export default class DealContacts extends LightningElement {
     @api recordId; // SBQQ__Quote__c Id, provided by the record page
 
@@ -27,6 +30,10 @@ export default class DealContacts extends LightningElement {
     error;
     activeRoleKey; // which row's picker is open, if any
     saving = false;
+
+    searchResultsByRole = {}; // roleKey -> array of ContactSearchResult
+    searchingRoleKey; // roleKey currently awaiting a search response, if any
+    searchTimeoutId;
 
     @wire(getPanelData, { quoteId: '$recordId' })
     wiredPanel(result) {
@@ -44,14 +51,6 @@ export default class DealContacts extends LightningElement {
         return !this.panel && !this.error;
     }
 
-    get accountFilter() {
-        if (!this.panel) return undefined;
-        return {
-            criteria: [{ fieldPath: 'AccountId', operator: 'eq', value: this.panel.accountId }],
-            filterLogic: '1'
-        };
-    }
-
     get roleRows() {
         if (!this.panel) return [];
         return Object.keys(ROLE_META).map((key) => {
@@ -59,6 +58,7 @@ export default class DealContacts extends LightningElement {
             const role = this.panel.roles[key] || {};
             const required = meta.alwaysRequired || (this.panel.hasAlmEvent && (key === 'invoice' || key === 'event'));
             const source = role.source ? SOURCE_META[role.source] : undefined;
+            const rawResults = this.searchResultsByRole[key] || [];
             return {
                 key,
                 label: meta.label,
@@ -72,7 +72,12 @@ export default class DealContacts extends LightningElement {
                 sourceVariant: source ? source.variant : 'inverse',
                 showSameAsPrimary: key !== 'primary' && !role.contactId && !!(this.panel.roles.primary && this.panel.roles.primary.contactId),
                 isPickerOpen: this.activeRoleKey === key,
-                rowClass: 'role-row' + (this.activeRoleKey === key ? ' role-row_active' : '')
+                isSearching: this.searchingRoleKey === key,
+                searchResults: rawResults.map((r) => ({
+                    contactId: r.contactId,
+                    name: r.name,
+                    subtitle: [r.sameOffice ? 'This office' : 'Other office in the firm', r.title, r.accountName].filter(Boolean).join(' · ')
+                }))
             };
         });
     }
@@ -83,10 +88,6 @@ export default class DealContacts extends LightningElement {
 
     get counterLabel() {
         return `${this.syncedCount} / 4 synced`;
-    }
-
-    get counterVariant() {
-        return this.syncedCount === 4 ? 'success' : 'inverse';
     }
 
     get counterBadgeClass() {
@@ -104,7 +105,13 @@ export default class DealContacts extends LightningElement {
 
     handleTogglePicker(event) {
         const key = event.currentTarget.dataset.role;
-        this.activeRoleKey = this.activeRoleKey === key ? undefined : key;
+        if (this.activeRoleKey === key) {
+            this.activeRoleKey = undefined;
+            return;
+        }
+        this.activeRoleKey = key;
+        this.searchResultsByRole = { ...this.searchResultsByRole, [key]: [] };
+        this.runSearch(key, '');
     }
 
     handleSameAsPrimary(event) {
@@ -114,10 +121,33 @@ export default class DealContacts extends LightningElement {
         this.applyRole(key, primaryId, 'same-as-primary');
     }
 
-    handlePick(event) {
+    handleSearchInput(event) {
         const key = event.currentTarget.dataset.role;
-        const contactId = event.detail.recordId;
-        if (!contactId) return;
+        const term = event.target.value;
+        window.clearTimeout(this.searchTimeoutId);
+        this.searchTimeoutId = window.setTimeout(() => {
+            this.runSearch(key, term);
+        }, SEARCH_DEBOUNCE_MS);
+    }
+
+    runSearch(roleKey, term) {
+        this.searchingRoleKey = roleKey;
+        searchFamilyContacts({ quoteId: this.recordId, searchTerm: term })
+            .then((results) => {
+                if (this.activeRoleKey !== roleKey) return; // popover closed or switched before this resolved
+                this.searchResultsByRole = { ...this.searchResultsByRole, [roleKey]: results };
+            })
+            .catch((err) => this.notifyError(err))
+            .finally(() => {
+                if (this.searchingRoleKey === roleKey) {
+                    this.searchingRoleKey = undefined;
+                }
+            });
+    }
+
+    handleSearchResultClick(event) {
+        const key = event.currentTarget.dataset.role;
+        const contactId = event.currentTarget.dataset.contactId;
         this.applyRole(key, contactId, 'manual');
     }
 

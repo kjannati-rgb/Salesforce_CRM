@@ -357,4 +357,65 @@ private class DealContactsController_Test {
 
         System.assertEquals(2, results.size(), 'a blank search term should default to the whole firm family, same-office first');
     }
+
+    @isTest
+    static void setRoleContact_forInvoiceOnPrimaryQuoteAlsoSyncsToOpportunity() {
+        Account acc = makeAccount('Farrow & Sinclair LLP');
+        Contact invoiceContact = makeContact('Tobias', 'Reyes', acc.Id);
+        Opportunity opp = makeOpportunity('Global Research Platform', acc.Id, null);
+        SBQQ__Quote__c quote = makeQuote(opp.Id, acc.Id, 'Quote');
+        quote.SBQQ__Primary__c = true;
+        update quote;
+
+        Test.startTest();
+        DealContactsController.setRoleContact(quote.Id, 'invoice', invoiceContact.Id, 'manual');
+        Test.stopTest();
+
+        Opportunity updatedOpp = [SELECT Invoice_Contact__c FROM Opportunity WHERE Id = :opp.Id];
+        System.assertEquals(invoiceContact.Id, updatedOpp.Invoice_Contact__c, 'the primary quote is the one existing mechanism already reads - its edits should reach the Opportunity');
+    }
+
+    @isTest
+    static void setRoleContact_forInvoiceOnNonPrimaryQuoteDoesNotTouchOpportunity() {
+        Account acc = makeAccount('Farrow & Sinclair LLP');
+        Contact invoiceContact = makeContact('Tobias', 'Reyes', acc.Id);
+        Opportunity opp = makeOpportunity('Global Research Platform', acc.Id, null);
+        SBQQ__Quote__c quote = makeQuote(opp.Id, acc.Id, 'Quote'); // SBQQ__Primary__c defaults to false
+
+        Test.startTest();
+        DealContactsController.setRoleContact(quote.Id, 'invoice', invoiceContact.Id, 'manual');
+        Test.stopTest();
+
+        Opportunity updatedOpp = [SELECT Invoice_Contact__c FROM Opportunity WHERE Id = :opp.Id];
+        System.assertEquals(null, updatedOpp.Invoice_Contact__c, 'a non-primary quote must not overwrite the Opportunity - it is not the one the existing flow reads either');
+
+        List<OpportunityContactRole> ocrs = [SELECT Id FROM OpportunityContactRole WHERE OpportunityId = :opp.Id AND Role = 'Invoice Recipient'];
+        System.assertEquals(1, ocrs.size(), 'the Contact Role sync itself is unaffected by primary-quote gating');
+    }
+
+    @isTest
+    static void copyFromPreviousQuote_forInvoiceOnPrimaryRenewalQuoteAlsoSyncsToOpportunity() {
+        Account office = makeAccount('Farrow & Sinclair LLP');
+        Contact invoiceContact = makeContact('Tobias', 'Reyes', office.Id);
+
+        Opportunity previousOpp = makeOpportunity('Global Research Platform (prior term)', office.Id, null);
+        closeOpportunityAsWon(previousOpp, invoiceContact.Id);
+        SBQQ__Quote__c previousQuote = makeQuote(previousOpp.Id, office.Id, 'Quote');
+        previousQuote.Invoice_Contact__c = invoiceContact.Id;
+        update previousQuote;
+
+        Opportunity renewalOpp = makeOpportunity('Global Research Platform', office.Id, previousOpp.Id);
+        SBQQ__Quote__c renewalQuote = makeQuote(renewalOpp.Id, office.Id, 'Renewal');
+        renewalQuote.SBQQ__Primary__c = true;
+        update renewalQuote;
+
+        Test.startTest();
+        Map<String, Id> applied = DealContactsController.copyFromPreviousQuote(renewalQuote.Id);
+        Test.stopTest();
+
+        System.assertEquals(true, applied.containsKey('invoice'), 'invoice should have been carried from the previous quote');
+
+        Opportunity updatedRenewalOpp = [SELECT Invoice_Contact__c FROM Opportunity WHERE Id = :renewalOpp.Id];
+        System.assertEquals(invoiceContact.Id, updatedRenewalOpp.Invoice_Contact__c, 'carrying a value onto the primary quote should sync to its own Opportunity too');
+    }
 }

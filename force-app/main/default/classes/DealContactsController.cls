@@ -4,6 +4,14 @@
  * OpportunityContactRole in sync using this org's existing Role picklist
  * values (Decision Maker / Invoice Recipient / Creative Contact /
  * Event Logistical Contact) - no new fields required.
+ *
+ * Invoice Contact also syncs to Opportunity.Invoice_Contact__c, but only
+ * when the edited Quote is the Opportunity's primary quote (SBQQ__Primary__c)
+ * - matching the one existing mechanism that already reads this field
+ * (Opportunity_BeforeSaveFlow reads SBQQ__PrimaryQuote__r.Invoice_Contact__c),
+ * so a non-primary quote's edits never overwrite the Opportunity's value.
+ * Primary Contact's own Opportunity sync is handled by the org's existing
+ * Opportunity_Contact_Role_Create flow, not by this controller.
  */
 public with sharing class DealContactsController {
 
@@ -85,10 +93,7 @@ public with sharing class DealContactsController {
         }
 
         SBQQ__Quote__c q = queryQuoteForWrite(quoteId);
-        updateQuoteField(q.Id, role, contactId);
-        if (q.SBQQ__Opportunity2__c != null) {
-            syncContactRole(q.SBQQ__Opportunity2__c, role, contactId);
-        }
+        applyRoleWrite(q, role, contactId);
     }
 
     @AuraEnabled
@@ -129,10 +134,7 @@ public with sharing class DealContactsController {
         for (String role : FIELD_BY_ROLE.keySet()) {
             Id prevContactId = prevValues.get(role);
             if (prevContactId != null && currentValues.get(role) == null) {
-                updateQuoteField(q.Id, role, prevContactId);
-                if (q.SBQQ__Opportunity2__c != null) {
-                    syncContactRole(q.SBQQ__Opportunity2__c, role, prevContactId);
-                }
+                applyRoleWrite(q, role, prevContactId);
                 applied.put(role, prevContactId);
             }
         }
@@ -224,7 +226,7 @@ public with sharing class DealContactsController {
     private static SBQQ__Quote__c queryQuote(Id quoteId) {
         return [
             SELECT Id, SBQQ__Account__c, SBQQ__Account__r.Name, SBQQ__Type__c, ALM_Event_Product__c,
-                   SBQQ__Opportunity2__c, SBQQ__Opportunity2__r.Previous_Opportunity__c,
+                   SBQQ__Opportunity2__c, SBQQ__Opportunity2__r.Previous_Opportunity__c, SBQQ__Primary__c,
                    SBQQ__PrimaryContact__c, SBQQ__PrimaryContact__r.Name, SBQQ__PrimaryContact__r.Title,
                    Invoice_Contact__c, Invoice_Contact__r.Name, Invoice_Contact__r.Title,
                    Creative_Contact__c, Creative_Contact__r.Name, Creative_Contact__r.Title,
@@ -238,12 +240,33 @@ public with sharing class DealContactsController {
 
     private static SBQQ__Quote__c queryQuoteForWrite(Id quoteId) {
         return [
-            SELECT Id, SBQQ__Opportunity2__c
+            SELECT Id, SBQQ__Opportunity2__c, SBQQ__Primary__c
             FROM SBQQ__Quote__c
             WHERE Id = :quoteId
             WITH SECURITY_ENFORCED
             LIMIT 1
         ];
+    }
+
+    /**
+     * Single write path shared by setRoleContact and copyFromPreviousQuote: the
+     * Quote field, the Contact Role, and - for Invoice only, and only when this
+     * Quote is the Opportunity's primary quote - the Opportunity field.
+     */
+    private static void applyRoleWrite(SBQQ__Quote__c q, String role, Id contactId) {
+        updateQuoteField(q.Id, role, contactId);
+        if (q.SBQQ__Opportunity2__c != null) {
+            syncContactRole(q.SBQQ__Opportunity2__c, role, contactId);
+        }
+        if (role == 'invoice' && contactId != null && q.SBQQ__Opportunity2__c != null && q.SBQQ__Primary__c == true) {
+            syncInvoiceContactToOpportunity(q.SBQQ__Opportunity2__c, contactId);
+        }
+    }
+
+    private static void syncInvoiceContactToOpportunity(Id opportunityId, Id contactId) {
+        Opportunity toUpdate = new Opportunity(Id = opportunityId, Invoice_Contact__c = contactId);
+        List<SObject> stripped = Security.stripInaccessible(AccessType.UPDATABLE, new List<SObject>{ toUpdate }).getRecords();
+        update stripped;
     }
 
     private static ContactRoleInfo buildRoleInfo(Id contactId, Contact c, Map<String, Id> ocrContactByRole, String roleKey) {

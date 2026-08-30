@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Credit Control - Payment Terms</label>
+    <description>Payment Term Extension Process: lets Credit Control set PO Required / PO Number on a quote as a condition of approving extended payment terms, and read the review fields. Assign to Credit Control approver group members.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <objectPermissions>
+        <object>SBQQ__Quote__c</object>
+        <allowCreate>false</allowCreate>
+        <allowDelete>false</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <viewAllRecords>true</viewAllRecords>
+    </objectPermissions>
+    <fieldPermissions>
+        <field>SBQQ__Quote__c.PO_Required__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>SBQQ__Quote__c.PO_Number__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>SBQQ__Quote__c.Payment_Terms_Justification__c</field>
+        <readable>true</readable>
+        <editable>false</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>SBQQ__Quote__c.ACV_GBP__c</field>
+        <readable>true</readable>
+        <editable>false</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>SBQQ__Quote__c.Payment_Terms_Days__c</field>
+        <readable>true</readable>
+        <editable>false</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>SBQQ__Quote__c.Net_Amount_GBP__c</field>
+        <readable>true</readable>
+        <editable>false</editable>
+    </fieldPermissions>
+</PermissionSet>

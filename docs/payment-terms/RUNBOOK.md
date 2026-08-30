@@ -140,3 +140,12 @@ Nick F has confirmed the unified all-contracts scope (including ALM). Production
 ## EUR added to the block message - 29 Aug 2026
 
 Kamyar's catch: the under-threshold VR message quoted only USD/GBP but Centellic also sells in EUR. Message now reads "under USD 10,000 (GBP 7,500 / EUR 8,600)". Deployed to KJDEV and verified: EUR 8,000 quote (= GBP 6,958) blocked with the new message; EUR 10,000 (= GBP 8,698) permitted with justification. Threshold evaluation itself was already currency-correct (GBP conversion) - this is message clarity only. EUR 8,600 constant derives from the org's 1.1497 rate; revisit alongside the GBP 7,500 constant if FX moves.
+
+## Credit Control PO condition - built in KJDEV, 30 Aug 2026 (Lina's per-deal override)
+
+Lets Credit Control require a PO on a specific quote as a condition of approving extended terms ("Net 60 agreed, subject to PO at signature" - the order form then enforces it via the existing PO mechanism).
+
+- New permset `Credit_Control_Payment_Terms`: Quote read/edit + View All, edit on PO_Required__c + PO_Number__c, read on justification/ACV/days/Net GBP. Assign to the Credit Control approver group members (prod: Samantha Law, Leslie Perry, Candice Goodpaster, Rahul Vadgama). Assigned to Samantha in KJDEV.
+- `PO_Required__c` added beside `PO_Number__c` (already present, Edit) in the Payment Information section of all three quote layouts, behavior Edit (FLS gates who can actually change it).
+- In-Review editability VERIFIED: quotes under review sit on the "Readonly" record type -> "Pending" layout (37 profiles); setting PO_Required__c on an In-Review quote saves cleanly, status stays In Review, chain untouched.
+- Prod step: deploy permset + 3 freshly-retrieved prod layouts (patch, don't push sandbox copies), assign permset to the 4 Credit Control members. Account-flag PO enforcement is the separate Order Form v1.2 item.

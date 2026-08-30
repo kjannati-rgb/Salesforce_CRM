@@ -139,6 +139,10 @@
                 <behavior>Edit</behavior>
                 <field>PO_Number__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>PO_Required__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

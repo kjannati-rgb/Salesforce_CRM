@@ -135,6 +135,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>PO_Required__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Order_Reference__c</field>
             </layoutItems>
         </layoutColumns>

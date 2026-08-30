@@ -131,13 +131,16 @@ public with sharing class DealContactsController {
             'event' => prev.Event_Logistics_Contact__c
         };
 
+        Map<String, Id> toApply = new Map<String, Id>();
         for (String role : FIELD_BY_ROLE.keySet()) {
             Id prevContactId = prevValues.get(role);
             if (prevContactId != null && currentValues.get(role) == null) {
-                applyRoleWrite(q, role, prevContactId);
-                applied.put(role, prevContactId);
+                toApply.put(role, prevContactId);
             }
         }
+
+        applyRoleWrites(q, toApply);
+        applied.putAll(toApply);
 
         return applied;
     }
@@ -250,16 +253,36 @@ public with sharing class DealContactsController {
 
     /**
      * Single write path shared by setRoleContact and copyFromPreviousQuote: the
-     * Quote field, the Contact Role, and - for Invoice only, and only when this
-     * Quote is the Opportunity's primary quote - the Opportunity field.
+     * Quote field(s), the Contact Role(s), and - for Invoice only, and only when
+     * this Quote is the Opportunity's primary quote - the Opportunity field.
+     *
+     * Batched by design: copyFromPreviousQuote can carry forward up to 4 roles in
+     * one rep action, and each role used to run its own separate Quote update and
+     * OpportunityContactRole query/DML. That meant one click could fire the Quote's
+     * save automation (CPQ calc, etc.) up to 4 times in a single transaction - in an
+     * org whose legacy Opportunity-save flows have already tripped the 100-SOQL
+     * limit twice. Collapsing every role into one Quote update and one OCR
+     * query/DML pass keeps a multi-role copy the same automation cost as a
+     * single-role edit.
      */
     private static void applyRoleWrite(SBQQ__Quote__c q, String role, Id contactId) {
-        updateQuoteField(q.Id, role, contactId);
-        if (q.SBQQ__Opportunity2__c != null) {
-            syncContactRole(q.SBQQ__Opportunity2__c, role, contactId);
+        applyRoleWrites(q, new Map<String, Id>{ role => contactId });
+    }
+
+    private static void applyRoleWrites(SBQQ__Quote__c q, Map<String, Id> roleToContactId) {
+        if (roleToContactId.isEmpty()) {
+            return;
         }
-        if (role == 'invoice' && contactId != null && q.SBQQ__Opportunity2__c != null && q.SBQQ__Primary__c == true) {
-            syncInvoiceContactToOpportunity(q.SBQQ__Opportunity2__c, contactId);
+
+        updateQuoteFields(q.Id, roleToContactId);
+
+        if (q.SBQQ__Opportunity2__c != null) {
+            syncContactRoles(q.SBQQ__Opportunity2__c, roleToContactId);
+        }
+
+        Id invoiceContactId = roleToContactId.get('invoice');
+        if (invoiceContactId != null && q.SBQQ__Opportunity2__c != null && q.SBQQ__Primary__c == true) {
+            syncInvoiceContactToOpportunity(q.SBQQ__Opportunity2__c, invoiceContactId);
         }
     }
 
@@ -312,43 +335,65 @@ public with sharing class DealContactsController {
         return quotes.isEmpty() ? null : quotes[0];
     }
 
-    private static void updateQuoteField(Id quoteId, String role, Id contactId) {
+    private static void updateQuoteFields(Id quoteId, Map<String, Id> roleToContactId) {
         SBQQ__Quote__c toUpdate = new SBQQ__Quote__c(Id = quoteId);
-        toUpdate.put(FIELD_BY_ROLE.get(role), contactId);
+        for (String role : roleToContactId.keySet()) {
+            toUpdate.put(FIELD_BY_ROLE.get(role), roleToContactId.get(role));
+        }
         List<SObject> stripped = Security.stripInaccessible(AccessType.UPDATABLE, new List<SObject>{ toUpdate }).getRecords();
         update stripped;
     }
 
-    private static void syncContactRole(Id opportunityId, String role, Id contactId) {
-        if (contactId == null) {
+    private static void syncContactRoles(Id opportunityId, Map<String, Id> roleToContactId) {
+        Map<String, Id> contactByTargetRole = new Map<String, Id>();
+        for (String role : roleToContactId.keySet()) {
+            Id contactId = roleToContactId.get(role);
+            if (contactId != null) {
+                contactByTargetRole.put(OCR_ROLE_BY_KEY.get(role), contactId);
+            }
+        }
+        if (contactByTargetRole.isEmpty()) {
             return;
         }
-        String targetRole = OCR_ROLE_BY_KEY.get(role);
-        List<OpportunityContactRole> existing = [
-            SELECT Id, ContactId
+
+        Map<String, OpportunityContactRole> existingByTargetRole = new Map<String, OpportunityContactRole>();
+        for (OpportunityContactRole ocr : [
+            SELECT Id, ContactId, Role
             FROM OpportunityContactRole
             WHERE OpportunityId = :opportunityId
-            AND Role = :targetRole
+            AND Role IN :contactByTargetRole.keySet()
             WITH SECURITY_ENFORCED
-            LIMIT 1
-        ];
-
-        if (!existing.isEmpty()) {
-            if (existing[0].ContactId != contactId) {
-                OpportunityContactRole toUpdate = new OpportunityContactRole(Id = existing[0].Id, ContactId = contactId);
-                List<SObject> stripped = Security.stripInaccessible(AccessType.UPDATABLE, new List<SObject>{ toUpdate }).getRecords();
-                update stripped;
-            }
-            return;
+        ]) {
+            existingByTargetRole.put(ocr.Role, ocr);
         }
 
-        OpportunityContactRole toInsert = new OpportunityContactRole(
-            OpportunityId = opportunityId,
-            ContactId = contactId,
-            Role = targetRole,
-            IsPrimary = (role == 'primary')
-        );
-        List<SObject> stripped = Security.stripInaccessible(AccessType.CREATABLE, new List<SObject>{ toInsert }).getRecords();
-        insert stripped;
+        List<OpportunityContactRole> toUpdate = new List<OpportunityContactRole>();
+        List<OpportunityContactRole> toInsert = new List<OpportunityContactRole>();
+
+        for (String targetRole : contactByTargetRole.keySet()) {
+            Id contactId = contactByTargetRole.get(targetRole);
+            OpportunityContactRole existing = existingByTargetRole.get(targetRole);
+            if (existing != null) {
+                if (existing.ContactId != contactId) {
+                    toUpdate.add(new OpportunityContactRole(Id = existing.Id, ContactId = contactId));
+                }
+            } else {
+                toInsert.add(new OpportunityContactRole(
+                    OpportunityId = opportunityId,
+                    ContactId = contactId,
+                    Role = targetRole,
+                    IsPrimary = (targetRole == OCR_ROLE_BY_KEY.get('primary'))
+                ));
+            }
+        }
+
+        if (!toUpdate.isEmpty()) {
+            List<SObject> stripped = Security.stripInaccessible(AccessType.UPDATABLE, toUpdate).getRecords();
+            update stripped;
+        }
+        if (!toInsert.isEmpty()) {
+            List<SObject> stripped = Security.stripInaccessible(AccessType.CREATABLE, toInsert).getRecords();
+            insert stripped;
+        }
     }
 }

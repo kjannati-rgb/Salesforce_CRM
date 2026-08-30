@@ -149,3 +149,21 @@ Lets Credit Control require a PO on a specific quote as a condition of approving
 - `PO_Required__c` added beside `PO_Number__c` (already present, Edit) in the Payment Information section of all three quote layouts, behavior Edit (FLS gates who can actually change it).
 - In-Review editability VERIFIED: quotes under review sit on the "Readonly" record type -> "Pending" layout (37 profiles); setting PO_Required__c on an In-Review quote saves cleanly, status stays In Review, chain untouched.
 - Prod step: deploy permset + 3 freshly-retrieved prod layouts (patch, don't push sandbox copies), assign permset to the 4 Credit Control members. Account-flag PO enforcement is the separate Order Form v1.2 item.
+
+---
+
+## PRODUCTION SEQUENCE - CURRENT (30 Aug 2026; supersedes the Phase 2 list above)
+
+Gate: Kamyar's explicit go per step. Prereqs met: Nick F scope confirmed; Lina's Monday UAT (Leslie Perry / Rahul Vadgama) + her under-$10k answer outstanding.
+
+1. **Metadata deploy** (`manifest/payment-terms-package.xml` + additions): 3 fields (Payment_Terms_Days__c maps Net 15-120), 2 VRs (block message quotes GBP/USD/EUR), Quote_Finance_Terms_Approval_Check__c carve-out file, `Credit_Control_Payment_Terms` permset.
+   DECISION AT THIS STEP: VRs deploy ACTIVE by default = policy starts enforcing on terms *changes* immediately. Alternative: flip both to inactive for the deploy and activate in the step-5 window (recommended - single cutover moment).
+2. **Layouts**: retrieve the 3 prod quote layouts FRESH (never push sandbox copies - drift), patch in: Payment_Terms_Justification__c (Edit on Quote Layout / Readonly on Pending+Approved), Payment_Terms_Days__c + ACV_GBP__c (Readonly), PO_Required__c beside PO_Number__c (Edit, all three). Deploy.
+3. **FLS**: `sf apex run --file scripts/payment_terms_fls.apex -o PROD` (org-agnostic mirror; expect some un-grantable parents - licence-restricted/managed/PSG shadows, same as KJDEV).
+4. **AA data**: `aa_setup_1_groups.apex` then `aa_setup_2_approvals.apex` (order matters - MIXED_DML split). Creates Financial Control Director group (Lina) + approver + chain + 2 INACTIVE rules + conditions. Prod's existing Credit Control approver is queried, never modified.
+5. **Credit Control PO piece**: assign `Credit_Control_Payment_Terms` permset to the 4 Credit Control group members (Samantha Law, Leslie Perry, Candice Goodpaster, Rahul Vadgama).
+6. **Change window** (one moment): activate the 2 new chain rules; deactivate `ALM - Quote: Payment Terms > Net 30` (a5PPx0000000xphMAA); if VRs were held inactive at step 1, activate them now.
+7. **Smoke tests** (draft quotes, then revert): scenario 1 (Net 30 self-service), 4 (justified Net 45 routes: step 1 Credit Control / step 2 Director queued), 11 (Net 30 submit fires nothing). Approve via the sbaa UI ONLY (/apex/sbaa__Approve?id=...) - DML status updates do NOT advance the chain. Verify a Credit Control member can set PO_Required__c on an In-Review quote.
+8. **Rollback** (if needed): reactivate ALM rule, deactivate the 2 new rules + 2 VRs, redeploy pre-carve-out formula (in git history / scratchpad fmla_prod retrieve).
+
+Out of scope here: account-flag PO enforcement (Account.PO_Required__c -> order form) = Order Form v1.2 workstream, tracked on its go-live checklist.

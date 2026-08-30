@@ -8,10 +8,10 @@ import searchFamilyContacts from '@salesforce/apex/DealContactsController.search
 
 const ROLE_META = {
     primary: { label: 'Primary Contact', icon: 'utility:user', alwaysRequired: true },
+    signatory: { label: 'Signatory Contact', icon: 'utility:signature', alwaysRequired: false },
     invoice: { label: 'Invoice Contact', icon: 'utility:money', alwaysRequired: false },
     creative: { label: 'Creative Contact', icon: 'utility:image', alwaysRequired: false },
-    event: { label: 'Event Logistics Contact', icon: 'utility:event', alwaysRequired: false },
-    signatory: { label: 'Signatory Contact', icon: 'utility:signature', alwaysRequired: false }
+    event: { label: 'Event Logistics Contact', icon: 'utility:event', alwaysRequired: false }
 };
 
 const SOURCE_META = {

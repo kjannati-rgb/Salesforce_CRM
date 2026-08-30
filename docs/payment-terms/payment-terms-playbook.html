@@ -1,0 +1,547 @@
+<title>Payment Terms Playbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+  :root {
+    --ink: #243239;
+    --ink-soft: #52646d;
+    --paper: #f6f8f9;
+    --card: #ffffff;
+    --line: #d8e0e4;
+    --brand: #1f4e5f;
+    --brand-soft: #e7eff2;
+    --ok: #2e7d5b;
+    --ok-soft: #e4f1ea;
+    --warn: #a8712b;
+    --warn-soft: #f6eddd;
+    --stop: #ae4a38;
+    --stop-soft: #f7e6e2;
+    --mono-bg: #eef3f5;
+    --shadow: 0 1px 3px rgba(31,78,95,.08), 0 4px 16px rgba(31,78,95,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #dbe5e9;
+      --ink-soft: #93a6ae;
+      --paper: #131b1f;
+      --card: #1b262c;
+      --line: #2e3d44;
+      --brand: #6fb1c4;
+      --brand-soft: #21343c;
+      --ok: #63b78f;
+      --ok-soft: #1d3229;
+      --warn: #d0a05c;
+      --warn-soft: #382c18;
+      --stop: #d47f6d;
+      --stop-soft: #3a231e;
+      --mono-bg: #22313a;
+      --shadow: 0 1px 3px rgba(0,0,0,.4), 0 4px 16px rgba(0,0,0,.3);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #dbe5e9;
+    --ink-soft: #93a6ae;
+    --paper: #131b1f;
+    --card: #1b262c;
+    --line: #2e3d44;
+    --brand: #6fb1c4;
+    --brand-soft: #21343c;
+    --ok: #63b78f;
+    --ok-soft: #1d3229;
+    --warn: #d0a05c;
+    --warn-soft: #382c18;
+    --stop: #d47f6d;
+    --stop-soft: #3a231e;
+    --mono-bg: #22313a;
+    --shadow: 0 1px 3px rgba(0,0,0,.4), 0 4px 16px rgba(0,0,0,.3);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.55;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 40px 20px 90px; }
+  h1, h2, h3 { font-family: "Bricolage Grotesque", "Source Sans 3", system-ui, sans-serif; text-wrap: balance; }
+  h1 { font-size: 2.5rem; font-weight: 700; line-height: 1.08; margin: .3em 0 .2em; }
+  h2 { font-size: 1.45rem; font-weight: 600; margin: 0 0 .5em; }
+  h3 { font-size: 1.05rem; font-weight: 600; margin: 0 0 .4em; }
+  .eyebrow {
+    font-size: .74rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--brand); font-weight: 700; margin: 0;
+  }
+  .lede { color: var(--ink-soft); max-width: 62ch; margin: 0 0 10px; }
+  .chip {
+    display: inline-block; font-size: .78rem; font-weight: 600;
+    background: var(--ok-soft); color: var(--ok);
+    border: 1px solid color-mix(in srgb, var(--ok) 30%, transparent);
+    border-radius: 999px; padding: 3px 12px; margin-top: 10px;
+  }
+  section { margin-top: 56px; }
+  .stepnum {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--brand); color: var(--paper);
+    font-family: "IBM Plex Mono", monospace; font-size: .8rem; font-weight: 600;
+    margin-right: 10px; vertical-align: -4px;
+  }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    box-shadow: var(--shadow); padding: 24px;
+  }
+  /* ---- simulator ---- */
+  .sim-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px 20px; }
+  @media (max-width: 620px) { .sim-grid { grid-template-columns: 1fr; } }
+  .field label {
+    display: block; font-size: .74rem; letter-spacing: .09em; text-transform: uppercase;
+    font-weight: 700; color: var(--ink-soft); margin-bottom: 5px;
+  }
+  .field select, .field input[type="number"] {
+    width: 100%; padding: 9px 10px; font-size: 1rem;
+    font-family: "IBM Plex Mono", monospace;
+    background: var(--paper); color: var(--ink);
+    border: 1px solid var(--line); border-radius: 7px;
+  }
+  .field select:focus-visible, .field input:focus-visible, button:focus-visible {
+    outline: 2px solid var(--brand); outline-offset: 2px;
+  }
+  .switch { display: flex; align-items: center; gap: 10px; padding-top: 24px; }
+  .switch input { width: 18px; height: 18px; accent-color: var(--brand); }
+  .switch span { font-weight: 600; }
+  .calc {
+    display: flex; flex-wrap: wrap; gap: 10px 26px; margin-top: 18px; padding: 14px 16px;
+    background: var(--mono-bg); border-radius: 8px;
+    font-family: "IBM Plex Mono", monospace; font-size: .86rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .calc b { font-weight: 600; color: var(--brand); }
+  .calc .dim { color: var(--ink-soft); }
+  .verdict {
+    margin-top: 18px; border-radius: 10px; padding: 18px 20px;
+    border: 1px solid; transition: background .25s, border-color .25s;
+  }
+  @media (prefers-reduced-motion: reduce) { .verdict, .stage { transition: none !important; } }
+  .verdict.ok   { background: var(--ok-soft);   border-color: color-mix(in srgb, var(--ok) 35%, transparent); }
+  .verdict.warn { background: var(--warn-soft); border-color: color-mix(in srgb, var(--warn) 35%, transparent); }
+  .verdict.stop { background: var(--stop-soft); border-color: color-mix(in srgb, var(--stop) 35%, transparent); }
+  .verdict-head { display: flex; align-items: baseline; gap: 10px; font-weight: 700; font-size: 1.05rem; }
+  .verdict.ok .verdict-head   { color: var(--ok); }
+  .verdict.warn .verdict-head { color: var(--warn); }
+  .verdict.stop .verdict-head { color: var(--stop); }
+  .verdict p { margin: .5em 0 0; }
+  .sysmsg {
+    margin-top: 12px; padding: 12px 14px; border-radius: 7px;
+    background: var(--card); border: 1px dashed var(--line);
+    font-size: .92rem; color: var(--ink-soft); font-style: italic;
+  }
+  .sysmsg em { font-style: normal; font-weight: 700; color: var(--stop); font-size: .78rem; letter-spacing: .08em; }
+  .presets { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 22px; }
+  .presets button {
+    font: 600 .82rem "Source Sans 3", sans-serif;
+    background: var(--brand-soft); color: var(--brand);
+    border: 1px solid color-mix(in srgb, var(--brand) 25%, transparent);
+    border-radius: 999px; padding: 5px 13px; cursor: pointer;
+  }
+  .presets button:hover { background: color-mix(in srgb, var(--brand) 16%, var(--card)); }
+  /* ---- chain ---- */
+  .chain { margin-top: 20px; display: none; }
+  .chain.show { display: block; }
+  .stage {
+    border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px;
+    margin-top: 12px; background: var(--card); transition: border-color .25s;
+    position: relative;
+  }
+  .stage.active { border-color: var(--brand); box-shadow: 0 0 0 2px color-mix(in srgb, var(--brand) 22%, transparent); }
+  .stage.done-ok { border-color: color-mix(in srgb, var(--ok) 45%, transparent); }
+  .stage.done-stop { border-color: color-mix(in srgb, var(--stop) 45%, transparent); }
+  .stage-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .stage-title { font-weight: 700; }
+  .stage-sub { font-size: .88rem; color: var(--ink-soft); }
+  .badge {
+    font: 600 .74rem "IBM Plex Mono", monospace; letter-spacing: .04em;
+    padding: 3px 10px; border-radius: 999px; white-space: nowrap;
+  }
+  .badge.wait { background: var(--mono-bg); color: var(--ink-soft); }
+  .badge.req  { background: var(--warn-soft); color: var(--warn); }
+  .badge.ok   { background: var(--ok-soft); color: var(--ok); }
+  .badge.stop { background: var(--stop-soft); color: var(--stop); }
+  .stage-actions { display: flex; gap: 8px; margin-top: 12px; }
+  .stage-actions button {
+    font: 600 .88rem "Source Sans 3", sans-serif; padding: 7px 16px;
+    border-radius: 7px; border: 1px solid; cursor: pointer;
+  }
+  .btn-ok   { background: var(--ok-soft); color: var(--ok); border-color: color-mix(in srgb, var(--ok) 35%, transparent); }
+  .btn-stop { background: var(--stop-soft); color: var(--stop); border-color: color-mix(in srgb, var(--stop) 35%, transparent); }
+  .btn-neutral { background: var(--brand-soft); color: var(--brand); border-color: color-mix(in srgb, var(--brand) 30%, transparent); }
+  .stage-actions button:hover { filter: brightness(.96); }
+  .chain-note { font-size: .9rem; color: var(--ink-soft); margin-top: 10px; }
+  .comment-line { margin-top: 10px; font-size: .92rem; background: var(--mono-bg); border-radius: 7px; padding: 10px 12px; }
+  .comment-line b { color: var(--stop); }
+  /* ---- go-live toggle ---- */
+  .toggle {
+    display: inline-flex; border: 1px solid var(--line); border-radius: 999px;
+    overflow: hidden; margin: 4px 0 18px; background: var(--card);
+  }
+  .toggle button {
+    font: 600 .9rem "Source Sans 3", sans-serif; padding: 8px 20px;
+    border: none; background: transparent; color: var(--ink-soft); cursor: pointer;
+  }
+  .toggle button.on { background: var(--brand); color: var(--paper); }
+  .rules { display: grid; gap: 12px; }
+  .rule {
+    display: grid; grid-template-columns: 200px 1fr; gap: 4px 18px;
+    border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; background: var(--card);
+  }
+  @media (max-width: 620px) { .rule { grid-template-columns: 1fr; } }
+  .rule-name { font-family: "IBM Plex Mono", monospace; font-size: .82rem; font-weight: 600; color: var(--brand); overflow-wrap: anywhere; }
+  .rule-fate { font-size: .95rem; }
+  .rule-fate .badge { margin-right: 8px; }
+  /* ---- cards / accordions ---- */
+  details {
+    border: 1px solid var(--line); border-radius: 10px; background: var(--card);
+    padding: 0 18px; margin-top: 10px;
+  }
+  details summary {
+    cursor: pointer; font-weight: 700; padding: 14px 0; list-style: none;
+    display: flex; align-items: center; gap: 10px;
+  }
+  details summary::before { content: "+"; font-family: "IBM Plex Mono", monospace; color: var(--brand); font-weight: 600; }
+  details[open] summary::before { content: "\2212"; }
+  details p { margin: 0 0 14px; color: var(--ink-soft); }
+  details p b { color: var(--ink); }
+  .footnote { margin-top: 40px; font-size: .85rem; color: var(--ink-soft); border-top: 1px solid var(--line); padding-top: 16px; }
+  .mono { font-family: "IBM Plex Mono", monospace; font-size: .88em; background: var(--mono-bg); padding: 1px 5px; border-radius: 4px; }
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Centellic &middot; CPQ &amp; Advanced Approvals</p>
+  <h1>Payment Terms Playbook</h1>
+  <p class="lede">Your payment terms policy, played back interactively &mdash; what actually happens when terms are set on a quote. Everything on this page runs the same logic as the build, so what you see here is what Sales and Finance will experience.</p>
+  <span class="chip">Fully built &amp; tested &middot; 14 of 14 scenarios pass &middot; go-live awaiting final sign-off</span>
+
+  <section>
+    <h2><span class="stepnum">1</span>Try a quote</h2>
+    <p class="lede">Set up a quote the way a rep would. The verdict updates live using the real thresholds, currency rates and rule conditions from the build.</p>
+    <div class="presets" id="presets">
+      <button data-p="under">Small deal asks for Net 45</button>
+      <button data-p="just">&pound;12k deal, no justification</button>
+      <button data-p="chain">&pound;12k deal, justified Net 60</button>
+      <button data-p="usd">$10,000 USD quote</button>
+      <button data-p="multi">24-month &pound;20k contract</button>
+      <button data-p="net30">Net 30 on a big deal</button>
+    </div>
+    <div class="card">
+      <div class="sim-grid">
+        <div class="field">
+          <label for="amount">Quote net value</label>
+          <input type="number" id="amount" value="12000" min="0" step="500">
+        </div>
+        <div class="field">
+          <label for="currency">Currency</label>
+          <select id="currency">
+            <option value="GBP" selected>GBP &pound;</option>
+            <option value="EUR">EUR &euro;</option>
+            <option value="USD">USD $</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="term">Contract length</label>
+          <select id="term">
+            <option value="12" selected>12 months</option>
+            <option value="24">24 months</option>
+            <option value="36">36 months</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="terms">Payment terms selected</label>
+          <select id="terms">
+            <option value="0">Due upon receipt (default)</option>
+            <option value="15">Net 15</option>
+            <option value="30">Net 30</option>
+            <option value="45">Net 45</option>
+            <option value="60" selected>Net 60</option>
+            <option value="75">Net 75 &mdash; rare cases</option>
+            <option value="90">Net 90 &mdash; rare cases</option>
+            <option value="120">Net 120 &mdash; rare cases</option>
+          </select>
+        </div>
+        <div class="switch">
+          <input type="checkbox" id="just" checked>
+          <label for="just" style="all:unset;cursor:pointer"><span>Justification written</span><br><span style="font-size:.83rem;color:var(--ink-soft)">deal size, contract length, company size, credit context</span></label>
+        </div>
+      </div>
+
+      <div class="calc" id="calc"></div>
+      <div class="verdict" id="verdict"></div>
+
+      <div class="chain" id="chain">
+        <h3 style="margin-top:22px">The quote is submitted &mdash; walk the approval</h3>
+        <div class="stage" id="stage1">
+          <div class="stage-top">
+            <div>
+              <div class="stage-title">Step 1 &middot; Credit Control</div>
+              <div class="stage-sub">Samantha Law&rsquo;s team &mdash; reviews value, terms requested and the justification against the agreed criteria</div>
+            </div>
+            <span class="badge req" id="badge1">REQUESTED</span>
+          </div>
+          <label style="display:flex;align-items:center;gap:8px;margin-top:12px;font-size:.92rem;cursor:pointer">
+            <input type="checkbox" id="poCond" style="width:16px;height:16px;accent-color:var(--brand)">
+            <span><b>Require a PO at signature</b> as a condition of approving &mdash; sets &ldquo;PO Required&rdquo; to Yes on the quote</span>
+          </label>
+          <div class="stage-actions" id="act1">
+            <button class="btn-ok" data-act="approve1">Approve</button>
+            <button class="btn-stop" data-act="reject1">Reject with comment</button>
+          </div>
+          <div id="note1"></div>
+        </div>
+        <div class="stage" id="stage2">
+          <div class="stage-top">
+            <div>
+              <div class="stage-title">Step 2 &middot; Director of Financial Control</div>
+              <div class="stage-sub">Lina Patel&rsquo;s group &mdash; final decision, only sees requests Credit Control has already approved</div>
+            </div>
+            <span class="badge wait" id="badge2">ASSIGNED &middot; queued</span>
+          </div>
+          <div class="stage-actions" id="act2" style="display:none">
+            <button class="btn-ok" data-act="approve2">Approve</button>
+            <button class="btn-stop" data-act="reject2">Reject with comment</button>
+          </div>
+          <div id="note2"></div>
+        </div>
+        <div id="chainOutcome"></div>
+        <p class="chain-note">Both steps route to <b>groups</b>, not named people &mdash; holiday cover is a membership change, not a system change. Rejection comments land in the quote&rsquo;s approval history, visible to the rep.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="stepnum">2</span>What go-live changes &mdash; and what it doesn&rsquo;t</h2>
+    <p class="lede">Three approval mechanisms exist today. Flip the switch to see each one&rsquo;s fate. Nothing changes in production until the sign-off gate.</p>
+    <div class="toggle" role="tablist">
+      <button id="tglBefore" class="on">Today</button>
+      <button id="tglAfter">After go-live</button>
+    </div>
+    <div class="rules" id="rules"></div>
+  </section>
+
+  <section>
+    <h2><span class="stepnum">3</span>What happens to approvals already out there</h2>
+    <details open>
+      <summary>Quotes already approved</summary>
+      <p><b>Nothing changes retrospectively.</b> Approved quotes keep their approved status and their full approval history. Rules only run at the moment a quote is submitted, so nothing is re-opened or re-evaluated.</p>
+    </details>
+    <details>
+      <summary>Requests sitting with an approver at cutover</summary>
+      <p>They simply <b>complete under the rules they were submitted with</b> &mdash; approve or reject as normal. The new chain attaches only to submissions made after go-live.</p>
+    </details>
+    <details>
+      <summary>A rep recalls an old quote and resubmits</summary>
+      <p>Resubmission is a fresh evaluation, so it <b>routes through the new chain</b>. One nuance: older quotes may not have a justification written &mdash; the rule demands one only when terms change, so early requests can arrive without it. Finance can simply ask in the approval comments.</p>
+    </details>
+    <details>
+      <summary>Renewal quotes carrying legacy terms</summary>
+      <p>Renewals created automatically with old terms (say, Net 45 from a 2024 contract) are <b>never blocked at creation</b> &mdash; the checks engage only when someone changes terms or submits for approval. Renewal processing is not interrupted; Finance approval still happens on submission.</p>
+    </details>
+  </section>
+
+  <section>
+    <h2><span class="stepnum">4</span>Decisions and open points</h2>
+    <details>
+      <summary>60 vs 120 days &mdash; decided: extended list stays</summary>
+      <p><b>Decided: the extended list stays.</b> The production terms list offers Net 75, Net 90 and Net 120 (unused for at least two years). Rather than retiring them, they remain available for the extremely rare cases the process document allows &mdash; policed by exactly the same rules as Net 45/60: blocked under the threshold, justification required, routed through the two-step chain. One correction for the document before cascade: soften the &ldquo;60 days is the absolute maximum&rdquo; guardrail line to match its own approvals table &mdash; terms above 60 days are possible in extremely rare circumstances, with the same Finance approval.</p>
+    </details>
+    <details>
+      <summary>Net 30 routing for some teams &mdash; open question</summary>
+      <p>The pre-existing generic Finance check currently also routes Net&nbsp;15/30 quotes from most teams to Finance. We have deliberately left that untouched &mdash; it is existing behaviour, not part of this change &mdash; but it sits oddly against the policy line that 30 days or less is self-service. <b>This is the one open question for Finance:</b> keep that routing, or align with the policy and make 30 days or less fully self-service? Either is a small change once decided.</p>
+    </details>
+    <details>
+      <summary>Exchange-rate constant &mdash; for awareness</summary>
+      <p>The $10,000 line is applied as <b>GBP 7,500</b>. At today&rsquo;s USD rate that admits quotes from about $9,500 &mdash; slightly generous. Worth revisiting if FX moves materially.</p>
+    </details>
+    <details open>
+      <summary>Requiring a PO &mdash; two levels, both Credit Control&rsquo;s</summary>
+      <p><b>Per customer:</b> the &ldquo;PO Required&rdquo; flag the invoicing team maintains on the account (around 270 customers marked Yes today) will make the PO automatically mandatory on the order form &mdash; no signer choice. Ships with the order form release. <b>Per deal:</b> when approving extended terms, Credit Control can set &ldquo;PO Required&rdquo; to Yes on that specific quote as a condition &mdash; try the checkbox in the approval walkthrough above. Either way, the client cannot complete signing without entering the PO number, and it syncs straight back to the quote.</p>
+    </details>
+    <details>
+      <summary>Scope &mdash; confirmed: all contracts</summary>
+      <p><b>Confirmed by Nick&nbsp;F (29 August):</b> one unified process for <b>all contracts including ALM</b>, per Ken&rsquo;s recommendation. Production activation is cleared to proceed. The 24-hour turnaround stays procedural this phase; an automatic reminder is an easy later add.</p>
+    </details>
+  </section>
+
+  <p class="footnote">Prepared by Kamyar Jannati, CRM &middot; 29 August 2026. Currency conversion uses the org&rsquo;s standard rates (<span class="mono">EUR 1.1497</span>, <span class="mono">USD 1.2688</span>); multi-year deals are annualised before the threshold is applied. The full technical runbook and 14-scenario test evidence live in the CRM repo (<span class="mono">docs/payment-terms/RUNBOOK.md</span>).</p>
+</div>
+
+<script>
+(function () {
+  const XR = { GBP: 1, EUR: 1.1497, USD: 1.2688 };
+  const SYM = { GBP: "\u00A3", EUR: "\u20AC", USD: "$" };
+  const THRESHOLD = 7500;
+  const els = {
+    amount: document.getElementById("amount"),
+    currency: document.getElementById("currency"),
+    term: document.getElementById("term"),
+    terms: document.getElementById("terms"),
+    just: document.getElementById("just"),
+    calc: document.getElementById("calc"),
+    verdict: document.getElementById("verdict"),
+    chain: document.getElementById("chain"),
+  };
+  const fmt = (n) => n.toLocaleString("en-GB", { maximumFractionDigits: 0 });
+
+  function read() {
+    const amount = Math.max(0, Number(els.amount.value) || 0);
+    const cur = els.currency.value;
+    const months = Number(els.term.value);
+    const days = Number(els.terms.value);
+    const gbp = amount / XR[cur];
+    const acv = months <= 12 ? gbp : gbp / (months / 12);
+    return { amount, cur, months, days, gbp, acv, just: els.just.checked };
+  }
+
+  function render() {
+    const s = read();
+    els.calc.innerHTML =
+      '<span><span class="dim">in GBP</span> <b>\u00A3' + fmt(s.gbp) + "</b></span>" +
+      '<span><span class="dim">annualised value</span> <b>\u00A3' + fmt(s.acv) + "/yr</b></span>" +
+      '<span><span class="dim">threshold</span> \u00A3' + fmt(THRESHOLD) + "</span>" +
+      '<span><span class="dim">terms</span> <b>' + (s.days ? s.days + " days" : "immediate") + "</b></span>";
+
+    let cls, head, body, msg = "", chain = false;
+    if (s.days <= 30) {
+      cls = "ok"; head = "Saves &mdash; self-service";
+      body = s.days === 0
+        ? "Immediate payment is the default. No Finance involvement, no friction."
+        : "Terms of 30 days or less are Sales self-service under the policy. The quote saves and submits with no payment-terms approval.";
+    } else if (s.acv < THRESHOLD) {
+      cls = "stop"; head = "Blocked at save &mdash; no exceptions";
+      body = "Below \u00A3" + fmt(THRESHOLD) + " annualised value (about $10,000 or \u20AC8,600), terms above 30 days are not permitted. There is no override and no approval route \u2014 the rep sees the policy message and picks Net 30 or shorter.";
+      msg = "<em>SYSTEM MESSAGE</em><br>\u201CPayment terms above 30 days are not permitted for customers under USD 10,000 (GBP 7,500 / EUR 8,600) annual contract value, per the Centellic global payment terms process. Please select Net 30 or shorter terms.\u201D";
+    } else if (!s.just) {
+      cls = "warn"; head = "Blocked at save &mdash; justification first";
+      body = "The deal is large enough to consider extended terms, but Finance needs the context before it can assess. The save is held until the rep writes the justification. Tick the box above to continue.";
+      msg = "<em>SYSTEM MESSAGE</em><br>\u201CPayment terms above 30 days require a justification for Finance review. Please complete the Payment Terms Justification field (deal size, contract length, company size, credit context).\u201D";
+    } else {
+      cls = "warn"; head = "Saves &mdash; routes to Finance on submission";
+      body = "The quote saves with the justification attached. When the rep submits, it routes automatically to the two-step Finance chain below \u2014 no Teams messages, no email chasing. Walk it through:";
+      chain = true;
+    }
+    els.verdict.className = "verdict " + cls;
+    els.verdict.innerHTML = '<div class="verdict-head">' + head + "</div><p>" + body + "</p>" + (msg ? '<div class="sysmsg">' + msg + "</div>" : "");
+    els.chain.classList.toggle("show", chain);
+    if (chain) resetChain();
+  }
+
+  /* ---- chain walkthrough ---- */
+  const st1 = document.getElementById("stage1"), st2 = document.getElementById("stage2");
+  const b1 = document.getElementById("badge1"), b2 = document.getElementById("badge2");
+  const a1 = document.getElementById("act1"), a2 = document.getElementById("act2");
+  const n1 = document.getElementById("note1"), n2 = document.getElementById("note2");
+  const out = document.getElementById("chainOutcome");
+
+  function resetChain() {
+    st1.className = "stage active"; st2.className = "stage";
+    b1.className = "badge req"; b1.textContent = "REQUESTED";
+    b2.className = "badge wait"; b2.textContent = "ASSIGNED \u00B7 queued";
+    a1.style.display = "flex"; a2.style.display = "none";
+    n1.innerHTML = ""; n2.innerHTML = ""; out.innerHTML = "";
+  }
+
+  function outcome(html, good) {
+    out.innerHTML = '<div class="verdict ' + (good ? "ok" : "stop") + '" style="margin-top:14px"><div class="verdict-head">' +
+      (good ? "Quote approved &mdash; terms retained" : "Quote rejected &mdash; reason fed back") + "</div><p>" + html +
+      '</p><div class="stage-actions" style="margin-top:12px"><button class="btn-neutral" data-act="reset">Recall &amp; resubmit \u2014 start again</button></div></div>';
+  }
+
+  document.addEventListener("click", (e) => {
+    const act = e.target && e.target.dataset ? e.target.dataset.act : null;
+    if (!act) return;
+    if (act === "approve1") {
+      st1.className = "stage done-ok"; b1.className = "badge ok"; b1.textContent = "APPROVED";
+      a1.style.display = "none";
+      st2.className = "stage active"; b2.className = "badge req"; b2.textContent = "REQUESTED";
+      a2.style.display = "flex";
+      var po = document.getElementById("poCond").checked;
+      n1.innerHTML = po
+        ? '<div class="comment-line">Credit Control approves <b>subject to PO at signature</b> \u2014 \u201cPO Required\u201d is set to Yes on the quote, so the client cannot complete signing without entering a PO number. The request advances to the Director automatically.</div>'
+        : '<div class="comment-line">Credit Control approves \u2014 the request advances automatically. The Director now sees it; the rep sees progress in the approval history.</div>';
+    } else if (act === "reject1") {
+      st1.className = "stage done-stop"; b1.className = "badge stop"; b1.textContent = "REJECTED";
+      a1.style.display = "none";
+      st2.className = "stage"; b2.className = "badge stop"; b2.textContent = "REVOKED \u00B7 never asked";
+      n1.innerHTML = '<div class="comment-line"><b>Comment (always required on reject):</b> \u201CCredit exposure too high for 60-day terms \u2014 offer Net 45 with direct debit.\u201D</div>';
+      outcome("Step 2 is revoked \u2014 the Director is never bothered with a request Credit Control declined. The comment appears in the quote\u2019s approval history, so the rep knows exactly why and what to counter-offer.", false);
+    } else if (act === "approve2") {
+      st2.className = "stage done-ok"; b2.className = "badge ok"; b2.textContent = "APPROVED";
+      a2.style.display = "none";
+      var poDone = document.getElementById("poCond").checked;
+      outcome("Both steps approved. The quote status flips to Approved with the extended terms retained, and the full trail \u2014 who approved, when, with what comments \u2014 stays on the quote." +
+        (poDone ? " Because Credit Control required a PO, the order form will refuse to complete signing until the client enters one \u2014 nothing to chase afterwards." : ""), true);
+    } else if (act === "reject2") {
+      st2.className = "stage done-stop"; b2.className = "badge stop"; b2.textContent = "REJECTED";
+      a2.style.display = "none";
+      outcome("The Director declines with a comment. Even a Credit-Control-approved request can be turned at the final step \u2014 the reason is fed back to the rep the same way.", false);
+    } else if (act === "reset") {
+      resetChain();
+    }
+  });
+
+  /* ---- presets ---- */
+  const P = {
+    under: { amount: 5000, cur: "GBP", term: 12, terms: 45, just: false },
+    just:  { amount: 12000, cur: "GBP", term: 12, terms: 45, just: false },
+    chain: { amount: 12000, cur: "GBP", term: 12, terms: 60, just: true },
+    usd:   { amount: 10000, cur: "USD", term: 12, terms: 45, just: true },
+    multi: { amount: 20000, cur: "GBP", term: 24, terms: 45, just: true },
+    net30: { amount: 12000, cur: "GBP", term: 12, terms: 30, just: false },
+  };
+  document.getElementById("presets").addEventListener("click", (e) => {
+    const k = e.target && e.target.dataset ? e.target.dataset.p : null;
+    if (!k) return;
+    const p = P[k];
+    els.amount.value = p.amount; els.currency.value = p.cur;
+    els.term.value = String(p.term); els.terms.value = String(p.terms);
+    els.just.checked = p.just;
+    render();
+  });
+
+  ["input", "change"].forEach((ev) => {
+    els.amount.addEventListener(ev, render);
+    els.currency.addEventListener(ev, render);
+    els.term.addEventListener(ev, render);
+    els.terms.addEventListener(ev, render);
+    els.just.addEventListener(ev, render);
+  });
+  render();
+
+  /* ---- rules before/after ---- */
+  const RULES = {
+    before: [
+      { name: "ALM \u2014 Quote: Payment Terms > Net 30", badge: ["ok", "ACTIVE"], fate: "ALM quotes at Net 45/60 route to Credit Control only \u2014 a single-step, ALM-only path with no Director sign-off." },
+      { name: "LBR \u2014 Quote: Finance Terms", badge: ["ok", "ACTIVE"], fate: "The generic Finance check. Fires for extended terms on non-ALM quotes and for its other checks: special billing instructions, low-value credit-card prepayment, non-annual billing." },
+      { name: "Quote: Payment Terms (new chain)", badge: ["wait", "NOT YET CREATED"], fate: "Does not exist in production today." },
+      { name: "Debtor / credit-card / special-terms rules", badge: ["ok", "ACTIVE"], fate: "Problem-debtor and prepayment safeguards, operating as they always have." },
+    ],
+    after: [
+      { name: "ALM \u2014 Quote: Payment Terms > Net 30", badge: ["stop", "RETIRED"], fate: "Deactivated, not deleted \u2014 switching it back on is the instant rollback. ALM quotes now use the unified chain, so Credit Control keeps its review and gains the Director step." },
+      { name: "LBR \u2014 Quote: Finance Terms", badge: ["ok", "KEPT \u00B7 NARROWED"], fate: "The rule itself is never edited. The formula feeding it no longer flags terms above 30 days \u2014 that trigger belongs solely to the new chain, so Finance sees one request per quote, not two. Every other check continues unchanged." },
+      { name: "Quote: Payment Terms (new chain)", badge: ["ok", "ACTIVATED"], fate: "The two-step chain from section 1: Credit Control, then Director of Financial Control. One process for every brand, ALM included." },
+      { name: "Debtor / credit-card / special-terms rules", badge: ["ok", "UNTOUCHED"], fate: "No change of any kind." },
+    ],
+  };
+  const rulesEl = document.getElementById("rules");
+  const tb = document.getElementById("tglBefore"), ta = document.getElementById("tglAfter");
+  function renderRules(which) {
+    tb.className = which === "before" ? "on" : "";
+    ta.className = which === "after" ? "on" : "";
+    rulesEl.innerHTML = RULES[which].map((r) =>
+      '<div class="rule"><div class="rule-name">' + r.name + '</div><div class="rule-fate"><span class="badge ' + r.badge[0] + '">' + r.badge[1] + "</span>" + r.fate + "</div></div>"
+    ).join("");
+  }
+  tb.addEventListener("click", () => renderRules("before"));
+  ta.addEventListener("click", () => renderRules("after"));
+  renderRules("before");
+})();
+</script>

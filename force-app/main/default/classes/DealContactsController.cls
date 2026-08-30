@@ -1,9 +1,15 @@
 /**
- * Backs the dealContacts LWC. Reads/writes the four Quote-level contact
- * roles (Primary, Invoice, Creative, Event Logistics) and keeps a matching
- * OpportunityContactRole in sync using this org's existing Role picklist
- * values (Decision Maker / Invoice Recipient / Creative Contact /
- * Event Logistical Contact) - no new fields required.
+ * Backs the dealContacts LWC. Reads/writes the five Quote-level contact
+ * roles (Primary, Invoice, Creative, Event Logistics, Signatory) and keeps
+ * a matching OpportunityContactRole in sync using this org's existing Role
+ * picklist values (Decision Maker / Invoice Recipient / Creative Contact /
+ * Event Logistical Contact / Insertion Order Signer) - no new fields required.
+ *
+ * Signatory Contact has its own existing default (Quote_Stamp_Order_Form_Fields
+ * fills it from SBQQ__PrimaryContact__c when blank, and only when blank) -
+ * this panel just gives a rep visibility into it and a way to override it
+ * before that flow ever runs. No Opportunity-field sync: Signatory_Contact__c
+ * has no Opportunity-level counterpart, unlike Invoice Contact.
  *
  * Invoice Contact also syncs to Opportunity.Invoice_Contact__c, but only
  * when the edited Quote is the Opportunity's primary quote (SBQQ__Primary__c)
@@ -19,14 +25,16 @@ public with sharing class DealContactsController {
         'primary' => 'SBQQ__PrimaryContact__c',
         'invoice' => 'Invoice_Contact__c',
         'creative' => 'Creative_Contact__c',
-        'event' => 'Event_Logistics_Contact__c'
+        'event' => 'Event_Logistics_Contact__c',
+        'signatory' => 'Signatory_Contact__c'
     };
 
     private static final Map<String, String> OCR_ROLE_BY_KEY = new Map<String, String>{
         'primary' => 'Decision Maker',
         'invoice' => 'Invoice Recipient',
         'creative' => 'Creative Contact',
-        'event' => 'Event Logistical Contact'
+        'event' => 'Event Logistical Contact',
+        'signatory' => 'Insertion Order Signer'
     };
 
     public class ContactRoleInfo {
@@ -72,7 +80,8 @@ public with sharing class DealContactsController {
             'primary' => buildRoleInfo(q.SBQQ__PrimaryContact__c, q.SBQQ__PrimaryContact__r, ocrContactByRole, 'primary'),
             'invoice' => buildRoleInfo(q.Invoice_Contact__c, q.Invoice_Contact__r, ocrContactByRole, 'invoice'),
             'creative' => buildRoleInfo(q.Creative_Contact__c, q.Creative_Contact__r, ocrContactByRole, 'creative'),
-            'event' => buildRoleInfo(q.Event_Logistics_Contact__c, q.Event_Logistics_Contact__r, ocrContactByRole, 'event')
+            'event' => buildRoleInfo(q.Event_Logistics_Contact__c, q.Event_Logistics_Contact__r, ocrContactByRole, 'event'),
+            'signatory' => buildRoleInfo(q.Signatory_Contact__c, q.Signatory_Contact__r, ocrContactByRole, 'signatory')
         };
 
         if (q.SBQQ__Opportunity2__r != null && q.SBQQ__Opportunity2__r.Previous_Opportunity__c != null) {
@@ -111,7 +120,7 @@ public with sharing class DealContactsController {
         }
 
         SBQQ__Quote__c prev = [
-            SELECT SBQQ__PrimaryContact__c, Invoice_Contact__c, Creative_Contact__c, Event_Logistics_Contact__c
+            SELECT SBQQ__PrimaryContact__c, Invoice_Contact__c, Creative_Contact__c, Event_Logistics_Contact__c, Signatory_Contact__c
             FROM SBQQ__Quote__c
             WHERE Id = :prevQuote.Id
             WITH SECURITY_ENFORCED
@@ -122,13 +131,15 @@ public with sharing class DealContactsController {
             'primary' => q.SBQQ__PrimaryContact__c,
             'invoice' => q.Invoice_Contact__c,
             'creative' => q.Creative_Contact__c,
-            'event' => q.Event_Logistics_Contact__c
+            'event' => q.Event_Logistics_Contact__c,
+            'signatory' => q.Signatory_Contact__c
         };
         Map<String, Id> prevValues = new Map<String, Id>{
             'primary' => prev.SBQQ__PrimaryContact__c,
             'invoice' => prev.Invoice_Contact__c,
             'creative' => prev.Creative_Contact__c,
-            'event' => prev.Event_Logistics_Contact__c
+            'event' => prev.Event_Logistics_Contact__c,
+            'signatory' => prev.Signatory_Contact__c
         };
 
         Map<String, Id> toApply = new Map<String, Id>();
@@ -233,7 +244,8 @@ public with sharing class DealContactsController {
                    SBQQ__PrimaryContact__c, SBQQ__PrimaryContact__r.Name, SBQQ__PrimaryContact__r.Title,
                    Invoice_Contact__c, Invoice_Contact__r.Name, Invoice_Contact__r.Title,
                    Creative_Contact__c, Creative_Contact__r.Name, Creative_Contact__r.Title,
-                   Event_Logistics_Contact__c, Event_Logistics_Contact__r.Name, Event_Logistics_Contact__r.Title
+                   Event_Logistics_Contact__c, Event_Logistics_Contact__r.Name, Event_Logistics_Contact__r.Title,
+                   Signatory_Contact__c, Signatory_Contact__r.Name, Signatory_Contact__r.Title
             FROM SBQQ__Quote__c
             WHERE Id = :quoteId
             WITH SECURITY_ENFORCED
@@ -315,7 +327,7 @@ public with sharing class DealContactsController {
             SELECT ContactId, Role
             FROM OpportunityContactRole
             WHERE OpportunityId = :opportunityId
-            AND Role IN ('Decision Maker', 'Invoice Recipient', 'Creative Contact', 'Event Logistical Contact')
+            AND Role IN :OCR_ROLE_BY_KEY.values()
             WITH SECURITY_ENFORCED
         ]) {
             result.put(ocr.Role, ocr.ContactId);

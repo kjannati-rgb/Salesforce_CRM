@@ -211,6 +211,9 @@ private class DealContactsController_Test {
         previousQuote.Invoice_Contact__c = invoiceContact.Id;
         // Creative_Contact__c and Event_Logistics_Contact__c intentionally left blank,
         // matching the real gap: those two were never captured on the original quote.
+        // Signatory_Contact__c is also left unset here, but the org's existing
+        // Quote_Stamp_Order_Form_Fields flow defaults it from SBQQ__PrimaryContact__c
+        // on save whenever it's blank - so it won't actually stay null below.
         update previousQuote;
 
         Opportunity renewalOpp = makeOpportunity('Global Research Platform', acc.Id, previousOpp.Id);
@@ -223,23 +226,25 @@ private class DealContactsController_Test {
         Map<String, Id> applied = DealContactsController.copyFromPreviousQuote(renewalQuote.Id);
         Test.stopTest();
 
-        System.assertEquals(2, applied.size(), 'only primary and invoice were set on the previous quote');
+        System.assertEquals(3, applied.size(), 'primary and invoice were set explicitly; signatory was defaulted from primary by the existing flow');
         System.assertEquals(primaryContact.Id, applied.get('primary'));
         System.assertEquals(invoiceContact.Id, applied.get('invoice'));
+        System.assertEquals(primaryContact.Id, applied.get('signatory'), 'signatory defaulted to the same contact as primary on the previous quote');
 
         SBQQ__Quote__c updatedRenewal = [
-            SELECT SBQQ__PrimaryContact__c, Invoice_Contact__c, Creative_Contact__c, Event_Logistics_Contact__c
+            SELECT SBQQ__PrimaryContact__c, Invoice_Contact__c, Creative_Contact__c, Event_Logistics_Contact__c, Signatory_Contact__c
             FROM SBQQ__Quote__c WHERE Id = :renewalQuote.Id
         ];
         System.assertEquals(primaryContact.Id, updatedRenewal.SBQQ__PrimaryContact__c);
         System.assertEquals(invoiceContact.Id, updatedRenewal.Invoice_Contact__c);
         System.assertEquals(null, updatedRenewal.Creative_Contact__c, 'Creative was never on the previous quote either - stays blank, not invented');
         System.assertEquals(null, updatedRenewal.Event_Logistics_Contact__c);
+        System.assertEquals(primaryContact.Id, updatedRenewal.Signatory_Contact__c);
 
         List<OpportunityContactRole> ocrs = [
             SELECT Role FROM OpportunityContactRole WHERE OpportunityId = :renewalOpp.Id
         ];
-        System.assertEquals(2, ocrs.size(), 'copying from renewal should also sync Contact Role for each carried field');
+        System.assertEquals(3, ocrs.size(), 'copying from renewal should also sync Contact Role for each carried field');
     }
 
     @isTest
@@ -417,5 +422,67 @@ private class DealContactsController_Test {
 
         Opportunity updatedRenewalOpp = [SELECT Invoice_Contact__c FROM Opportunity WHERE Id = :renewalOpp.Id];
         System.assertEquals(invoiceContact.Id, updatedRenewalOpp.Invoice_Contact__c, 'carrying a value onto the primary quote should sync to its own Opportunity too');
+    }
+
+    @isTest
+    static void setRoleContact_forSignatoryUsesInsertionOrderSignerRoleAndIsNotPrimary() {
+        Account acc = makeAccount('Farrow & Sinclair LLP');
+        Contact signatoryContact = makeContact('Priya', 'Anand', acc.Id);
+        Opportunity opp = makeOpportunity('Global Research Platform', acc.Id, null);
+        SBQQ__Quote__c quote = makeQuote(opp.Id, acc.Id, 'Quote');
+
+        Test.startTest();
+        DealContactsController.setRoleContact(quote.Id, 'signatory', signatoryContact.Id, 'manual');
+        Test.stopTest();
+
+        SBQQ__Quote__c updated = [SELECT Signatory_Contact__c FROM SBQQ__Quote__c WHERE Id = :quote.Id];
+        System.assertEquals(signatoryContact.Id, updated.Signatory_Contact__c, 'Quote field should be written');
+
+        List<OpportunityContactRole> ocrs = [
+            SELECT ContactId, Role, IsPrimary FROM OpportunityContactRole WHERE OpportunityId = :opp.Id
+        ];
+        System.assertEquals(1, ocrs.size());
+        System.assertEquals('Insertion Order Signer', ocrs[0].Role);
+        System.assertEquals(false, ocrs[0].IsPrimary, 'signatory role is never the primary decision maker flag');
+
+        Opportunity updatedOpp = [SELECT Id FROM Opportunity WHERE Id = :opp.Id];
+        System.assertEquals(opp.Id, updatedOpp.Id, 'Signatory Contact has no Opportunity-level field to sync to');
+    }
+
+    @isTest
+    static void getPanelData_reportsSignatoryAsUnsetOnFreshQuote() {
+        Account acc = makeAccount('Farrow & Sinclair LLP');
+        Opportunity opp = makeOpportunity('Global Research Platform', acc.Id, null);
+        SBQQ__Quote__c quote = makeQuote(opp.Id, acc.Id, 'Quote');
+
+        Test.startTest();
+        DealContactsController.PanelData data = DealContactsController.getPanelData(quote.Id);
+        Test.stopTest();
+
+        System.assertEquals(null, data.roles.get('signatory').contactId, 'signatory should start unset');
+    }
+
+    @isTest
+    static void copyFromPreviousQuote_carriesSignatoryForward() {
+        Account acc = makeAccount('Farrow & Sinclair LLP');
+        Contact signatoryContact = makeContact('Elena', 'Whitfield', acc.Id);
+
+        Opportunity previousOpp = makeOpportunity('Global Research Platform (prior term)', acc.Id, null);
+        closeOpportunityAsWon(previousOpp, signatoryContact.Id);
+        SBQQ__Quote__c previousQuote = makeQuote(previousOpp.Id, acc.Id, 'Quote');
+        previousQuote.Signatory_Contact__c = signatoryContact.Id;
+        update previousQuote;
+
+        Opportunity renewalOpp = makeOpportunity('Global Research Platform', acc.Id, previousOpp.Id);
+        SBQQ__Quote__c renewalQuote = makeQuote(renewalOpp.Id, acc.Id, 'Renewal');
+
+        Test.startTest();
+        Map<String, Id> applied = DealContactsController.copyFromPreviousQuote(renewalQuote.Id);
+        Test.stopTest();
+
+        System.assertEquals(true, applied.containsKey('signatory'), 'signatory should have been carried from the previous quote');
+
+        SBQQ__Quote__c updatedRenewal = [SELECT Signatory_Contact__c FROM SBQQ__Quote__c WHERE Id = :renewalQuote.Id];
+        System.assertEquals(signatoryContact.Id, updatedRenewal.Signatory_Contact__c);
     }
 }

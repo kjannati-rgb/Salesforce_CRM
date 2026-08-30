@@ -10,7 +10,8 @@ const ROLE_META = {
     primary: { label: 'Primary Contact', icon: 'utility:user', alwaysRequired: true },
     invoice: { label: 'Invoice Contact', icon: 'utility:money', alwaysRequired: false },
     creative: { label: 'Creative Contact', icon: 'utility:image', alwaysRequired: false },
-    event: { label: 'Event Logistics Contact', icon: 'utility:event', alwaysRequired: false }
+    event: { label: 'Event Logistics Contact', icon: 'utility:event', alwaysRequired: false },
+    signatory: { label: 'Signatory Contact', icon: 'utility:signature', alwaysRequired: false }
 };
 
 const SOURCE_META = {
@@ -82,25 +83,29 @@ export default class DealContacts extends LightningElement {
         });
     }
 
+    get roleCount() {
+        return Object.keys(ROLE_META).length;
+    }
+
     get syncedCount() {
         return this.roleRows.filter((r) => r.isSet).length;
     }
 
     get counterLabel() {
-        return `${this.syncedCount} / 4 synced`;
+        return `${this.syncedCount} / ${this.roleCount} synced`;
     }
 
     get counterBadgeClass() {
-        return this.syncedCount === 4 ? 'slds-badge slds-theme_success' : 'slds-badge';
+        return this.syncedCount === this.roleCount ? 'slds-badge slds-theme_success' : 'slds-badge';
     }
 
     get showRenewalBanner() {
-        return !!(this.panel && this.panel.isRenewal && this.panel.previousQuoteId && this.syncedCount < 4);
+        return !!(this.panel && this.panel.isRenewal && this.panel.previousQuoteId && this.syncedCount < this.roleCount);
     }
 
     get renewalBannerText() {
         if (!this.panel) return '';
-        return `This quote renews ${this.panel.previousQuoteLabel}. Any Primary, Invoice, Creative or Event Logistics contact already on file there can be carried over.`;
+        return `This quote renews ${this.panel.previousQuoteLabel}. Any contact already on file there can be carried over.`;
     }
 
     handleTogglePicker(event) {

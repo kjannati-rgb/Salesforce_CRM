@@ -12,14 +12,6 @@
     ||
     (
       Sales_Rep_Team__c = &quot;Docket Navigator&quot; &amp;&amp;
-      TEXT(SBQQ__PaymentTerms__c) &lt;&gt; &quot;Due Upon Receipt of Invoice&quot; &amp;&amp;
-      TEXT(SBQQ__PaymentTerms__c) &lt;&gt; &quot;Due on receipt&quot; &amp;&amp;
-      TEXT(SBQQ__PaymentTerms__c) &lt;&gt; &quot;Net 30&quot; &amp;&amp;
-      Payment_Terms_Days__c &lt;= 30
-    )
-    ||
-    (
-      Sales_Rep_Team__c = &quot;Docket Navigator&quot; &amp;&amp;
       TEXT(Payment_Type__c) = &quot;Invoice&quot; &amp;&amp;
       SBQQ__NetAmount__c &lt; 1000 &amp;&amp;
       TEXT(CurrencyIsoCode) = &quot;GBP&quot;
@@ -29,14 +21,6 @@
       Sales_Rep_Team__c &lt;&gt; &quot;Docket Navigator&quot; &amp;&amp;
       TEXT(SBQQ__BillingFrequency__c) &lt;&gt; &quot;Annual&quot; &amp;&amp;
       Sales_Rep_Team__c &lt;&gt; &quot;MBL Seminars&quot;
-    )
-    ||
-    (
-      Sales_Rep_Team__c &lt;&gt; &quot;Docket Navigator&quot; &amp;&amp;
-      TEXT(SBQQ__PaymentTerms__c) &lt;&gt; &quot;Due Upon Receipt of Invoice&quot; &amp;&amp;
-      TEXT(SBQQ__PaymentTerms__c) &lt;&gt; &quot;Due on receipt&quot; &amp;&amp;
-      Sales_Rep_Team__c &lt;&gt; &quot;MBL Seminars&quot; &amp;&amp;
-      Payment_Terms_Days__c &lt;= 30
     )
     ||
     (

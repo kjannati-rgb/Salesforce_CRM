@@ -174,3 +174,7 @@ Out of scope here: account-flag PO enforcement (Account.PO_Required__c -> order 
 2. **Over $10k: Finance approval required; PO "normally, not exclusively"** - confirms the discretionary per-deal design as built: chain always fires, Credit Control chooses whether to set PO Required as a condition. Question CLOSED, zero build change.
 
 Still open with Lina: (a) Net <=30 self-service (the ~700 requests/yr data point, follow-up email sent 30 Aug); (b) process-doc wording correction before cascade (60-day guardrail line vs the kept Net 75/90/120 values).
+
+## Carve-out 2 - Net <=30 self-service - APPROVED + deployed to KJDEV, 31 Aug 2026
+
+Lina/Kamyar decision: anything at Net 30 or below is AUTO-APPROVED. Both payment-terms branches removed ENTIRELY from `Quote_Finance_Terms_Approval_Check__c` - the old Finance rule no longer looks at payment terms at all (>30 days = new chain; <=30 = self-service). Its other duties (billing frequency, low-value invoice thresholds, special instructions) untouched - verified in KJDEV: Net 15/Net 30 + Annual billing -> checkbox FALSE; Net 30 + non-annual billing -> TRUE (surviving branch intact). Removes ~700 Finance approval requests/yr (543 quotes, 98% payment-terms-only). The repo field file is the prod artefact - prod sequence step 1 unchanged, this rides the same deploy. Side effect: Prepayment-terms quotes also stop triggering via the payment-terms branch (days 0 <= 30 was catching them) - they keep triggering via the low-value/billing branches where applicable.

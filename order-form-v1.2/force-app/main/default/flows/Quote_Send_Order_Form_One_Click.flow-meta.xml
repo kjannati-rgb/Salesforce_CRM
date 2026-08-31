@@ -192,6 +192,7 @@
         </value>
     </processMetadataValues>
     <processType>Flow</processType>
+    <runInMode>SystemModeWithoutSharing</runInMode>
     <recordLookups>
         <name>Get_Quote</name>
         <label>Get quote</label>

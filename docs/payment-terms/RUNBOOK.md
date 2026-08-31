@@ -167,3 +167,10 @@ Gate: Kamyar's explicit go per step. Prereqs met: Nick F scope confirmed; Lina's
 8. **Rollback** (if needed): reactivate ALM rule, deactivate the 2 new rules + 2 VRs, redeploy pre-carve-out formula (in git history / scratchpad fmla_prod retrieve).
 
 Out of scope here: account-flag PO enforcement (Account.PO_Required__c -> order form) = Order Form v1.2 workstream, tracked on its go-live checklist.
+
+## Lina decisions - 30 Aug 2026 (afternoon)
+
+1. **Under $10k ACV: hard no regardless of PO** for non-standard terms - the absolute block stands exactly as built (no override, no routed-approval variant). Question CLOSED, zero build change.
+2. **Over $10k: Finance approval required; PO "normally, not exclusively"** - confirms the discretionary per-deal design as built: chain always fires, Credit Control chooses whether to set PO Required as a condition. Question CLOSED, zero build change.
+
+Still open with Lina: (a) Net <=30 self-service (the ~700 requests/yr data point, follow-up email sent 30 Aug); (b) process-doc wording correction before cascade (60-day guardrail line vs the kept Net 75/90/120 values).

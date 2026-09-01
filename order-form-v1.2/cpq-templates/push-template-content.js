@@ -164,9 +164,8 @@ async function upsert(type, extId, fields) {
 
   console.log("4/4 Line columns");
   const columns = [
-    ["OF-V12-L10", "Product Description", 10, "SBQQ__ProductName__c", 26, "Left"],
-    ["OF-V12-L20", "License Model", 20, "License_Model_Display__c", 25, "Left"],
-    ["OF-V12-L25", "Qty", 25, "SBQQ__Quantity__c", 5, "Center"],
+    ["OF-V12-L10", "Product Description", 10, "SBQQ__ProductName__c", 28, "Left"],
+    ["OF-V12-L20", "License Model", 20, "License_Model_Display__c", 28, "Left"],
     ["OF-V12-L30", "Annual fee (excl. tax)", 30, "SBQQ__NetTotal__c", 16, "Right"],
     // Date source switched 2026-08-19 (Kam): real QLE lines leave SBQQ__Start/EndDate__c null
     // and carry term dates in the finance-canonical SUN Report formulas (0.4% null on 180d
@@ -177,7 +176,10 @@ async function upsert(type, extId, fields) {
   // Retired columns (removed from the design) - deleted from the org if present.
   // OF-V12-L40 Currency: dropped 2026-08-18 (Kam) - the fee's automatic ISO prefix already
   // shows the currency, making a separate column redundant.
-  const RETIRED_COLUMNS = ["OF-V12-L40"];
+  // OF-V12-L25 Qty: dropped 2026-09-01 (Kam) - seat counts already print in contract language
+  // in the License Model column, the fee is a line total with no unit price to multiply, and
+  // most forms showed a column of "1.00"s. Width redistributed to Product/License Model.
+  const RETIRED_COLUMNS = ["OF-V12-L40", "OF-V12-L25"];
   for (const [suffix, tid] of templates) {
     for (const ext of RETIRED_COLUMNS) {
       const gone = await soql(`SELECT Id FROM SBQQ__LineColumn__c WHERE External_Id__c = '${ext}${suffix}'`);

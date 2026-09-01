@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Order_Form_PO_Tag__c</fullName>
-    <description>Emits the Adobe Sign signer-fillable PO text tag ONLY when the quote has no PO number. Since 2026-08-22 the field is REQUIRED and shown only when the signer answers Yes to the PO-required question (showif). When PO_Number__c is filled, the document prints the value as plain text instead and this field is blank.</description>
+    <description>Emits the Adobe Sign signer-fillable PO text tag ONLY when the quote has no PO number. Since 2026-08-22 the field is REQUIRED and shown only when the signer answers Yes to the PO-required question (showif). When the Account is flagged PO Required (credit control, ~270 accounts) the field is unconditionally required with no showif. When PO_Number__c is filled, the document prints the value as plain text instead and this field is blank.</description>
     <externalId>false</externalId>
-    <formula>IF(ISBLANK(PO_Number__c), "{{*PO_Number_es_:signer1:showif(PO_Required=Yes)}}", "")</formula>
+    <formula>IF(ISBLANK(PO_Number__c), IF(TEXT(SBQQ__Account__r.PO_Required__c) = "Yes", "{{*PO_Number_es_:signer1}}", "{{*PO_Number_es_:signer1:showif(PO_Required=Yes)}}"), "")</formula>
     <formulaTreatBlanksAs>BlankAsBlank</formulaTreatBlanksAs>
     <label>Order Form PO Tag</label>
     <required>false</required>

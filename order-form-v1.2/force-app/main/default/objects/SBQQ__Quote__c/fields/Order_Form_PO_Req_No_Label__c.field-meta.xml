@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Order_Form_PO_Req_No_Label__c</fullName>
-    <description>Visible label next to the No radio; blank when the quote already holds a PO.</description>
+    <description>Visible label next to the No radio; blank when the quote already holds a PO or the Account is flagged PO Required.</description>
     <externalId>false</externalId>
-    <formula>IF(ISBLANK(PO_Number__c), "No", "")</formula>
+    <formula>IF(AND(ISBLANK(PO_Number__c), NOT(TEXT(SBQQ__Account__r.PO_Required__c) = "Yes")), "No", "")</formula>
     <formulaTreatBlanksAs>BlankAsBlank</formulaTreatBlanksAs>
     <label>Order Form PO Required No Label</label>
     <required>false</required>

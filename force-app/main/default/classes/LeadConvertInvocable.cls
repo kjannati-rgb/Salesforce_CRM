@@ -42,6 +42,11 @@ public with sharing class LeadConvertInvocable {
             if (r.accountId != null) lc.setAccountId(r.accountId);
             if (r.contactId != null) lc.setContactId(r.contactId);
             lc.setDoNotCreateOpportunity(r.createOpportunity != true);
+            // Without this, the platform gives every NEW record from the convert (opportunity
+            // included) to the LEAD'S owner - and inbound leads are routinely owned by whoever
+            // routing assigned them, not the rep clicking Convert. The deal belongs to the
+            // person doing the converting. Existing matched accounts/contacts are untouched.
+            lc.setOwnerId(UserInfo.getUserId());
             lcs.add(lc);
         }
 

@@ -63,12 +63,17 @@ as captions.
 ---
 
 <!-- Voice: ElevenLabs George (JBFqnCBsd6RMkjVDRZzb, eleven_multilingual_v2), v4 rebuild 2026-08-29; key file C:/Users/Kamyar.Jannati/.elevenlabs_api_key (never commit). Video 3 has two segments of real QLE footage. -->
-## Video 3 — "The override" (~56 seconds, for managers; includes real line-editor footage)
+## Video 3 — "The override" (~84 seconds, for managers; includes real line-editor footage)
 
-**Screen:** title slide, then two real production frames of the quote line editor.
+**Screen:** title slide, the automatic-relabels slide (OE promo rule added 2 Sep 2026), then two real production frames of the quote line editor.
 
 > The licence wording on the Order Form is automatic, and it is right almost every time. This
 > video is for the exception.
+>
+> Before we get to the override, two relabels are automatic. A Lexology Pro line priced like a
+> firm-wide deal prints Firmwide License. And any line carrying promo code OE prints Firmwide
+> License too, whatever its user counts. If that is right for the deal, there is nothing to do.
+> If it is genuinely wrong, the override wins.
 >
 > When the wording doesn't match the deal, you have two places to fix it: the Licence Model
 > section on the quote line page, or the quote line editor, where you already work. Let me show
@@ -81,9 +86,9 @@ as captions.
 > — and the change lights up orange until you save. Save, regenerate the document, and the
 > wording follows.
 >
-> The override beats everything: the product default and the automatic pricing check, in both
-> directions. Use it when the deal is genuinely unusual, and clear it to go back to automatic.
-> Ten seconds, no admin, no ticket.
+> The override beats everything: the product default, the automatic pricing check, and the OE
+> promo rule, in both directions. Use it when the deal is genuinely unusual, and clear it to go
+> back to automatic. Ten seconds, no admin, no ticket.
 
 ---
 

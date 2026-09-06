@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Jonny_s_HIGH_RISK_Renewal_Opportunities</fullName>
+    <columns>OPPORTUNITY.NAME</columns>
+    <columns>ACCOUNT.NAME</columns>
+    <columns>OPPORTUNITY.STAGE_NAME</columns>
+    <columns>Forecast_Status__c</columns>
+    <columns>Budget_Renewal_Date__c</columns>
+    <columns>OPPORTUNITY.CLOSE_DATE</columns>
+    <columns>OPPORTUNITY.AMOUNT</columns>
+    <columns>CORE.USERS.ALIAS</columns>
+    <columns>TOP_INSIGHT</columns>
+    <columns>OPPORTUNITY_SCORE</columns>
+    <filterScope>Team</filterScope>
+    <filters>
+        <field>OPPORTUNITY.STAGE_NAME</field>
+        <operation>contains</operation>
+        <value>Identify,Qualify,Evaluation</value>
+    </filters>
+    <filters>
+        <field>OPPORTUNITY.STAGE_NAME</field>
+        <operation>notContain</operation>
+        <value>Close,Closed Won – Pending Approval,Closed Won,Closed Lost,Cancellation - Pending Review,Closed Won - Cancellation</value>
+    </filters>
+    <filters>
+        <field>Budget_Renewal_Date__c</field>
+        <operation>notEqual</operation>
+    </filters>
+    <filters>
+        <field>Budget_Renewal_Date__c</field>
+        <operation>greaterThan</operation>
+        <value>5/1/2021</value>
+    </filters>
+    <filters>
+        <field>OPPORTUNITY.NAME</field>
+        <operation>notContain</operation>
+        <value>delete</value>
+    </filters>
+    <filters>
+        <field>CORE.USERS.FULL_NAME</field>
+        <operation>equals</operation>
+        <value>Jonathan Derouet</value>
+    </filters>
+    <filters>
+        <field>Forecast_Status__c</field>
+        <operation>equals</operation>
+        <value>Forecast At Risk - High</value>
+    </filters>
+    <label>Jonny&apos;s HIGH RISK Opportunities</label>
+    <sharedTo>
+        <group>Core_Accounts</group>
+    </sharedTo>
+</ListView>

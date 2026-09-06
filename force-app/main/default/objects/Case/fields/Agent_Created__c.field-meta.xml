@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Agent_Created__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Origin marker set by the CRM Support Agentforce agent on every case it creates. Drives the per-topic KPI reporting required by the World-Class Agent Standard v2 §4 (deflection rate, escalation quality) in standard Salesforce reports. Set only by the agent's case-creation action; never by users.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Ticked automatically when this case was created by the CRM Support agent on the user's behalf. Do not tick manually.</inlineHelpText>
+    <label>Agent Created</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

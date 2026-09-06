@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>IP_Brands_OLD_ENQUIRIES_RE</fullName>
+    <columns>NAME</columns>
+    <columns>Prospect_Name__c</columns>
+    <columns>Email__c</columns>
+    <columns>Phone__c</columns>
+    <columns>Company__c</columns>
+    <columns>Country__c</columns>
+    <columns>Sales_Stage__c</columns>
+    <columns>Opportunity__c</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>OWNER.FIRST_NAME</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Brand__c</field>
+        <operation>equals</operation>
+        <value>IAM,WTR</value>
+    </filters>
+    <filters>
+        <field>Sales_Stage__c</field>
+        <operation>notContain</operation>
+        <value>Converted</value>
+    </filters>
+    <filters>
+        <field>Country__c</field>
+        <operation>notContain</operation>
+        <value>China,Viet Nam,Hong Kong,Korea,Japan,Afghanistan Australia Bangladesh Bhutan Brunei Darussalam Cambodia China</value>
+    </filters>
+    <filters>
+        <field>NAME</field>
+        <operation>notContain</operation>
+        <value>Regression</value>
+    </filters>
+    <label>IP Brands - OLD ENQUIRIES RE</label>
+</ListView>

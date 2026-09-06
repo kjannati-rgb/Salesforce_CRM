@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ACHILLES_GAR_OLD_ENQUIRIES</fullName>
+    <columns>NAME</columns>
+    <columns>Prospect_Name__c</columns>
+    <columns>Email__c</columns>
+    <columns>Phone__c</columns>
+    <columns>Company__c</columns>
+    <columns>Country__c</columns>
+    <columns>Sales_Stage__c</columns>
+    <columns>Opportunity__c</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>OWNER.FIRST_NAME</columns>
+    <columns>Contact__c</columns>
+    <columns>Lead__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Brand__c</field>
+        <operation>equals</operation>
+        <value>GAR</value>
+    </filters>
+    <filters>
+        <field>OWNER.FIRST_NAME</field>
+        <operation>notEqual</operation>
+        <value>Carl</value>
+    </filters>
+    <filters>
+        <field>OWNER.FIRST_NAME</field>
+        <operation>equals</operation>
+        <value>Charlie,Samuel,Dennis,Mateusz,Achilles</value>
+    </filters>
+    <filters>
+        <field>Country__c</field>
+        <operation>equals</operation>
+        <value>United States,Germany,United Kingdom,France,Switzerland,United Arab Emirates,Italy</value>
+    </filters>
+    <filters>
+        <field>Converted_to_Opportunity__c</field>
+        <operation>equals</operation>
+        <value>0</value>
+    </filters>
+    <filters>
+        <field>Company__c</field>
+        <operation>notContain</operation>
+        <value>Ankura,Person,universit,Dorsey,School,HKA,J.S,Jones Walker,Akerman,Kavanagh,Fladgate,Foley,Herbert,College,PwC,Siemens,Jacob</value>
+    </filters>
+    <label>Aaron - Old Enquiries</label>
+</ListView>

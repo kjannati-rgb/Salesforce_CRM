@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sales_People_Cant_Change_Stage_to_Conve</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+TEXT(Sales_Stage__c) = &apos;Converted&apos;,
+ISCHANGED(Sales_Stage__c) = TRUE,
+ISCHANGED( Opportunity__c ) = FALSE,
+$Profile.Name &lt;&gt; &apos;System Administrator&apos;,
+$Profile.Name &lt;&gt; &apos;Custom: Fin/Ops/HR&apos;,
+$User.Alias &lt;&gt; &apos;Ken.Fitz&apos;,
+$User.Alias &lt;&gt; &apos;Ade Agbomabiwon&apos;,
+NOT( $Setup.Application_Settings__c.Disable_Validation_Rules__c )
+)</errorConditionFormula>
+    <errorMessage>The status will be updated automatically once an opportunity has been created. Please use the Convert Lead/Create Opportunity button instead.</errorMessage>
+</ValidationRule>

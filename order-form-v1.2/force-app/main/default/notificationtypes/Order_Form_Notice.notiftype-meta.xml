@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomNotificationType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customNotifTypeName>Order_Form_Notice</customNotifTypeName>
+    <description>Bell notifications from the Order Form send automation (e.g. auto-send refused and why).</description>
+    <desktop>true</desktop>
+    <masterLabel>Order Form Notice</masterLabel>
+    <mobile>true</mobile>
+</CustomNotificationType>

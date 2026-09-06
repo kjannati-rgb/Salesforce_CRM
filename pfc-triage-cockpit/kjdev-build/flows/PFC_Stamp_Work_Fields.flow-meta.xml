@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <assignments>
+        <name>Assign_Clear_Overdue</name>
+        <label>Clear Routing Overdue</label>
+        <locationX>176</locationX>
+        <locationY>1000</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Routing_Overdue__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Assign_Date_Completed</name>
+        <label>Stamp Date Completed</label>
+        <locationX>88</locationX>
+        <locationY>760</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Date_Completed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Decision_Clear_Overdue</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_From_Contact</name>
+        <label>Set from Contact</label>
+        <locationX>176</locationX>
+        <locationY>470</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Work_Areas__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Contact.Work_Areas__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Work_Jurisdictions__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Contact.Work_Jurisdictions__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Decision_Date_Stamp</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_From_Lead</name>
+        <label>Set from Lead</label>
+        <locationX>440</locationX>
+        <locationY>470</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Work_Areas__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Lead.Work_Areas__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Work_Jurisdictions__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Lead.Work_Jurisdictions__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Decision_Date_Stamp</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Decision_Clear_Overdue</name>
+        <label>Clear Routing Overdue?</label>
+        <locationX>176</locationX>
+        <locationY>880</locationY>
+        <defaultConnectorLabel>Keep</defaultConnectorLabel>
+        <rules>
+            <name>OwnedByUserAndFlagged</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Routing_Overdue__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>ownerIsUser</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Clear_Overdue</targetReference>
+            </connector>
+            <label>User owns it</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Decision_Date_Stamp</name>
+        <label>Stamp Date Completed?</label>
+        <locationX>176</locationX>
+        <locationY>640</locationY>
+        <defaultConnector>
+            <targetReference>Decision_Clear_Overdue</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No stamp</defaultConnectorLabel>
+        <rules>
+            <name>ClosedAndUnstamped</name>
+            <conditionLogic>1 AND (2 OR 3)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Date_Completed__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Sales_Stage__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Converted</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Sales_Stage__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Disqualified</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Date_Completed</targetReference>
+            </connector>
+            <label>Closed, not yet stamped</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Decision_Person</name>
+        <label>Contact or Lead?</label>
+        <locationX>176</locationX>
+        <locationY>254</locationY>
+        <defaultConnector>
+            <targetReference>Get_Lead</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Lead</defaultConnectorLabel>
+        <rules>
+            <name>HasContact</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Contact__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Contact</targetReference>
+            </connector>
+            <label>Has Contact</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Decision_Person_Stamp_Needed</name>
+        <label>Person Stamp Needed?</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <defaultConnector>
+            <targetReference>Decision_Date_Stamp</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No — skip to date/overdue</defaultConnectorLabel>
+        <rules>
+            <name>StampPerson</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>personStampNeeded</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Decision_Person</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <description>REV-57 follow-up (Ken F) + Triage Cockpit Phase B: before-save multi-stamp. (1) On create or person change, stamp Work Areas + Work Jurisdictions from the linked Contact/Lead. (2) B4: stamp Date_Completed__c ONCE when Sales_Stage__c reaches Converted/Disqualified and the field is null — never overwrites (point-in-time first close; replaces the two classic Workflow Rules, deliberately dropping the old un-stamp-on-reopen behaviour). (3) B1: clear Routing_Overdue__c when a User (not queue) owns the record. No DML (before-save).</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>ownerIsUser</name>
+        <dataType>Boolean</dataType>
+        <expression>BEGINS({!$Record.OwnerId}, &quot;005&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>personStampNeeded</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(
+OR(NOT(ISBLANK({!$Record.Contact__c})), NOT(ISBLANK({!$Record.Lead__c}))),
+OR(ISNEW(), ISCHANGED({!$Record.Contact__c}), ISCHANGED({!$Record.Lead__c}))
+)</expression>
+    </formulas>
+    <interviewLabel>PFC Stamp Work Fields {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>PFC Stamp Work Fields</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Contact</name>
+        <label>Get Contact Work Fields</label>
+        <locationX>176</locationX>
+        <locationY>362</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_From_Contact</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Contact__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Contact</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Lead</name>
+        <label>Get Lead Work Fields</label>
+        <locationX>440</locationX>
+        <locationY>362</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_From_Lead</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Lead__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Lead</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Decision_Person_Stamp_Needed</targetReference>
+        </connector>
+        <filterFormula>OR(
+AND(
+OR(NOT(ISBLANK({!$Record.Contact__c})), NOT(ISBLANK({!$Record.Lead__c}))),
+OR(ISNEW(), ISCHANGED({!$Record.Contact__c}), ISCHANGED({!$Record.Lead__c}))
+),
+ISNEW(),
+ISCHANGED({!$Record.Sales_Stage__c}),
+ISCHANGED({!$Record.OwnerId})
+)</filterFormula>
+        <object>Pardot_Form_Completion__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lex_Inform_2021_Renewal__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Used to reconcile Lex Inform renewals for 2021, to be removed after the migration.</description>
+    <inlineHelpText>Used to reconcile Lex Inform renewals for 2021, to be removed after the migration.</inlineHelpText>
+    <label>Lex Inform 2021 Renewal</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

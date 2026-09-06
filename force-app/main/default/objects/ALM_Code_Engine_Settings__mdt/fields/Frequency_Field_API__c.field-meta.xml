@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Frequency_Field_API__c</fullName>
+    <description>REV-60: API name of the quote-line billing-frequency field the engine reads to compose the frequency code (Annual→"", Monthly→M, Quarterly→Q, Semi-Annual→H). Confirmed: SBQQ__BillingFrequency__c.</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Frequency Field API</label>
+    <length>255</length>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

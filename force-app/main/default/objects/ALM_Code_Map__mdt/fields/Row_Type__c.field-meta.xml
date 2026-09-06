@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Row_Type__c</fullName>
+    <description>REV-60: discriminator routing each row to the right lookup in the engine — Segment Base (firm segment → base promo), Team Override / Campaign Override (Non-AmLaw base overrides), Dispatch (product → dispatch code), Product Base (product → fixed base promo, e.g. GLBM → MSHP, ahead of the segment cascade). Mirrors REV-71's Setting_Type pattern.</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Row Type</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Segment Base</fullName>
+                <default>false</default>
+                <label>Segment Base</label>
+            </value>
+            <value>
+                <fullName>Team Override</fullName>
+                <default>false</default>
+                <label>Team Override</label>
+            </value>
+            <value>
+                <fullName>Campaign Override</fullName>
+                <default>false</default>
+                <label>Campaign Override</label>
+            </value>
+            <value>
+                <fullName>Dispatch</fullName>
+                <default>false</default>
+                <label>Dispatch</label>
+            </value>
+            <value>
+                <fullName>Product Base</fullName>
+                <default>false</default>
+                <label>Product Base</label>
+            </value>
+            <value>
+                <fullName>Rep Override</fullName>
+                <default>false</default>
+                <label>Rep Override</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

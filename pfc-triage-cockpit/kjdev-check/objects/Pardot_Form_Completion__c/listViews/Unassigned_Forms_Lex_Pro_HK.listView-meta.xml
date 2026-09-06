@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Unassigned_Forms_Lex_Pro_HK</fullName>
+    <booleanFilter>1 AND 2 AND (3 OR 7) AND 4 AND 5 AND 6 AND 8 AND 9</booleanFilter>
+    <columns>NAME</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>Country__c</columns>
+    <columns>Prospect_Name__c</columns>
+    <columns>Company__c</columns>
+    <columns>Job_Title__c</columns>
+    <columns>Sales_Stage__c</columns>
+    <columns>OWNER.ALIAS</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Sales_Rep__c</field>
+        <operation>equals</operation>
+        <value>James Mullen,Globe Admin,B2BMA Integration,Saurabh Patil</value>
+    </filters>
+    <filters>
+        <field>OWNER.ALIAS</field>
+        <operation>equals</operation>
+        <value>b2bmausr</value>
+    </filters>
+    <filters>
+        <field>Prospect_s_Region__c</field>
+        <operation>equals</operation>
+        <value>Asia</value>
+    </filters>
+    <filters>
+        <field>Country__c</field>
+        <operation>notEqual</operation>
+        <value>United Arab emirates,Turkey,Jordan,Kazakhstan,Uzbekistan,Qatar,Israel,Oman,Iran,Iraq,Cyprus,Bahrain,Afghanistan,Saudi Arabia,Lebanon,Kuwait,georgia</value>
+    </filters>
+    <filters>
+        <field>Sales_Stage__c</field>
+        <operation>contains</operation>
+        <value>New</value>
+    </filters>
+    <filters>
+        <field>CREATED_DATE</field>
+        <operation>greaterOrEqual</operation>
+        <value>5/16/2022 12:00 AM</value>
+    </filters>
+    <filters>
+        <field>Country__c</field>
+        <operation>equals</operation>
+        <value>Australia,New Zealand,Papua New Guinea</value>
+    </filters>
+    <filters>
+        <field>NAME</field>
+        <operation>contains</operation>
+        <value>lexology</value>
+    </filters>
+    <filters>
+        <field>Country__c</field>
+        <operation>notContain</operation>
+        <value>Iran</value>
+    </filters>
+    <label>Unassigned Forms: Lex Pro HK</label>
+</ListView>

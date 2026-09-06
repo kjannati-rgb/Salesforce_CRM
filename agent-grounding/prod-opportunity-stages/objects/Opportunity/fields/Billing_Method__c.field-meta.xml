@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Billing_Method__c</fullName>
+    <description>Billing Method</description>
+    <inlineHelpText>Billing Method</inlineHelpText>
+    <label>Billing Method</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Email</fullName>
+                <default>true</default>
+                <label>Email</label>
+            </value>
+            <value>
+                <fullName>Postal</fullName>
+                <default>false</default>
+                <label>Postal</label>
+            </value>
+            <value>
+                <fullName>Phone</fullName>
+                <default>false</default>
+                <label>Phone</label>
+            </value>
+            <value>
+                <fullName>Payment Plan</fullName>
+                <default>false</default>
+                <label>Payment Plan</label>
+            </value>
+            <value>
+                <fullName>Send Invoice</fullName>
+                <default>false</default>
+                <label>Send Invoice</label>
+            </value>
+            <value>
+                <fullName>Upfront Check</fullName>
+                <default>false</default>
+                <label>Upfront Check</label>
+            </value>
+            <value>
+                <fullName>Upfront Credit Card</fullName>
+                <default>false</default>
+                <label>Upfront Credit Card</label>
+            </value>
+            <value>
+                <fullName>Upfront Invoice</fullName>
+                <default>false</default>
+                <label>Upfront Invoice</label>
+            </value>
+            <value>
+                <fullName>Wire Transfer</fullName>
+                <default>false</default>
+                <label>Wire Transfer</label>
+            </value>
+            <value>
+                <fullName>Check</fullName>
+                <default>false</default>
+                <label>Check</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

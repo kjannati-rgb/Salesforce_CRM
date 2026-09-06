@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Content_Subs_banding__c</fullName>
+    <description>Product type 3 information in the form of numbers.
+Individual: 1 User - 1
+Team: 2-3 Users - 3
+Office: 4-10 Users - 10
+Practice Area group (Law Firm) / Global Function (Corporate): 11-15 Users - 15
+Firmwide: 16-20 Users - 20</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Individual: 1 User - 1
+Team: 2-3 Users - 3
+Office: 4-10 Users - 10
+Practice Area group (Law Firm) / Global Function (Corporate): 11-15 Users - 15
+Firmwide: 16-20 Users - 20</inlineHelpText>
+    <label>Content Subs banding</label>
+    <length>30</length>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

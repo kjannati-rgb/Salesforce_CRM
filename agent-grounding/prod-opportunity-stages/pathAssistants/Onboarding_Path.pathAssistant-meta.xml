@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PathAssistant xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <entityName>Onboarding__c</entityName>
+    <fieldName>Status__c</fieldName>
+    <masterLabel>Onboarding Path</masterLabel>
+    <pathAssistantSteps>
+        <info>&lt;p&gt;AM Team lead assigns an AM to the renewal opp and the opportunity team is finalised.&lt;/p&gt;</info>
+        <picklistValueName>Account Management</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Training_Status__c</fieldNames>
+        <info>&lt;p&gt;Onboarding is resolved once all steps above are completed and:&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;•	Training event is logged&lt;/p&gt;&lt;p&gt;•	Training status dropdown is updated with a positive status&lt;/p&gt;</info>
+        <picklistValueName>Closed - Resolved</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Training_Status__c</fieldNames>
+        <info>&lt;p&gt;Onboarding unresolved - when a deal is cancelled or where a customer becomes unresponsive.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Customers with the following training status have unresolved onboarding. This status should only be chosen in tandem with your manager.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Declined training&lt;/p&gt;&lt;p&gt;Unresponsive&lt;/p&gt;</info>
+        <picklistValueName>Closed - Unresolved</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <info>&lt;p&gt;This stage is communicating with the customer and awaiting response.&lt;/p&gt;</info>
+        <picklistValueName>Communicate</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Training_Status__c</fieldNames>
+        <info>&lt;p&gt;Goal number of seats have a user allocated and if the client has a banded license where they will not reach the top of the band the client agrees that we have allocated as many as possible for them to get vale&lt;/p&gt;</info>
+        <picklistValueName>Fullfillment</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Product__c</fieldNames>
+        <fieldNames>Priority__c</fieldNames>
+        <info>&lt;p&gt;This is the triage stage make sure the basics of the case are checked:&lt;/p&gt;&lt;p&gt;•	Which team assigned this work?&lt;/p&gt;&lt;p&gt;•	Start date assessed and priority proposed.&lt;/p&gt;</info>
+        <picklistValueName>New</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <info>&lt;p&gt;A support phase of the onboarding – time to add permissions and set up the products for the customer.&lt;/p&gt;</info>
+        <picklistValueName>Set up</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Event_Details__c</fieldNames>
+        <info>&lt;p&gt;Training planned (but not concluded)&lt;/p&gt;</info>
+        <picklistValueName>Training</picklistValueName>
+    </pathAssistantSteps>
+    <recordTypeName>__MASTER__</recordTypeName>
+</PathAssistant>

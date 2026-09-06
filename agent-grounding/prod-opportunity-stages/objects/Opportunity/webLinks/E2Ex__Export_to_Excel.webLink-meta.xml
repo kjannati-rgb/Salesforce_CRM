@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>E2Ex__Export_to_Excel</fullName>
+    <availability>online</availability>
+    <displayType>massActionButton</displayType>
+    <hasMenubar>false</hasMenubar>
+    <hasScrollbars>true</hasScrollbars>
+    <hasToolbar>false</hasToolbar>
+    <height>600</height>
+    <isResizable>true</isResizable>
+    <linkType>page</linkType>
+    <masterLabel>Export to Excel</masterLabel>
+    <openType>newWindow</openType>
+    <page>E2Ex__E2Excel_Opportunity</page>
+    <position>none</position>
+    <protected>false</protected>
+    <requireRowSelection>true</requireRowSelection>
+    <showsLocation>false</showsLocation>
+    <showsStatus>false</showsStatus>
+</WebLink>

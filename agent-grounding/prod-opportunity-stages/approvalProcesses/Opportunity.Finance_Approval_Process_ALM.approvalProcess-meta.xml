@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApprovalProcess xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <allowRecall>true</allowRecall>
+    <allowedSubmitters>
+        <type>owner</type>
+    </allowedSubmitters>
+    <approvalPageFields>
+        <field>Name</field>
+        <field>Owner</field>
+        <field>StageName</field>
+    </approvalPageFields>
+    <approvalStep>
+        <allowDelegate>true</allowDelegate>
+        <assignedApprover>
+            <approver>
+                <name>willie.guerrero@alm.com</name>
+                <type>user</type>
+            </approver>
+            <whenMultipleApprovers>FirstResponse</whenMultipleApprovers>
+        </assignedApprover>
+        <label>Finance Approval</label>
+        <name>Finance_Approval</name>
+    </approvalStep>
+    <emailTemplate>SA_Opportunity_Email_Templates/Opportunity_Approval_Process</emailTemplate>
+    <enableMobileDeviceAccess>false</enableMobileDeviceAccess>
+    <entryCriteria>
+        <formula>AND(NOT( $Setup.Application_Settings__c.Disable_Approval_Processes__c ),
+NOT(Approved__c),
+NOT(Submitted_to_Approval_Process__c),
+ISPICKVAL( StageName , &apos;Closed won – pending approval&apos;)
+)</formula>
+    </entryCriteria>
+    <finalApprovalActions>
+        <action>
+            <name>Close_Date</name>
+            <type>FieldUpdate</type>
+        </action>
+        <action>
+            <name>Finance_Submitted_to_Approval_True</name>
+            <type>FieldUpdate</type>
+        </action>
+        <action>
+            <name>Opportunity_Approved_True</name>
+            <type>FieldUpdate</type>
+        </action>
+        <action>
+            <name>Ordered</name>
+            <type>FieldUpdate</type>
+        </action>
+        <action>
+            <name>Stage_Closed_Won</name>
+            <type>FieldUpdate</type>
+        </action>
+    </finalApprovalActions>
+    <finalApprovalRecordLock>true</finalApprovalRecordLock>
+    <finalRejectionActions>
+        <action>
+            <name>Opportunity_Approved_False</name>
+            <type>FieldUpdate</type>
+        </action>
+        <action>
+            <name>Opportunity_Rejection_email_notification</name>
+            <type>Alert</type>
+        </action>
+        <action>
+            <name>Rejected_Submitted_to_Approval_False</name>
+            <type>FieldUpdate</type>
+        </action>
+        <action>
+            <name>Stage_Close</name>
+            <type>FieldUpdate</type>
+        </action>
+    </finalRejectionActions>
+    <finalRejectionRecordLock>false</finalRejectionRecordLock>
+    <initialSubmissionActions>
+        <action>
+            <name>Submitted_for_Approval_True</name>
+            <type>FieldUpdate</type>
+        </action>
+    </initialSubmissionActions>
+    <label>Finance Approval Process - ALM</label>
+    <processOrder>3</processOrder>
+    <recallActions>
+        <action>
+            <name>Opportunity_Recall_email_notification</name>
+            <type>Alert</type>
+        </action>
+        <action>
+            <name>Recall_Opportunity_Approved_False</name>
+            <type>FieldUpdate</type>
+        </action>
+        <action>
+            <name>Recall_Stage_Close</name>
+            <type>FieldUpdate</type>
+        </action>
+        <action>
+            <name>Recall_Submitted_for_Approval_False</name>
+            <type>FieldUpdate</type>
+        </action>
+    </recallActions>
+    <recordEditability>AdminOrCurrentApprover</recordEditability>
+    <showApprovalHistory>true</showApprovalHistory>
+</ApprovalProcess>

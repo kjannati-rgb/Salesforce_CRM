@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <description>Triage Cockpit C5: guided disqualification quick action. Required reason + optional comment (prepended to existing comments). Sets Sales_Stage__c = Disqualified; Date_Completed__c stamps via PFC_Stamp_Work_Fields (B4). Satisfies VR Disqualified_Reason_Mandatory.</description>
+    <dynamicChoiceSets>
+        <name>ReasonChoices</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+        <object xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+        <picklistField>Reason_Disqualified__c</picklistField>
+        <picklistObject>Pardot_Form_Completion__c</picklistObject>
+    </dynamicChoiceSets>
+    <environments>Default</environments>
+    <formulas>
+        <name>mergedComments</name>
+        <dataType>String</dataType>
+        <expression>IF(ISBLANK({!CommentText}),
+{!Get_PFC.Comments__c},
+{!CommentText} &amp; IF(ISBLANK({!Get_PFC.Comments__c}), &quot;&quot;, &quot; | &quot; &amp; {!Get_PFC.Comments__c}))</expression>
+    </formulas>
+    <interviewLabel>PFC Disqualify {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>PFC Disqualify</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>Get_PFC</name>
+        <label>Get Form Completion</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Screen_Disqualify</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Screen_Error</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Pardot_Form_Completion__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_PFC</name>
+        <label>Disqualify Form</label>
+        <locationX>176</locationX>
+        <locationY>398</locationY>
+        <faultConnector>
+            <targetReference>Screen_Error</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Comments__c</field>
+            <value>
+                <elementReference>mergedComments</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Reason_Disqualified__c</field>
+            <value>
+                <elementReference>ReasonPick</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Sales_Stage__c</field>
+            <value>
+                <stringValue>Disqualified</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Pardot_Form_Completion__c</object>
+    </recordUpdates>
+    <screens>
+        <name>Screen_Disqualify</name>
+        <label>Disqualify Form Completion</label>
+        <locationX>176</locationX>
+        <locationY>266</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Update_PFC</targetReference>
+        </connector>
+        <fields>
+            <name>DisqualifyIntro</name>
+            <fieldText>&lt;p&gt;Close this form completion out as &lt;b&gt;Disqualified&lt;/b&gt;. The reason feeds form-quality reporting back to Marketing.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>ReasonPick</name>
+            <choiceReferences>ReasonChoices</choiceReferences>
+            <dataType>String</dataType>
+            <fieldText>Reason Disqualified</fieldText>
+            <fieldType>DropdownBox</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>CommentText</name>
+            <fieldText>Comment (optional)</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <isRequired>false</isRequired>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Screen_Error</name>
+        <label>Something went wrong</label>
+        <locationX>440</locationX>
+        <locationY>398</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>ErrorText</name>
+            <fieldText>&lt;p&gt;The form could not be disqualified:&lt;/p&gt;&lt;p&gt;{!$Flow.FaultMessage}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_PFC</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Newsfeed_Subscribers</fullName>
+    <active>true</active>
+    <compactLayoutAssignment>Newsfeed_Compact</compactLayoutAssignment>
+    <description>Records created via Free Newsfeed Subscribers sign-ups</description>
+    <label>Newsfeed Subscribers</label>
+    <picklistValues>
+        <picklist>Form_Name__c</picklist>
+        <values>
+            <fullName>GAR - LeadGen - Subscribe - Short Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GAR - LeadGen Form - ROI Campaign</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GBRR - LeadGen - Subscribe - Short Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GCR - LeadGen - APAC enquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GCR - LeadGen - Content download</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GCR - LeadGen - September 2022 - Scanner</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GCR - LeadGen - Subscribe - Short Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GCR - LeadGen Form - Subscriber upgrade</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GDR - LeadGen - Content download</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GDR - LeadGen - Subscribe - Short Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GIR - LeadGen - Subscribe - Short Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GIR Lead Generation Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GRR - LeadGen - Content Download</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GRR - LeadGen - Subscribe - Short Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IAM - LeadGen - Subscribe - Short Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Latin Lawyer - LeadGen - Subscribe - Short Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Legal Monitor - LeadGen - Book Demo</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexology - IBA Annual 2022 - ROI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexology - LeadGen - Lexology Lexy - Subscribe</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexology - LeadGen - Lexology PRO - APAC Subscribe</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexology - LeadGen - Lexology PRO - Content Download</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexology - LeadGen - Lexology PRO - Content Download - UK Practical resources</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexology - LeadGen - Lexology PRO - Content Download - UK and ROW</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexology - LeadGen - Lexology PRO - Content Download - US Practical resources</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexology - LeadGen - Lexology PRO - Content Download - Welcome Campaign</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexology - LeadGen - Lexology PRO - Events - ACC Prize Draw</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexology - LeadGen - Lexology PRO - Marketing - Gated Content</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexology - LeadGen - Lexology PRO - Scanner</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexology - LeadGen - Lexology PRO - Scanner - Email Marketing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexology - LeadGen - Lexology PRO - Scanner - Email Marketing - APAC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexology - LeadGen - Lexology PRO - Subscribe</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexology - LeadGen - Lexology PRO - Subscribe - ACC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexology - LeadGen - Lexology PRO In-house - ACC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexology - LeadGen - Lexology PRO In-house - Subscribe</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexology - LeadGen - Lexology PRO In-house - Subscribe - ACC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexology - LeadGen - Lexology PRO Landing Page - ACC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexology - LeadGen - Lexology PRO Landing Page - Subscribe</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexology - LeadGen - Lexology PRO UK Marketing - Gated Content</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexology - LeadGen - LexologyPRO - APAC - Gated Content</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexology PRO Lead Generation Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Subscriptions - Lexology PRO - Content Download %E2%80%93 APAC V%2E2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Subscriptions - Lexology PRO - Content Download %E2%80%93 Main Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Subscriptions - Lexology PRO - Content Download %E2%80%93 NON APAC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Subscriptions - Lexology PRO - LinkedIn PPC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WTR - LeadGen - Subscribe - Marketing Form - Gated Content</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WTR - LeadGen - Subscribe - Short Form</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>PFC_Source__c</picklist>
+        <values>
+            <fullName>Event</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Import</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inbound Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Newsfeed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scored Lead</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Product_Brand__c</picklist>
+        <values>
+            <fullName>GAR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GBRR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GCR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GDR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GIR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GRR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IAM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Latin Lawyer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexology</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WTR</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Reason_Disqualified__c</picklist>
+        <values>
+            <fullName>Can%E2%80%99t afford</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Duplicate Enquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Duplicate Scored Lead%C2%A0</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Existing Opportunity%C2%A0</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Existing customer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Form %E2%80%93 Inbound Enquiry%C2%A0</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Form %E2%80%93 Sales Initiated%C2%A0</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Invalid Contact Information</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Moved Company</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No Budget Authority %C2%A0</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No response</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not ICP %E2%80%93 Company Size%C2%A0</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not ICP %E2%80%93 Industry%C2%A0</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not ICP %E2%80%93 Job Title%C2%A0</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Interested</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Product%2Fservice gap</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Student enquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Test%2FInvalid enquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Too Early %2F Not Ready%C2%A0</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wrong Job Function %C2%A0</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Sales_Stage__c</picklist>
+        <values>
+            <fullName>Converted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Disqualified</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Nurturing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Working</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

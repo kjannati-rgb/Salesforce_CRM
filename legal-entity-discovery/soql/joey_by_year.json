@@ -1,0 +1,164 @@
+{
+  "status": 0,
+  "result": {
+    "records": [
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "ALM Global, LLC",
+        "closeYear": 2021,
+        "CurrencyIsoCode": "GBP",
+        "recs": 121,
+        "sumAmount": 395288.03,
+        "sumACV": -8422.32
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "ALM Global, LLC",
+        "closeYear": 2021,
+        "CurrencyIsoCode": "USD",
+        "recs": 6,
+        "sumAmount": 19110.72,
+        "sumACV": null
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "ALM Global, LLC",
+        "closeYear": 2022,
+        "CurrencyIsoCode": "GBP",
+        "recs": 336,
+        "sumAmount": 1415676.1,
+        "sumACV": 8569.58
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "ALM Global, LLC",
+        "closeYear": 2022,
+        "CurrencyIsoCode": "USD",
+        "recs": 3,
+        "sumAmount": 9587.5,
+        "sumACV": null
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "ALM Global, LLC",
+        "closeYear": 2023,
+        "CurrencyIsoCode": "GBP",
+        "recs": 328,
+        "sumAmount": 1296397.44,
+        "sumACV": 37882.24
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "ALM Global, LLC",
+        "closeYear": 2023,
+        "CurrencyIsoCode": "USD",
+        "recs": 8,
+        "sumAmount": 14719.93,
+        "sumACV": 0
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "ALM Global, LLC",
+        "closeYear": 2024,
+        "CurrencyIsoCode": "GBP",
+        "recs": 391,
+        "sumAmount": 1574556.53,
+        "sumACV": 216267.51
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "ALM Global, LLC",
+        "closeYear": 2024,
+        "CurrencyIsoCode": "USD",
+        "recs": 5,
+        "sumAmount": 11343.59,
+        "sumACV": 6038.86
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "ALM Global, LLC",
+        "closeYear": 2025,
+        "CurrencyIsoCode": "GBP",
+        "recs": 104,
+        "sumAmount": 526605,
+        "sumACV": 106400.94
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "ALM Global, LLC",
+        "closeYear": 2025,
+        "CurrencyIsoCode": "USD",
+        "recs": 2,
+        "sumAmount": 3108.81,
+        "sumACV": 3108.81
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "ALM Global, LLC",
+        "closeYear": 2026,
+        "CurrencyIsoCode": "GBP",
+        "recs": 129,
+        "sumAmount": 623315.2,
+        "sumACV": 93155.75
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "ALM Global, LLC",
+        "closeYear": 2026,
+        "CurrencyIsoCode": "USD",
+        "recs": 2,
+        "sumAmount": 4933.83,
+        "sumACV": 1127.82
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "ALM Global, LLC",
+        "closeYear": 2027,
+        "CurrencyIsoCode": "GBP",
+        "recs": 7,
+        "sumAmount": null,
+        "sumACV": 0
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "ALM Global, LLC",
+        "closeYear": 2030,
+        "CurrencyIsoCode": "GBP",
+        "recs": 2,
+        "sumAmount": 20874,
+        "sumACV": 6958
+      }
+    ],
+    "totalSize": 14,
+    "done": true
+  },
+  "warnings": []
+}

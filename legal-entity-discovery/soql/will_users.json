@@ -1,0 +1,200 @@
+{
+  "status": 0,
+  "result": {
+    "records": [
+      {
+        "attributes": {
+          "type": "User",
+          "url": "/services/data/v66.0/sobjects/User/0056g000005rqzBAAQ"
+        },
+        "Id": "0056g000005rqzBAAQ",
+        "Name": "Will Bull",
+        "IsActive": false,
+        "LBR_Legal_Entity__c": "Law Business Research (UK) Ltd.",
+        "CompanyName": "Law Business Research (UK) Ltd.",
+        "Division": "Practice Intelligence",
+        "UserRole": {
+          "attributes": {
+            "type": "UserRole",
+            "url": "/services/data/v66.0/sobjects/UserRole/00E6g000000gjaiEAA"
+          },
+          "Name": "Chief Executive Officer"
+        }
+      },
+      {
+        "attributes": {
+          "type": "User",
+          "url": "/services/data/v66.0/sobjects/User/0056g000005rqyiAAA"
+        },
+        "Id": "0056g000005rqyiAAA",
+        "Name": "Will Guyatt",
+        "IsActive": false,
+        "LBR_Legal_Entity__c": "Law Business Research (UK) Ltd.",
+        "CompanyName": "Law Business Research (UK) Ltd.",
+        "Division": "Legal Information",
+        "UserRole": {
+          "attributes": {
+            "type": "UserRole",
+            "url": "/services/data/v66.0/sobjects/UserRole/00E6g000000gjaiEAA"
+          },
+          "Name": "Chief Executive Officer"
+        }
+      },
+      {
+        "attributes": {
+          "type": "User",
+          "url": "/services/data/v66.0/sobjects/User/005Tm000001JILdIAO"
+        },
+        "Id": "005Tm000001JILdIAO",
+        "Name": "William Anderson",
+        "IsActive": true,
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "CompanyName": "Law Business Research LLC",
+        "Division": "Practice Intelligence",
+        "UserRole": {
+          "attributes": {
+            "type": "UserRole",
+            "url": "/services/data/v66.0/sobjects/UserRole/00E4L0000018pw9UAA"
+          },
+          "Name": "USA - Content Subs Key Account Manager"
+        }
+      },
+      {
+        "attributes": {
+          "type": "User",
+          "url": "/services/data/v66.0/sobjects/User/0056g000005rqzvAAA"
+        },
+        "Id": "0056g000005rqzvAAA",
+        "Name": "William Bruce-Morgan",
+        "IsActive": false,
+        "LBR_Legal_Entity__c": "Law Business Research (UK) Ltd.",
+        "CompanyName": "Law Business Research (UK) Ltd.",
+        "Division": "Legal Information",
+        "UserRole": {
+          "attributes": {
+            "type": "UserRole",
+            "url": "/services/data/v66.0/sobjects/UserRole/00E6g000000gjaiEAA"
+          },
+          "Name": "Chief Executive Officer"
+        }
+      },
+      {
+        "attributes": {
+          "type": "User",
+          "url": "/services/data/v66.0/sobjects/User/0056g000005rr0RAAQ"
+        },
+        "Id": "0056g000005rr0RAAQ",
+        "Name": "William Holt",
+        "IsActive": false,
+        "LBR_Legal_Entity__c": "Law Business Research (UK) Ltd.",
+        "CompanyName": "Law Business Research (UK) Ltd.",
+        "Division": "Operations",
+        "UserRole": {
+          "attributes": {
+            "type": "UserRole",
+            "url": "/services/data/v66.0/sobjects/UserRole/00E4L0000018pk8UAA"
+          },
+          "Name": "Production Executive"
+        }
+      },
+      {
+        "attributes": {
+          "type": "User",
+          "url": "/services/data/v66.0/sobjects/User/005Tm0000018mlFIAQ"
+        },
+        "Id": "005Tm0000018mlFIAQ",
+        "Name": "William Moss",
+        "IsActive": false,
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "CompanyName": "Law Business Research LLC",
+        "Division": "Practice Intelligence",
+        "UserRole": {
+          "attributes": {
+            "type": "UserRole",
+            "url": "/services/data/v66.0/sobjects/UserRole/00E6g000000gjaiEAA"
+          },
+          "Name": "Chief Executive Officer"
+        }
+      },
+      {
+        "attributes": {
+          "type": "User",
+          "url": "/services/data/v66.0/sobjects/User/0054L000002q0egQAA"
+        },
+        "Id": "0054L000002q0egQAA",
+        "Name": "William New",
+        "IsActive": false,
+        "LBR_Legal_Entity__c": "Law Business Research (UK) Ltd.",
+        "CompanyName": "Law Business Research (UK) Ltd.",
+        "Division": "Editorial & Content",
+        "UserRole": {
+          "attributes": {
+            "type": "UserRole",
+            "url": "/services/data/v66.0/sobjects/UserRole/00E4L0000018pjoUAA"
+          },
+          "Name": "Content Management - Editor"
+        }
+      },
+      {
+        "attributes": {
+          "type": "User",
+          "url": "/services/data/v66.0/sobjects/User/005Tm0000010mk2IAA"
+        },
+        "Id": "005Tm0000010mk2IAA",
+        "Name": "William Shaw",
+        "IsActive": false,
+        "LBR_Legal_Entity__c": "MBL Seminars Limited",
+        "CompanyName": "MBL Seminars Limited",
+        "Division": "MBL Seminars",
+        "UserRole": {
+          "attributes": {
+            "type": "UserRole",
+            "url": "/services/data/v66.0/sobjects/UserRole/00ETm0000011kwHMAQ"
+          },
+          "Name": "MBL Seminars - Membership Team Sales Executive"
+        }
+      },
+      {
+        "attributes": {
+          "type": "User",
+          "url": "/services/data/v66.0/sobjects/User/005Px000009fBBjIAM"
+        },
+        "Id": "005Px000009fBBjIAM",
+        "Name": "Willie Guerrero",
+        "IsActive": true,
+        "LBR_Legal_Entity__c": "ALM Global, LLC",
+        "CompanyName": "ALM Global, LLC",
+        "Division": "ALM Legal - Info Services",
+        "UserRole": {
+          "attributes": {
+            "type": "UserRole",
+            "url": "/services/data/v66.0/sobjects/UserRole/00EPx00000MRLV9MAP"
+          },
+          "Name": "ALM Legal - IS - Sales Operations Team"
+        }
+      },
+      {
+        "attributes": {
+          "type": "User",
+          "url": "/services/data/v66.0/sobjects/User/0056g000005rqziAAA"
+        },
+        "Id": "0056g000005rqziAAA",
+        "Name": "Will Lovett",
+        "IsActive": false,
+        "LBR_Legal_Entity__c": "Law Business Research (UK) Ltd.",
+        "CompanyName": "Law Business Research (UK) Ltd.",
+        "Division": "Practice Intelligence",
+        "UserRole": {
+          "attributes": {
+            "type": "UserRole",
+            "url": "/services/data/v66.0/sobjects/UserRole/00E6g000000gjaiEAA"
+          },
+          "Name": "Chief Executive Officer"
+        }
+      }
+    ],
+    "totalSize": 10,
+    "done": true
+  },
+  "warnings": []
+}

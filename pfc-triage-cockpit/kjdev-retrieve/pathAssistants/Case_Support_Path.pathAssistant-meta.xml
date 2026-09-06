@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PathAssistant xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <entityName>Case</entityName>
+    <fieldName>Status</fieldName>
+    <masterLabel>Case Support Path</masterLabel>
+    <pathAssistantSteps>
+        <fieldNames>Case_Unresolved_Reason__c</fieldNames>
+        <info>&lt;p&gt;The case cannot or will not be solved. This is not the right selection if the customer is unhappy with our response. Rather it is that we cannot provide a good answer to the problem e.g. Perhaps the original case raiser is unresponsive.&lt;/p&gt;</info>
+        <picklistValueName>Closed - Not Resolved</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Case_Resolved_Reason__c</fieldNames>
+        <info>&lt;p&gt;We have solved the case. Time to assess whether the interaction was a positive interaction for the customer.&lt;/p&gt;</info>
+        <picklistValueName>Closed - Resolved</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Connected_opportunity__c</fieldNames>
+        <fieldNames>Customer_Type__c</fieldNames>
+        <fieldNames>ProductId</fieldNames>
+        <fieldNames>Priority</fieldNames>
+        <info>&lt;p&gt;This is the triage stage make sure the basics of the case are checked:&lt;/p&gt;&lt;p&gt;•	Is it in the right queue?&lt;/p&gt;&lt;p&gt;•	What is the user type? Have we checked for connected opportunities?&lt;/p&gt;&lt;p&gt;•	Impact assessed and priority proposed&lt;/p&gt;&lt;p&gt;Assign to a team member.&lt;/p&gt;</info>
+        <picklistValueName>New</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>MilestoneStatus</fieldNames>
+        <info>&lt;p&gt;The case should only be waiting with customer if you have emailed or contacted the customer in another way.&lt;/p&gt;</info>
+        <picklistValueName>With Customer</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Blocked_by__c</fieldNames>
+        <info>&lt;p&gt;Your case is in this status because you are waiting for help from another team. In this stage:&lt;/p&gt;&lt;p&gt;•	Track the team this is with&lt;/p&gt;&lt;p&gt;•	Make notes about actions if they are outside of Salesforce&lt;/p&gt;&lt;p&gt;•	Chatter with colleagues linking them to this case if they use Salesforce&lt;/p&gt;</info>
+        <picklistValueName>With Other Team</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Task_Size__c</fieldNames>
+        <fieldNames>Task_difficulty_complexity__c</fieldNames>
+        <fieldNames>Priority</fieldNames>
+        <info>&lt;p&gt;Time to research and understand the task ahead of contacting the customer.&lt;/p&gt;&lt;p&gt;•	How big do you estimate the task to be?&lt;/p&gt;&lt;p&gt;•	How complex is the resolution&lt;/p&gt;&lt;p&gt;•	Do you agree with the impact and priority assigned?&lt;/p&gt;&lt;p&gt;Who else might need to know about this case?&lt;/p&gt;&lt;p&gt;•	Add case team members to keep them in the loop or collaborate&lt;/p&gt;&lt;p&gt;•	Use chatter to notify others of activyty&lt;/p&gt;&lt;p&gt;Check the knowledge base and templates to resolve the case efficiently and consistently.&lt;/p&gt;</info>
+        <picklistValueName>With Team</picklistValueName>
+    </pathAssistantSteps>
+    <recordTypeName>Support</recordTypeName>
+</PathAssistant>

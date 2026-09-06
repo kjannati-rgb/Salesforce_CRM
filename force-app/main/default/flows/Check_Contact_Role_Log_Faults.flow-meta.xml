@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <actionCalls>
+        <name>Send_Alert_Email</name>
+        <label>Send Fault Alert Email</label>
+        <locationX>176</locationX>
+        <locationY>1142</locationY>
+        <description>Real-time alert to all active System Administrator and Data Management users that a Contact Role Check fault occurred and a save proceeded unchecked. Fail-open: an email error never blocks the save.</description>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <faultConnector>
+            <targetReference>Handle_Log_Fault</targetReference>
+        </faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddressesArray</name>
+            <value>
+                <elementReference>varEmails</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>[Action] Contact Role Check fault - save proceeded unchecked</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>tplEmailBody</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+    </actionCalls>
+    <assignments>
+        <name>Add_Email</name>
+        <label>Add Recipient Email</label>
+        <locationX>50</locationX>
+        <locationY>1034</locationY>
+        <description>Collects each recipient's email into the address list for the alert.</description>
+        <assignmentItems>
+            <assignToReference>varEmails</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Recipients.Email</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Recipients</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Add_Profile_Id</name>
+        <label>Add Profile Id</label>
+        <locationX>50</locationX>
+        <locationY>566</locationY>
+        <description>Collects the Ids of the target profiles for the recipient query.</description>
+        <assignmentItems>
+            <assignToReference>varProfileIds</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Profiles.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Profiles</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Handle_Log_Fault</name>
+        <label>Handle Log Fault (Fail Open)</label>
+        <locationX>440</locationX>
+        <locationY>1250</locationY>
+        <description>If writing the Flow_Log__c row or sending the alert email fails, swallow it so logging/alerting can never block or roll back the user's Opportunity save.</description>
+        <assignmentItems>
+            <assignToReference>varLogFaultHandled</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <name>Check_Has_Recipients</name>
+        <label>Any Recipients Found?</label>
+        <locationX>176</locationX>
+        <locationY>926</locationY>
+        <description>Only attempt to send if at least one active recipient was found.</description>
+        <defaultConnectorLabel>No Recipients</defaultConnectorLabel>
+        <rules>
+            <name>Has_Recipients</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Recipients</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Loop_Recipients</targetReference>
+            </connector>
+            <label>Has Recipients</label>
+        </rules>
+    </decisions>
+    <description>After-save companion to Check_Completeness_of_Contact_Roles. Runs only when that before-save flow stamped a fault (Contact_Role_Check_Has_Error__c). Records it to Flow_Log__c and emails a real-time alert to all active System Administrator and Data Management users. Fail-open: a logging or email error never blocks the save.</description>
+    <environments>Default</environments>
+    <interviewLabel>Check Contact Role Log Faults {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Check Contact Role Log Faults</label>
+    <loops>
+        <name>Loop_Profiles</name>
+        <label>For Each Target Profile</label>
+        <locationX>176</locationX>
+        <locationY>458</locationY>
+        <description>Builds the list of target profile Ids.</description>
+        <collectionReference>Get_Profiles</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Add_Profile_Id</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Get_Recipients</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <name>Loop_Recipients</name>
+        <label>For Each Recipient</label>
+        <locationX>176</locationX>
+        <locationY>1034</locationY>
+        <description>Builds the email address list from the matched active users.</description>
+        <collectionReference>Get_Recipients</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Add_Email</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Send_Alert_Email</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_Flow_Log</name>
+        <label>Create Flow Log</label>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
+        <description>Writes the captured before-save fault to Flow_Log__c (org's standard logging object), tagged with the Flow Error record type when available.</description>
+        <connector>
+            <targetReference>Get_Profiles</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Handle_Log_Fault</targetReference>
+        </faultConnector>
+        <inputAssignments>
+            <field>Class_Name__c</field>
+            <value>
+                <stringValue>Check_Completeness_of_Contact_Roles (before-save, fail-open)</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Error_Description__c</field>
+            <value>
+                <elementReference>$Record.Contact_Role_Check_Last_Error__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Flow_Name__c</field>
+            <value>
+                <stringValue>Check Completeness of Contact Roles</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Record_Name__c</field>
+            <value>
+                <elementReference>$Record.Name</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>Get_Flow_Error_RT.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Flow_Log__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <name>Get_Flow_Error_RT</name>
+        <label>Get Flow Error Record Type</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <description>Resolves the Flow_Log__c "Flow Error" record type Id without hardcoding it. If not found or it faults, the log is still created with the default record type.</description>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Create_Flow_Log</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Create_Flow_Log</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SobjectType</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Flow_Log__c</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Flow_Error</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RecordType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Profiles</name>
+        <label>Get Target Profiles</label>
+        <locationX>176</locationX>
+        <locationY>458</locationY>
+        <description>Finds the profiles whose active users should receive the fault alert.</description>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Loop_Profiles</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Handle_Log_Fault</targetReference>
+        </faultConnector>
+        <filterLogic>1 OR 2 OR 3</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>System Administrator</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Custom: Data Management</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>ALM - Custom: Data Management</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Profile</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Recipients</name>
+        <label>Get Active Recipients</label>
+        <locationX>176</locationX>
+        <locationY>758</locationY>
+        <description>Active users in the target profiles. Fault path fails open (no email, save unaffected).</description>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_Has_Recipients</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Handle_Log_Fault</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>IsActive</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>ProfileId</field>
+            <operator>In</operator>
+            <value>
+                <elementReference>varProfileIds</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>User</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Flow_Error_RT</targetReference>
+        </connector>
+        <filterFormula>AND({!$Record.Contact_Role_Check_Has_Error__c}, OR(ISNEW(), ISCHANGED({!$Record.Contact_Role_Check_Has_Error__c})))</filterFormula>
+        <object>Opportunity</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>tplEmailBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>A Contact Role Check fault occurred and the Opportunity save proceeded UNCHECKED. Please review the record.
+
+Opportunity: {!$Record.Name}
+Record Id: {!$Record.Id}
+
+Fault detail:
+{!$Record.Contact_Role_Check_Last_Error__c}
+
+(Logged to Flow_Log__c, class "Check_Completeness_of_Contact_Roles (before-save, fail-open)".)</text>
+    </textTemplates>
+    <variables>
+        <name>varEmails</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varLogFaultHandled</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
+        <name>varProfileIds</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

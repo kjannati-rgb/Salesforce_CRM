@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Layered ownership: plan lead, lane owners, SDRs, contributors. Drives plan-team-based sharing (architecture 2.6 / 8).</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <label>Plan Team Member</label>
+    <nameField>
+        <displayFormat>PTM-{0000000}</displayFormat>
+        <label>Team Member ID</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Plan Team Members</pluralLabel>
+    <sharingModel>ControlledByParent</sharingModel>
+    <visibility>Public</visibility>
+</CustomObject>

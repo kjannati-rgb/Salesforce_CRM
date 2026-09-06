@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Loss_Reason__c</fullName>
+    <label>Loss Reason</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Bad Debtor</fullName>
+                <default>false</default>
+                <label>Bad Debtor</label>
+            </value>
+            <value>
+                <fullName>Busy with other publications</fullName>
+                <default>false</default>
+                <label>Busy with other publications</label>
+            </value>
+            <value>
+                <fullName>Busy with other publications, No response</fullName>
+                <default>false</default>
+                <label>Busy with other publications, No response</label>
+            </value>
+            <value>
+                <fullName>Chapter taken by another firm</fullName>
+                <default>false</default>
+                <label>Chapter taken by another firm</label>
+            </value>
+            <value>
+                <fullName>Cost too high</fullName>
+                <default>false</default>
+                <label>Cost too high</label>
+            </value>
+            <value>
+                <fullName>Existing Customer</fullName>
+                <default>false</default>
+                <label>Existing Customer</label>
+            </value>
+            <value>
+                <fullName>False Enquiry</fullName>
+                <default>false</default>
+                <label>False Enquiry</label>
+            </value>
+            <value>
+                <fullName>Inactive Account</fullName>
+                <default>false</default>
+                <label>Inactive Account</label>
+            </value>
+            <value>
+                <fullName>Lack of time</fullName>
+                <default>false</default>
+                <label>Lack of time</label>
+            </value>
+            <value>
+                <fullName>Lost to Competitor</fullName>
+                <default>false</default>
+                <label>Lost to Competitor</label>
+            </value>
+            <value>
+                <fullName>Macroeconomic</fullName>
+                <default>false</default>
+                <label>Macroeconomic</label>
+            </value>
+            <value>
+                <fullName>No Budget</fullName>
+                <default>false</default>
+                <label>No Budget</label>
+            </value>
+            <value>
+                <fullName>No Budget / Lost Funding</fullName>
+                <default>false</default>
+                <label>No Budget / Lost Funding</label>
+            </value>
+            <value>
+                <fullName>No Decision / Non-Responsive</fullName>
+                <default>false</default>
+                <label>No Decision / Non-Responsive</label>
+            </value>
+            <value>
+                <fullName>Non-paying Policy</fullName>
+                <default>false</default>
+                <label>Non-paying Policy</label>
+            </value>
+            <value>
+                <fullName>No reason given</fullName>
+                <default>false</default>
+                <label>No reason given</label>
+            </value>
+            <value>
+                <fullName>No response</fullName>
+                <default>false</default>
+                <label>No response</label>
+            </value>
+            <value>
+                <fullName>Not Paid</fullName>
+                <default>false</default>
+                <label>Not Paid</label>
+            </value>
+            <value>
+                <fullName>Open</fullName>
+                <default>false</default>
+                <label>Open</label>
+            </value>
+            <value>
+                <fullName>Open, Budget not yet planned</fullName>
+                <default>false</default>
+                <label>Open, Budget not yet planned</label>
+            </value>
+            <value>
+                <fullName>Open, Lack of time</fullName>
+                <default>false</default>
+                <label>Open, Lack of time</label>
+            </value>
+            <value>
+                <fullName>Open, No budget</fullName>
+                <default>false</default>
+                <label>Open, No budget</label>
+            </value>
+            <value>
+                <fullName>Open, Non-paying Policy</fullName>
+                <default>false</default>
+                <label>Open, Non-paying Policy</label>
+            </value>
+            <value>
+                <fullName>Open, No reason given</fullName>
+                <default>false</default>
+                <label>Open, No reason given</label>
+            </value>
+            <value>
+                <fullName>Open, Working with a competitor, Busy with other publications</fullName>
+                <default>false</default>
+                <label>Open, Working with a competitor, Busy with other publications</label>
+            </value>
+            <value>
+                <fullName>Opportunity Expired</fullName>
+                <default>false</default>
+                <label>Opportunity Expired</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+            <value>
+                <fullName>Poor Follow Up</fullName>
+                <default>false</default>
+                <label>Poor Follow Up</label>
+            </value>
+            <value>
+                <fullName>Price</fullName>
+                <default>false</default>
+                <label>Price</label>
+            </value>
+            <value>
+                <fullName>Product/Service Gap</fullName>
+                <default>false</default>
+                <label>Product/Service Gap</label>
+            </value>
+            <value>
+                <fullName>Rolled Out</fullName>
+                <default>false</default>
+                <label>Rolled Out</label>
+            </value>
+            <value>
+                <fullName>Timing Gap</fullName>
+                <default>false</default>
+                <label>Timing Gap</label>
+            </value>
+            <value>
+                <fullName>Too Expensive/Insufficient Budget</fullName>
+                <default>false</default>
+                <label>Too Expensive/Insufficient Budget</label>
+            </value>
+            <value>
+                <fullName>Already Renewed</fullName>
+                <default>false</default>
+                <label>Already Renewed</label>
+            </value>
+            <value>
+                <fullName>Autorenewal Cancelation</fullName>
+                <default>false</default>
+                <label>Autorenewal Cancelation</label>
+            </value>
+            <value>
+                <fullName>Budget Timing</fullName>
+                <default>false</default>
+                <label>Budget Timing</label>
+            </value>
+            <value>
+                <fullName>Content</fullName>
+                <default>false</default>
+                <label>Content</label>
+            </value>
+            <value>
+                <fullName>Cost/Budget</fullName>
+                <default>false</default>
+                <label>Cost/Budget</label>
+            </value>
+            <value>
+                <fullName>Merged with another account</fullName>
+                <default>false</default>
+                <label>Merged with another account</label>
+            </value>
+            <value>
+                <fullName>Migrated to Online</fullName>
+                <default>false</default>
+                <label>Migrated to Online</label>
+            </value>
+            <value>
+                <fullName>Migrated to site license</fullName>
+                <default>false</default>
+                <label>Migrated to site license</label>
+            </value>
+            <value>
+                <fullName>Poor Previous Experience</fullName>
+                <default>false</default>
+                <label>Poor Previous Experience</label>
+            </value>
+            <value>
+                <fullName>Product Capabilities</fullName>
+                <default>false</default>
+                <label>Product Capabilities</label>
+            </value>
+            <value>
+                <fullName>Product Performance</fullName>
+                <default>false</default>
+                <label>Product Performance</label>
+            </value>
+            <value>
+                <fullName>Registered Online</fullName>
+                <default>false</default>
+                <label>Registered Online</label>
+            </value>
+            <value>
+                <fullName>Sales Experience</fullName>
+                <default>false</default>
+                <label>Sales Experience</label>
+            </value>
+            <value>
+                <fullName>Stronger Competitor</fullName>
+                <default>false</default>
+                <label>Stronger Competitor</label>
+            </value>
+            <value>
+                <fullName>Stronger Product</fullName>
+                <default>false</default>
+                <label>Stronger Product</label>
+            </value>
+            <value>
+                <fullName>Upsold/Included in another opportunity</fullName>
+                <default>false</default>
+                <label>Upsold/Included in another opportunity</label>
+            </value>
+            <value>
+                <fullName>Wrong Contact/Level</fullName>
+                <default>false</default>
+                <label>Wrong Contact/Level</label>
+            </value>
+            <value>
+                <fullName>Closed due to inactivity</fullName>
+                <default>false</default>
+                <label>Closed due to inactivity</label>
+            </value>
+            <value>
+                <fullName>Decline Upgrade</fullName>
+                <default>false</default>
+                <label>Decline Upgrade</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

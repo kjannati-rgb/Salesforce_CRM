@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity_Type_Forecast__c</fullName>
+    <description>This picklist is used to Group the Type field into groupings i.e. Renewal, Auto-Renewal and Repeat Business into Renewals! It is used in Salesforce standard forecasting!</description>
+    <inlineHelpText>This picklist is used to Group the Type field into groupings i.e. Renewal, Auto-Renewal and Repeat Business into Renewals! It is used in Salesforce standard forecasting!</inlineHelpText>
+    <label>Opportunity Type (Forecast)</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetName>Opportunity_Type_Grouping</valueSetName>
+    </valueSet>
+</CustomField>

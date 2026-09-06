@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <classAccesses>
+        <apexClass>PFCQualityCardController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <description>Human-facing FLS + Apex access for PFC Triage Cockpit (read-only fields: automation owns the values; class access powers the quality card wire). Assign alongside PFC_REV57_Field_Access to reps/managers who work the triage views.</description>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Pardot_Form_Completion__c.Routing_Overdue__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Pardot_Form_Completion__c.UTM_Source__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Pardot_Form_Completion__c.UTM_Medium__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Pardot_Form_Completion__c.UTM_Campaign__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Pardot_Form_Completion__c.UTM_Term__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Pardot_Form_Completion__c.UTM_Content__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>PFC Triage Cockpit Fields</label>
+</PermissionSet>

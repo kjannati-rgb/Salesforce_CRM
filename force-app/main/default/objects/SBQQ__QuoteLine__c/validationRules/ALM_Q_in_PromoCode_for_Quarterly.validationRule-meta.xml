@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ALM_Q_in_PromoCode_for_Quarterly</fullName>
+    <active>false</active>
+    <description>RETIRED by REV-60 (17 Jul 2026): the promo engine composes the Q automatically and refreshes on frequency changes; this QLE-time rule fired before the after-save engine and blocked blank new lines (UAT A2). Engine + backstop replace it.</description>
+    <errorConditionFormula>(NOT(CONTAINS(Promo_Code__c, "Q"))
+&amp;&amp;
+text(SBQQ__Quote__r.SBQQ__BillingFrequency__c) = 'Quarterly'
+&amp;&amp;
+text(Division__c)  = 'ALM'
+&amp;&amp;
+SBQQ__Bundle__c = FALSE
+)
+||
+(ISBLANK(Promo_Code__c)
+&amp;&amp;
+text(SBQQ__Quote__r.SBQQ__BillingFrequency__c) = 'Quarterly'
+&amp;&amp;
+text(Division__c)  = 'ALM'
+&amp;&amp;
+SBQQ__Bundle__c = FALSE
+)</errorConditionFormula>
+    <errorMessage>Please add "Q" to promo code if Billing Frequency is Quarterly</errorMessage>
+</ValidationRule>

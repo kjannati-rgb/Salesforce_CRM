@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Disqualified_Reason_Mandatory</fullName>
+    <active>true</active>
+    <errorConditionFormula>text( Sales_Stage__c)==&quot;Disqualified&quot;
+&amp;&amp;
+ISBLANK( text(Reason_Disqualified__c ))</errorConditionFormula>
+    <errorMessage>Please fill in the Reason Disqualified field.</errorMessage>
+</ValidationRule>

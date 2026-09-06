@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>REV-60 engine configuration (single Control record): master + per-layer kill switches, the ALM product-scope set, year-suffix and +Z composition toggles, and documentation of the pending base-promo determinant (§7.1) and contract-year source (§7.3) fields.</description>
+    <label>ALM Code Engine Setting</label>
+    <pluralLabel>ALM Code Engine Settings</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>

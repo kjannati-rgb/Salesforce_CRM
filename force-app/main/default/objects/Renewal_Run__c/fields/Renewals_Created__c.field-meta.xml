@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Renewals_Created__c</fullName>
+    <label>Renewals Created</label>
+    <description>Count of renewal opportunities this run actually created (always 0 for a dry run).</description>
+    <inlineHelpText>How many new renewal opportunities this run produced.</inlineHelpText>
+    <type>Number</type>
+    <precision>18</precision>
+    <scale>0</scale>
+</CustomField>

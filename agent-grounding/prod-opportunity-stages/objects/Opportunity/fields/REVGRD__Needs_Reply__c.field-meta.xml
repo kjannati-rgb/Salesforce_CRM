@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>REVGRD__Needs_Reply__c</fullName>
+    <deprecated>false</deprecated>
+    <formula>AND(NOT(ISNULL(REVGRD__Last_Inbound_Email_Date__c)), OR( ISNULL(REVGRD__Last_Outbound_Email_Date__c), REVGRD__Last_Inbound_Email_Date__c&gt;  REVGRD__Last_Outbound_Email_Date__c))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Needs Reply</label>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

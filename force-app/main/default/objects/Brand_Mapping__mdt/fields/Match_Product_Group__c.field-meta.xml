@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Match_Product_Group__c</fullName>
+    <label>Match Product Group</label>
+    <description>Optional. When set, active-subscription matching keys on Product2.Product_Group__c = this value instead of Brand__c. Use for product lines that share a Brand (e.g. Lexology PRO vs Lexology Intelligence both have Brand__c="Lexology" but distinct Product_Group__c).</description>
+    <type>Text</type>
+    <length>120</length>
+    <required>false</required>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>Content_Subs_NB_Handshake</fullName>
+        <ccEmails>PoLLegalVerticalsNewBusiness@lbresearch.com</ccEmails>
+        <description>Content Subs NB Handshake</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Specialist_platforms_New_business__c</field>
+            <type>email</type>
+        </recipients>
+        <recipients>
+            <recipient>nick.fielden@lbresearch.com</recipient>
+            <type>user</type>
+        </recipients>
+        <senderAddress>customersuccess@lbresearch.com</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/NB_Sales_handshake_CS</template>
+    </alerts>
+    <alerts>
+        <fullName>Content_Subs_NB_Handshake2</fullName>
+        <ccEmails>PoLLegalVerticalsNewBusiness@globeBPCRM.onmicrosoft.com</ccEmails>
+        <description>Content Subs NB Handshake2</description>
+        <protected>false</protected>
+        <senderAddress>customersuccess@lbresearch.com</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/NB_Sales_handshake_Lex_Pro</template>
+    </alerts>
+    <alerts>
+        <fullName>Lex_Pro_BG_Handshake</fullName>
+        <ccEmails>LexologyPRO_Newdeals_Discontinues@globeBPCRM.onmicrosoft.com</ccEmails>
+        <ccEmails>lexologypro_newdeals_discontinues@lbresearch.com</ccEmails>
+        <ccEmails>nick.fielden@lbresearch.com</ccEmails>
+        <ccEmails>aaron.gill@lbresearch.com</ccEmails>
+        <description>Lex Pro BG Handshake</description>
+        <protected>false</protected>
+        <recipients>
+            <field>LexPRO_New_Business__c</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>customersuccess@lbresearch.com</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/NB_BG_Sales_handshake_Lex_Pro</template>
+    </alerts>
+    <alerts>
+        <fullName>Lex_Pro_NB_Handshake</fullName>
+        <ccEmails>lexologypro_newdeals_discontinues@lbresearch.com</ccEmails>
+        <ccEmails>nick.fielden@lbresearch.com</ccEmails>
+        <description>Lex Pro NB Handshake</description>
+        <protected>false</protected>
+        <recipients>
+            <field>LexPRO_New_Business__c</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>customersuccess@lbresearch.com</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/NB_Sales_handshake_Lex_Pro</template>
+    </alerts>
+    <alerts>
+        <fullName>Lex_Pro_NB_Handshake2</fullName>
+        <ccEmails>dist_lexology-newdeals&amp;discontinues@gbp.co.uk</ccEmails>
+        <description>Lex Pro NB Handshake2</description>
+        <protected>false</protected>
+        <senderAddress>customersuccess@lbresearch.com</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/NB_Sales_handshake_Lex_Pro</template>
+    </alerts>
+    <alerts>
+        <fullName>Sales_handshake</fullName>
+        <description>Sales handshake</description>
+        <protected>false</protected>
+        <recipients>
+            <recipient>claire.spear@lbresearch.com</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>david.samuels@lbresearch.com</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>rosie.cresswell@lbresearch.com</recipient>
+            <type>user</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/NB_Sales_handshake_Lex_Pro</template>
+    </alerts>
+</Workflow>

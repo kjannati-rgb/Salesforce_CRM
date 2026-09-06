@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomPermission xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>REV-69 — gates the LexPRO Deal Qualifier surface (embedded component + "Qualify this deal" action). Held by the Lexology Pro team and RevOps via the Opportunity_LexPRO_Qualification_Fields permission set.</description>
+    <isLicensed>false</isLicensed>
+    <label>LexPRO Qualifier Access</label>
+</CustomPermission>

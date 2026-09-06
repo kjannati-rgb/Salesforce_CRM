@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LexPRO_NB_Qualification_Gate</fullName>
+    <active>true</active>
+    <description>REV-69: gates Lexology Pro deals (NB record type, Type=New Business only — Upsell/Repeat exempt) advancing past Identify w/o the 3 LexPRO answers (Closed Lost exempt). Fires only on stage transition, not unrelated edits (fixed 1-2 Jul 2026).</description>
+    <errorConditionFormula>AND(
+  $RecordType.DeveloperName = "New_Business",
+  ISPICKVAL(Type, "New Business"),
+  Opportunity_Owner_Team__c = "Lexology Pro",
+  OR(ISNEW(), ISCHANGED(StageName)),
+  NOT(ISPICKVAL(StageName, "Identify")),
+  NOT(ISPICKVAL(StageName, "Closed Lost")),
+  OR(
+    ISPICKVAL(LexPRO_Qual_Jurisdiction_Coverage__c, ""),
+    ISPICKVAL(LexPRO_Qual_Content_Coverage__c, ""),
+    ISBLANK(LexPRO_Qual_Process_Improvement__c)
+  )
+)</errorConditionFormula>
+    <errorDisplayField>StageName</errorDisplayField>
+    <errorMessage>Complete the three LexPRO qualification answers (Jurisdiction, Content, and Process) before moving this New Business deal past Identify. Use the "Qualify this deal" action to fill them in, or set the stage to Closed Lost to disqualify.</errorMessage>
+</ValidationRule>

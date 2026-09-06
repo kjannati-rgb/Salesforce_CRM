@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Closed_Lost_primary_reason__c</fullName>
+    <description>Please enter the main reason to close lost this opportunity</description>
+    <inlineHelpText>Indicates the main reason to close lost an opportunity</inlineHelpText>
+    <label>Closed Lost primary reason</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Budget issues</fullName>
+                <default>false</default>
+                <label>Budget issues</label>
+            </value>
+            <value>
+                <fullName>Buyer issues</fullName>
+                <default>false</default>
+                <label>Buyer issues</label>
+            </value>
+            <value>
+                <fullName>Client chose competitor</fullName>
+                <default>false</default>
+                <label>Client chose competitor</label>
+            </value>
+            <value>
+                <fullName>Client engagement issue</fullName>
+                <default>false</default>
+                <label>Client engagement issue</label>
+            </value>
+            <value>
+                <fullName>Content issues</fullName>
+                <default>false</default>
+                <label>Content issues</label>
+            </value>
+            <value>
+                <fullName>Lack of ROI</fullName>
+                <default>false</default>
+                <label>Lack of ROI</label>
+            </value>
+            <value>
+                <fullName>LBR cancellation</fullName>
+                <default>false</default>
+                <label>LBR cancellation</label>
+            </value>
+            <value>
+                <fullName>LBR engagement issue</fullName>
+                <default>false</default>
+                <label>LBR engagement issue</label>
+            </value>
+            <value>
+                <fullName>No fault cancellation</fullName>
+                <default>false</default>
+                <label>No fault cancellation</label>
+            </value>
+            <value>
+                <fullName>Product issues</fullName>
+                <default>false</default>
+                <label>Product issues</label>
+            </value>
+            <value>
+                <fullName>T&amp;Cs - Non-Agreement</fullName>
+                <default>false</default>
+                <label>T&amp;Cs - Non-Agreement</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

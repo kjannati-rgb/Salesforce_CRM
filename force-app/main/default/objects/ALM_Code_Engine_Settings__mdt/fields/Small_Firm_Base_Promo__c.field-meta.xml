@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Small_Firm_Base_Promo__c</fullName>
+    <description>REV-60 small-firm promo rule. Base promo written when the deal is a solo / small firm (attorney count &lt;= Small_Firm_Attorney_Max__c) and the Opportunity has NO Group ID. Business rule 22 Jul 2026: !SREN. Deliberately WRITE-ON-BLANK-ONLY and deliberately NOT registered in allKnownBases(), so the engine can fill an empty promo but can NEVER overwrite a rep-entered code - that separation is what prevents a repeat of the 22 Jul !SREN clobber, where seeding !SREN as a team-override base made it engine-owned and non-WNS paths silently rewrote it to !SJSI. BLANK disables the rule.</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Small Firm Base Promo</label>
+    <length>50</length>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

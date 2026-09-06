@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reports_To__c</fullName>
+    <label>Reports To</label>
+    <description>Self-lookup for the org chart / influence map.</description>
+    <type>Lookup</type>
+    <referenceTo>Plan_Stakeholder__c</referenceTo>
+    <relationshipName>Direct_Reports</relationshipName>
+    <relationshipLabel>Direct Reports</relationshipLabel>
+    <required>false</required>
+    <deleteConstraint>SetNull</deleteConstraint>
+</CustomField>

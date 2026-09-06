@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Submitted_to_Approval_Process__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Automatically checked to exclude opportunities being automatically submitted to the approval process twice and create flow errors</description>
+    <inlineHelpText>Automatically checked to exclude opportunities being automatically submitted to the approval process twice and create flow errors</inlineHelpText>
+    <label>Submitted to Approval Process</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

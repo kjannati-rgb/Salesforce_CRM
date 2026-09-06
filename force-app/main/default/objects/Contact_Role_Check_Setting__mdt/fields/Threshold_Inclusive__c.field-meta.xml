@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Threshold_Inclusive__c</fullName>
+    <description>TRUE = enforce when Probability &gt;= Min Probability (at or above). FALSE = enforce only when strictly greater than.</description>
+    <label>Threshold Inclusive</label>
+    <type>Checkbox</type>
+    <defaultValue>true</defaultValue>
+</CustomField>

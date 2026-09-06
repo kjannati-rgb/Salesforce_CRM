@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Contact_Role_Check_Last_Error__c</fullName>
+    <description>System field. Set by the "Check Completeness of Contact Roles" before-save flow when a lookup faults (fail-open). The after-save companion flow logs it to Flow_Log__c, and it is cleared on the next clean save. Not for manual edit; keep off page layouts.</description>
+    <label>Contact Role Check Last Error</label>
+    <type>LongTextArea</type>
+    <length>5000</length>
+    <visibleLines>3</visibleLines>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+</CustomField>

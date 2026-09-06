@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CZ_Qualifying_Open_c__c</fullName>
+    <formula>AND(
+  OR(
+    ISPICKVAL(Type, &quot;Renewal&quot;),
+    ISPICKVAL(Type, &quot;Auto-Renewal&quot;),
+    ISPICKVAL(Type, &quot;Repeat Business&quot;),
+    ISPICKVAL(Type, &quot;Auto-Repeat Business&quot;),
+    ISPICKVAL(Type, &quot;Upsell&quot;),
+    ISPICKVAL(Type, &quot;Downgrade&quot;)
+  ),
+  OR(
+    ISPICKVAL(StageName, &quot;Identify&quot;),
+    ISPICKVAL(StageName, &quot;Qualify&quot;),
+    ISPICKVAL(StageName, &quot;Evaluate&quot;),
+    ISPICKVAL(StageName, &quot;Negotiate&quot;),
+    ISPICKVAL(StageName, &quot;Contract Out&quot;),
+    ISPICKVAL(StageName, &quot;Closed Won - Pending Approval&quot;)
+  )
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>CZ_Qualifying_Open__c</label>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

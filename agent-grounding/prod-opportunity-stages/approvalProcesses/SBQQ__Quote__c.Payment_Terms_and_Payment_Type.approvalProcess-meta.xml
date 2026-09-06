@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApprovalProcess xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <allowRecall>true</allowRecall>
+    <allowedSubmitters>
+        <type>owner</type>
+    </allowedSubmitters>
+    <approvalPageFields>
+        <field>Name</field>
+        <field>Owner</field>
+        <field>SBQQ__PaymentTerms__c</field>
+        <field>Payment_Type__c</field>
+        <field>SBQQ__AverageCustomerDiscount__c</field>
+        <field>SBQQ__NetAmount__c</field>
+        <field>Special_Terms__c</field>
+    </approvalPageFields>
+    <approvalStep>
+        <allowDelegate>false</allowDelegate>
+        <assignedApprover>
+            <approver>
+                <name>Finance_Approvers</name>
+                <type>queue</type>
+            </approver>
+            <whenMultipleApprovers>FirstResponse</whenMultipleApprovers>
+        </assignedApprover>
+        <label>Finance Approval</label>
+        <name>Finance_Approval</name>
+    </approvalStep>
+    <emailTemplate>SA_Quote_Email_Templates/Quote_Approval_Template</emailTemplate>
+    <enableMobileDeviceAccess>false</enableMobileDeviceAccess>
+    <entryCriteria>
+        <formula>AND(
+NOT($Setup.Application_Settings__c.Disable_Approval_Processes__c ),
+
+OR(
+
+/* Docket Navigator Logic */
+AND(
+NOT(ISPICKVAL( SBQQ__PaymentTerms__c , &apos;Net 30&apos;)),
+NOT(ISPICKVAL( SBQQ__PaymentTerms__c , &apos;Due on Receipt&apos;)),
+ISPICKVAL(Owner:User.Team__c, &apos;Docket Navigator&apos;)),
+
+/* NOT Docket Navigator Logic */
+AND(
+NOT(ISPICKVAL( SBQQ__PaymentTerms__c , &apos;Due on Receipt&apos;)),
+NOT(ISPICKVAL(Owner:User.Team__c, &apos;Docket Navigator&apos;))),
+
+/* Other Company-wide Logic */
+NOT(ISPICKVAL( SBQQ__BillingFrequency__c , &apos;Annual&apos;)),
+
+AND(ISPICKVAL( Payment_Type__c , &apos;Invoice&apos;), SBQQ__NetAmount__c &lt; 1000)
+)
+
+)</formula>
+    </entryCriteria>
+    <finalApprovalActions>
+        <action>
+            <name>Approved</name>
+            <type>FieldUpdate</type>
+        </action>
+        <action>
+            <name>Approved_RT</name>
+            <type>FieldUpdate</type>
+        </action>
+        <action>
+            <name>PT_Approval_Message</name>
+            <type>Alert</type>
+        </action>
+        <action>
+            <name>PT_Status_Approve</name>
+            <type>FieldUpdate</type>
+        </action>
+        <action>
+            <name>PT_Watermark_False</name>
+            <type>FieldUpdate</type>
+        </action>
+    </finalApprovalActions>
+    <finalApprovalRecordLock>false</finalApprovalRecordLock>
+    <finalRejectionActions>
+        <action>
+            <name>PT_Rejection_Message</name>
+            <type>Alert</type>
+        </action>
+        <action>
+            <name>PT_Status_Reject</name>
+            <type>FieldUpdate</type>
+        </action>
+    </finalRejectionActions>
+    <finalRejectionRecordLock>false</finalRejectionRecordLock>
+    <initialSubmissionActions>
+        <action>
+            <name>PT_Status_Review</name>
+            <type>FieldUpdate</type>
+        </action>
+        <action>
+            <name>Uncheck_Approved</name>
+            <type>FieldUpdate</type>
+        </action>
+    </initialSubmissionActions>
+    <label>Payment Terms and Payment Type</label>
+    <processOrder>1</processOrder>
+    <recallActions>
+        <action>
+            <name>Payment_Terms_and_Payment_Type_Recall_Message</name>
+            <type>Alert</type>
+        </action>
+        <action>
+            <name>Payment_Terms_Status_Draft</name>
+            <type>FieldUpdate</type>
+        </action>
+    </recallActions>
+    <recordEditability>AdminOnly</recordEditability>
+    <showApprovalHistory>true</showApprovalHistory>
+</ApprovalProcess>

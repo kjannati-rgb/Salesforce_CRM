@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ALMCreated_Flexible_Payment_Plan_Before__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>|Advendio. MediaCampaign</description>
+    <label>ALM Created Flexible Payment Plan Before</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

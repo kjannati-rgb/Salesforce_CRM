@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>CRC Field Access</label>
+    <description>Grants read/edit FLS on the Contact Role Check system fields so admins can view/troubleshoot them. (Test + admin convenience; the flows themselves run in system context and do not need this.)</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <fieldPermissions>
+        <field>Opportunity.Contact_Role_Check_Has_Error__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>Opportunity.Contact_Role_Check_Last_Error__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+</PermissionSet>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sweep_Disabled__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Kill switch: when checked, the PFC Routing SLA sweep exits without flagging or posting.</description>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Sweep Disabled</label>
+    <type>Checkbox</type>
+</CustomField>

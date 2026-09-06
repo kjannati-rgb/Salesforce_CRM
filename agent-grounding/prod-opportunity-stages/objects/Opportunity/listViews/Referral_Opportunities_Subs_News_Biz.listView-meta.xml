@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Referral_Opportunities_Subs_News_Biz</fullName>
+    <columns>OPPORTUNITY.CREATED_DATE</columns>
+    <columns>OPPORTUNITY.NAME</columns>
+    <columns>Primary_Contact__c</columns>
+    <columns>ACCOUNT.NAME</columns>
+    <columns>OPPORTUNITY.AMOUNT</columns>
+    <columns>CORE.USERS.FULL_NAME</columns>
+    <columns>OPPORTUNITY.STAGE_NAME</columns>
+    <columns>Close_Date_Month__c</columns>
+    <columns>Campaign__c</columns>
+    <columns>OPPORTUNITY.LEAD_SOURCE</columns>
+    <columns>Cross_divisional_Referrer__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Cross_divisional_Referrer__c</field>
+        <operation>contains</operation>
+        <value>Taghavi,Child,Machin,Wen,Eisenmann,Charlie Murray,Amfo</value>
+    </filters>
+    <label>Referral Opportunities - Subs News Biz</label>
+</ListView>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Customer_Success_Plans_Completed__c</fullName>
+    <description>Customer Success Plans Completed</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Customer Success Plans Completed</inlineHelpText>
+    <label>Customer Success Plans Completed</label>
+    <precision>2</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

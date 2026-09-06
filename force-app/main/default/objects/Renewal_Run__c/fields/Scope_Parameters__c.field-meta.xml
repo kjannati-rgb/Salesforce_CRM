@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Scope_Parameters__c</fullName>
+    <label>Scope Parameters</label>
+    <description>JSON of the exact filter criteria used for this run (date range, brands, product families, account ids, dry run flag), for audit and re-run purposes.</description>
+    <inlineHelpText>Raw JSON of the scope filters this run used. Read-only, written by the batch itself.</inlineHelpText>
+    <type>LongTextArea</type>
+    <length>32768</length>
+    <visibleLines>10</visibleLines>
+</CustomField>

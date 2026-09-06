@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Interaction_Type__c</fullName>
+    <description>Law Business Research interaction type.</description>
+    <inlineHelpText>Law Business Research interaction type.</inlineHelpText>
+    <label>Interaction Type</label>
+    <required>true</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Contributor</fullName>
+                <default>false</default>
+                <label>Contributor</label>
+            </value>
+            <value>
+                <fullName>Directory Listing</fullName>
+                <default>false</default>
+                <label>Directory Listing</label>
+            </value>
+            <value>
+                <fullName>Event Delegate</fullName>
+                <default>false</default>
+                <label>Event Delegate</label>
+            </value>
+            <value>
+                <fullName>Event Speaker</fullName>
+                <default>false</default>
+                <label>Event Speaker</label>
+            </value>
+            <value>
+                <fullName>Event Sponsor</fullName>
+                <default>false</default>
+                <label>Event Sponsor</label>
+            </value>
+            <value>
+                <fullName>Library Contact</fullName>
+                <default>false</default>
+                <label>Library Contact</label>
+            </value>
+            <value>
+                <fullName>Main Contact</fullName>
+                <default>false</default>
+                <label>Main Contact</label>
+            </value>
+            <value>
+                <fullName>Member</fullName>
+                <default>false</default>
+                <label>Member</label>
+            </value>
+            <value>
+                <fullName>Power Based Mapping</fullName>
+                <default>false</default>
+                <label>Power Based Mapping</label>
+            </value>
+            <value>
+                <fullName>Ranked</fullName>
+                <default>false</default>
+                <label>Ranked</label>
+            </value>
+            <value>
+                <fullName>Registration</fullName>
+                <default>false</default>
+                <label>Registration</label>
+            </value>
+            <value>
+                <fullName>Subscriber</fullName>
+                <default>false</default>
+                <label>Subscriber</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

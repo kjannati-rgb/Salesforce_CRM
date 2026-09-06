@@ -1,0 +1,114 @@
+:host {
+    display: block;
+}
+
+/* ---- shared station shell ---- */
+.lex-station {
+    border: 1px solid var(--line, #e5e9f0);
+    border-radius: var(--r, 12px);
+    background: var(--surface, #fff);
+    padding: 0.85rem 0.95rem;
+}
+
+.lex-station__head {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+}
+
+.lex-badge {
+    flex: 0 0 auto;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 7px;
+    background: var(--lex-ink, #00162d);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lex-station__titles {
+    flex: 1 1 auto;
+}
+
+.lex-station__title {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink-1, #0e1b2e);
+}
+
+.lex-station__q {
+    margin: 0.15rem 0 0;
+    font-size: 0.8rem;
+    color: var(--ink-2, #586478);
+    line-height: 1.35;
+}
+
+.lex-tick {
+    flex: 0 0 auto;
+    color: var(--lex-blue, #0094ff);
+    font-weight: 700;
+}
+
+/* ---- driver cards ---- */
+.lex-cards {
+    margin-top: 0.7rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+.lex-card {
+    text-align: left;
+    border: 1px solid var(--line-2, #d4dae5);
+    background: #fff;
+    color: var(--ink-1, #0e1b2e);
+    border-radius: var(--r-sm, 8px);
+    padding: 0.6rem 0.7rem;
+    font-size: 0.78rem;
+    line-height: 1.3;
+    cursor: pointer;
+    transition: all 0.15s var(--ease, ease);
+}
+
+.lex-card_on {
+    border-color: var(--lex-blue, #0094ff);
+    background: var(--lex-blue-tint, #e6f4ff);
+    box-shadow: inset 0 0 0 1px var(--lex-blue, #0094ff);
+    font-weight: 600;
+}
+
+.lex-other {
+    margin-top: 0.6rem;
+    width: 100%;
+    min-height: 3.5rem;
+    box-sizing: border-box;
+    border: 1px solid var(--line-2, #d4dae5);
+    border-radius: var(--r-sm, 8px);
+    padding: 0.5rem 0.6rem;
+    font: inherit;
+    font-size: 0.8rem;
+    resize: vertical;
+}
+
+.lex-other:focus-visible,
+.lex-card:focus-visible {
+    outline: 2px solid var(--lex-blue, #0094ff);
+    outline-offset: 2px;
+}
+
+@media (max-width: 620px) {
+    .lex-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lex-card {
+        transition: none;
+    }
+}

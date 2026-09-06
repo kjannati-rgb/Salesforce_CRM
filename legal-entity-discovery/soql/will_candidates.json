@@ -1,0 +1,64 @@
+{
+  "status": 0,
+  "result": {
+    "records": [
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "Id": "0056g000005rqzBAAQ",
+        "Name": "Will Bull",
+        "IsActive": false,
+        "opps": 869
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "Id": "005Tm000001JILdIAO",
+        "Name": "William Anderson",
+        "IsActive": true,
+        "opps": 521
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "Id": "0056g000005rqyiAAA",
+        "Name": "Will Guyatt",
+        "IsActive": false,
+        "opps": 500
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "Id": "0056g000005rqziAAA",
+        "Name": "Will Lovett",
+        "IsActive": false,
+        "opps": 203
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "Id": "005Px000009fBBjIAM",
+        "Name": "Willie Guerrero",
+        "IsActive": true,
+        "opps": 7
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "Id": "005Tm0000018mlFIAQ",
+        "Name": "William Moss",
+        "IsActive": false,
+        "opps": 6
+      }
+    ],
+    "totalSize": 6,
+    "done": true
+  },
+  "warnings": []
+}

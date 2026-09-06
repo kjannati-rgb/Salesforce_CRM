@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CM_Close_Lost_GCR_Opps</fullName>
+    <columns>Primary_Contact__c</columns>
+    <columns>OPPORTUNITY.NAME</columns>
+    <columns>ACCOUNT.NAME</columns>
+    <columns>OPPORTUNITY.AMOUNT</columns>
+    <columns>OPPORTUNITY.CLOSE_DATE</columns>
+    <columns>OPPORTUNITY.LEAD_SOURCE</columns>
+    <columns>CORE.USERS.ALIAS</columns>
+    <columns>Campaign__c</columns>
+    <columns>Closed_Lost_primary_reason__c</columns>
+    <columns>Closed_Lost_reason_Free_Text__c</columns>
+    <columns>Closed_Lost_reason_detailed__c</columns>
+    <columns>Closed_Lost_Reasons_PI__c</columns>
+    <columns>Closed_Lost_sub_reason__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>CORE.USERS.FULL_NAME</field>
+        <operation>equals</operation>
+        <value>Charlie Murray</value>
+    </filters>
+    <filters>
+        <field>OPPORTUNITY.NAME</field>
+        <operation>startsWith</operation>
+        <value>GCR</value>
+    </filters>
+    <filters>
+        <field>OPPORTUNITY.STAGE_NAME</field>
+        <operation>equals</operation>
+        <value>Closed Lost</value>
+    </filters>
+    <filters>
+        <field>Account_Name__c</field>
+        <operation>notEqual</operation>
+        <value>Ericsson Inc.,Novartis Pharma AG,Volkswagen AG</value>
+    </filters>
+    <label>CM - Close Lost GCR Opps</label>
+</ListView>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PathAssistant xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <entityName>Opportunity</entityName>
+    <fieldName>StageName</fieldName>
+    <masterLabel>Renewals</masterLabel>
+    <pathAssistantSteps>
+        <fieldNames>Amount</fieldNames>
+        <fieldNames>CloseDate</fieldNames>
+        <fieldNames>NextStep</fieldNames>
+        <fieldNames>Forecast_Status__c</fieldNames>
+        <info>&lt;p&gt;&lt;b&gt;Known renewal - do not park here.&lt;/b&gt; Renewals win about 50% and retain ~87% by value - start at Evaluate, not Identify.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Confirm the account is renewing&lt;/li&gt;&lt;li&gt;Existing contract and usage reviewed&lt;/li&gt;&lt;li&gt;Set Forecast Status (health) and advance promptly&lt;/li&gt;&lt;/ul&gt;</info>
+        <picklistValueName>Identify</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Amount</fieldNames>
+        <fieldNames>CloseDate</fieldNames>
+        <fieldNames>NextStep</fieldNames>
+        <fieldNames>Forecast_Status__c</fieldNames>
+        <info>&lt;p&gt;&lt;b&gt;Confirm renewal intent.&lt;/b&gt; Renewals are lost mostly to no-fault cancellation, budget and engagement - protect those:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Customer confirms the product still solves their need - show usage and ROI&lt;/li&gt;&lt;li&gt;Budget and economic buyer confirmed&lt;/li&gt;&lt;li&gt;Renewal quote requested or proposal due&lt;/li&gt;&lt;li&gt;Forecast Status reflects current health&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Do not leave renewals at 10-20% - advance promptly.&lt;/p&gt;</info>
+        <picklistValueName>Qualify</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>SBQQ__PrimaryQuote__c</fieldNames>
+        <fieldNames>Amount</fieldNames>
+        <fieldNames>CloseDate</fieldNames>
+        <fieldNames>Forecast_Status__c</fieldNames>
+        <info>&lt;p&gt;&lt;b&gt;Renewal entry point.&lt;/b&gt; The customer is reviewing the renewal.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Budget approved or terms in review; ROI and usage demonstrated&lt;/li&gt;&lt;li&gt;Renewal quote shared and acknowledged&lt;/li&gt;&lt;li&gt;Closing call scheduled and accepted (or jump straight to Contract Out)&lt;/li&gt;&lt;/ul&gt;</info>
+        <picklistValueName>Evaluate</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>SBQQ__PrimaryQuote__c</fieldNames>
+        <fieldNames>Amount</fieldNames>
+        <fieldNames>CloseDate</fieldNames>
+        <fieldNames>Forecast_Status__c</fieldNames>
+        <info>&lt;p&gt;&lt;b&gt;Yes, subject to terms.&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Customer happy with final proposal; gives verbal or written go-ahead to send the contract&lt;/li&gt;&lt;li&gt;Legal and Finance terms approved internally&lt;/li&gt;&lt;/ul&gt;</info>
+        <picklistValueName>Negotiate</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>SBQQ__PrimaryQuote__c</fieldNames>
+        <fieldNames>CloseDate</fieldNames>
+        <fieldNames>Forecast_Status__c</fieldNames>
+        <info>&lt;p&gt;&lt;b&gt;Renewal contract is with the customer to sign.&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Contract issued for signature&lt;/li&gt;&lt;li&gt;Buyer signs and returns the contract&lt;/li&gt;&lt;li&gt;PO received if applicable. &lt;b&gt;Contract Attached&lt;/b&gt; is set automatically once the contract or quote document is on the opportunity&lt;/li&gt;&lt;/ul&gt;</info>
+        <picklistValueName>Contract Out</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <info>&lt;p&gt;&lt;b&gt;Signed - Finance approving. Not won yet (still open).&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Signed contract attached; Finance reviews for approval&lt;/li&gt;&lt;li&gt;Sales to AM hand-off complete; onboarding and CEP initiated&lt;/li&gt;&lt;li&gt;Named users and ROI measures confirmed&lt;/li&gt;&lt;/ul&gt;</info>
+        <picklistValueName>Closed Won – Pending Approval</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <info>&lt;p&gt;&lt;b&gt;Renewed.&lt;/b&gt; Set by Finance approval once the Pending Approval stage is approved.&lt;/p&gt;</info>
+        <picklistValueName>Closed Won</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Closed_Lost_primary_reason__c</fieldNames>
+        <fieldNames>Closed_Lost_sub_reason__c</fieldNames>
+        <fieldNames>Note__c</fieldNames>
+        <info>&lt;p&gt;&lt;b&gt;Lost renewal - record the reason (every team, no exceptions).&lt;/b&gt; Most renewal losses are No-fault cancellation, Budget, or engagement.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Primary Reason&lt;/li&gt;&lt;li&gt;Sub-reason&lt;/li&gt;&lt;li&gt;A one-line Note&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;This is how we track and fix churn.&lt;/p&gt;</info>
+        <picklistValueName>Closed Lost</picklistValueName>
+    </pathAssistantSteps>
+    <recordTypeName>Renewals</recordTypeName>
+</PathAssistant>

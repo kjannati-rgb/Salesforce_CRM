@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Coverted_Form_Cant_Be_Edited</fullName>
+    <active>true</active>
+    <description>If stage = Converted or Disqualified, the Form is locked. Exception (REV-57): the conversion-relink may stamp Contact when it was previously blank and the stage is not changing — see the last AND clause.</description>
+    <errorConditionFormula>AND(
+OR(ISPICKVAL(PRIORVALUE( Sales_Stage__c),&quot;Converted&quot;),
+ISPICKVAL(PRIORVALUE( Sales_Stage__c),&quot;Disqualified&quot;))
+,
+
+ISCHANGED(Reason_Disqualified__c) = FALSE,
+
+$Profile.Name &lt;&gt; &apos;System Administrator&apos;,
+$Profile.Name &lt;&gt; &apos;Custom: Fin/Ops/HR&apos;,
+$User.Alias &lt;&gt; &apos;Ken.Fitz&apos;,
+$User.Alias &lt;&gt; &apos;Ade Agbomabiwon&apos;,
+NOT( $Setup.Application_Settings__c.Disable_Validation_Rules__c ),
+
+NOT( AND( NOT(ISCHANGED( Sales_Stage__c )), ISCHANGED( Contact__c ), ISBLANK(PRIORVALUE( Contact__c )) ) ))</errorConditionFormula>
+    <errorMessage>This form has been converted and is now locked.</errorMessage>
+</ValidationRule>

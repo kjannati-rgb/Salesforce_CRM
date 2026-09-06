@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Bypass Contact Role Check</label>
+    <description>Exempts assigned users from the Opportunity Contact Role completeness block (Custom Error). Replaces the old Contact_Role_Complete_50 VR profile exemptions (Sys Admin, ALM/Custom Fin-Ops-HR, B2BMA Integration User).</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <customPermissions>
+        <enabled>true</enabled>
+        <name>Bypass_Contact_Role_Check</name>
+    </customPermissions>
+</PermissionSet>

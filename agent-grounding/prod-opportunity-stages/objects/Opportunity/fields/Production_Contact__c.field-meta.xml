@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Production_Contact__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Secondary Contact to be used by the Production team in case the Primary Contact can&apos;t be reached. Please note that by default both the content fulfilment and the distribution will be addressed to the Primary Contact on this Opportunity</description>
+    <inlineHelpText>Secondary Contact to be used by the Production team in case the Primary Contact can&apos;t be reached. Please note that by default both the content fulfilment and the distribution will be addressed to the Primary Contact on this Opportunity</inlineHelpText>
+    <label>Additional Contact for Production</label>
+    <referenceTo>Contact</referenceTo>
+    <relationshipLabel>Opportunities (Production Contact)</relationshipLabel>
+    <relationshipName>Opportunities2</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Lookup</type>
+</CustomField>

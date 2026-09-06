@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Clay_Routed__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Indicates whether this opportunity originated from a lead that was auto-routed via Clay Labs. Used for pipeline attribution and performance reporting.</description>
+    <inlineHelpText>Inherited from the originating lead/contact. Used to track revenue influenced by Clay routing. Do not edit manually.</inlineHelpText>
+    <label>Clay Routed</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

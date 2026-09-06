@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Targeted_for_Multi_Year_Deal__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Field used to identify Opportunities that are targeted for multi-year deals.</description>
+    <inlineHelpText>Field used to identify Opportunities that are targeted for multi-year deals.</inlineHelpText>
+    <label>Targeted for Multi-Year Deal</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

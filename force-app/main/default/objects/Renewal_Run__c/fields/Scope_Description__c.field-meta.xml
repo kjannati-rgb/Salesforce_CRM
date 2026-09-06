@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Scope_Description__c</fullName>
+    <label>Scope Description</label>
+    <description>Human-readable summary of what this run covered, e.g. "WTR 1000 FY26 backfill" or "Nightly reconciliation".</description>
+    <inlineHelpText>Short summary of the scope for this run - shown in list views without opening the record.</inlineHelpText>
+    <type>Text</type>
+    <length>255</length>
+</CustomField>

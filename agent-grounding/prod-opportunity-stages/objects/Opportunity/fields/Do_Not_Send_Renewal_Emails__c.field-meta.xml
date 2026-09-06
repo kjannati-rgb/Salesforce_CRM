@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Do_Not_Send_Renewal_Emails__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>This field is used to exclude the main contact from any renewal emails via Pardot or Outlook.</description>
+    <inlineHelpText>This field is used to exclude the main contact from any renewal emails via Pardot or Outlook.</inlineHelpText>
+    <label>Do Not Send Renewal Emails</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

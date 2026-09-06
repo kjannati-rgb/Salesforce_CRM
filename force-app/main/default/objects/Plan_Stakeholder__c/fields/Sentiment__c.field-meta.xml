@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sentiment__c</fullName>
+    <label>Sentiment</label>
+    <description>Champion / Supporter / Neutral / Detractor. History enabled for sentiment-shift tracking (QBR).</description>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value><fullName>Champion</fullName><default>false</default><label>Champion</label></value>
+            <value><fullName>Supporter</fullName><default>false</default><label>Supporter</label></value>
+            <value><fullName>Neutral</fullName><default>true</default><label>Neutral</label></value>
+            <value><fullName>Detractor</fullName><default>false</default><label>Detractor</label></value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

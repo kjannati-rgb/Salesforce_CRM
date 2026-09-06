@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>TLR_Total_Sale_Value__c</fullName>
+    <description>This field captures the total opportunity line item value for TLR.</description>
+    <inlineHelpText>This field captures the total opportunity line item value for TLR.</inlineHelpText>
+    <label>TLR Total Sale Value</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Currency</type>
+</CustomField>

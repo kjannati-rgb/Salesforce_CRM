@@ -1,0 +1,994 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>View</actionName>
+        <comment>Action override created by Lightning App Builder during activation.</comment>
+        <content>Contact_Record_Page</content>
+        <formFactor>Large</formFactor>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Flexipage</type>
+        <pageOrSobjectType>Contact</pageOrSobjectType>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <comment>Action override created by Lightning App Builder during activation.</comment>
+        <content>Contact_Record_Page</content>
+        <formFactor>Small</formFactor>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Flexipage</type>
+        <pageOrSobjectType>Contact</pageOrSobjectType>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <comment>Action override created by Lightning App Builder during activation.</comment>
+        <content>Lead_Record_PageALM</content>
+        <formFactor>Large</formFactor>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Flexipage</type>
+        <pageOrSobjectType>Lead</pageOrSobjectType>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <comment>Action override created by Lightning App Builder during activation.</comment>
+        <content>Lead_Record_PageALM</content>
+        <formFactor>Small</formFactor>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Flexipage</type>
+        <pageOrSobjectType>Lead</pageOrSobjectType>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <comment>Action override updated by Lightning App Builder during activation.</comment>
+        <content>Opportunity_Record_Page_RenewalsALM</content>
+        <formFactor>Large</formFactor>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Flexipage</type>
+        <pageOrSobjectType>Opportunity</pageOrSobjectType>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <comment>Action override updated by Lightning App Builder during activation.</comment>
+        <content>Opportunity_Record_Page_RenewalsALM</content>
+        <formFactor>Small</formFactor>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Flexipage</type>
+        <pageOrSobjectType>Opportunity</pageOrSobjectType>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <content>ALM_Home_Page</content>
+        <formFactor>Large</formFactor>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Flexipage</type>
+        <pageOrSobjectType>standard-home</pageOrSobjectType>
+    </actionOverrides>
+    <brand>
+        <headerColor>#009996</headerColor>
+        <logoVersion>1</logoVersion>
+        <shouldOverrideOrgTheme>true</shouldOverrideOrgTheme>
+    </brand>
+    <formFactors>Small</formFactors>
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
+    <isOmniPinnedViewEnabled>false</isOmniPinnedViewEnabled>
+    <label>ALM</label>
+    <navType>Standard</navType>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Pardot_Form_Completion_Record_Pagev2</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Pardot_Form_Completion__c</pageOrSobjectType>
+        <recordType>Pardot_Form_Completion__c.Newsfeed_Subscribers</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Data Management</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Pardot_Form_Completion_Record_Pagev2</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Pardot_Form_Completion__c</pageOrSobjectType>
+        <recordType>Pardot_Form_Completion__c.Newsfeed_Subscribers</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Data Management</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Pardot_Form_Completion_Record_Pagev2</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Pardot_Form_Completion__c</pageOrSobjectType>
+        <recordType>Pardot_Form_Completion__c.Newsfeed_Subscribers</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Fin/Ops/HR</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Pardot_Form_Completion_Record_Pagev2</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Pardot_Form_Completion__c</pageOrSobjectType>
+        <recordType>Pardot_Form_Completion__c.Newsfeed_Subscribers</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Fin/Ops/HR</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Pardot_Form_Completion_Record_Pagev2</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Pardot_Form_Completion__c</pageOrSobjectType>
+        <recordType>Pardot_Form_Completion__c.Newsfeed_Subscribers</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Marketing</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Pardot_Form_Completion_Record_Pagev2</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Pardot_Form_Completion__c</pageOrSobjectType>
+        <recordType>Pardot_Form_Completion__c.Newsfeed_Subscribers</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Marketing</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Pardot_Form_Completion_Record_Pagev2</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Pardot_Form_Completion__c</pageOrSobjectType>
+        <recordType>Pardot_Form_Completion__c.Newsfeed_Subscribers</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Marketing Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Pardot_Form_Completion_Record_Pagev2</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Pardot_Form_Completion__c</pageOrSobjectType>
+        <recordType>Pardot_Form_Completion__c.Newsfeed_Subscribers</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Marketing Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Pardot_Form_Completion_Record_Pagev2</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Pardot_Form_Completion__c</pageOrSobjectType>
+        <recordType>Pardot_Form_Completion__c.Newsfeed_Subscribers</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Pardot_Form_Completion_Record_Pagev2</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Pardot_Form_Completion__c</pageOrSobjectType>
+        <recordType>Pardot_Form_Completion__c.Newsfeed_Subscribers</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Pardot_Form_Completion_Record_Pagev2</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Pardot_Form_Completion__c</pageOrSobjectType>
+        <recordType>Pardot_Form_Completion__c.Newsfeed_Subscribers</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Profile</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Pardot_Form_Completion_Record_Pagev2</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Pardot_Form_Completion__c</pageOrSobjectType>
+        <recordType>Pardot_Form_Completion__c.Newsfeed_Subscribers</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Profile</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Pardot_Form_Completion_Record_Pagev2</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Pardot_Form_Completion__c</pageOrSobjectType>
+        <recordType>Pardot_Form_Completion__c.Newsfeed_Subscribers</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Read Only</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Pardot_Form_Completion_Record_Pagev2</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Pardot_Form_Completion__c</pageOrSobjectType>
+        <recordType>Pardot_Form_Completion__c.Newsfeed_Subscribers</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Read Only</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Pardot_Form_Completion_Record_Pagev2</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Pardot_Form_Completion__c</pageOrSobjectType>
+        <recordType>Pardot_Form_Completion__c.Newsfeed_Subscribers</recordType>
+        <type>Flexipage</type>
+        <profile>Analytics Cloud Integration User</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Pardot_Form_Completion_Record_Pagev2</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Pardot_Form_Completion__c</pageOrSobjectType>
+        <recordType>Pardot_Form_Completion__c.Newsfeed_Subscribers</recordType>
+        <type>Flexipage</type>
+        <profile>Analytics Cloud Integration User</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Pardot_Form_Completion_Record_Pagev2</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Pardot_Form_Completion__c</pageOrSobjectType>
+        <recordType>Pardot_Form_Completion__c.Newsfeed_Subscribers</recordType>
+        <type>Flexipage</type>
+        <profile>Custom: Sales Profile</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Pardot_Form_Completion_Record_Pagev2</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Pardot_Form_Completion__c</pageOrSobjectType>
+        <recordType>Pardot_Form_Completion__c.Newsfeed_Subscribers</recordType>
+        <type>Flexipage</type>
+        <profile>Custom: Sales Profile</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Pardot_Form_Completion_Record_Pagev2</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Pardot_Form_Completion__c</pageOrSobjectType>
+        <recordType>Pardot_Form_Completion__c.Newsfeed_Subscribers</recordType>
+        <type>Flexipage</type>
+        <profile>Custom: Sales Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Pardot_Form_Completion_Record_Pagev2</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Pardot_Form_Completion__c</pageOrSobjectType>
+        <recordType>Pardot_Form_Completion__c.Newsfeed_Subscribers</recordType>
+        <type>Flexipage</type>
+        <profile>Custom: Sales Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Pardot_Form_Completion_Record_Pagev2</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Pardot_Form_Completion__c</pageOrSobjectType>
+        <recordType>Pardot_Form_Completion__c.Newsfeed_Subscribers</recordType>
+        <type>Flexipage</type>
+        <profile>Custom: Data Management</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Pardot_Form_Completion_Record_Pagev2</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Pardot_Form_Completion__c</pageOrSobjectType>
+        <recordType>Pardot_Form_Completion__c.Newsfeed_Subscribers</recordType>
+        <type>Flexipage</type>
+        <profile>Custom: Data Management</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Pardot_Form_Completion_Record_Pagev2</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Pardot_Form_Completion__c</pageOrSobjectType>
+        <recordType>Pardot_Form_Completion__c.Newsfeed_Subscribers</recordType>
+        <type>Flexipage</type>
+        <profile>Custom: Fin/Ops/HR</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Pardot_Form_Completion_Record_Pagev2</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Pardot_Form_Completion__c</pageOrSobjectType>
+        <recordType>Pardot_Form_Completion__c.Newsfeed_Subscribers</recordType>
+        <type>Flexipage</type>
+        <profile>Custom: Fin/Ops/HR</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Opportunity_Record_Page_New_BusinessALM</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Opportunity</pageOrSobjectType>
+        <recordType>Opportunity.New_Business</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Fin/Ops/HR</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Opportunity_Record_Page_New_BusinessALM</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Opportunity</pageOrSobjectType>
+        <recordType>Opportunity.New_Business</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Fin/Ops/HR</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Opportunity_Record_Page_New_BusinessALM</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Opportunity</pageOrSobjectType>
+        <recordType>Opportunity.New_Business</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Opportunity_Record_Page_New_BusinessALM</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Opportunity</pageOrSobjectType>
+        <recordType>Opportunity.New_Business</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Opportunity_Record_Page_New_BusinessALM</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Opportunity</pageOrSobjectType>
+        <recordType>Opportunity.New_Business</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Profile</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Opportunity_Record_Page_New_BusinessALM</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Opportunity</pageOrSobjectType>
+        <recordType>Opportunity.New_Business</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Profile</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Opportunity_Record_Page_RenewalsALM</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Opportunity</pageOrSobjectType>
+        <recordType>Opportunity.Renewals</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Fin/Ops/HR</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Opportunity_Record_Page_RenewalsALM</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Opportunity</pageOrSobjectType>
+        <recordType>Opportunity.Renewals</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Fin/Ops/HR</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Opportunity_Record_Page_RenewalsALM</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Opportunity</pageOrSobjectType>
+        <recordType>Opportunity.Renewals</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Opportunity_Record_Page_RenewalsALM</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Opportunity</pageOrSobjectType>
+        <recordType>Opportunity.Renewals</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Opportunity_Record_Page_RenewalsALM</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Opportunity</pageOrSobjectType>
+        <recordType>Opportunity.Renewals</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Profile</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Opportunity_Record_Page_RenewalsALM</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Opportunity</pageOrSobjectType>
+        <recordType>Opportunity.Renewals</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Profile</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Opportunity_Record_Page_New_BusinessALM</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Opportunity</pageOrSobjectType>
+        <recordType>Opportunity.New_Business</recordType>
+        <type>Flexipage</type>
+        <profile>Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Opportunity_Record_Page_New_BusinessALM</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Opportunity</pageOrSobjectType>
+        <recordType>Opportunity.New_Business</recordType>
+        <type>Flexipage</type>
+        <profile>Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Quote_Record_Page_Draft</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>SBQQ__Quote__c</pageOrSobjectType>
+        <recordType>SBQQ__Quote__c.Draft</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Fin/Ops/HR</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Quote_Record_Page_Draft</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>SBQQ__Quote__c</pageOrSobjectType>
+        <recordType>SBQQ__Quote__c.Draft</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Fin/Ops/HR</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Quote_Record_Page_Draft</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>SBQQ__Quote__c</pageOrSobjectType>
+        <recordType>SBQQ__Quote__c.Draft</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Quote_Record_Page_Draft</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>SBQQ__Quote__c</pageOrSobjectType>
+        <recordType>SBQQ__Quote__c.Draft</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Quote_Record_Page_Draft</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>SBQQ__Quote__c</pageOrSobjectType>
+        <recordType>SBQQ__Quote__c.Draft</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Profile</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Quote_Record_Page_Draft</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>SBQQ__Quote__c</pageOrSobjectType>
+        <recordType>SBQQ__Quote__c.Draft</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Profile</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Quote_Record_Page_Draft</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>SBQQ__Quote__c</pageOrSobjectType>
+        <recordType>SBQQ__Quote__c.Draft</recordType>
+        <type>Flexipage</type>
+        <profile>Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Quote_Record_Page_Draft</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>SBQQ__Quote__c</pageOrSobjectType>
+        <recordType>SBQQ__Quote__c.Draft</recordType>
+        <type>Flexipage</type>
+        <profile>Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Quote_Record_Page_Pending</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>SBQQ__Quote__c</pageOrSobjectType>
+        <recordType>SBQQ__Quote__c.Readonly</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Fin/Ops/HR</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Quote_Record_Page_Pending</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>SBQQ__Quote__c</pageOrSobjectType>
+        <recordType>SBQQ__Quote__c.Readonly</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Fin/Ops/HR</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Quote_Record_Page_Pending</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>SBQQ__Quote__c</pageOrSobjectType>
+        <recordType>SBQQ__Quote__c.Readonly</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Quote_Record_Page_Pending</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>SBQQ__Quote__c</pageOrSobjectType>
+        <recordType>SBQQ__Quote__c.Readonly</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Quote_Record_Page_Pending</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>SBQQ__Quote__c</pageOrSobjectType>
+        <recordType>SBQQ__Quote__c.Readonly</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Profile</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Quote_Record_Page_Pending</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>SBQQ__Quote__c</pageOrSobjectType>
+        <recordType>SBQQ__Quote__c.Readonly</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Profile</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Quote_Record_Page_Pending</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>SBQQ__Quote__c</pageOrSobjectType>
+        <recordType>SBQQ__Quote__c.Readonly</recordType>
+        <type>Flexipage</type>
+        <profile>Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Quote_Record_Page_Pending</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>SBQQ__Quote__c</pageOrSobjectType>
+        <recordType>SBQQ__Quote__c.Readonly</recordType>
+        <type>Flexipage</type>
+        <profile>Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Quote_Record_Page_Approved_Status</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>SBQQ__Quote__c</pageOrSobjectType>
+        <recordType>SBQQ__Quote__c.Approved</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Fin/Ops/HR</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Quote_Record_Page_Approved_Status</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>SBQQ__Quote__c</pageOrSobjectType>
+        <recordType>SBQQ__Quote__c.Approved</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Fin/Ops/HR</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Quote_Record_Page_Approved_Status</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>SBQQ__Quote__c</pageOrSobjectType>
+        <recordType>SBQQ__Quote__c.Approved</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Quote_Record_Page_Approved_Status</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>SBQQ__Quote__c</pageOrSobjectType>
+        <recordType>SBQQ__Quote__c.Approved</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Quote_Record_Page_Approved_Status</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>SBQQ__Quote__c</pageOrSobjectType>
+        <recordType>SBQQ__Quote__c.Approved</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Profile</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Quote_Record_Page_Approved_Status</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>SBQQ__Quote__c</pageOrSobjectType>
+        <recordType>SBQQ__Quote__c.Approved</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Profile</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Quote_Record_Page_Approved_Status</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>SBQQ__Quote__c</pageOrSobjectType>
+        <recordType>SBQQ__Quote__c.Approved</recordType>
+        <type>Flexipage</type>
+        <profile>Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Quote_Record_Page_Approved_Status</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>SBQQ__Quote__c</pageOrSobjectType>
+        <recordType>SBQQ__Quote__c.Approved</recordType>
+        <type>Flexipage</type>
+        <profile>Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Office_Account_Record_PageALM</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Account</pageOrSobjectType>
+        <recordType>Account.Office</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Fin/Ops/HR</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Office_Account_Record_PageALM</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Account</pageOrSobjectType>
+        <recordType>Account.Office</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Fin/Ops/HR</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Office_Account_Record_PageALM</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Account</pageOrSobjectType>
+        <recordType>Account.Office</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Marketing</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Office_Account_Record_PageALM</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Account</pageOrSobjectType>
+        <recordType>Account.Office</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Marketing</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Office_Account_Record_PageALM</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Account</pageOrSobjectType>
+        <recordType>Account.Office</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Marketing Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Office_Account_Record_PageALM</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Account</pageOrSobjectType>
+        <recordType>Account.Office</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Marketing Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Office_Account_Record_PageALM</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Account</pageOrSobjectType>
+        <recordType>Account.Office</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Office_Account_Record_PageALM</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Account</pageOrSobjectType>
+        <recordType>Account.Office</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Office_Account_Record_PageALM</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Account</pageOrSobjectType>
+        <recordType>Account.Office</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Profile</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Office_Account_Record_PageALM</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Account</pageOrSobjectType>
+        <recordType>Account.Office</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Profile</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Account_Record_Page4</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Account</pageOrSobjectType>
+        <recordType>Account.Firm</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Fin/Ops/HR</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Account_Record_Page4</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Account</pageOrSobjectType>
+        <recordType>Account.Firm</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Fin/Ops/HR</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Account_Record_Page4</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Account</pageOrSobjectType>
+        <recordType>Account.Firm</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Marketing</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Account_Record_Page4</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Account</pageOrSobjectType>
+        <recordType>Account.Firm</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Marketing</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Account_Record_Page4</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Account</pageOrSobjectType>
+        <recordType>Account.Firm</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Marketing Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Account_Record_Page4</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Account</pageOrSobjectType>
+        <recordType>Account.Firm</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Marketing Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Account_Record_Page4</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Account</pageOrSobjectType>
+        <recordType>Account.Firm</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Account_Record_Page4</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Account</pageOrSobjectType>
+        <recordType>Account.Firm</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Account_Record_Page4</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Account</pageOrSobjectType>
+        <recordType>Account.Firm</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Profile</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Account_Record_Page4</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Account</pageOrSobjectType>
+        <recordType>Account.Firm</recordType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Profile</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Lead_Record_PageALM</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Lead</pageOrSobjectType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Fin/Ops/HR</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Lead_Record_PageALM</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Lead</pageOrSobjectType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Fin/Ops/HR</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Lead_Record_PageALM</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Lead</pageOrSobjectType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Marketing</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Lead_Record_PageALM</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Lead</pageOrSobjectType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Marketing</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Lead_Record_PageALM</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Lead</pageOrSobjectType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Marketing Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Lead_Record_PageALM</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Lead</pageOrSobjectType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Marketing Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Lead_Record_PageALM</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Lead</pageOrSobjectType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Lead_Record_PageALM</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Lead</pageOrSobjectType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Lead_Record_PageALM</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Lead</pageOrSobjectType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Profile</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Lead_Record_PageALM</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Lead</pageOrSobjectType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Profile</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Contact_Record_Page</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Contact</pageOrSobjectType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Fin/Ops/HR</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Contact_Record_Page</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Contact</pageOrSobjectType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Fin/Ops/HR</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Contact_Record_Page</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Contact</pageOrSobjectType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Marketing</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Contact_Record_Page</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Contact</pageOrSobjectType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Marketing</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Contact_Record_Page</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Contact</pageOrSobjectType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Contact_Record_Page</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Contact</pageOrSobjectType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Contact_Record_Page</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Contact</pageOrSobjectType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Marketing Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Contact_Record_Page</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Contact</pageOrSobjectType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Marketing Admin</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Contact_Record_Page</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Contact</pageOrSobjectType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Profile</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Contact_Record_Page</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Contact</pageOrSobjectType>
+        <type>Flexipage</type>
+        <profile>ALM - Custom: Sales Profile</profile>
+    </profileActionOverrides>
+    <tabs>standard-home</tabs>
+    <tabs>standard-Lead</tabs>
+    <tabs>standard-Campaign</tabs>
+    <tabs>standard-Contact</tabs>
+    <tabs>standard-Account</tabs>
+    <tabs>standard-Opportunity</tabs>
+    <tabs>SBQQ__Quote__c</tabs>
+    <tabs>standard-Task</tabs>
+    <tabs>standard-Event</tabs>
+    <tabs>standard-Order</tabs>
+    <tabs>standard-Contract</tabs>
+    <tabs>standard-Product2</tabs>
+    <tabs>standard-report</tabs>
+    <tabs>standard-Dashboard</tabs>
+    <tabs>standard-ContentNote</tabs>
+    <tabs>standard-Forecasting3</tabs>
+    <uiType>Lightning</uiType>
+    <utilityBar>ALM_UtilityBar</utilityBar>
+</CustomApplication>

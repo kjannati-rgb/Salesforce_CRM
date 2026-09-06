@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>My_Forms</fullName>
+    <columns>LAST_ACTIVITY</columns>
+    <columns>NAME</columns>
+    <columns>Sales_Stage__c</columns>
+    <columns>Prospect_Name__c</columns>
+    <columns>Job_Title__c</columns>
+    <columns>Company__c</columns>
+    <columns>Email__c</columns>
+    <columns>Phone__c</columns>
+    <columns>Country__c</columns>
+    <columns>CREATED_DATE</columns>
+    <filterScope>Mine</filterScope>
+    <filters>
+        <field>Sales_Stage__c</field>
+        <operation>equals</operation>
+        <value>New,Working,Nurturing</value>
+    </filters>
+    <label>My Forms</label>
+</ListView>

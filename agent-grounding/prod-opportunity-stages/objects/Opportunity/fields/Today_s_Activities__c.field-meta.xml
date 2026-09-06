@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Today_s_Activities__c</fullName>
+    <description>Activity Metrics - Number of activities closed today.</description>
+    <externalId>false</externalId>
+    <formula>ENCODED:{!ID:ActivityMetricRollup.TotalActivitiesDay}</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>Activity Metrics - Number of activities closed today.</inlineHelpText>
+    <label>Today’s Activities</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Next_Contact_Date_Mandatory</fullName>
+    <active>false</active>
+    <description>This validation rule ensures that the &quot;Closed Lost Reason&quot; field includes either &quot;Timing&quot; or &quot;Budget&quot;, the &quot;Next Contact Date&quot; field is blank, and the record is owned by specific users before it can be saved.</description>
+    <errorConditionFormula>(
+INCLUDES(Closed_Lost_Reason__c, &apos;Timing&apos;)
+||
+INCLUDES(Closed_Lost_Reason__c, &apos;Budget&apos;)
+)
+&amp;&amp;
+(
+ISBLANK(  Next_Contact_Date__c )
+||
+ isblank(Closed_Lost_reason_Free_Text__c )
+)
+
+
+&amp;&amp;
+ text(Owner.Team__c )=&apos;Advertising&apos;
+&amp;&amp;
+ text(Type )=&apos;New Business&apos;</errorConditionFormula>
+    <errorMessage>Please add a Next Contact Date and Closed Lost reason (Free Text) if the Closed Lost Reason is Timing or Budget.</errorMessage>
+</ValidationRule>

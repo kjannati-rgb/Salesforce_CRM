@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <apiVersion>62.0</apiVersion>
+    <description>Record-triggered (after save, create/update) on OpportunityTeamMember. Stamps the parent Opportunity's Client_Engagement_Director__c / Sales_Development_Representative__c lookup from the team member, so the fields stay correct no matter how the member was added (screen-flow widget, native Opportunity Team list, data load, or sync flow). Fault paths swallow stamp errors so they never block the team-member DML. Companion to the deletion-clear flow.</description>
+    <assignments>
+        <name>asg_SwallowFault</name>
+        <label>Swallow Stamp Fault</label>
+        <locationX>578</locationX>
+        <locationY>492</locationY>
+        <description>Captures a stamp fault without re-throwing, so a field-update problem (e.g. an Opportunity validation rule) never blocks the team-member insert/update.</description>
+        <assignmentItems>
+            <assignToReference>var_faultMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <constants>
+        <name>const_RoleCED</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Client Engagement Director</stringValue>
+        </value>
+    </constants>
+    <constants>
+        <name>const_RoleSDR</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Sales Development Representative</stringValue>
+        </value>
+    </constants>
+    <decisions>
+        <name>dec_Role</name>
+        <label>Which Role?</label>
+        <locationX>308</locationX>
+        <locationY>276</locationY>
+        <description>Routes CED vs SDR to the matching Opportunity field stamp. Non-matching roles end (the entry condition already limits to CED/SDR).</description>
+        <defaultConnectorLabel>Other</defaultConnectorLabel>
+        <rules>
+            <name>rule_CED</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.TeamMemberRole</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>const_RoleCED</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>upd_StampCED</targetReference>
+            </connector>
+            <label>Client Engagement Director</label>
+        </rules>
+        <rules>
+            <name>rule_SDR</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.TeamMemberRole</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>const_RoleSDR</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>upd_StampSDR</targetReference>
+            </connector>
+            <label>Sales Development Representative</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <interviewLabel>OTM Stamp Role Fields {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Opportunity Team Member: Stamp Role Fields</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>upd_StampCED</name>
+        <label>Stamp CED on Opportunity</label>
+        <locationX>176</locationX>
+        <locationY>384</locationY>
+        <description>Sets Opportunity.Client_Engagement_Director__c to this team member's user.</description>
+        <faultConnector>
+            <targetReference>asg_SwallowFault</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.OpportunityId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Client_Engagement_Director__c</field>
+            <value>
+                <elementReference>$Record.UserId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>upd_StampSDR</name>
+        <label>Stamp SDR on Opportunity</label>
+        <locationX>440</locationX>
+        <locationY>384</locationY>
+        <description>Sets Opportunity.Sales_Development_Representative__c to this team member's user.</description>
+        <faultConnector>
+            <targetReference>asg_SwallowFault</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.OpportunityId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Sales_Development_Representative__c</field>
+            <value>
+                <elementReference>$Record.UserId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <start>
+        <locationX>176</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>dec_Role</targetReference>
+        </connector>
+        <filterLogic>or</filterLogic>
+        <filters>
+            <field>TeamMemberRole</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Client Engagement Director</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>TeamMemberRole</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Sales Development Representative</stringValue>
+            </value>
+        </filters>
+        <object>OpportunityTeamMember</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>var_faultMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

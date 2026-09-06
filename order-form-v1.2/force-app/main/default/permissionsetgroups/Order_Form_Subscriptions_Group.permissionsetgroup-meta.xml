@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSetGroup xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Everything a subscription rep needs to produce and send the Order Form: Core + Subscriptions. Future businesses get their own group (Core + Events, Core + Contributors).</description>
+    <label>Order Form - Subscriptions (group)</label>
+    <permissionSets>Order_Form_Core</permissionSets>
+    <permissionSets>Order_Form_Subscriptions</permissionSets>
+    <status>Updated</status>
+</PermissionSetGroup>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Am Law UK 50 Whitespace Access</label>
+    <description>Read+Edit FLS for Account.Am_Law_UK_50_Rank__c (Am Law UK 50 Whitespace matrix/dashboard). Assign to admins + the Revenue Operations report-folder audience so Rev Ops can maintain the rank and reports can filter/group on it.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <fieldPermissions>
+        <field>Account.Am_Law_UK_50_Rank__c</field>
+        <editable>true</editable>
+        <readable>true</readable>
+    </fieldPermissions>
+</PermissionSet>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>unfiled$public/Contact_Whitespace</members>
+        <members>unfiled$public/Copy_of_Quotes_with_and_without_Aapprova_mrb</members>
+        <members>unfiled$public/X190624_Opps_without_renewals_4w5</members>
+        <name>Report</name>
+    </types>
+    <version>62.0</version>
+</Package>

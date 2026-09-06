@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Alert_Chatter_Group__c</fullName>
+    <description>Name of the Chatter group that receives the routing-SLA breach digest. If blank or the group does not exist, the sweep still flags records but posts nothing (fail-open).</description>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Alert Chatter Group</label>
+    <length>80</length>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

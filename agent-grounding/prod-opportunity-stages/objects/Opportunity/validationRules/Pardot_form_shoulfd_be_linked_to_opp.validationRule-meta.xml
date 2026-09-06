@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Pardot_form_shoulfd_be_linked_to_opp</fullName>
+    <active>false</active>
+    <errorConditionFormula>text( LeadSource )=&apos;Form Completion&apos;
+&amp;&amp;
+ISBLANK( Pardot_Form_Completion__c)</errorConditionFormula>
+    <errorMessage>Opportunity was not created using the &quot;Create Opportunity&quot; button from the Pardot form. Please create the opportunity using that button and contact the CRM team to delete this opportunity.</errorMessage>
+</ValidationRule>

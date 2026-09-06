@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ALM_Product_Codes__c</fullName>
+    <description>REV-60 ALM-scoping gate: semicolon-separated ProductCodes the engine may act on. Reuses the REV-71 anchor set plus NYLJ (pending Cayla/Team Brady confirmation). Lines whose ProductCode is not in this set are never touched.</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>ALM Product Codes</label>
+    <length>255</length>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

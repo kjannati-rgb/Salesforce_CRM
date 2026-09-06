@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Campaign_Name__c</fullName>
+    <description>Exact Campaign.Name to resolve to a Campaign Id at runtime (Get Records by Name) — replaces the hardcoded Campaign Id. Missing campaign (e.g. in a sandbox) resolves to null, no error.</description>
+    <label>Campaign Name</label>
+    <type>Text</type>
+    <length>255</length>
+    <required>false</required>
+    <unique>false</unique>
+</CustomField>

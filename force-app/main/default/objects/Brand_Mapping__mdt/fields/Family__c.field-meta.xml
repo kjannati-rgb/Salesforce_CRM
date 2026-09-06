@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Family__c</fullName>
+    <label>Brand Family</label>
+    <description>Optional brand-family grouping (e.g. "Specialist Platforms"). A firm holding an active subscription for ANY brand in the same family is a cross-sell target for an enquiry about a sibling title in that family.</description>
+    <type>Text</type>
+    <length>120</length>
+    <required>false</required>
+    <unique>false</unique>
+</CustomField>

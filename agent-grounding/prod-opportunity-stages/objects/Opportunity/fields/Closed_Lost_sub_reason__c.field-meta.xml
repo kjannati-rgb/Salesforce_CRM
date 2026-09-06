@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Closed_Lost_sub_reason__c</fullName>
+    <description>Please select the secondary reason to close lost this opportunity</description>
+    <inlineHelpText>Indicates the secondary reason to close lost an opportunity.</inlineHelpText>
+    <label>Closed Lost sub reason</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Closed_Lost_primary_reason__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Account not set up correctly</fullName>
+                <default>false</default>
+                <label>Account not set up correctly</label>
+            </value>
+            <value>
+                <fullName>Bad debtor</fullName>
+                <default>false</default>
+                <label>Bad debtor</label>
+            </value>
+            <value>
+                <fullName>Breach of contract</fullName>
+                <default>false</default>
+                <label>Breach of contract</label>
+            </value>
+            <value>
+                <fullName>Budget cut</fullName>
+                <default>false</default>
+                <label>Budget cut</label>
+            </value>
+            <value>
+                <fullName>Change of content strategy</fullName>
+                <default>false</default>
+                <label>Change of content strategy</label>
+            </value>
+            <value>
+                <fullName>Change of internal strategy</fullName>
+                <default>false</default>
+                <label>Change of internal strategy</label>
+            </value>
+            <value>
+                <fullName>Client does not value product</fullName>
+                <default>false</default>
+                <label>Client does not value product</label>
+            </value>
+            <value>
+                <fullName>Client is wrong persona</fullName>
+                <default>false</default>
+                <label>Client is wrong persona</label>
+            </value>
+            <value>
+                <fullName>Client stopped replying</fullName>
+                <default>false</default>
+                <label>Client stopped replying</label>
+            </value>
+            <value>
+                <fullName>Contract consolidation/covered by licence agreement</fullName>
+                <default>false</default>
+                <label>Contract consolidation/covered by licence agreement</label>
+            </value>
+            <value>
+                <fullName>Data not detailed enough</fullName>
+                <default>false</default>
+                <label>Data not detailed enough</label>
+            </value>
+            <value>
+                <fullName>Didn&apos;t submit agreed content</fullName>
+                <default>false</default>
+                <label>Didn&apos;t submit agreed content</label>
+            </value>
+            <value>
+                <fullName>Didn&apos;t use tools/didn&apos;t know how to use data</fullName>
+                <default>false</default>
+                <label>Didn&apos;t use tools/didn&apos;t know how to use data</label>
+            </value>
+            <value>
+                <fullName>Dissolved</fullName>
+                <default>false</default>
+                <label>Dissolved</label>
+            </value>
+            <value>
+                <fullName>Duplicate</fullName>
+                <default>false</default>
+                <label>Duplicate</label>
+            </value>
+            <value>
+                <fullName>Lack of jurisdictional coverage</fullName>
+                <default>false</default>
+                <label>Lack of jurisdictional coverage</label>
+            </value>
+            <value>
+                <fullName>Lack of sector coverage</fullName>
+                <default>false</default>
+                <label>Lack of sector coverage</label>
+            </value>
+            <value>
+                <fullName>LBR not responsive enough</fullName>
+                <default>false</default>
+                <label>LBR not responsive enough</label>
+            </value>
+            <value>
+                <fullName>Merger</fullName>
+                <default>false</default>
+                <label>Merger</label>
+            </value>
+            <value>
+                <fullName>Mis-sold</fullName>
+                <default>false</default>
+                <label>Mis-sold</label>
+            </value>
+            <value>
+                <fullName>No reason given</fullName>
+                <default>false</default>
+                <label>No reason given</label>
+            </value>
+            <value>
+                <fullName>Not a budget priority</fullName>
+                <default>false</default>
+                <label>Not a budget priority</label>
+            </value>
+            <value>
+                <fullName>Not eligible for renewal</fullName>
+                <default>false</default>
+                <label>Not eligible for renewal</label>
+            </value>
+            <value>
+                <fullName>Not enough content/free newsfeed was enough</fullName>
+                <default>false</default>
+                <label>Not enough content/free newsfeed was enough</label>
+            </value>
+            <value>
+                <fullName>No time to use data/tools/content</fullName>
+                <default>false</default>
+                <label>No time to use data/tools/content</label>
+            </value>
+            <value>
+                <fullName>Not impressed with results</fullName>
+                <default>false</default>
+                <label>Not impressed with results</label>
+            </value>
+            <value>
+                <fullName>Not producing content</fullName>
+                <default>false</default>
+                <label>Not producing content</label>
+            </value>
+            <value>
+                <fullName>Persistent product issues</fullName>
+                <default>false</default>
+                <label>Persistent product issues</label>
+            </value>
+            <value>
+                <fullName>Personal expense</fullName>
+                <default>false</default>
+                <label>Personal expense</label>
+            </value>
+            <value>
+                <fullName>Platform too hard to navigate</fullName>
+                <default>false</default>
+                <label>Platform too hard to navigate</label>
+            </value>
+            <value>
+                <fullName>Primary contact left/change in staff</fullName>
+                <default>false</default>
+                <label>Primary contact left/change in staff</label>
+            </value>
+            <value>
+                <fullName>Purchased for specific project</fullName>
+                <default>false</default>
+                <label>Purchased for specific project</label>
+            </value>
+            <value>
+                <fullName>Sanctioned client</fullName>
+                <default>false</default>
+                <label>Sanctioned client</label>
+            </value>
+            <value>
+                <fullName>Target clients not covered</fullName>
+                <default>false</default>
+                <label>Target clients not covered</label>
+            </value>
+            <value>
+                <fullName>Touch points/CEP incomplete</fullName>
+                <default>false</default>
+                <label>Touch points/CEP incomplete</label>
+            </value>
+            <value>
+                <fullName>Wrong audience</fullName>
+                <default>false</default>
+                <label>Wrong audience</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Budget issues</controllingFieldValue>
+            <valueName>Budget cut</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Budget issues</controllingFieldValue>
+            <valueName>Not a budget priority</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Budget issues</controllingFieldValue>
+            <valueName>Personal expense</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Buyer issues</controllingFieldValue>
+            <valueName>Change of internal strategy</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Buyer issues</controllingFieldValue>
+            <valueName>Client is wrong persona</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Buyer issues</controllingFieldValue>
+            <valueName>Mis-sold</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Buyer issues</controllingFieldValue>
+            <valueName>Primary contact left/change in staff</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Client engagement issue</controllingFieldValue>
+            <valueName>Change of content strategy</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Client engagement issue</controllingFieldValue>
+            <valueName>Client stopped replying</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Client engagement issue</controllingFieldValue>
+            <valueName>Didn&apos;t submit agreed content</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Client engagement issue</controllingFieldValue>
+            <valueName>Didn&apos;t use tools/didn&apos;t know how to use data</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Client engagement issue</controllingFieldValue>
+            <valueName>No reason given</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Client engagement issue</controllingFieldValue>
+            <valueName>Not producing content</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Content issues</controllingFieldValue>
+            <valueName>Lack of jurisdictional coverage</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Content issues</controllingFieldValue>
+            <valueName>Lack of sector coverage</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Content issues</controllingFieldValue>
+            <valueName>Not enough content/free newsfeed was enough</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Content issues</controllingFieldValue>
+            <valueName>Target clients not covered</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lack of ROI</controllingFieldValue>
+            <valueName>Client does not value product</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lack of ROI</controllingFieldValue>
+            <valueName>No time to use data/tools/content</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lack of ROI</controllingFieldValue>
+            <valueName>Not impressed with results</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lack of ROI</controllingFieldValue>
+            <valueName>Purchased for specific project</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>LBR cancellation</controllingFieldValue>
+            <valueName>Bad debtor</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>LBR cancellation</controllingFieldValue>
+            <valueName>Breach of contract</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>LBR cancellation</controllingFieldValue>
+            <valueName>Sanctioned client</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>LBR engagement issue</controllingFieldValue>
+            <valueName>Account not set up correctly</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>LBR engagement issue</controllingFieldValue>
+            <valueName>LBR not responsive enough</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>LBR engagement issue</controllingFieldValue>
+            <valueName>Persistent product issues</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>LBR engagement issue</controllingFieldValue>
+            <valueName>Touch points/CEP incomplete</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>No fault cancellation</controllingFieldValue>
+            <valueName>Contract consolidation/covered by licence agreement</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>No fault cancellation</controllingFieldValue>
+            <valueName>Dissolved</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>No fault cancellation</controllingFieldValue>
+            <valueName>Duplicate</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>No fault cancellation</controllingFieldValue>
+            <valueName>Merger</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>No fault cancellation</controllingFieldValue>
+            <valueName>Not eligible for renewal</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Product issues</controllingFieldValue>
+            <valueName>Data not detailed enough</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Product issues</controllingFieldValue>
+            <valueName>Platform too hard to navigate</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Product issues</controllingFieldValue>
+            <valueName>Wrong audience</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

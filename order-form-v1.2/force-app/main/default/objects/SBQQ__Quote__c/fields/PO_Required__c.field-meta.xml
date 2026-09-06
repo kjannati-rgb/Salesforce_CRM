@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PO_Required__c</fullName>
+    <description>Signer's answer to "Does your organisation require a PO number on invoices?" captured from the signed Order Form (Adobe form data). Finance signal: Yes means invoices must carry a PO.</description>
+    <externalId>false</externalId>
+    <label>PO Required</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value><fullName>Yes</fullName><default>false</default><label>Yes</label></value>
+            <value><fullName>No</fullName><default>false</default><label>No</label></value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

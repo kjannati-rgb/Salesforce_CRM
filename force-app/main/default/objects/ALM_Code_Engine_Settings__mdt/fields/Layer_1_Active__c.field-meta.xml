@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Layer_1_Active__c</fullName>
+    <description>REV-60 Layer 1 kill switch (Quote Line stamp, invoked via Quote_AfterSave_MasterFlow). Ships false (Phase A scaffold).</description>
+    <defaultValue>false</defaultValue>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Layer 1 Active</label>
+    <type>Checkbox</type>
+</CustomField>

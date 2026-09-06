@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QuickAction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Guided disqualification: required reason + optional comment. Date Completed stamps via PFC_Stamp_Work_Fields.</description>
+    <flowDefinition>PFC_Disqualify</flowDefinition>
+    <label>Disqualify</label>
+    <optionsCreateFeedItem>false</optionsCreateFeedItem>
+    <type>Flow</type>
+</QuickAction>

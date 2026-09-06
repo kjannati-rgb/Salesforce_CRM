@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Dry_Run__c</fullName>
+    <label>Dry Run</label>
+    <description>True when this run only reported what it would create, without inserting any renewal opportunities.</description>
+    <inlineHelpText>Checked if this was a report-only run - no renewals were actually created.</inlineHelpText>
+    <type>Checkbox</type>
+    <defaultValue>false</defaultValue>
+</CustomField>

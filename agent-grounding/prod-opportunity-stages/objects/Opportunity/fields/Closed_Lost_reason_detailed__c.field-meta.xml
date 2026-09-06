@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Closed_Lost_reason_detailed__c</fullName>
+    <description>Field Dependent on &quot;Closed Lost Reasons&quot; for CS team</description>
+    <label>Closed Lost reason detailed</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Miss - sold</fullName>
+                <default>false</default>
+                <label>Miss - sold</label>
+            </value>
+            <value>
+                <fullName>Not enough content to warrant investment.</fullName>
+                <default>false</default>
+                <label>Not enough content to warrant investment.</label>
+            </value>
+            <value>
+                <fullName>Free Lexology newsfeed was enough.</fullName>
+                <default>false</default>
+                <label>Free Lexology newsfeed was enough.</label>
+            </value>
+            <value>
+                <fullName>Lack of relevant jurisdictional coverage.</fullName>
+                <default>false</default>
+                <label>Lack of relevant jurisdictional coverage.</label>
+            </value>
+            <value>
+                <fullName>Platform too hard to navigate.</fullName>
+                <default>false</default>
+                <label>Platform too hard to navigate.</label>
+            </value>
+            <value>
+                <fullName>Not enough content on clients</fullName>
+                <default>false</default>
+                <label>Not enough content on clients</label>
+            </value>
+            <value>
+                <fullName>Wrong persona / reader type</fullName>
+                <default>false</default>
+                <label>Wrong persona / reader type</label>
+            </value>
+            <value>
+                <fullName>Change of internal strategy</fullName>
+                <default>false</default>
+                <label>Change of internal strategy</label>
+            </value>
+            <value>
+                <fullName>Practitioners moved elsewhere/ Loss Change in staff and/</fullName>
+                <default>false</default>
+                <label>Practitioners moved elsewhere/ Loss Change in staff and/</label>
+            </value>
+            <value>
+                <fullName>Personal not firm expense</fullName>
+                <default>false</default>
+                <label>Personal not firm expense</label>
+            </value>
+            <value>
+                <fullName>Firm  dissolved</fullName>
+                <default>false</default>
+                <label>Firm  dissolved</label>
+            </value>
+            <value>
+                <fullName>New  Primary Contact</fullName>
+                <default>false</default>
+                <label>New  Primary Contact</label>
+            </value>
+            <value>
+                <fullName>Unable to demonstrate/deliver value</fullName>
+                <default>false</default>
+                <label>Unable to demonstrate/deliver value</label>
+            </value>
+            <value>
+                <fullName>Purchased for a specific project for 1 year.</fullName>
+                <default>false</default>
+                <label>Purchased for a specific project for 1 year.</label>
+            </value>
+            <value>
+                <fullName>Not enough BD work – purchased as a tool for BD, opportunities didn’t materialise.</fullName>
+                <default>false</default>
+                <label>Not enough BD work – purchased as a tool for BD, opportunities didn’t materialise.</label>
+            </value>
+            <value>
+                <fullName>Switch to competitor</fullName>
+                <default>false</default>
+                <label>Switch to competitor</label>
+            </value>
+            <value>
+                <fullName>Conditional -  if so, who?</fullName>
+                <default>false</default>
+                <label>Conditional -  if so, who?</label>
+            </value>
+            <value>
+                <fullName>Conditional -  if so, who? When is the expiry of the contract happening?</fullName>
+                <default>false</default>
+                <label>Conditional -  if so, who? When is the expiry of the contract happening?</label>
+            </value>
+            <value>
+                <fullName>No reason given / stopped replying</fullName>
+                <default>false</default>
+                <label>No reason given / stopped replying</label>
+            </value>
+            <value>
+                <fullName>Touch points unsuccessful</fullName>
+                <default>false</default>
+                <label>Touch points unsuccessful</label>
+            </value>
+            <value>
+                <fullName>CEP incomplete</fullName>
+                <default>false</default>
+                <label>CEP incomplete</label>
+            </value>
+            <value>
+                <fullName>Subscription Administration error</fullName>
+                <default>false</default>
+                <label>Subscription Administration error</label>
+            </value>
+            <value>
+                <fullName>Bad debtor</fullName>
+                <default>false</default>
+                <label>Bad debtor</label>
+            </value>
+            <value>
+                <fullName>Sanction client</fullName>
+                <default>false</default>
+                <label>Sanction client</label>
+            </value>
+            <value>
+                <fullName>Breach of contract</fullName>
+                <default>false</default>
+                <label>Breach of contract</label>
+            </value>
+            <value>
+                <fullName>Duplicate</fullName>
+                <default>false</default>
+                <label>Duplicate</label>
+            </value>
+            <value>
+                <fullName>Contract consolidation</fullName>
+                <default>false</default>
+                <label>Contract consolidation</label>
+            </value>
+            <value>
+                <fullName>Firm Merged</fullName>
+                <default>false</default>
+                <label>Firm Merged</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

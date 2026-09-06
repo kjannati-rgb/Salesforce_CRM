@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>REV-69 — config-driven coverage for the LexPRO Deal Qualifier. One record per coverage region (with map position + covered flag) or per work area (with Core/Beyond tier). Editable by RevOps/content without a deploy.</description>
+    <label>LexPRO Coverage</label>
+    <pluralLabel>LexPRO Coverage</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>

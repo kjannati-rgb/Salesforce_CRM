@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Apply_Year_Suffix__c</fullName>
+    <description>REV-60: when true, the contract-year suffix (Y2/Y3/Y4; year 1 unsuffixed) composes onto this base. Set false for fixed bases that never take a year suffix.</description>
+    <defaultValue>true</defaultValue>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Apply Year Suffix</label>
+    <type>Checkbox</type>
+</CustomField>

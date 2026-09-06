@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PathAssistant xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <entityName>Pardot_Form_Completion__c</entityName>
+    <fieldName>Sales_Stage__c</fieldName>
+    <masterLabel>Pardot Form Completion - Form Completion</masterLabel>
+    <pathAssistantSteps>
+        <fieldNames>Next_Step__c</fieldNames>
+        <fieldNames>Next_Contact_Date__c</fieldNames>
+        <info>&lt;p&gt;&lt;b&gt;Fresh inbound — speed wins.&lt;/b&gt; Review the Lead Quality card before outreach (fit, duplicates, entitlement for existing accounts). First touch within 4 working hours — the routing SLA. Set &lt;i&gt;Next Step&lt;/i&gt; and &lt;i&gt;Next Contact Date&lt;/i&gt; as soon as you take the record.&lt;/p&gt;</info>
+        <picklistValueName>New</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Next_Step__c</fieldNames>
+        <fieldNames>Next_Contact_Date__c</fieldNames>
+        <info>&lt;p&gt;&lt;b&gt;Actively engaging.&lt;/b&gt; Keep &lt;i&gt;Next Step&lt;/i&gt; and &lt;i&gt;Next Contact Date&lt;/i&gt; current — the reminder-task engine works off them. Log every call and email so the timeline tells the story.&lt;/p&gt;</info>
+        <picklistValueName>Working</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Next_Contact_Date__c</fieldNames>
+        <info>&lt;p&gt;&lt;b&gt;Interested, not ready.&lt;/b&gt; Set a realistic &lt;i&gt;Next Contact Date&lt;/i&gt; (2–4 week cadence) and note what would change their timing. Don't let nurture records go dark.&lt;/p&gt;</info>
+        <picklistValueName>Nurturing</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <info>&lt;p&gt;This field will be updated &lt;b&gt;automatically&lt;/b&gt; when the Lead is converted and an Opportunity is created. Work the Opportunity from here — Date Completed stamps itself.&lt;/p&gt;</info>
+        <picklistValueName>Converted</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Reason_Disqualified__c</fieldNames>
+        <fieldNames>Comments__c</fieldNames>
+        <info>&lt;p&gt;Pick the &lt;i&gt;Reason Disqualified&lt;/i&gt; that fits best — it feeds form-quality reporting back to Marketing. Use the &lt;b&gt;Disqualify&lt;/b&gt; action for a guided close-out; Date Completed stamps automatically.&lt;/p&gt;</info>
+        <picklistValueName>Disqualified</picklistValueName>
+    </pathAssistantSteps>
+    <recordTypeName>Form_Completion</recordTypeName>
+</PathAssistant>

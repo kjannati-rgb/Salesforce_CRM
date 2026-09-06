@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Annual_Contract_Value_converted__c</fullName>
+    <description>Annual Contract Value in GBP, used for Renewals Reporting</description>
+    <externalId>false</externalId>
+    <formula>Annual_Contract_Value__c  /  Exchange_Rate__c</formula>
+    <inlineHelpText>Annual Contract Value in GBP, used for Renewals Reporting</inlineHelpText>
+    <label>Annual Contract Value (converted)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

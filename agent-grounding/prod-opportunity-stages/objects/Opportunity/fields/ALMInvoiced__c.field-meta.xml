@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ALMInvoiced__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>stamped when an invoice for a media campaign is created|Advendio. MediaCampaign</description>
+    <label>ALM Invoiced</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

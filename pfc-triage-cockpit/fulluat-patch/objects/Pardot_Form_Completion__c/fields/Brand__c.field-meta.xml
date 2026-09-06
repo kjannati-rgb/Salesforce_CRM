@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Brand__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(
+CONTAINS(TEXT(Form_Name__c), &quot;Lexology&quot;), &quot;Lexology&quot;,
+IF(CONTAINS(TEXT(Form_Name__c), &quot;GAR&quot;), &quot;GAR&quot;,
+IF(CONTAINS(TEXT(Form_Name__c), &quot;GCR&quot;), &quot;GCR&quot;,
+IF(CONTAINS(TEXT(Form_Name__c), &quot;GIR&quot;), &quot;GIR&quot;,
+IF(CONTAINS(TEXT(Form_Name__c), &quot;GRR&quot;), &quot;GRR&quot;,
+IF(CONTAINS(TEXT(Form_Name__c), &quot;GDR&quot;), &quot;GDR&quot;,
+IF(CONTAINS(TEXT(Form_Name__c), &quot;Latin Lawyer&quot;), &quot;Latin Lawyer&quot;,
+IF(CONTAINS(TEXT(Form_Name__c), &quot;GBRR&quot;), &quot;GBRR&quot;,
+IF(CONTAINS(TEXT(Form_Name__c), &quot;IAM&quot;), &quot;IAM&quot;,
+IF(CONTAINS(TEXT(Form_Name__c), &quot;WTR&quot;), &quot;WTR&quot;,
+&quot;Other&quot;))))))))))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Brand</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

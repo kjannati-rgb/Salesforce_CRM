@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ALMVatAmountType2__c</fullName>
+    <description>Displays the total VAT for all items of type 2. Calculated by an APEX script.|Advendio. MediaCampaign</description>
+    <label>ALM VAT Amount (Type 2 (A))</label>
+    <precision>10</precision>
+    <required>false</required>
+    <scale>9</scale>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Currency</type>
+</CustomField>

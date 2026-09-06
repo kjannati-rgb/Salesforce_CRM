@@ -1,0 +1,110 @@
+{
+  "status": 0,
+  "result": {
+    "records": [
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "closeYear": 2025,
+        "CurrencyIsoCode": "GBP",
+        "recs": 7,
+        "sumAmount": 38637.24
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "closeYear": 2025,
+        "CurrencyIsoCode": "USD",
+        "recs": 122,
+        "sumAmount": 2047485.18
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "closeYear": 2026,
+        "CurrencyIsoCode": "GBP",
+        "recs": 25,
+        "sumAmount": 169395.47
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "closeYear": 2026,
+        "CurrencyIsoCode": "USD",
+        "recs": 180,
+        "sumAmount": 1971463.62
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "closeYear": 2027,
+        "CurrencyIsoCode": "GBP",
+        "recs": 15,
+        "sumAmount": 160275.24
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "closeYear": 2027,
+        "CurrencyIsoCode": "USD",
+        "recs": 85,
+        "sumAmount": 1143843.13
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "closeYear": 2028,
+        "CurrencyIsoCode": "GBP",
+        "recs": 10,
+        "sumAmount": 328147.94
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "closeYear": 2028,
+        "CurrencyIsoCode": "USD",
+        "recs": 60,
+        "sumAmount": 1901182.17
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "closeYear": 2029,
+        "CurrencyIsoCode": "GBP",
+        "recs": 1,
+        "sumAmount": 10185
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "closeYear": 2029,
+        "CurrencyIsoCode": "USD",
+        "recs": 16,
+        "sumAmount": 384554.89
+      }
+    ],
+    "totalSize": 10,
+    "done": true
+  },
+  "warnings": []
+}

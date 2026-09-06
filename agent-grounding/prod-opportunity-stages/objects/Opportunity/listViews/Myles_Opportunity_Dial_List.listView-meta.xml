@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Myles_Opportunity_Dial_List</fullName>
+    <columns>Next_Contact_Date__c</columns>
+    <columns>OPPORTUNITY.NAME</columns>
+    <columns>ACCOUNT.NAME</columns>
+    <columns>OPPORTUNITY.STAGE_NAME</columns>
+    <columns>Forecast_Status__c</columns>
+    <columns>Budget_Renewal_Date__c</columns>
+    <columns>OPPORTUNITY.AMOUNT</columns>
+    <columns>CORE.USERS.ALIAS</columns>
+    <columns>Notes__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>OPPORTUNITY.STAGE_NAME</field>
+        <operation>contains</operation>
+        <value>Identify,Qualify,Evaluation,Close,Closed Won,Closed Lost</value>
+    </filters>
+    <filters>
+        <field>OPPORTUNITY.STAGE_NAME</field>
+        <operation>notContain</operation>
+        <value>Closed Won – Pending Approval,Cancellation - Pending Review,Closed Won - Cancellation</value>
+    </filters>
+    <filters>
+        <field>Budget_Renewal_Month__c</field>
+        <operation>contains</operation>
+        <value>2023</value>
+    </filters>
+    <filters>
+        <field>OPPORTUNITY.NAME</field>
+        <operation>notContain</operation>
+        <value>delete</value>
+    </filters>
+    <filters>
+        <field>CORE.USERS.FULL_NAME</field>
+        <operation>equals</operation>
+        <value>Myles Jones</value>
+    </filters>
+    <filters>
+        <field>OPPORTUNITY.TYPE</field>
+        <operation>equals</operation>
+        <value>Renewal</value>
+    </filters>
+    <filters>
+        <field>OPPORTUNITY.STAGE_NAME</field>
+        <operation>notContain</operation>
+        <value>Closed Won – Pending Approval,Cancellation - Pending Review,Closed Won - Cancellation</value>
+    </filters>
+    <filters>
+        <field>Budget_Renewal_Date__c</field>
+        <operation>lessThan</operation>
+        <value>7/1/2023</value>
+    </filters>
+    <label>Myles&apos; Opportunity Dial List - 2023</label>
+    <sharedTo>
+        <group>Content_Subs</group>
+    </sharedTo>
+</ListView>

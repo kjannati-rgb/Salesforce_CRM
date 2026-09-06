@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LexPRO_Qual_Work_Area_Other__c</fullName>
+    <description>REV-69: free-text detail when &quot;Other&quot; is selected for Work Areas in the LexPRO Deal Qualifier.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Detail for the &quot;Other&quot; work area, captured in the LexPRO Deal Qualifier.</inlineHelpText>
+    <label>LexPRO Qual: Work Area (Other)</label>
+    <length>255</length>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

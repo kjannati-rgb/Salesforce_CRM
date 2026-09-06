@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Require_Title__c</fullName>
+    <description>When TRUE, the primary contact must have a Job Title for the role to count as complete.</description>
+    <label>Require Contact Job Title</label>
+    <type>Checkbox</type>
+    <defaultValue>true</defaultValue>
+</CustomField>

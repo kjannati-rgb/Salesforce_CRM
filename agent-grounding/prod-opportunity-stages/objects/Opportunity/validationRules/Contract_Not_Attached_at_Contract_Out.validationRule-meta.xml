@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Contract_Not_Attached_at_Contract_Out</fullName>
+    <active>true</active>
+    <description>This validation checks if contract attached field on opportunity is flagged as true or false if the stages are close</description>
+    <errorConditionFormula>Contract_Attached__c = False
+&amp;&amp; 
+
+	text(StageName)= &quot;Contract Out&quot;</errorConditionFormula>
+    <errorMessage>Please send out the contract to sign or attach the necessary document before proceeding to close</errorMessage>
+</ValidationRule>

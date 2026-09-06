@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Name__c</fullName>
+    <description>Law Business Research interaction name.</description>
+    <externalId>false</externalId>
+    <formula>Contact__r.FirstName &amp; &apos; &apos; &amp; Contact__r.LastName &amp; &apos; &apos; &amp; &apos;-&apos; &amp; &apos; &apos;&amp;  Product__r.Name</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>Law Business Research interaction name.</inlineHelpText>
+    <label>Name</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

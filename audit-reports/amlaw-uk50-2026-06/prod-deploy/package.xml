@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Am Law UK 50 Whitespace — PROD deploy manifest. DO NOT deploy without per-step confirmation. -->
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>Account.Am_Law_UK_50_Rank__c</members>
+        <name>CustomField</name>
+    </types>
+    <types>
+        <members>Am_Law_UK_50_Whitespace_Access</members>
+        <name>PermissionSet</name>
+    </types>
+    <types>
+        <!-- NEW report type -->
+        <members>Accounts_with_or_without_Opportunities</members>
+        <!-- MODIFIED shared report type — re-retrieve PROD's copy and add ONLY the rank column before deploying (see runbook). -->
+        <members>Custom_Opportunities_with_Products</members>
+        <name>ReportType</name>
+    </types>
+    <types>
+        <members>Am_Law_UK_50_Whitespace</members>
+        <members>Am_Law_UK_50_Whitespace/AmLaw_UK50_Whitespace_Matrix_Current</members>
+        <members>Am_Law_UK_50_Whitespace/AmLaw_UK50_Whitespace_Matrix_LastYear</members>
+        <members>Am_Law_UK_50_Whitespace/AmLaw_UK50_Whitespace_YoY</members>
+        <members>Am_Law_UK_50_Whitespace/AmLaw_UK50_Never_Served_Live</members>
+        <name>Report</name>
+    </types>
+    <types>
+        <members>Am_Law_UK_50_Whitespace</members>
+        <members>Am_Law_UK_50_Whitespace/AmLaw_UK50_Whitespace</members>
+        <name>Dashboard</name>
+    </types>
+    <version>62.0</version>
+</Package>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Corporate</fullName>
+    <active>true</active>
+    <description>Corporate / in-house legal segment - SoW denominator = in-house counsel headcount; Advertising not relevant.</description>
+    <label>Corporate</label>
+    <picklistValues>
+        <picklist>Deal_Model__c</picklist>
+        <values><fullName>Enterprise</fullName><default>false</default></values>
+        <values><fullName>Coordinated</fullName><default>false</default></values>
+        <values><fullName>Regional</fullName><default>false</default></values>
+        <values><fullName>Buying_Centre</fullName><default>true</default></values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Plan_Tier__c</picklist>
+        <values><fullName>T1</fullName><default>false</default></values>
+        <values><fullName>T2</fullName><default>true</default></values>
+        <values><fullName>T3</fullName><default>false</default></values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Plan_Status__c</picklist>
+        <values><fullName>Draft</fullName><default>true</default></values>
+        <values><fullName>Active</fullName><default>false</default></values>
+        <values><fullName>In_Review</fullName><default>false</default></values>
+        <values><fullName>Archived</fullName><default>false</default></values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Review_Cadence__c</picklist>
+        <values><fullName>Monthly</fullName><default>false</default></values>
+        <values><fullName>Quarterly</fullName><default>false</default></values>
+        <values><fullName>Half_Yearly</fullName><default>true</default></values>
+    </picklistValues>
+</RecordType>

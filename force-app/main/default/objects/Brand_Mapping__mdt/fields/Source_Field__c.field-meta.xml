@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Source_Field__c</fullName>
+    <label>Source Field</label>
+    <description>Optional qualifier for which inbound field this mapping applies to (e.g. Form.Brand__c, Lead.Lexology_Product__c, Lead.ALM_Product_Interest__c). Blank = matches any field.</description>
+    <type>Text</type>
+    <length>80</length>
+    <required>false</required>
+    <unique>false</unique>
+</CustomField>

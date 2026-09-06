@@ -1,0 +1,76 @@
+<template>
+    <article class="slds-card">
+        <div class="slds-card__body slds-card__body_inner slds-p-around_medium">
+            <h2 class="slds-text-heading_medium slds-m-bottom_medium">Firm metrics for {firmName}</h2>
+            <template if:true={error}>
+                <div class="slds-text-body_small slds-text-color_error slds-m-bottom_small">{error}</div>
+            </template>
+            <template if:true={ready}>
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-m-bottom_medium">
+                        <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_x-small">Open opportunities by stage ({openTotal})</p>
+                        <template for:each={stageRows} for:item="s">
+                            <div key={s.name} class="slds-grid slds-grid_align-spread slds-text-body_small stage-row">
+                                <span class="slds-truncate">{s.name}</span>
+                                <span>{s.count}</span>
+                            </div>
+                        </template>
+                        <template if:true={moreStages}>
+                            <div class="slds-text-body_small slds-text-color_weak">+{moreStages} more stages</div>
+                        </template>
+                        <div class="slds-text-body_small slds-m-top_x-small">{openValue} open pipeline</div>
+                        <a class="slds-text-body_small link" onclick={goToFirm}>View firm sales summary</a>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_4-of-12 slds-m-bottom_medium">
+                        <div class="slds-border_top slds-p-top_small">
+                            <p class="slds-text-body_small slds-text-color_weak">Revenue (USD)</p>
+                            <div class="pair">
+                                <div>
+                                    <div class="slds-text-heading_large">{revLast}</div>
+                                    <div class="slds-text-body_small slds-text-color_weak">Last FY</div>
+                                </div>
+                                <div>
+                                    <div class="slds-text-heading_large">{revThis}</div>
+                                    <div class="slds-text-body_small slds-text-color_weak">This FY</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_4-of-12 slds-m-bottom_medium">
+                        <div class="slds-border_top slds-p-top_small">
+                            <p class="slds-text-body_small slds-text-color_weak">Opportunity win rate</p>
+                            <div class="pair">
+                                <div>
+                                    <div class="slds-text-heading_large">{winLast}</div>
+                                    <div class="slds-text-body_small slds-text-color_weak">{winLastSub}</div>
+                                </div>
+                                <div>
+                                    <div class="slds-text-heading_large">{winThis}</div>
+                                    <div class="slds-text-body_small slds-text-color_weak">{winThisSub}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_4-of-12">
+                        <div class="slds-border_top slds-p-top_small">
+                            <p class="slds-text-body_small slds-text-color_weak">Won ACV (USD)</p>
+                            <div class="slds-text-heading_large">{acvThis}</div>
+                            <div class="slds-text-body_small slds-text-color_weak">This FY · annual run-rate</div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_4-of-12">
+                        <div class="slds-border_top slds-p-top_small">
+                            <p class="slds-text-body_small slds-text-color_weak">Active subscriptions</p>
+                            <div class="slds-text-heading_large">{subsCount}</div>
+                            <div class="slds-text-body_small slds-text-color_weak">{subsSub}</div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            <p class="slds-text-body_small slds-text-color_weak slds-m-top_small">
+                Aggregated across every office of the firm, in USD — unlike the standard account-only metrics.
+                Pipeline and win rate are live; revenue, ACV and subscriptions come from the Firm Sales Summary rollups.
+            </p>
+        </div>
+    </article>
+</template>

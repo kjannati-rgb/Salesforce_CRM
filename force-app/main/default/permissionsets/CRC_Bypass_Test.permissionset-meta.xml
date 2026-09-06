@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>CRC Bypass Test</label>
+    <description>Test-only: grants Bypass_Contact_Role_Check to validate the bypass path. Not part of the production deployment.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <customPermissions>
+        <enabled>true</enabled>
+        <name>Bypass_Contact_Role_Check</name>
+    </customPermissions>
+</PermissionSet>

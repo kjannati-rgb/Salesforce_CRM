@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Workbooks_Legacy_Opps</fullName>
+    <columns>OPPORTUNITY.NAME</columns>
+    <columns>ACCOUNT.NAME</columns>
+    <columns>OPPORTUNITY.AMOUNT</columns>
+    <columns>OPPORTUNITY.STAGE_NAME</columns>
+    <columns>CORE.USERS.FULL_NAME</columns>
+    <columns>Next_Contact_Date__c</columns>
+    <columns>OPPORTUNITY.CLOSE_DATE</columns>
+    <columns>Notes__c</columns>
+    <columns>Workbooks_CRM_Legacy_Opportunity_Name__c</columns>
+    <columns>Sales_Manager__c</columns>
+    <columns>Lex_Inform_2021_Renewal__c</columns>
+    <columns>Opportunity_Number__c</columns>
+    <columns>Annual_Contract_Value__c</columns>
+    <columns>Submitted_to_Approval_Process__c</columns>
+    <columns>Workbooks_CRM_Legacy_Reference__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Workbooks_CRM_Legacy_Reference__c</field>
+        <operation>greaterThan</operation>
+    </filters>
+    <filters>
+        <field>Workbooks_CRM_Legacy_Reference__c</field>
+        <operation>equals</operation>
+    </filters>
+    <label>Workbooks Legacy Opps (Shared View)</label>
+</ListView>

@@ -1,0 +1,75 @@
+{
+  "status": 0,
+  "result": {
+    "records": [
+      {
+        "attributes": {
+          "type": "User",
+          "url": "/services/data/v66.0/sobjects/User/0056g000005rqyZAAQ"
+        },
+        "Id": "0056g000005rqyZAAQ",
+        "Name": "Aaron Dodds",
+        "FirstName": "Aaron",
+        "LastName": "Dodds",
+        "IsActive": false,
+        "LBR_Legal_Entity__c": "Law Business Research (UK) Ltd.",
+        "CompanyName": "Law Business Research (UK) Ltd."
+      },
+      {
+        "attributes": {
+          "type": "User",
+          "url": "/services/data/v66.0/sobjects/User/0056g000005s4hAAAQ"
+        },
+        "Id": "0056g000005s4hAAAQ",
+        "Name": "Nicholas Dolder",
+        "FirstName": "Nicholas",
+        "LastName": "Dolder",
+        "IsActive": false,
+        "LBR_Legal_Entity__c": null,
+        "CompanyName": null
+      },
+      {
+        "attributes": {
+          "type": "User",
+          "url": "/services/data/v66.0/sobjects/User/0054L0000048IuDQAU"
+        },
+        "Id": "0054L0000048IuDQAU",
+        "Name": "Alexandra Dova",
+        "FirstName": "Alexandra",
+        "LastName": "Dova",
+        "IsActive": false,
+        "LBR_Legal_Entity__c": "Law Business Research (UK) Ltd.",
+        "CompanyName": "Law Business Research (UK) Ltd."
+      },
+      {
+        "attributes": {
+          "type": "User",
+          "url": "/services/data/v66.0/sobjects/User/005Tm0000018jPBIAY"
+        },
+        "Id": "005Tm0000018jPBIAY",
+        "Name": "Ellie Done",
+        "FirstName": "Ellie",
+        "LastName": "Done",
+        "IsActive": false,
+        "LBR_Legal_Entity__c": "MBL Seminars Limited",
+        "CompanyName": "MBL Seminars Limited"
+      },
+      {
+        "attributes": {
+          "type": "User",
+          "url": "/services/data/v66.0/sobjects/User/005Px000009myUXIAY"
+        },
+        "Id": "005Px000009myUXIAY",
+        "Name": "James Doyle",
+        "FirstName": "James",
+        "LastName": "Doyle",
+        "IsActive": false,
+        "LBR_Legal_Entity__c": "ALM Global, LLC",
+        "CompanyName": "ALM Global, LLC"
+      }
+    ],
+    "totalSize": 5,
+    "done": true
+  },
+  "warnings": []
+}

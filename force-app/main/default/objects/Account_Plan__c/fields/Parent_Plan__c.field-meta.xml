@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Parent_Plan__c</fullName>
+    <label>Parent Plan</label>
+    <description>Plan hierarchy: enterprise to regional child.</description>
+    <type>Lookup</type>
+    <referenceTo>Account_Plan__c</referenceTo>
+    <relationshipName>Child_Plans</relationshipName>
+    <relationshipLabel>Child Plans</relationshipLabel>
+    <required>false</required>
+    <deleteConstraint>SetNull</deleteConstraint>
+</CustomField>

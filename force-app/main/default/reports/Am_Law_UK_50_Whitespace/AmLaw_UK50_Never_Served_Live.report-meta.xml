@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Am Law UK 50 Never-Served (live)</name>
+    <description>Live approx: Am Law UK 50 firms (rank not null) with NO Closed Won non-cancelled opp (any family) as Ultimate Account. Family-agnostic (cross-filter can't reach line-item family) so under-reports whitespace; pair with the precise matrix list.</description>
+    <format>Tabular</format>
+    <reportType>Accounts_with_or_without_Opportunities__c</reportType>
+    <columns>
+        <field>Account$Am_Law_UK_50_Rank__c</field>
+    </columns>
+    <columns>
+        <field>Account$Name</field>
+    </columns>
+    <columns>
+        <field>Account$Owner</field>
+    </columns>
+    <filter>
+        <criteriaItems>
+            <column>Account$Am_Law_UK_50_Rank__c</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>false</isUnlocked>
+            <operator>notEqual</operator>
+            <value></value>
+        </criteriaItems>
+    </filter>
+    <crossFilters>
+        <criteriaItems>
+            <column>StageName</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>false</isUnlocked>
+            <operator>equals</operator>
+            <value>Closed Won</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Cancelled__c</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>false</isUnlocked>
+            <operator>equals</operator>
+            <value>0</value>
+        </criteriaItems>
+        <operation>without</operation>
+        <primaryTableColumn>Account$Id</primaryTableColumn>
+        <relatedTable>Opportunity</relatedTable>
+        <relatedTableJoinColumn>Ultimate_Account__c</relatedTableJoinColumn>
+    </crossFilters>
+    <scope>organization</scope>
+    <sortColumn>Account$Am_Law_UK_50_Rank__c</sortColumn>
+    <sortOrder>Asc</sortOrder>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+</Report>

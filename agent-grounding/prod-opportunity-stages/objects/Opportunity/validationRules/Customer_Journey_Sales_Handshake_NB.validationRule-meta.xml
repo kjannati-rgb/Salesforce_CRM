@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Customer_Journey_Sales_Handshake_NB</fullName>
+    <active>false</active>
+    <description>Opp can&apos;t be moved to closed won without SalesHandshake. Closed won (awaiting sign off) Pending.</description>
+    <errorConditionFormula>AND(
+NOT($Setup.Application_Settings__c.Disable_Validation_Rules__c),
+ISPICKVAL( Type , &apos;New Business&apos;),
+ISPICKVAL( StageName , &apos;Closed Won – Pending Approval&apos;),
+ISBLANK(Sales_handshake__c),
+Cancelled__c = FALSE,
+$Profile.Name &lt;&gt; &apos;Custom: Fin/Ops/HR&apos;,
+$Profile.Name &lt;&gt; &apos;ALM - Custom: Fin/Ops/HR&apos;,
+OR( Content_Sub_Present__c = True,
+LexPro_present__c = True)
+)</errorConditionFormula>
+    <errorMessage>Please complete Sales Handshake Customer journey record.</errorMessage>
+</ValidationRule>

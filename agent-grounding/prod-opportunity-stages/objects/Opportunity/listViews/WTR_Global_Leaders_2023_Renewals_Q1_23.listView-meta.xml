@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>WTR_Global_Leaders_2023_Renewals_Q1_23</fullName>
+    <columns>OPPORTUNITY.NAME</columns>
+    <columns>Campaign__c</columns>
+    <columns>ACCOUNT.NAME</columns>
+    <columns>OPPORTUNITY.STAGE_NAME</columns>
+    <columns>OPPORTUNITY.CLOSE_DATE</columns>
+    <columns>Aspirational_Price__c</columns>
+    <columns>OPPORTUNITY.AMOUNT</columns>
+    <columns>CORE.USERS.ALIAS</columns>
+    <columns>OPPORTUNITY_SCORE</columns>
+    <columns>Primary_Contact__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>OPPORTUNITY.NAME</field>
+        <operation>startsWith</operation>
+        <value>PD - WTR Global Leaders 2023</value>
+    </filters>
+    <filters>
+        <field>Opportunity_Owner_Team__c</field>
+        <operation>equals</operation>
+        <value>Benchmarking</value>
+    </filters>
+    <label>WTR Global Leaders 2023 Renewals - Q1 23</label>
+</ListView>

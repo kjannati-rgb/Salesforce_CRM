@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Source__c</fullName>
+    <description>REV-57: value stamped into PFC_Source__c (e.g. "Inbound Form", "Newsfeed", "Event").</description>
+    <label>Source</label>
+    <type>Text</type>
+    <length>40</length>
+    <required>false</required>
+    <unique>false</unique>
+</CustomField>

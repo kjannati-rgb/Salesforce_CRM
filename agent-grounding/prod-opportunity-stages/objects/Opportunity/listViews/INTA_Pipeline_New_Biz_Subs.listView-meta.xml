@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>INTA_Pipeline_New_Biz_Subs</fullName>
+    <columns>Primary_Contact__c</columns>
+    <columns>OPPORTUNITY.NAME</columns>
+    <columns>ACCOUNT.NAME</columns>
+    <columns>OPPORTUNITY.AMOUNT</columns>
+    <columns>OPPORTUNITY.CLOSE_DATE</columns>
+    <columns>OPPORTUNITY.LEAD_SOURCE</columns>
+    <columns>CORE.USERS.ALIAS</columns>
+    <columns>Campaign__c</columns>
+    <filterScope>Team</filterScope>
+    <filters>
+        <field>Campaign__c</field>
+        <operation>equals</operation>
+        <value>WTR &amp; IAM - Central Marketing - External Events - INTA 2026</value>
+    </filters>
+    <label>INTA Pipeline - New Biz Subs</label>
+</ListView>

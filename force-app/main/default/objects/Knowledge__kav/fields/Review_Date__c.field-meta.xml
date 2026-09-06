@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Review_Date__c</fullName>
+    <description>Date by which this article must be re-verified against org metadata. An article past this date is treated as stale and flagged to its owner by the scheduled staleness check (World-Class Agent Standard v2 §1). Populated by the Knowledge load script from the article's repo frontmatter.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>When this date passes, the article is flagged for re-verification. Update the source article in the repo and reload; do not edit the article here.</inlineHelpText>
+    <label>Review Date</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

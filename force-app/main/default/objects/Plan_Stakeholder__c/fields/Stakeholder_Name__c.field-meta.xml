@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Stakeholder_Name__c</fullName>
+    <label>Stakeholder Name</label>
+    <description>Display name (denormalised from Contact for the heat-map, or typed directly).</description>
+    <type>Text</type>
+    <length>120</length>
+    <required>false</required>
+</CustomField>

@@ -1,0 +1,116 @@
+<template>
+    <lightning-card icon-name="custom:custom63">
+        <span slot="title">White-Space Matrix</span>
+        <div slot="actions" class="hdr-actions">
+            <span class="subtitle">{subtitle}</span>
+        </div>
+        <div class="slds-p-horizontal_small slds-p-bottom_small">
+            <template lwc:if={hasData}>
+                <div class="summary">
+                    <div class="stat">
+                        <span class="k">Total ARR</span>
+                        <span class="v">{totalArr}</span>
+                    </div>
+                </div>
+                <div class="famrow">
+                    <template for:each={familySummary} for:item="f">
+                        <span key={f.key} class="famchip">
+                            <span class="fn">{f.name}</span>
+                            <span class="fo">{f.owned}</span>
+                        </span>
+                    </template>
+                </div>
+                <div class="viewtoggle">
+                    <lightning-button-group>
+                        <lightning-button
+                            label="By Office"
+                            variant={officeViewVariant}
+                            onclick={handleViewOffice}
+                        ></lightning-button>
+                        <lightning-button
+                            label="By Region"
+                            variant={regionViewVariant}
+                            onclick={handleViewRegion}
+                        ></lightning-button>
+                        <lightning-button
+                            label="Firm-wide"
+                            variant={firmViewVariant}
+                            onclick={handleViewFirm}
+                        ></lightning-button>
+                    </lightning-button-group>
+                </div>
+                <div class="scroller">
+                    <table class="ws">
+                        <thead>
+                            <tr class="bandrow">
+                                <th class="rowhdr"></th>
+                                <template for:each={bands} for:item="b">
+                                    <th key={b.key} colspan={b.colspan} class="band">
+                                        <template lwc:if={b.showToggle}>
+                                            <lightning-button-icon
+                                                icon-name={b.toggleIcon}
+                                                alternative-text="Collapse group"
+                                                title="Collapse / expand group"
+                                                variant="bare"
+                                                size="x-small"
+                                                data-key={b.key}
+                                                onclick={handleToggleGroup}
+                                            ></lightning-button-icon>
+                                        </template>
+                                        <span class="bandlbl">{b.label}</span>
+                                        <template lwc:if={b.collapsed}>
+                                            <span class="bandcount">({b.count})</span>
+                                        </template>
+                                    </th>
+                                </template>
+                            </tr>
+                            <tr>
+                                <th class="rowhdr">Node</th>
+                                <template for:each={visibleColumns} for:item="col">
+                                    <th key={col.key}>{col.name}</th>
+                                </template>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={rows} for:item="row">
+                                <tr key={row.key}>
+                                    <td class="rowlabel">
+                                        <template lwc:if={row.officeUrl}>
+                                            <a href={row.officeUrl} target="_top">{row.label}</a>
+                                        </template>
+                                        <template lwc:else>{row.label}</template>
+                                        <template lwc:if={row.region}>
+                                            <div class="rowregion">{row.region}</div>
+                                        </template>
+                                    </td>
+                                    <template for:each={row.cells} for:item="cell">
+                                        <td key={cell.key} class="cellwrap">
+                                            <div class={cell.cssClass}>
+                                                <span class="amt">{cell.amount}</span>
+                                                <span class="sub">{cell.sub}</span>
+                                            </div>
+                                        </td>
+                                    </template>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="legend">
+                    <span class="lg"><span class="sw c-owned"></span>Owned / Healthy</span>
+                    <span class="lg"><span class="sw c-renewal"></span>In Renewal</span>
+                    <span class="lg"><span class="sw c-winback"></span>Win-back</span>
+                    <span class="lg"><span class="sw c-white"></span>White Space</span>
+                    <span class="lg"><span class="sw c-booked"></span>Booked</span>
+                    <span class="lg"><span class="sw c-candidate"></span>Candidate</span>
+                    <span class="lg"><span class="sw c-noeng"></span>No Engagement</span>
+                </div>
+            </template>
+            <template lwc:else>
+                <p class="slds-p-around_medium slds-text-color_weak">
+                    No white-space cells yet. Run generation or seed cells for this plan.
+                </p>
+            </template>
+        </div>
+    </lightning-card>
+</template>

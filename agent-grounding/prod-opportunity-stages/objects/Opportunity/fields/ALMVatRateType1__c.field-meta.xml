@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ALMVatRateType1__c</fullName>
+    <description>This VAT rate has been defined in your custom settings and depends on which country is buying from whom. It is automatically set by an apex script.|Advendio. MediaCampaign</description>
+    <label>ALM VAT Rate % (Type 1 (A))</label>
+    <precision>16</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Percent</type>
+</CustomField>

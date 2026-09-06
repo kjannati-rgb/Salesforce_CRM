@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Lexology Index</label>
+    <protected>false</protected>
+    <values>
+        <field>Brand_Value__c</field>
+        <value xsi:type="xsd:string">Lexology Index</value>
+    </values>
+    <values>
+        <field>Logo_Document_Name__c</field>
+        <value xsi:type="xsd:string">Brand_Logo_Lexology_Index</value>
+    </values>
+    <values>
+        <field>Is_Default__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+</CustomMetadata>

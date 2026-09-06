@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Use_Billing_Address__c</fullName>
+    <defaultValue>false</defaultValue>
+    <inlineHelpText>Checking This box will cause the billing address from the associated account to be copied into the ship to fields below.</inlineHelpText>
+    <label>ALM Use Account Billing Address</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

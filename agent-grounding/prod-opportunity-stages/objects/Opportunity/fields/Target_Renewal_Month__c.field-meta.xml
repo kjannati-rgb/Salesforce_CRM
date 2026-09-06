@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Target_Renewal_Month__c</fullName>
+    <description>This field is a formula field derived from the Target Renewal Date. Designed to identify the month and year the Target Renewal Date falls into.</description>
+    <externalId>false</externalId>
+    <formula>TEXT(YEAR(Target_Renewal_Date__c)) &amp; &quot;-&quot; &amp;
+CASE(TEXT(MONTH(Target_Renewal_Date__c)),
+&quot;1&quot;, &quot;01&quot;,
+&quot;2&quot;, &quot;02&quot;,
+&quot;3&quot;, &quot;03&quot;,
+&quot;4&quot;, &quot;04&quot;,
+&quot;5&quot;, &quot;05&quot;,
+&quot;6&quot;, &quot;06&quot;,
+&quot;7&quot;, &quot;07&quot;,
+&quot;8&quot;, &quot;08&quot;,
+&quot;9&quot;, &quot;09&quot;,
+&quot;10&quot;, &quot;10&quot;,
+&quot;11&quot;, &quot;11&quot;,
+&quot;12&quot;, &quot;12&quot;,
+NULL
+)</formula>
+    <inlineHelpText>This field is a formula field derived from the Target Renewal Date. Designed to identify the month and year the Target Renewal Date falls into</inlineHelpText>
+    <label>Target Renewal Month</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

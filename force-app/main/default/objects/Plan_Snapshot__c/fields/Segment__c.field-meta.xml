@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Segment__c</fullName>
+    <label>Segment</label>
+    <description>Segment captured at snapshot time (for trend slicing).</description>
+    <type>Text</type>
+    <length>40</length>
+    <required>false</required>
+</CustomField>

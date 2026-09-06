@@ -1,0 +1,123 @@
+<template>
+    <article class="slds-card slds-card_boundary qc-card">
+        <div class="slds-card__header slds-grid slds-grid_vertical-align-center qc-head">
+            <div class="qc-icon">◆</div>
+            <h2 class="slds-text-heading_small slds-m-left_x-small">{title}</h2>
+        </div>
+
+        <div class="slds-card__body slds-card__body_inner">
+            <template lwc:if={error}>
+                <div class="qc-empty">The quality card could not load. Refresh the page or contact CRM Support.</div>
+            </template>
+
+            <!-- ============ LEAD MODE ============ -->
+            <template lwc:if={isLeadMode}>
+                <div class="qc-grid">
+                    <div class="qc-gauge">
+                        <svg viewBox="0 0 100 60" aria-hidden="true">
+                            <path d="M8 55 A45 45 0 0 1 92 55" fill="none" stroke="#eee" stroke-width="9" stroke-linecap="round"></path>
+                            <path d="M8 55 A45 45 0 0 1 92 55" fill="none" stroke-width="9" stroke-linecap="round"
+                                  class="qc-arc" style={gaugeArcStyle}></path>
+                        </svg>
+                        <div class="qc-num">
+                            <b class={scoreNumberClass} data-id="score">{scoreDisplay}</b>
+                            <span>Fit score</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="qc-badges">
+                            <template lwc:if={isCorporateDomain}>
+                                <span class="qc-badge good" data-id="domain-badge">{corporateBadgeLabel}</span>
+                            </template>
+                            <template lwc:if={isFreemailDomain}>
+                                <span class="qc-badge warn" data-id="domain-badge">{freemailBadgeLabel}</span>
+                            </template>
+                            <template lwc:if={showClayBadge}>
+                                <span class="qc-badge info">◆ Clay routed</span>
+                            </template>
+                            <template lwc:if={hasSource}>
+                                <span class="qc-badge info">{data.pfcSource}</span>
+                            </template>
+                        </div>
+                        <template lwc:if={hasReasoning}>
+                            <div class="qc-reason"><b>Score reasoning:</b> {data.scoreReasoning}</div>
+                        </template>
+                        <template lwc:if={scorePending}>
+                            <div class="qc-reason pending" data-id="pending">
+                                Score pending — Clay enrichment runs within ~10 min of creation.
+                                Work the record from the prospect details in the meantime.
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </template>
+
+            <!-- ============ CONTACT MODE ============ -->
+            <template lwc:if={contactWithoutAccount}>
+                <div class="qc-reason pending" data-id="no-account">
+                    This contact isn't linked to an account, so firm-level context can't be shown.
+                    Check the contact's account before outreach.
+                </div>
+            </template>
+            <template lwc:if={showFirmContext}>
+                <div class="qc-grid">
+                    <div class="qc-bignum">
+                        <b data-id="subcount">{firm.activeSubs}</b>
+                        <span>Active subscriptions</span>
+                        <span class="qc-fam">{familiesLine}</span>
+                    </div>
+                    <div>
+                        <div class="qc-badges">
+                            <template lwc:if={hasFirmSubs}>
+                                <span class="qc-badge good" data-id="customer-badge">✓ Existing customer — firm level</span>
+                            </template>
+                            <span class="qc-badge info">{firmBadgeLabel}</span>
+                            <span class="qc-badge info">{officeBadgeLabel}</span>
+                        </div>
+                        <template lwc:if={hasFirmSubs}>
+                            <div class="qc-reason"><b>Holdings summary:</b> {holdingsSummary}.
+                                Rolled up via Ultimate Account across all offices.</div>
+                        </template>
+                        <template lwc:if={noFirmSubs}>
+                            <div class="qc-reason pending" data-id="no-subs">
+                                No active firm-level subscriptions found — treat like a new-business signal,
+                                but confirm the account hierarchy is complete before cold outreach.
+                            </div>
+                        </template>
+                    </div>
+                </div>
+                <template lwc:if={showEntitlementFlag}>
+                    <div class="qc-alert crit" data-id="entitlement">
+                        <span class="ic">⚑</span>
+                        <div>{entitlementText}</div>
+                    </div>
+                </template>
+                <template lwc:elseif={hasFirmSubs}>
+                    <div class="qc-alert info-line">
+                        <span class="ic">◆</span>
+                        <div>{expansionText}</div>
+                    </div>
+                </template>
+            </template>
+
+            <!-- ============ DUPLICATES (both modes) ============ -->
+            <template lwc:if={hasDuplicates}>
+                <div class="qc-alert warn-box" data-id="dupes">
+                    <span class="ic">⚠</span>
+                    <div>
+                        <b>{duplicateHeadline}</b> — consider working the earliest and disqualifying
+                        the rest as <i>Duplicate Enquiry</i>.
+                        <ul class="qc-dupelist">
+                            <template for:each={duplicateRows} for:item="d">
+                                <li key={d.recordId}>
+                                    <a href={d.url}>{d.name}</a>
+                                    <span class="qc-dupemeta"> · {d.stage} · <lightning-formatted-date-time value={d.createdDate}></lightning-formatted-date-time></span>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </article>
+</template>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Core_Renewals_Pipe</fullName>
+    <columns>Bad_Debtor_Status__c</columns>
+    <columns>OPPORTUNITY.NAME</columns>
+    <columns>ACCOUNT.NAME</columns>
+    <columns>OPPORTUNITY.AMOUNT</columns>
+    <columns>OPPORTUNITY.RECORDTYPE</columns>
+    <columns>OPPORTUNITY.STAGE_NAME</columns>
+    <columns>Forecast_Status__c</columns>
+    <columns>Budget_Renewal_Date__c</columns>
+    <columns>CORE.USERS.FULL_NAME</columns>
+    <columns>OPPORTUNITY.CLOSE_DATE</columns>
+    <columns>OPPORTUNITY.CREATED_DATE</columns>
+    <columns>Submitted_to_Approval_Process__c</columns>
+    <columns>Notes__c</columns>
+    <columns>Budget_Renewal_Month__c</columns>
+    <columns>OPPORTUNITY.TYPE</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>OPPORTUNITY.STAGE_NAME</field>
+        <operation>equals</operation>
+        <value>Identify,Qualify,Evaluation,Close,Closed Won – Pending Approval</value>
+    </filters>
+    <filters>
+        <field>CORE.USERS.FULL_NAME</field>
+        <operation>contains</operation>
+        <value>Tom Cleall,Dill Cadoret,Jonathan Derouet,Bruno Ferreira</value>
+    </filters>
+    <filters>
+        <field>OPPORTUNITY.TYPE</field>
+        <operation>equals</operation>
+        <value>Renewal</value>
+    </filters>
+    <filters>
+        <field>Budget_Renewal_Month__c</field>
+        <operation>equals</operation>
+        <value>2024-03</value>
+    </filters>
+    <filters>
+        <field>Forecast_Status__c</field>
+        <operation>equals</operation>
+        <value>Forecast At Risk - High</value>
+    </filters>
+    <label>Core Renewals Pipe</label>
+</ListView>

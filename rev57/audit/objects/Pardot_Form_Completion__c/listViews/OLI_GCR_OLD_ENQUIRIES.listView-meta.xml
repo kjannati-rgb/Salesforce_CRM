@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>OLI_GCR_OLD_ENQUIRIES</fullName>
+    <columns>NAME</columns>
+    <columns>Prospect_Name__c</columns>
+    <columns>Email__c</columns>
+    <columns>Phone__c</columns>
+    <columns>Job_Title__c</columns>
+    <columns>Company__c</columns>
+    <columns>Country__c</columns>
+    <columns>Sales_Stage__c</columns>
+    <columns>Opportunity__c</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>OWNER.FIRST_NAME</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Brand__c</field>
+        <operation>equals</operation>
+        <value>GCR</value>
+    </filters>
+    <filters>
+        <field>OWNER.FIRST_NAME</field>
+        <operation>notEqual</operation>
+        <value>Carl</value>
+    </filters>
+    <filters>
+        <field>Job_Title__c</field>
+        <operation>notEqual</operation>
+        <value>,Student</value>
+    </filters>
+    <filters>
+        <field>Prospect_Name__c</field>
+        <operation>notContain</operation>
+        <value>9000</value>
+    </filters>
+    <filters>
+        <field>Email__c</field>
+        <operation>notContain</operation>
+        <value>yahoo,gmail,hotmail,icloud,qq</value>
+    </filters>
+    <label>OLI - GCR OLD ENQUIRIES</label>
+</ListView>

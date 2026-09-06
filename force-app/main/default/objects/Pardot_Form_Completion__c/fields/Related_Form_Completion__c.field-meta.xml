@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Related_Form_Completion__c</fullName>
+    <description>REV-57 cross-link: points to an open PFC for the same person + same Product Brand. Populated by the orchestrator on the newer record; the reverse direction is surfaced automatically by the "Linked Form Completions" related list on the older record.</description>
+    <label>Related Form Completion</label>
+    <referenceTo>Pardot_Form_Completion__c</referenceTo>
+    <relationshipLabel>Linked Form Completions</relationshipLabel>
+    <relationshipName>Linked_Form_Completions</relationshipName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <required>false</required>
+    <type>Lookup</type>
+</CustomField>

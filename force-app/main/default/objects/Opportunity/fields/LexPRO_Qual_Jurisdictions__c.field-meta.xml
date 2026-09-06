@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LexPRO_Qual_Jurisdictions__c</fullName>
+    <externalId>false</externalId>
+    <label>LexPRO Qual: Jurisdictions</label>
+    <description>REV-69: the specific regions selected on the LexPRO qualifier coverage map — the detail behind the Jurisdiction Coverage Yes/No. Set by the LexPRO Deal Qualifier component.</description>
+    <inlineHelpText>Regions selected in the LexPRO Deal Qualifier.</inlineHelpText>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>MultiselectPicklist</type>
+    <visibleLines>8</visibleLines>
+    <valueSet>
+        <restricted>false</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value><fullName>North America</fullName><default>false</default><label>North America</label></value>
+            <value><fullName>UK &amp; Ireland</fullName><default>false</default><label>UK &amp; Ireland</label></value>
+            <value><fullName>Europe</fullName><default>false</default><label>Europe</label></value>
+            <value><fullName>Middle East</fullName><default>false</default><label>Middle East</label></value>
+            <value><fullName>Asia-Pacific</fullName><default>false</default><label>Asia-Pacific</label></value>
+            <value><fullName>Latin America</fullName><default>false</default><label>Latin America</label></value>
+            <value><fullName>Africa</fullName><default>false</default><label>Africa</label></value>
+            <value><fullName>Other</fullName><default>false</default><label>Other</label></value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

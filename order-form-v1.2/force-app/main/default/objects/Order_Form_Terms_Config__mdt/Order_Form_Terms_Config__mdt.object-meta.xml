@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Which General Subscription Terms of Business an Order Form references. The deal owner's role name is matched against Role_Pattern__c (CONTAINS); the record flagged Is_Default__c applies when nothing matches. Adding a team = adding a record.</description>
+    <label>Order Form Terms Config</label>
+    <pluralLabel>Order Form Terms Configs</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>

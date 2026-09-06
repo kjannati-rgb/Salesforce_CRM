@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Relevant_Law_Firm__c</fullName>
+    <label>Relevant - Law Firm</label>
+    <description>Whether this family is a matrix column for Law Firm segment plans.</description>
+    <type>Checkbox</type>
+    <defaultValue>true</defaultValue>
+</CustomField>

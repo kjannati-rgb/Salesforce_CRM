@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>My_Newsfeed</fullName>
+    <columns>NAME</columns>
+    <columns>Prospect_Name__c</columns>
+    <columns>Product_Brand__c</columns>
+    <columns>Sales_Stage__c</columns>
+    <columns>Company__c</columns>
+    <columns>Email__c</columns>
+    <columns>Related_Form_Completion__c</columns>
+    <columns>CREATED_DATE</columns>
+    <filterScope>Mine</filterScope>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Pardot_Form_Completion__c.Newsfeed_Subscribers</value>
+    </filters>
+    <label>My Newsfeed</label>
+</ListView>

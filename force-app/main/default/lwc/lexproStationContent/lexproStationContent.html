@@ -1,0 +1,60 @@
+<template>
+    <section class="lex-station">
+        <div class="lex-station__head">
+            <span class="lex-badge">E</span>
+            <div class="lex-station__titles">
+                <h3 class="lex-station__title">Essential Work Areas</h3>
+                <p class="lex-station__q">
+                    Does Lexology PRO have content that covers their work areas?
+                </p>
+            </div>
+            <template if:true={answered}>
+                <span class="lex-tick" title="Resolved">&#10003;</span>
+            </template>
+        </div>
+
+        <p class="lex-hint">
+            Financial regulation, data protection, and sanctions monitoring are our main areas.
+        </p>
+
+        <div class="lex-group" role="group" aria-label="Core work areas">
+            <p class="lex-group__label">Core</p>
+            <div class="lex-chips">
+                <template for:each={coreAreas} for:item="w">
+                    <button key={w.key} type="button" class={w.cls} data-key={w.key}
+                            aria-pressed={w.pressed} disabled={pickerDisabled} onclick={toggle}>{w.label}</button>
+                </template>
+            </div>
+        </div>
+
+        <template if:true={hasBeyond}>
+            <div class="lex-group" role="group" aria-label="Beyond-core work areas">
+                <p class="lex-group__label">Beyond — confirm with content</p>
+                <div class="lex-chips">
+                    <template for:each={beyondAreas} for:item="w">
+                        <button key={w.key} type="button" class={w.cls} data-key={w.key}
+                                aria-pressed={w.pressed} disabled={pickerDisabled} onclick={toggle}>{w.label}</button>
+                    </template>
+                </div>
+            </div>
+        </template>
+
+        <div class="lex-group" role="group" aria-label="Other work area">
+            <p class="lex-group__label">Other</p>
+            <div class="lex-chips">
+                <button type="button" class={otherClass} aria-pressed={otherPressed}
+                        disabled={pickerDisabled} onclick={toggleOther}>Other</button>
+            </div>
+            <template if:true={showOther}>
+                <textarea class="lex-other" placeholder="Which area? (optional)" value={otherText}
+                          disabled={pickerDisabled} onchange={handleOther}
+                          aria-label="Other work area detail"></textarea>
+            </template>
+        </div>
+
+        <div class="lex-seggroup" role="radiogroup" aria-label="Content coverage answer">
+            <button type="button" class={yesClass} role="radio" aria-checked={yesPressed} data-val="Yes" onclick={pick}>Yes</button>
+            <button type="button" class={noClass} role="radio" aria-checked={noPressed} data-val="No" onclick={pick}>No</button>
+        </div>
+    </section>
+</template>

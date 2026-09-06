@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>No_Paid_Line_Items__c</fullName>
+    <description>No Paid Line Items</description>
+    <inlineHelpText>No Paid Line Items</inlineHelpText>
+    <label>No Paid Line Items</label>
+    <summaryFilterItems>
+        <field>OpportunityLineItem.TotalPrice</field>
+        <operation>notEqual</operation>
+        <value>0</value>
+    </summaryFilterItems>
+    <summaryForeignKey>OpportunityLineItem.OpportunityId</summaryForeignKey>
+    <summaryOperation>count</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <type>Summary</type>
+</CustomField>

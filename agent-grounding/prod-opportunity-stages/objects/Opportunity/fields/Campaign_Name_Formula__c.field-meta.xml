@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Campaign_Name_Formula__c</fullName>
+    <description>Campaign Name added as text formula field for Gong Deal Board.</description>
+    <externalId>false</externalId>
+    <formula>Campaign__r.Name</formula>
+    <inlineHelpText>Campaign Name added as text formula field for Gong Deal Board.</inlineHelpText>
+    <label>Campaign Name (Formula)</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

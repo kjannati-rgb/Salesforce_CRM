@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Segment_Promo_Product_Codes__c</fullName>
+    <description>REV-60: semicolon-separated ProductCodes whose promo BASE is derived from the firm segment cascade (the Law.com umbrella — LAWM, LWKM). A product NOT listed here and NOT carrying a Product Base row gets no promo (dispatch-only) — e.g. print/online NYLM/NYOM. Added 30 Jun 2026 after PROD data showed base derivation is segment-driven only for Law.com.</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Segment Promo Product Codes</label>
+    <length>255</length>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

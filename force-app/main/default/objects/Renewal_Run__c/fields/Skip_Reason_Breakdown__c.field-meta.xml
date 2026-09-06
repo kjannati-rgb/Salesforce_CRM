@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Skip_Reason_Breakdown__c</fullName>
+    <label>Skip Reason Breakdown</label>
+    <description>Counts of skipped orders grouped by reason (already has a renewal, no eligible line, etc.), so a reviewer can tell deliberate skips apart from a masked problem.</description>
+    <inlineHelpText>One line per skip reason with its count, e.g. "Already has renewal: 45".</inlineHelpText>
+    <type>LongTextArea</type>
+    <length>32768</length>
+    <visibleLines>10</visibleLines>
+</CustomField>

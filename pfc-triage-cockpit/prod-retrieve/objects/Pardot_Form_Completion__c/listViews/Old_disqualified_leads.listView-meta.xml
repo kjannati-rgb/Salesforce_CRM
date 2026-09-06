@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Old_disqualified_leads</fullName>
+    <columns>NAME</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>OWNER.FIRST_NAME</columns>
+    <columns>Company__c</columns>
+    <columns>Sales_Stage__c</columns>
+    <columns>Job_Role__c</columns>
+    <columns>Job_Title__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>OWNER.FIRST_NAME</field>
+        <operation>contains</operation>
+        <value>,Saffyan,Adria,Raphael,Caitlin,Carla,Jamie,Emlyn,Sam,Charlie,Matilda,Nishant,Ellie,Anna,Florence,Will,Jake,Richard,Liam,Peter,Fraser,Saif,B2BMA</value>
+    </filters>
+    <filters>
+        <field>CREATED_DATE</field>
+        <operation>greaterOrEqual</operation>
+        <value>6/1/2023 12:00 AM</value>
+    </filters>
+    <filters>
+        <field>NAME</field>
+        <operation>contains</operation>
+        <value>Lexology</value>
+    </filters>
+    <filters>
+        <field>Sales_Stage__c</field>
+        <operation>equals</operation>
+        <value>Disqualified</value>
+    </filters>
+    <label>Old disqualified leads</label>
+</ListView>

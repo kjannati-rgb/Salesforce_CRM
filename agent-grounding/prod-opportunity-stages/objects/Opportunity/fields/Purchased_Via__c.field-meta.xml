@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Purchased_Via__c</fullName>
+    <description>This field is used to determine if the opportunity is a direct or agency sale.</description>
+    <inlineHelpText>This field is used to determine if the opportunity is a direct or agency sale.</inlineHelpText>
+    <label>Purchased Via</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Direct</fullName>
+                <default>true</default>
+                <label>Direct</label>
+            </value>
+            <value>
+                <fullName>Agency</fullName>
+                <default>false</default>
+                <label>Agency</label>
+            </value>
+            <value>
+                <fullName>Subs Agent</fullName>
+                <default>false</default>
+                <label>Subs Agent</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

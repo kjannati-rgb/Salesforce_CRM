@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>License_Model__c</fullName>
+    <description>Twin of SBQQ__QuoteLine__c.License_Model__c. CPQ copies same-named fields QuoteLine to Subscription at contracting and Subscription to renewal QuoteLine, so the licence model a customer signed carries into the renewal Order Form automatically.</description>
+    <externalId>false</externalId>
+    <label>License Model</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Authorised Users</fullName>
+                <default>false</default>
+                <label>Authorised Users</label>
+            </value>
+            <value>
+                <fullName>Limited Access</fullName>
+                <default>false</default>
+                <label>Limited Access</label>
+            </value>
+            <value>
+                <fullName>Benefiting Group</fullName>
+                <default>false</default>
+                <label>Benefiting Group</label>
+            </value>
+            <value>
+                <fullName>Enterprise-Wide Access</fullName>
+                <default>false</default>
+                <label>Enterprise-Wide Access</label>
+            </value>
+            <value>
+                <fullName>Individual License</fullName>
+                <default>false</default>
+                <label>Individual License</label>
+            </value>
+            <value>
+                <fullName>Team License</fullName>
+                <default>false</default>
+                <label>Team License</label>
+            </value>
+            <value>
+                <fullName>Office License</fullName>
+                <default>false</default>
+                <label>Office License</label>
+            </value>
+            <value>
+                <fullName>Group License</fullName>
+                <default>false</default>
+                <label>Group License</label>
+            </value>
+            <value>
+                <fullName>Firmwide License</fullName>
+                <default>false</default>
+                <label>Firmwide License</label>
+            </value>
+            <value>
+                <fullName>Bespoke License</fullName>
+                <default>false</default>
+                <label>Bespoke License</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NB_Team_Leads_Subscriptions</fullName>
+    <columns>NAME</columns>
+    <columns>Prospect_Name__c</columns>
+    <columns>OWNER.FIRST_NAME</columns>
+    <columns>Company__c</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>Sales_Stage__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>NAME</field>
+        <operation>contains</operation>
+        <value>GAR,GRR,GCR,IAM,WTR,GDR,LL,GIR</value>
+    </filters>
+    <filters>
+        <field>CREATED_DATE</field>
+        <operation>greaterThan</operation>
+        <value>1/31/2023 12:00 AM</value>
+    </filters>
+    <filters>
+        <field>Sales_Stage__c</field>
+        <operation>equals</operation>
+        <value>New</value>
+    </filters>
+    <filters>
+        <field>Pardot_Form_Completion__c</field>
+        <operation>notContain</operation>
+        <value>lexology,IAM Market,GAR Academy</value>
+    </filters>
+    <label>NB Team Leads - Subscriptions</label>
+</ListView>

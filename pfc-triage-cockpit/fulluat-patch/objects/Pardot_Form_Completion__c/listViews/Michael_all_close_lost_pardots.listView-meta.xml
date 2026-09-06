@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Michael_all_close_lost_pardots</fullName>
+    <columns>OWNER.FIRST_NAME</columns>
+    <columns>NAME</columns>
+    <columns>Prospect_Name__c</columns>
+    <columns>Job_Title__c</columns>
+    <columns>Company__c</columns>
+    <columns>Email__c</columns>
+    <columns>Phone__c</columns>
+    <columns>Country__c</columns>
+    <columns>Sales_Stage__c</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>Opportunity__c</columns>
+    <columns>Opportunity_Stage__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>NAME</field>
+        <operation>notContain</operation>
+        <value>Market,Lexology,Docket,UPC</value>
+    </filters>
+    <filters>
+        <field>CREATED_DATE</field>
+        <operation>greaterOrEqual</operation>
+        <value>1/1/2025 12:00 AM</value>
+    </filters>
+    <filters>
+        <field>Country__c</field>
+        <operation>notEqual</operation>
+        <value>,China,Russia,Japan,Vietnam,Australia</value>
+    </filters>
+    <filters>
+        <field>Job_Title__c</field>
+        <operation>notContain</operation>
+        <value>Student,Professor</value>
+    </filters>
+    <filters>
+        <field>NAME</field>
+        <operation>contains</operation>
+        <value>GIR</value>
+    </filters>
+    <filters>
+        <field>Sales_Stage__c</field>
+        <operation>equals</operation>
+        <value>Disqualified</value>
+    </filters>
+    <label>Michael - all close lost pardots</label>
+</ListView>

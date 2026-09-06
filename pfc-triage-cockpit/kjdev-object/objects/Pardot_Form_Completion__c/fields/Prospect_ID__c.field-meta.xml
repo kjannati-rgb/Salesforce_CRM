@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Prospect_ID__c</fullName>
+    <description>Lead or Contact ID</description>
+    <externalId>false</externalId>
+    <formula>IF(
+ISBLANK(Contact__r.Salesforce_Contact_ID__c),   Lead__r.Salesforce_Lead_ID__c ,  Contact__r.Salesforce_Contact_ID__c 
+)</formula>
+    <inlineHelpText>Lead or Contact ID</inlineHelpText>
+    <label>Prospect ID</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

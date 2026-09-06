@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>User_Training_Status__c</fullName>
+    <description>This field is used to record User Training Status</description>
+    <inlineHelpText>This field is used to record User Training Status</inlineHelpText>
+    <label>User Training Status</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Trained</fullName>
+                <default>false</default>
+                <label>Trained</label>
+            </value>
+            <value>
+                <fullName>Not Trained</fullName>
+                <default>false</default>
+                <label>Not Trained</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

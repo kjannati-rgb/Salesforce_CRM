@@ -1,0 +1,25 @@
+{
+  "FullName": "Contact.PFC_Sidebar_Update",
+  "Metadata": {
+    "label": "Update",
+    "optionsCreateFeedItem": false,
+    "type": "Update",
+    "quickActionLayout": {
+      "layoutSectionStyle": "TwoColumnsLeftToRight",
+      "quickActionLayoutColumns": [
+        {
+          "quickActionLayoutItems": [
+            { "field": "LastName", "uiBehavior": "Required", "emptySpace": false },
+            { "field": "Title", "uiBehavior": "Edit", "emptySpace": false }
+          ]
+        },
+        {
+          "quickActionLayoutItems": [
+            { "field": "Email", "uiBehavior": "Edit", "emptySpace": false },
+            { "field": "Phone", "uiBehavior": "Edit", "emptySpace": false }
+          ]
+        }
+      ]
+    }
+  }
+}

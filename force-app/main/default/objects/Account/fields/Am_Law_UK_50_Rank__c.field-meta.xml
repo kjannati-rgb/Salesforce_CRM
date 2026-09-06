@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Am_Law_UK_50_Rank__c</fullName>
+    <description>Am Law UK 50 ranking position (1 = highest-ranked firm; expected range 1-50). Source: The American Lawyer "Am Law UK 50" published ranking. Maintained on firm-level (Ultimate) Account records only; null = firm is not in the Am Law UK 50 cohort. Data owner: Revenue Operations.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Firm's position in the Am Law UK 50 ranking (1 = top firm). Leave blank if the firm is not in the cohort. Owner: Revenue Operations.</inlineHelpText>
+    <label>Am Law UK 50 Rank</label>
+    <precision>2</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

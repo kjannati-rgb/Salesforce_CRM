@@ -1,0 +1,154 @@
+﻿{
+  "status": 0,
+  "result": {
+    "summary": {
+      "failRate": "0%",
+      "failing": 0,
+      "hostname": "https://lawbusinessresearch--fulluat.sandbox.my.salesforce.com",
+      "orgId": "00DAd00000CZR4rMAH",
+      "outcome": "Passed",
+      "passRate": "100%",
+      "passing": 9,
+      "skipped": 0,
+      "testRunId": "707Ad00001NTx4B",
+      "testStartTime": "2026-08-14T21:31:09.000Z",
+      "testsRan": 9,
+      "userId": "0056g000004G0DvAAK",
+      "username": "kamyar.jannati@lbresearch.com.fulluat",
+      "commandTime": "73 ms",
+      "testExecutionTime": "2843 ms",
+      "testTotalTime": "23378 ms"
+    },
+    "tests": [
+      {
+        "Id": "07MAd00000NUFsRMAX",
+        "QueueItemId": "709Ad00000NlUwfIAF",
+        "StackTrace": null,
+        "Message": null,
+        "AsyncApexJobId": "707Ad00001NTx4BIAT",
+        "MethodName": "bulkSiblings",
+        "Outcome": "Pass",
+        "ApexClass": {
+          "Id": "01pAd00000AWkI6IAL",
+          "Name": "PFCQualityCardControllerTest",
+          "NamespacePrefix": null
+        },
+        "RunTime": 1506,
+        "FullName": "PFCQualityCardControllerTest.bulkSiblings"
+      },
+      {
+        "Id": "07MAd00000NUFsSMAX",
+        "QueueItemId": "709Ad00000NlUwfIAF",
+        "StackTrace": null,
+        "Message": null,
+        "AsyncApexJobId": "707Ad00001NTx4BIAT",
+        "MethodName": "contactModeFallsBackToContactsAccountWhenStampMissing",
+        "Outcome": "Pass",
+        "ApexClass": {
+          "Id": "01pAd00000AWkI6IAL",
+          "Name": "PFCQualityCardControllerTest",
+          "NamespacePrefix": null
+        },
+        "RunTime": 197,
+        "FullName": "PFCQualityCardControllerTest.contactModeFallsBackToContactsAccountWhenStampMissing"
+      },
+      {
+        "Id": "07MAd00000NUFsTMAX",
+        "QueueItemId": "709Ad00000NlUwfIAF",
+        "StackTrace": null,
+        "Message": null,
+        "AsyncApexJobId": "707Ad00001NTx4BIAT",
+        "MethodName": "contactModeNoOverlapForUnmappedBrand",
+        "Outcome": "Pass",
+        "ApexClass": {
+          "Id": "01pAd00000AWkI6IAL",
+          "Name": "PFCQualityCardControllerTest",
+          "NamespacePrefix": null
+        },
+        "RunTime": 162,
+        "FullName": "PFCQualityCardControllerTest.contactModeNoOverlapForUnmappedBrand"
+      },
+      {
+        "Id": "07MAd00000NUFsUMAX",
+        "QueueItemId": "709Ad00000NlUwfIAF",
+        "StackTrace": null,
+        "Message": null,
+        "AsyncApexJobId": "707Ad00001NTx4BIAT",
+        "MethodName": "contactModeRollupAndOverlap",
+        "Outcome": "Pass",
+        "ApexClass": {
+          "Id": "01pAd00000AWkI6IAL",
+          "Name": "PFCQualityCardControllerTest",
+          "NamespacePrefix": null
+        },
+        "RunTime": 198,
+        "FullName": "PFCQualityCardControllerTest.contactModeRollupAndOverlap"
+      },
+      {
+        "Id": "07MAd00000NUFsVMAX",
+        "QueueItemId": "709Ad00000NlUwfIAF",
+        "StackTrace": null,
+        "Message": null,
+        "AsyncApexJobId": "707Ad00001NTx4BIAT",
+        "MethodName": "duplicatesFoundAcrossLeadAndContactWithSameEmail",
+        "Outcome": "Pass",
+        "ApexClass": {
+          "Id": "01pAd00000AWkI6IAL",
+          "Name": "PFCQualityCardControllerTest",
+          "NamespacePrefix": null
+        },
+        "RunTime": 539,
+        "FullName": "PFCQualityCardControllerTest.duplicatesFoundAcrossLeadAndContactWithSameEmail"
+      },
+      {
+        "Id": "07MAd00000NUFsWMAX",
+        "QueueItemId": "709Ad00000NlUwfIAF",
+        "StackTrace": null,
+        "Message": null,
+        "AsyncApexJobId": "707Ad00001NTx4BIAT",
+        "MethodName": "leadModeFreemailAndPendingScore",
+        "Outcome": "Pass",
+        "ApexClass": {
+          "Id": "01pAd00000AWkI6IAL",
+          "Name": "PFCQualityCardControllerTest",
+          "NamespacePrefix": null
+        },
+        "RunTime": 132,
+        "FullName": "PFCQualityCardControllerTest.leadModeFreemailAndPendingScore"
+      },
+      {
+        "Id": "07MAd00000NUFsXMAX",
+        "QueueItemId": "709Ad00000NlUwfIAF",
+        "StackTrace": null,
+        "Message": null,
+        "AsyncApexJobId": "707Ad00001NTx4BIAT",
+        "MethodName": "orphanRecordNoEmailNoDuplicatesNoCrash",
+        "Outcome": "Pass",
+        "ApexClass": {
+          "Id": "01pAd00000AWkI6IAL",
+          "Name": "PFCQualityCardControllerTest",
+          "NamespacePrefix": null
+        },
+        "RunTime": 98,
+        "FullName": "PFCQualityCardControllerTest.orphanRecordNoEmailNoDuplicatesNoCrash"
+      },
+      {
+        "Id": "07MAd00000NUFsYMAX",
+        "QueueItemId": "709Ad00000NlUwfIAF",
+        "StackTrace": null,
+        "Message": null,
+        "AsyncApexJobId": "707Ad00001NTx4BIAT",
+        "MethodName": "registrableDomainParsing",
+        "Outcome": "Pass",
+        "ApexClass": {
+          "Id": "01pAd00000AWkI6IAL",
+          "Name": "PFCQualityCardControllerTest",
+          "NamespacePrefix": null
+        },
+        "RunTime": 11,
+        "FullName": "PFCQualityCardControllerTest.registrableDomainParsing"
+      }
+    ]
+  },
+  "warnings": []
+}

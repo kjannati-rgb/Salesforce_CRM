@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Nina_Open_Forms</fullName>
+    <columns>LAST_ACTIVITY</columns>
+    <columns>NAME</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>Prospect_Name__c</columns>
+    <columns>Company__c</columns>
+    <columns>Email__c</columns>
+    <columns>Phone__c</columns>
+    <columns>Job_Title__c</columns>
+    <columns>Country__c</columns>
+    <columns>Sales_Stage__c</columns>
+    <columns>OWNER.ALIAS</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Sales_Stage__c</field>
+        <operation>equals</operation>
+        <value>New,Working,Nurturing</value>
+    </filters>
+    <filters>
+        <field>OWNER.FIRST_NAME</field>
+        <operation>equals</operation>
+        <value>Nina</value>
+    </filters>
+    <label>Nina Open Forms</label>
+</ListView>

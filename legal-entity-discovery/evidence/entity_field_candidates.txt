@@ -1,0 +1,197 @@
+
+================================================================================
+Opportunity — 525 fields total, 6 entity/company/region candidates
+================================================================================
+
+- API: LBR_Legal_Entity__c
+  Label: LBR Legal Entity
+  Type: string (FORMULA)  Custom: True  Updateable: False  Nillable: True
+  Formula: TEXT (Owner.LBR_Legal_Entity__c)
+
+- API: LID__LinkedIn_Company_Id__c
+  Label: LinkedIn Company Id
+  Type: string  Custom: True  Updateable: True  Nillable: True
+
+- API: Billing_Entity__c
+  Label: Billing Entity
+  Type: picklist  Custom: True  Updateable: True  Nillable: True
+  Picklist (5 active): ['LBR', 'GHK', 'LLC', 'MBL', 'ALM']
+
+- API: Bill_to_Company__c
+  Label: ALM Bill to Company
+  Type: string  Custom: True  Updateable: True  Nillable: True
+
+- API: Ship_to_Company__c
+  Label: ALM Ship to Company
+  Type: string  Custom: True  Updateable: True  Nillable: True
+
+- API: Owner_Company_Name__c
+  Label: Owner Company Name
+  Type: string (FORMULA)  Custom: True  Updateable: False  Nillable: True
+  Formula: Owner.CompanyName
+
+================================================================================
+User — 251 fields total, 3 entity/company/region candidates
+================================================================================
+
+- API: CompanyName
+  Label: Company Name
+  Type: string  Custom: False  Updateable: True  Nillable: True
+
+- API: DB_Region__c
+  Label: DB Region
+  Type: picklist  Custom: True  Updateable: True  Nillable: True
+  Picklist (4 active): ['NA', 'EMEA', 'APAC', 'LA']
+
+- API: LBR_Legal_Entity__c
+  Label: LBR Legal Entity
+  Type: picklist  Custom: True  Updateable: True  Nillable: True
+  Picklist (6 active): ['ALM Global, LLC', 'Law Business Research (Asia) Ltd.', 'Law Business Research (UK) Ltd.', 'Law Business Research LLC', 'MBL Seminars Limited', 'The Business Research Company']
+
+================================================================================
+SBQQ__Quote__c — 183 fields total, 3 entity/company/region candidates
+================================================================================
+
+- API: Billing_Intermediate_Region__c
+  Label: Billing Intermediate Region
+  Type: string (FORMULA)  Custom: True  Updateable: False  Nillable: True
+  Formula: IF(ISBLANK(SBQQ__BillingCountry__c),NULL,
+IF (SBQQ__BillingCountry__c = 'United States Minor Outlying Islands', "Micronesia",
+IF(
+CONTAINS("Antartica",SBQQ__BillingCountry__c),
+"Antartica",
+IF(
+CONTAINS("Australia:Christmas Island:Cocos (Keeling) Islands:Heard Island and McDonald Islands:New Zealand:Norfolk Island",SBQQ__BillingCountry__c),
+"Australia and New Zealand",
+IF(
+CONTAINS("Kazakhstan:Kyrgyzstan:Tajikistan:Turkmenistan:Uzbekistan",SBQQ__BillingCountry__c),
+"Central Asia",
+IF(
+CONTAINS("China:Chinese Taipei:Hong Kong:Japan:Korea, Democratic People's Republic of:Korea, Republic of:Macao:Mongolia",SBQQ__BillingCountry__c),
+"Eastern Asia",
+IF(
+CONTAINS("Belarus:Bulgaria:Czech Republic:Hungary:Moldova, Republic of:Poland:Romania:Russian Federation:Slovakia:Ukraine",SBQQ__BillingCountry__c),
+"Eastern Europe",
+IF(
+CONTAINS("Armenia:Azerbaijan:Bahrain:Cyprus:Georgia:Iraq:Israel:Jordan:Kuwait:Lebanon:Oman:Palestinian Territory, Occupied:Qatar:Saudi Arabia:Syrian Arab Republic:Turkey:United Arab Emirates:Yemen",SBQQ__BillingCountry__c),
+"Western Asia",
+IF(
+CONTAINS("Anguilla:Antigua and Barbuda:Argentina:Aruba:Bahamas:Barbados:Belize:Bolivia, Plurinational State of:Bonaire, Sint Eustatius and Saba:Bouvet Island:Brazil:Cayman Islands:Chile:Colombia:Costa Rica:Cuba:Curaçao:Dominica:Dominican Republic:Ecuador:El Salvador:Falkland Islands (Malvinas):French Guiana:Grenada:Guadeloupe:Guatemala:Guyana:Haiti:Honduras:Jamaica:Martinique:Mexico:Montserrat:Netherlands Antilles:Nicaragua:Panama:Paraguay:Peru:Saint Barthélemy:Saint Kitts and Nevis:Saint Lucia:Saint Martin (French part):Saint Vincent and the Grenadines:Sint Maarten (Dutch part):South Georgia and the South Sandwich Islands:Suriname:Trinidad and Tobago:Turks and Caicos Islands:Uruguay:Venezuela, Bolivarian Republic of:Virgin Islands, US:Virgin Islands, British",SBQQ__BillingCountry__c),
+"Latin America and the Caribbean",
+IF(
+CONTAINS("Fiji:New Caledonia:Papua New Guinea:Solomon Islands:Vanuatu",SBQQ__BillingCountry__c),
+"Melanesia",
+IF(
+CONTAINS("Guam:Kiribati:Marshall Islands:Nauru:Northern Mariana Islands",SBQQ__BillingCountry__c),
+"Micronesia",
+IF(
+CONTAINS("Algeria:Egypt:Libyan Arab Jamahiriya:Morocco:Sudan:Tunisia:Western Sahara",SBQQ__BillingCountry__c),
+"Northern Africa",
+IF(
+CONTAINS("Bermuda:Canada:Greenland:Saint Pierre and Miquelon:United States",SBQQ__BillingCountry__c),
+"Northern America",
+IF(
+CONTAINS("Aland Islands:Denmark:Estonia:Faroe Islands:Finland:Guernsey:Iceland:Ireland:Isle of Man:Jersey:Latvia:Lithuania:Norway:Svalbard and Jan Mayen:Sweden:United Kingdom",SBQQ__BillingCountry__c),
+"Northern Europe",
+IF(
+CONTAINS("American Samoa:Cook Islands:French Polynesia:Niue:Pitcairn:Samoa:Tokelau:Tonga:Tuvalu:Wallis and Futuna",SBQQ__BillingCountry__c),
+"Polynesia",
+IF(
+CONTAINS("Brunei Darussalam:Cambodia:Indonesia:Lao People's Democratic Republic:Malaysia:Myanmar:Philippines:Singapore:Thailand:Timor-Leste:Viet Nam",SBQQ__BillingCountry__c),
+"South-eastern Asia",
+IF(
+CONTAINS("Afghanistan:Bangladesh:Bhutan:India:Iran, Islamic Republic of:Maldives:Nepal:Pakistan:Sri Lanka",SBQQ__BillingCountry__c),
+"Southern Asia",
+IF(
+CONTAINS("Albania:Andorra:Bosnia and Herzegovina:Croatia:Gibraltar:Greece:Holy See (Vatican City State):Italy:Macedonia, the former Yugoslav Republic of:Malta:Montenegro:Portugal:San Marino:Serbia:Serbia and Montenegro:Slovenia:Spain",SBQQ__BillingCountry__c),
+"Southern Europe",
+IF(
+CONTAINS("Austria:Belgium:France:Germany:Liechtenstein:Luxembourg:Monaco:Netherlands:Switzerland",SBQQ__BillingCountry__c),
+"Western Europe",
+"Sub-Saharan Africa"
+)))))))))))))))))))
+
+- API: Sales_Rep_Legal_Entity__c
+  Label: Sales Rep Legal Entity
+  Type: string (FORMULA)  Custom: True  Updateable: False  Nillable: True
+  Formula: TEXT(SBQQ__SalesRep__r.LBR_Legal_Entity__c)
+
+- API: Quote_Owner_LBR_Legal_Entity__c
+  Label: Quote Owner:LBR Legal Entity
+  Type: string (FORMULA)  Custom: True  Updateable: False  Nillable: True
+  Formula: TEXT(Owner:User.LBR_Legal_Entity__c)
+
+================================================================================
+OpportunityLineItem — 247 fields total, 6 entity/company/region candidates
+================================================================================
+
+- API: Chapter_Region__c
+  Label: Chapter/Region
+  Type: string  Custom: True  Updateable: True  Nillable: True
+
+- API: Chapter_Region_Code_for_SUN__c
+  Label: Chapter Region Code for SUN
+  Type: string (FORMULA)  Custom: True  Updateable: False  Nillable: True
+  Formula: "ZZZ"
+
+- API: Company2__c
+  Label: Company2
+  Type: string (FORMULA)  Custom: True  Updateable: False  Nillable: True
+  Formula: IF(
+
+AND(NOT(CONTAINS(PricebookEntry.Product2.Name, 'Webinar')), TEXT(PricebookEntry.Product2.Revenue_Stream__c) = 'Conferences'),
+
+CASE(
+PricebookEntry.Product2.Event_Location_Country__c,
+'United States', 'LLC',
+'United States of America', 'LLC',
+'USA', 'LLC',
+'Hong Kong', 'GHK',
+IF( TEXT(Opportunity.Owner.LBR_Legal_Entity__c) = 'Law Business Research (Asia) Ltd.', 'GHK', IF( TEXT(Opportunity.Owner.LBR_Legal_Entity__c) = 'Law Business Research LLC',  'LLC', 'LBR'))
+),
+
+IF( TEXT(Opportunity.Owner.LBR_Legal_Entity__c) = 'Law Business Research (Asia) Ltd.', 'GHK', IF( TEXT(Opportunity.Owner.LBR_Legal_Entity__c) = 'Law Business Research LLC',  'LLC', 'LBR'))
+)
+
+- API: LBR_Legal_Entity_for_SUN__c
+  Label: LBR Legal Entity for SUN
+  Type: string (FORMULA)  Custom: True  Updateable: False  Nillable: True
+  Formula: CASE(
+PricebookEntry.Product2.Revenue_Stream__c,
+
+'Conferences', CASE(
+ PricebookEntry.Product2.Event_Location_Country__c,
+ 'United States', 'US',
+ 'United States of America', 'US',
+ 'USA', 'US',
+ 'Hong Kong', 'Asia',
+ 'UK'
+),
+
+'UK'
+
+
+)
+
+- API: Company3__c
+  Label: Company3
+  Type: string (FORMULA)  Custom: True  Updateable: False  Nillable: True
+  Formula: IF(
+
+AND(NOT(CONTAINS(PricebookEntry.Product2.Name, 'Webinar')), TEXT(PricebookEntry.Product2.Revenue_Stream__c) = 'Conferences'),
+
+CASE(
+ PricebookEntry.Product2.Event_Location_Country__c,
+ 'United States', 'LLC',
+ 'United States of America', 'LLC',
+ 'USA', 'LLC',
+ 'Hong Kong', 'GHK',
+ IF( TEXT(Opportunity.Owner.LBR_Legal_Entity__c) = 'Law Business Research (Asia) Ltd.', 'GHK', 'LBR')
+),
+
+IF( TEXT(Opportunity.Owner.LBR_Legal_Entity__c) = 'Law Business Research (Asia) Ltd.', 'GHK', 'LBR') 
+)
+
+- API: Ship_to_Company__c
+  Label: ALM Ship to Company
+  Type: string  Custom: True  Updateable: True  Nillable: True

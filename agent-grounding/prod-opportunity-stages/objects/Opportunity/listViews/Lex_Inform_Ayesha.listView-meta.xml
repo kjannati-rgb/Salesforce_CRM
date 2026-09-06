@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lex_Inform_Ayesha</fullName>
+    <columns>OPPORTUNITY.NAME</columns>
+    <columns>ACCOUNT.NAME</columns>
+    <columns>OPPORTUNITY.STAGE_NAME</columns>
+    <columns>Budget_Renewal_Month__c</columns>
+    <columns>OPPORTUNITY.CLOSE_DATE</columns>
+    <columns>OPPORTUNITY.AMOUNT</columns>
+    <columns>Forecast_Price__c</columns>
+    <columns>Forecast_Status__c</columns>
+    <columns>CORE.USERS.FULL_NAME</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>CORE.USERS.FULL_NAME</field>
+        <operation>equals</operation>
+        <value>Ayesha Ahmad</value>
+    </filters>
+    <filters>
+        <field>Budget_Renewal_Date__c</field>
+        <operation>greaterThan</operation>
+        <value>12/31/2021</value>
+    </filters>
+    <filters>
+        <field>OPPORTUNITY.STAGE_NAME</field>
+        <operation>notEqual</operation>
+        <value>Closed Won – Pending Approval,Closed Won,Closed Lost</value>
+    </filters>
+    <label>Lex Inform - Ayesha</label>
+    <sharedTo>
+        <group>ILO_Team</group>
+    </sharedTo>
+</ListView>

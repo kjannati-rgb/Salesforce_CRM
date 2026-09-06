@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>High_Risk_Volume__c</fullName>
+    <description>The volume of Renewal Opportunities with Status Forecast At Risk - High</description>
+    <externalId>false</externalId>
+    <formula>IF (
+AND(RecordType.DeveloperName = &quot;Renewals&quot;,
+TEXT(StageName) != &quot;Closed Lost&quot;,
+TEXT(StageName) != &quot;Closed Won&quot;,
+TEXT(Forecast_Status__c) = &quot;Forecast At Risk - High&quot;),
+1, 0)</formula>
+    <inlineHelpText>The volume of Renewal Opportunities with Status Forecast At Risk - High</inlineHelpText>
+    <label>High Risk Volume</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

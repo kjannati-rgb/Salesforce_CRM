@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Small_Firm_Attorney_Max__c</fullName>
+    <description>REV-60 small-firm promo rule. Maximum attorney count for a deal to be treated as solo / single-user / small firm and receive Small_Firm_Base_Promo__c. Business rule (22 Jul 2026): solo firms, single-user institutions and small law firms of 4 or fewer attorneys use !SREN; do NOT apply where the Opportunity carries a Group ID. Attorney count is read from the firm (Account.Ultimate_Account__r.Number_of_Attorneys__c) falling back to the buying account, mirroring how firm segment is resolved. BLANK disables the rule entirely.</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Small Firm Attorney Max</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

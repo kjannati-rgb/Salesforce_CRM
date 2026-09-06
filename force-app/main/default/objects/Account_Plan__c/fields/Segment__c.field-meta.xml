@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Segment__c</fullName>
+    <label>Segment</label>
+    <description>Mirrors the record type for reporting and matrix relevance.</description>
+    <type>Text</type>
+    <formula>CASE(RecordType.DeveloperName, "Law_Firm", "Law Firm", "Corporate", "Corporate", "")</formula>
+    <formulaTreatBlanksAs>BlankAsBlank</formulaTreatBlanksAs>
+    <required>false</required>
+    <unique>false</unique>
+</CustomField>

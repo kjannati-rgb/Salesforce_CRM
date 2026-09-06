@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Plan_Role__c</fullName>
+    <label>Plan Role</label>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value><fullName>Plan_Lead</fullName><default>false</default><label>Plan Lead</label></value>
+            <value><fullName>Lane_Owner</fullName><default>false</default><label>Lane Owner</label></value>
+            <value><fullName>SDR</fullName><default>false</default><label>SDR</label></value>
+            <value><fullName>Contributor</fullName><default>true</default><label>Contributor</label></value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

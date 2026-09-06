@@ -1,0 +1,87 @@
+{
+  "status": 0,
+  "result": {
+    "records": [
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "StageName": "Closed Won",
+        "CurrencyIsoCode": "EUR",
+        "recs": 18,
+        "sumAmount": 76858.83,
+        "sumACV": null
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "StageName": "Closed Won",
+        "CurrencyIsoCode": "GBP",
+        "recs": 1026,
+        "sumAmount": 2480359.85,
+        "sumACV": -25559.24
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "StageName": "Closed Won",
+        "CurrencyIsoCode": "USD",
+        "recs": 15,
+        "sumAmount": 87507.83,
+        "sumACV": null
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "StageName": "Closed Lost",
+        "CurrencyIsoCode": "EUR",
+        "recs": 10,
+        "sumAmount": 30345.64,
+        "sumACV": 2624.87
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "StageName": "Closed Lost",
+        "CurrencyIsoCode": "GBP",
+        "recs": 1891,
+        "sumAmount": 11922649.31,
+        "sumACV": 49112.83
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "StageName": "Closed Lost",
+        "CurrencyIsoCode": "USD",
+        "recs": 49,
+        "sumAmount": 237440.61,
+        "sumACV": 3121
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "StageName": "Closed Won - Cancellation",
+        "CurrencyIsoCode": "GBP",
+        "recs": 19,
+        "sumAmount": 0,
+        "sumACV": null
+      }
+    ],
+    "totalSize": 7,
+    "done": true
+  },
+  "warnings": []
+}

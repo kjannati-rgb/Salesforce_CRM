@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>License_Model_Override__c</fullName>
+    <description>Manual licence-model override. When set, it beats BOTH the product-default model and the qty-1 Lexology Pro price heuristic (2x list = Firmwide License): the stamp flow copies it into License Model and the document prints accordingly. Leave blank for automatic derivation. Exception valve - expected use is a handful of edge deals a year.</description>
+    <externalId>false</externalId>
+    <label>License Model Override</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Authorised Users</fullName>
+                <default>false</default>
+                <label>Authorised Users</label>
+            </value>
+            <value>
+                <fullName>Limited Access</fullName>
+                <default>false</default>
+                <label>Limited Access</label>
+            </value>
+            <value>
+                <fullName>Benefiting Group</fullName>
+                <default>false</default>
+                <label>Benefiting Group</label>
+            </value>
+            <value>
+                <fullName>Enterprise-Wide Access</fullName>
+                <default>false</default>
+                <label>Enterprise-Wide Access</label>
+            </value>
+            <value>
+                <fullName>Individual License</fullName>
+                <default>false</default>
+                <label>Individual License</label>
+            </value>
+            <value>
+                <fullName>Team License</fullName>
+                <default>false</default>
+                <label>Team License</label>
+            </value>
+            <value>
+                <fullName>Office License</fullName>
+                <default>false</default>
+                <label>Office License</label>
+            </value>
+            <value>
+                <fullName>Group License</fullName>
+                <default>false</default>
+                <label>Group License</label>
+            </value>
+            <value>
+                <fullName>Firmwide License</fullName>
+                <default>false</default>
+                <label>Firmwide License</label>
+            </value>
+            <value>
+                <fullName>Bespoke License</fullName>
+                <default>false</default>
+                <label>Bespoke License</label>
+            </value>
+            <value>
+                <fullName>Included</fullName>
+                <default>false</default>
+                <label>Included</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

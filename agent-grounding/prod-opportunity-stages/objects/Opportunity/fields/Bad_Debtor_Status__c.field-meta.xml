@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Bad_Debtor_Status__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF ( OR( ISPICKVAL(Account.Debtor_Status__c , &quot;Bad Debtor&quot;), ISPICKVAL( Ultimate_Account__r.Debtor_Status__c , &quot;Bad Debtor&quot;)),
+&quot;🔴&quot;,
+IF ( OR( ISPICKVAL(Account.Debtor_Status__c, &quot;Problem Debtor&quot;), ISPICKVAL(Ultimate_Account__r.Debtor_Status__c, &quot;Problem Debtor&quot;)),
+&quot;🟠&quot;,
+IF (ISPICKVAL(Account.Debtor_Status__c, &quot;Good Debtor&quot;),
+&quot;🟢&quot;, 
+&quot;⚪&quot;
+)))</formula>
+    <label>Bad Debtor Status</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

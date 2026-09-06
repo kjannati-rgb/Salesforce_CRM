@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>My_Teams_Pardot_Forms</fullName>
+    <booleanFilter>1 AND 2 AND (3 OR 5) AND 4</booleanFilter>
+    <columns>NAME</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>Country__c</columns>
+    <columns>Prospect_Name__c</columns>
+    <columns>Company__c</columns>
+    <columns>Sales_Stage__c</columns>
+    <columns>OWNER.ALIAS</columns>
+    <columns>Sales_Rep__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
+    </filters>
+    <filters>
+        <field>OWNER.FIRST_NAME</field>
+        <operation>startsWith</operation>
+        <value>Phoebe,Carl,Chris,Edith,Nina,stephanie,antonia,jasmine,harry,Yash</value>
+    </filters>
+    <filters>
+        <field>Prospect_s_Region__c</field>
+        <operation>equals</operation>
+        <value>Asia</value>
+    </filters>
+    <filters>
+        <field>Country__c</field>
+        <operation>notEqual</operation>
+        <value>united arab emirates,turkey,jordan,Kazakhstan,Uzbekistan Qatar,Israel,Oman</value>
+    </filters>
+    <filters>
+        <field>Country__c</field>
+        <operation>equals</operation>
+        <value>Australia,Iran,United Kingdom</value>
+    </filters>
+    <label>My Teams Pardot Forms Stephanie Treversh</label>
+</ListView>

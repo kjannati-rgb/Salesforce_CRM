@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Previous_Opportunity_Exchange_Rate__c</fullName>
+    <externalId>false</externalId>
+    <formula>CASE(Previous_Currency__c,
+&apos;EUR&apos;,
+/*Euros*/
+(IF(CloseDate &gt;= DATE(2026, 1, 1), 1.099200,
+
+IF(CloseDate &gt;= DATE(2025, 1, 1), 1.149700,
+IF(CloseDate &gt;= DATE(2023, 10, 1), 1.1250,
+IF(CloseDate &gt;= DATE(2022, 10, 1), 1.1692,
+IF(CloseDate &gt;= DATE(2021, 10, 1), 1.165,
+IF(CloseDate &gt; DATE(2020, 10, 1), 1.100,
+IF(CloseDate &gt; DATE(2020, 1, 1), 1.107,
+IF(CloseDate &gt; DATE(2019, 1, 1), 1.120,
+IF(CloseDate &gt; DATE(2018, 1, 1), 1.1237,
+1.1070)))))))))),
+
+&apos;USD&apos;,
+
+/*Dollars*/
+(IF(CloseDate &gt;= DATE(2026, 1, 1), 1.330000,
+
+IF(CloseDate &gt;= DATE(2025, 1, 1), 1.268800,
+IF(CloseDate &gt;= DATE(2023, 10, 1), 1.2470,
+IF(CloseDate &gt;= DATE(2022, 10, 1), 1.3067,
+IF(CloseDate &gt;= DATE(2021, 10, 1), 1.3690,
+IF(CloseDate &gt; DATE(2020, 10, 1), 1.2800,
+IF(CloseDate &gt; DATE(2020, 1, 1), 1.2700,
+IF(CloseDate &gt; DATE(2019, 1, 1), 1.3401,
+IF(CloseDate &gt; DATE(2018, 1, 1), 1.3162,
+1.2700)))))))))),
+
+1)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Previous Opportunity Exchange Rate</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>4</scale>
+    <trackHistory>false</trackHistory>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

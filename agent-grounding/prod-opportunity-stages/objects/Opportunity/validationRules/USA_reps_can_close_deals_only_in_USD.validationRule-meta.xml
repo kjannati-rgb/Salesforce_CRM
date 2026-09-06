@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>USA_reps_can_close_deals_only_in_USD</fullName>
+    <active>false</active>
+    <description>USA reps can close deals only in USD</description>
+    <errorConditionFormula>ISCHANGED(StageName )
+&amp;&amp;
+TEXT(Owner.LBR_Legal_Entity__c) = &quot;Law Business Research LLC&quot;
+&amp;&amp;
+TEXT(CurrencyIsoCode) &lt;&gt; &quot;USD&quot;</errorConditionFormula>
+    <errorMessage>Please Change Opportunity Currency to USD
+(In order to change the currency please delete existing quote and opportunity line item)</errorMessage>
+</ValidationRule>

@@ -12,3 +12,15 @@ deploy-options.json
 .DS_Store
 Thumbs.db
 *.log
+
+# Dependencies
+node_modules/
+
+# Org retrieve dumps / snapshots (regenerable from the org; go stale — always retrieve fresh)
+.prodsnap/
+prod-meta/
+scratch-astrea-retrieve/
+
+# Test output
+coverage/
+legal-entity-discovery/reports/

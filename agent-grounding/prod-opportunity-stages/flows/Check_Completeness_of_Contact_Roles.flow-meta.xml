@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <assignments>
+        <description>Stamps Has_Complete_Contact_Role__c = false. Set on every incomplete path so the flag is never stale; the CRM Analytics recipes read this field.</description>
+        <name>Assign_Complete_False</name>
+        <label>Mark Role Incomplete</label>
+        <locationX>176</locationX>
+        <locationY>1034</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Has_Complete_Contact_Role__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Final_Gate</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Stamps Has_Complete_Contact_Role__c = true when the primary contact (and, if required, the account address) is complete. No block needed on this path.</description>
+        <name>Assign_Complete_True</name>
+        <label>Mark Role Complete</label>
+        <locationX>440</locationX>
+        <locationY>1034</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Has_Complete_Contact_Role__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>Stamps Has_Contact_Role__c from fHasPrimary (true when a primary OpportunityContactRole exists, false otherwise). Always set to avoid stale flags.</description>
+        <name>Assign_Has_Role</name>
+        <label>Stamp Has Contact Role</label>
+        <locationX>176</locationX>
+        <locationY>566</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Has_Contact_Role__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>fHasPrimary</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Contact</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Resets the error flag at the start of every enabled run, so it is set only by a fault from the current save. A false flag tells the after-save logger there is nothing to log.</description>
+        <name>Clear_Error</name>
+        <label>Clear Last Error</label>
+        <locationX>176</locationX>
+        <locationY>434</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Contact_Role_Check_Has_Error__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Primary_OCR</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Fail-open: on any lookup fault, leave the flags unchanged and do NOT block the save. Stamps $Flow.FaultMessage into the bridge field so the after-save companion flow can log it to Flow_Log__c (before-save flows cannot do DML).</description>
+        <name>Handle_Fault</name>
+        <label>Handle Fault (Fail Open + Stamp)</label>
+        <locationX>704</locationX>
+        <locationY>566</locationY>
+        <assignmentItems>
+            <assignToReference>varFaultHandled</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Contact_Role_Check_Has_Error__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Contact_Role_Check_Last_Error__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <customErrors>
+        <description>Blocks the save with a precise, dynamic message naming exactly which fields are missing. Replaces the old Contact_Role_Complete_50 validation rule.</description>
+        <name>Block_Save</name>
+        <label>Block Incomplete Save</label>
+        <locationX>50</locationX>
+        <locationY>1250</locationY>
+        <customErrorMessages>
+            <errorMessage>{!fBlockMessage}</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <decisions>
+        <description>Fail-safe skip: if no settings record exists, the feature is switched off, or the global flow kill switch is on, exit without changing anything.</description>
+        <name>Check_Active</name>
+        <label>Is Check Enabled?</label>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
+        <defaultConnector>
+            <targetReference>Clear_Error</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Enabled</defaultConnectorLabel>
+        <rules>
+            <name>Disabled_or_No_Settings</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Settings</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Settings.Active__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Setup.Application_Settings__c.Disable_Autolaunch_Lightning_Flow__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Disabled / No Settings</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Blocks only when above threshold, incomplete, the user lacks the Bypass permission, and the Opp is not a CPQ amendment. Otherwise the save is allowed (flags are still stamped for analytics).</description>
+        <name>Final_Gate</name>
+        <label>Should Block Save?</label>
+        <locationX>176</locationX>
+        <locationY>1142</locationY>
+        <defaultConnectorLabel>Allow Save</defaultConnectorLabel>
+        <rules>
+            <name>Block</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>fShouldBlock</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Block_Save</targetReference>
+            </connector>
+            <label>Block</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Routes to the complete/incomplete stamp based on fIsComplete (no missing required fields).</description>
+        <name>Set_Complete</name>
+        <label>Is Role Complete?</label>
+        <locationX>308</locationX>
+        <locationY>926</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Complete_False</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Incomplete</defaultConnectorLabel>
+        <rules>
+            <name>Complete</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>fIsComplete</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Complete_True</targetReference>
+            </connector>
+            <label>Complete</label>
+        </rules>
+    </decisions>
+    <description>Before-save record-triggered flow on Opportunity. Stamps Has_Contact_Role__c and Has_Complete_Contact_Role__c, and raises a precise Custom Error when an Opportunity at/above the configured win-probability threshold lacks a complete primary Contact Role. Thresholds and required fields are driven by Contact_Role_Check_Setting__mdt; bypass via the Bypass_Contact_Role_Check custom permission. Rebuilt 2026-06 (replaces the split flow + Contact_Role_Complete_50 validation rule).</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>fAboveThreshold</name>
+        <dataType>Boolean</dataType>
+        <expression>IF({!Get_Settings.Threshold_Inclusive__c} = TRUE,
+{!$Record.Probability} &gt;= {!Get_Settings.Min_Probability__c},
+{!$Record.Probability} &gt; {!Get_Settings.Min_Probability__c})</expression>
+    </formulas>
+    <formulas>
+        <name>fBlockMessage</name>
+        <dataType>String</dataType>
+        <expression>&quot;This Opportunity needs a complete primary Contact Role before it can be saved at this win probability. Please provide: &quot; &amp; {!fCleanMissing} &amp; &quot;.&quot;</expression>
+    </formulas>
+    <formulas>
+        <name>fCleanMissing</name>
+        <dataType>String</dataType>
+        <expression>IF(LEN({!fMissingFields}) &gt;= 2, LEFT({!fMissingFields}, LEN({!fMissingFields}) - 2), {!fMissingFields})</expression>
+    </formulas>
+    <formulas>
+        <name>fHasPrimary</name>
+        <dataType>Boolean</dataType>
+        <expression>NOT(ISBLANK({!Get_Primary_OCR.Id}))</expression>
+    </formulas>
+    <formulas>
+        <name>fIsComplete</name>
+        <dataType>Boolean</dataType>
+        <expression>LEN({!fMissingFields}) = 0</expression>
+    </formulas>
+    <formulas>
+        <name>fMissingFields</name>
+        <dataType>String</dataType>
+        <expression>IF(ISBLANK({!Get_Primary_OCR.Id}), &quot;a Primary Contact Role, &quot;, &quot;&quot;)
+&amp; IF(AND({!fHasPrimary}, {!Get_Settings.Require_Email__c}, ISBLANK({!Get_Contact.Email})), &quot;Contact Email, &quot;, &quot;&quot;)
+&amp; IF(AND({!fHasPrimary}, {!Get_Settings.Require_Title__c}, ISBLANK({!Get_Contact.Title})), &quot;Job Title, &quot;, &quot;&quot;)
+&amp; IF(AND({!fHasPrimary}, {!Get_Settings.Require_First_Name__c}, ISBLANK({!Get_Contact.FirstName})), &quot;Contact First Name, &quot;, &quot;&quot;)
+&amp; IF(AND({!fHasPrimary}, {!Get_Settings.Require_Mailing_Street__c}, ISBLANK({!Get_Contact.MailingStreet})), &quot;Contact Mailing Street, &quot;, &quot;&quot;)
+&amp; IF(AND({!fHasPrimary}, {!Get_Settings.Require_Mailing_City__c}, ISBLANK({!Get_Contact.MailingCity})), &quot;Contact Mailing City, &quot;, &quot;&quot;)
+&amp; IF(AND({!Get_Settings.Require_Account_Billing_Address__c}, ISBLANK({!Get_Account.BillingStreet})), &quot;Account Billing Street, &quot;, &quot;&quot;)
+&amp; IF(AND({!Get_Settings.Require_Account_Billing_Address__c}, ISBLANK({!Get_Account.BillingCity})), &quot;Account Billing City, &quot;, &quot;&quot;)
+&amp; IF(AND({!Get_Settings.Require_Account_Billing_Address__c}, ISBLANK({!Get_Account.BillingCountry})), &quot;Account Billing Country, &quot;, &quot;&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>fShouldBlock</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(
+{!fAboveThreshold},
+LEN({!fMissingFields}) &gt; 0,
+NOT({!$Permission.Bypass_Contact_Role_Check}),
+ISBLANK({!$Record.SBQQ__AmendedContract__c}),
+NOT({!fStageExcluded})
+)</expression>
+    </formulas>
+    <formulas>
+        <name>fStageExcluded</name>
+        <dataType>Boolean</dataType>
+        <expression>IF(ISBLANK({!Get_Settings.Excluded_Stages__c}), false,
+CONTAINS(&quot;,&quot; &amp; {!Get_Settings.Excluded_Stages__c} &amp; &quot;,&quot;, &quot;,&quot; &amp; TEXT({!$Record.StageName}) &amp; &quot;,&quot;))</expression>
+    </formulas>
+    <interviewLabel>Check Completeness of Contact Roles {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Check Completeness of Contact Roles</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>Loads the Opportunity&apos;s Account to evaluate billing-address completeness. Fault path fails open.</description>
+        <name>Get_Account</name>
+        <label>Get Account</label>
+        <locationX>308</locationX>
+        <locationY>818</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Set_Complete</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Handle_Fault</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.AccountId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Loads the Contact behind the primary OpportunityContactRole to evaluate field completeness. Returns nothing if there is no primary (ContactId null). Fault path fails open.</description>
+        <name>Get_Contact</name>
+        <label>Get Primary Contact</label>
+        <locationX>308</locationX>
+        <locationY>710</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Account</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Handle_Fault</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Primary_OCR.ContactId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Contact</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Loads the primary OpportunityContactRole for this Opportunity. Fault path fails open.</description>
+        <name>Get_Primary_OCR</name>
+        <label>Get Primary Contact Role</label>
+        <locationX>176</locationX>
+        <locationY>458</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_Has_Role</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Handle_Fault</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>IsPrimary</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>OpportunityId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>OpportunityContactRole</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Loads the Default Contact_Role_Check_Setting__mdt record (threshold + required-field toggles). Custom Metadata reads do not count against SOQL limits. Fault path fails open.</description>
+        <name>Get_Settings</name>
+        <label>Get Settings</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_Active</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Handle_Fault</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Default</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Contact_Role_Check_Setting__mdt</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Settings</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>StageName</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Closed Lost</stringValue>
+            </value>
+        </filters>
+        <object>Opportunity</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>varFaultHandled</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+</Flow>

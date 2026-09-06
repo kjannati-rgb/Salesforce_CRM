@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Number_of_Users__c</fullName>
+    <description>Operational field used by Subscription teams to record the total number of licensed users/seats sold on an Opportunity.
+
+This field is primarily used for:
+
+account management allocation
+renewal ownership decisions
+operational visibility/reporting
+
+For multi-product Opportunities, enter the combined total across all applicable subscription products.
+
+Example:
+
+5 GAR licenses + 5 GRR licenses = 10 total users
+
+This is a manual/static field and does not currently roll automatically to Renewal Opportunities.
+
+This field should not be used as a contractual source of truth where seat counts already exist within CPQ products, Quote Line Items, or Product Terms.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Enter the total number of licensed users/seats included across all subscription products on this Opportunity.</inlineHelpText>
+    <label>Number of Users</label>
+    <precision>6</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

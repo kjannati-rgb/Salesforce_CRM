@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity_Owner_Pardot__c</fullName>
+    <description>Field created for Pardot</description>
+    <externalId>false</externalId>
+    <formula>Owner.FirstName &amp; &quot; &quot; &amp; Owner.LastName</formula>
+    <inlineHelpText>Field created for Pardot</inlineHelpText>
+    <label>Opportunity Owner Pardot</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

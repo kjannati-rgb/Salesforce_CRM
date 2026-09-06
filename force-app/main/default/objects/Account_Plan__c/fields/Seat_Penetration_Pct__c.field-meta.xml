@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Seat_Penetration_Pct__c</fullName>
+    <label>Seat Penetration %</label>
+    <description>Seats sold divided by SoW denominator (attorneys / counsel). Distinct from family coverage.</description>
+    <type>Percent</type>
+    <precision>5</precision>
+    <scale>1</scale>
+    <required>false</required>
+</CustomField>

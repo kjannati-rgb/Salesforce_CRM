@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Level_1_Reporting_Logic__c</fullName>
+    <description>The running user is the opp owner, or the opp owner&apos;s manager</description>
+    <formula>OR(
+
+(/* Reporting Level 1 logic */
+AND(TEXT($User.Reporting_Level__c) = &quot;1&quot;, 
+OR(
+$User.Email =  Owner.Email,
+$User.Email =  Owner.Manager.Email)
+))
+,
+
+(/* Reporting Level 2 logic */
+AND(TEXT($User.Reporting_Level__c) = &quot;2&quot;, 
+OR(
+$User.Email =  Owner.Email,
+$User.Email =  Owner.Manager.Email,
+$User.Email =  Owner.Manager.Manager.Email )
+))
+
+
+)</formula>
+    <label>Level Reporting Logic</label>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reason_Disqualified__c</fullName>
+    <label>Reason Disqualified</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Can’t afford</fullName>
+                <default>false</default>
+                <label>Can’t afford</label>
+            </value>
+            <value>
+                <fullName>Duplicate Enquiry</fullName>
+                <default>false</default>
+                <label>Duplicate Enquiry</label>
+            </value>
+            <value>
+                <fullName>Duplicate Scored Lead</fullName>
+                <default>false</default>
+                <label>Duplicate Scored Lead</label>
+            </value>
+            <value>
+                <fullName>Existing customer</fullName>
+                <default>false</default>
+                <label>Existing customer</label>
+            </value>
+            <value>
+                <fullName>Existing Opportunity</fullName>
+                <default>false</default>
+                <label>Existing Opportunity</label>
+            </value>
+            <value>
+                <fullName>Form – Inbound Enquiry</fullName>
+                <default>false</default>
+                <label>Form – Inbound Enquiry</label>
+            </value>
+            <value>
+                <fullName>Form – Sales Initiated</fullName>
+                <default>false</default>
+                <label>Form – Sales Initiated</label>
+            </value>
+            <value>
+                <fullName>Invalid Contact Information</fullName>
+                <default>false</default>
+                <label>Invalid Contact Information</label>
+            </value>
+            <value>
+                <fullName>Moved Company</fullName>
+                <default>false</default>
+                <label>Moved Company</label>
+            </value>
+            <value>
+                <fullName>No Budget Authority</fullName>
+                <default>false</default>
+                <label>No Budget Authority</label>
+            </value>
+            <value>
+                <fullName>No response</fullName>
+                <default>false</default>
+                <label>No response</label>
+            </value>
+            <value>
+                <fullName>Not ICP – Company Size</fullName>
+                <default>false</default>
+                <label>Not ICP – Company Size</label>
+            </value>
+            <value>
+                <fullName>Not ICP – Industry</fullName>
+                <default>false</default>
+                <label>Not ICP – Industry</label>
+            </value>
+            <value>
+                <fullName>Not ICP – Job Title</fullName>
+                <default>false</default>
+                <label>Not ICP – Job Title</label>
+            </value>
+            <value>
+                <fullName>Not Interested</fullName>
+                <default>false</default>
+                <label>Not Interested</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+            <value>
+                <fullName>Product/service gap</fullName>
+                <default>false</default>
+                <label>Product/service gap</label>
+            </value>
+            <value>
+                <fullName>Student enquiry</fullName>
+                <default>false</default>
+                <label>Student enquiry</label>
+            </value>
+            <value>
+                <fullName>Test/Invalid enquiry</fullName>
+                <default>false</default>
+                <label>Test/Invalid enquiry</label>
+            </value>
+            <value>
+                <fullName>Too Early / Not Ready</fullName>
+                <default>false</default>
+                <label>Too Early / Not Ready</label>
+            </value>
+            <value>
+                <fullName>Wrong Job Function</fullName>
+                <default>false</default>
+                <label>Wrong Job Function</label>
+            </value>
+            <value>
+                <fullName>Price too high</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Price too high</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

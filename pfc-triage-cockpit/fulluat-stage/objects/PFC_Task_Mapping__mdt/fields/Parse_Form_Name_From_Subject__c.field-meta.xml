@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Parse_Form_Name_From_Subject__c</fullName>
+    <description>REV-57: when TRUE the orchestrator derives Form_Name__c from the Task Subject (stripping Form_Name_Prefix_To_Strip__c). MUST be FALSE for Newsfeed - identity is never parsed from the subject; person comes from Task WhoId.</description>
+    <label>Parse Form Name From Subject</label>
+    <type>Checkbox</type>
+    <defaultValue>false</defaultValue>
+</CustomField>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Require_Account_Billing_Address__c</fullName>
+    <description>When TRUE, the Opportunity's Account must have Billing Street, City and Country populated (these feed billing &amp; marketing) for the role to count as complete.</description>
+    <label>Require Account Billing Address</label>
+    <type>Checkbox</type>
+    <defaultValue>true</defaultValue>
+</CustomField>

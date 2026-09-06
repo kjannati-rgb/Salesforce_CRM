@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lexology_Academic_Target__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>This checkbox is used by Practice intelligence team to convert deals to Lexology Academic Target</description>
+    <inlineHelpText>Please tick this box if this opportunity is Targeted for Lexology Academic product</inlineHelpText>
+    <label>Lexology Academic Target</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

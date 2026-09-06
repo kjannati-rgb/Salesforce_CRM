@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>External_Key__c</fullName>
+    <label>External Key</label>
+    <description>Composite key (plan + family + node type + node key) for idempotent upsert by the generation service.</description>
+    <type>Text</type>
+    <length>180</length>
+    <externalId>true</externalId>
+    <unique>true</unique>
+    <required>false</required>
+    <caseSensitive>false</caseSensitive>
+</CustomField>

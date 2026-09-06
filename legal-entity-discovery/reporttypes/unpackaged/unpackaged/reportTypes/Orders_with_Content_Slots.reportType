@@ -1,0 +1,1383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ReportType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <baseObject>Order</baseObject>
+    <category>busop</category>
+    <deployed>true</deployed>
+    <description>Orders with Content Slots, used for the Content Fulfilment reports.</description>
+    <join>
+        <join>
+            <outerJoin>true</outerJoin>
+            <relationship>Content_Slots__r</relationship>
+        </join>
+        <outerJoin>false</outerJoin>
+        <relationship>OrderItems</relationship>
+    </join>
+    <label>Orders with Content Slots</label>
+    <sections>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Product: Content Slot Title</displayNameOverride>
+            <field>Content_Slot__c.Name</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Primary Author</displayNameOverride>
+            <field>Author__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Bio Taker</displayNameOverride>
+            <field>Bio_Taker__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot ID</displayNameOverride>
+            <field>Id</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>true</checkedByDefault>
+            <displayNameOverride>Content Slot Title</displayNameOverride>
+            <field>Name</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Contributor</displayNameOverride>
+            <field>Contributor__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Created By</displayNameOverride>
+            <field>CreatedBy</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Created Date</displayNameOverride>
+            <field>CreatedDate</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Currency</displayNameOverride>
+            <field>CurrencyIsoCode</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>isCancelled</displayNameOverride>
+            <field>isCancelled__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Jurisdiction</displayNameOverride>
+            <field>Jurisdiction__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Last Modified By</displayNameOverride>
+            <field>LastModifiedBy</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Last Modified Date</displayNameOverride>
+            <field>LastModifiedDate</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Owner</displayNameOverride>
+            <field>Owner</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Publication</displayNameOverride>
+            <field>Publication__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Quote Line</displayNameOverride>
+            <field>Quote_Line__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Status</displayNameOverride>
+            <field>Status__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Tier</displayNameOverride>
+            <field>Tier__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Type</displayNameOverride>
+            <field>Type__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Workbooks CRM Legacy ID</displayNameOverride>
+            <field>Workbooks_CRM_Legacy_ID__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>WWL Bio Quote</displayNameOverride>
+            <field>WWL_Bio_Quote__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Type</displayNameOverride>
+            <field>Content_Type__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order Product</displayNameOverride>
+            <field>Order_Product__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Editing Firm Recycle</displayNameOverride>
+            <field>Editing_Firm__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Guidelines Sent</displayNameOverride>
+            <field>Qs_Out__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Guidelines Ack</displayNameOverride>
+            <field>Qs_Ack__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>WWL Research Status</displayNameOverride>
+            <field>WWL_Research_Status__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>WWL Production Status</displayNameOverride>
+            <field>WWL_Production_Status__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Submission Deadline Recycle</displayNameOverride>
+            <field>Copy_Deadline__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Extended Deadline</displayNameOverride>
+            <field>Extended_Deadline__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Draft Submitted</displayNameOverride>
+            <field>Copy_In__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Proof Sent</displayNameOverride>
+            <field>Proof_Sent__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Amends Received</displayNameOverride>
+            <field>Amends_Received__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Final Proof Sent</displayNameOverride>
+            <field>Final_Proof_Sent__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Approved</displayNameOverride>
+            <field>Approved__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Status</displayNameOverride>
+            <field>Content_Status__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>WWL LMA</displayNameOverride>
+            <field>WWL_LMA__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Sales Rep</displayNameOverride>
+            <field>Sales_Rep__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Number of Words</displayNameOverride>
+            <field>Number_of_Words__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Type Production Update</displayNameOverride>
+            <field>Content_Type_Production_Update__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Primary Contact Email</displayNameOverride>
+            <field>Primary_Contact_Email__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Published</displayNameOverride>
+            <field>Content_Published__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Print Proof</displayNameOverride>
+            <field>Print_Proof__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Print Proof Sent</displayNameOverride>
+            <field>Print_Proof_Sent__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Additional Contact for Production</displayNameOverride>
+            <field>Additional_Contact_for_Production__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Ultimate Parent</displayNameOverride>
+            <field>Ultimate_Parent__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Author 2</displayNameOverride>
+            <field>Author_2__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Author 3</displayNameOverride>
+            <field>Author_3__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Author 4</displayNameOverride>
+            <field>Author_4__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Author 5</displayNameOverride>
+            <field>Author_5__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Author 6</displayNameOverride>
+            <field>Author_6__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Author 7</displayNameOverride>
+            <field>Author_7__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Author 8</displayNameOverride>
+            <field>Author_8__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Author 9</displayNameOverride>
+            <field>Author_9__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Author 10</displayNameOverride>
+            <field>Author_10__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Author 11</displayNameOverride>
+            <field>Author_11__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Author 12</displayNameOverride>
+            <field>Author_12__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Author 13</displayNameOverride>
+            <field>Author_13__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Author Emails</displayNameOverride>
+            <field>Author_Emails__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Primary Author Contact ID</displayNameOverride>
+            <field>Primary_Author_Contact_ID__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Author 14</displayNameOverride>
+            <field>Author_14__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Author 15</displayNameOverride>
+            <field>Author_15__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Author 16</displayNameOverride>
+            <field>Author_16__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Author 17</displayNameOverride>
+            <field>Author_17__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Bio Taker Email</displayNameOverride>
+            <field>Bio_Taker_Email__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>WWL - Key Account Recycle</displayNameOverride>
+            <field>WWL_Key_Account__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Author 18</displayNameOverride>
+            <field>Author_18__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Actual Published Date</displayNameOverride>
+            <field>Actual_Published_Date__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Author 19</displayNameOverride>
+            <field>Author_19__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Author 20</displayNameOverride>
+            <field>Author_20__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot : Primary Contact : Job Title</displayNameOverride>
+            <field>Primary_Contact__c.Title</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot : Publication : Product Title</displayNameOverride>
+            <field>Publication__c.Publication_Title__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot : Publication : Reporting Stream</displayNameOverride>
+            <field>Publication__c.Reporting_Stream__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot : Author 10 : Contact ID</displayNameOverride>
+            <field>Author_10__c.Id</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot : Author 11 : Contact ID</displayNameOverride>
+            <field>Author_11__c.Id</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot : Author 12 : Contact ID</displayNameOverride>
+            <field>Author_12__c.Id</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot : Author 13 : Contact ID</displayNameOverride>
+            <field>Author_13__c.Id</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot : Author 14 : Contact ID</displayNameOverride>
+            <field>Author_14__c.Id</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot : Author 15 : Contact ID</displayNameOverride>
+            <field>Author_15__c.Id</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot : Author 16 : Contact ID</displayNameOverride>
+            <field>Author_16__c.Id</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot : Author 17 : Contact ID</displayNameOverride>
+            <field>Author_17__c.Id</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot : Author 18 : Contact ID</displayNameOverride>
+            <field>Author_18__c.Id</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot : Author 19 : Contact ID</displayNameOverride>
+            <field>Author_19__c.Id</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot : Author 20 : Contact ID</displayNameOverride>
+            <field>Author_20__c.Id</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot : Author 3 : Contact ID</displayNameOverride>
+            <field>Author_3__c.Id</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot : Author 4 : Contact ID</displayNameOverride>
+            <field>Author_4__c.Id</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot : Author 5 : Contact ID</displayNameOverride>
+            <field>Author_5__c.Id</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot : Author 6 : Contact ID</displayNameOverride>
+            <field>Author_6__c.Id</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot : Author 7 : Contact ID</displayNameOverride>
+            <field>Author_7__c.Id</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot : Author 8 : Contact ID</displayNameOverride>
+            <field>Author_8__c.Id</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot : Author 9 : Contact ID</displayNameOverride>
+            <field>Author_9__c.Id</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot : Primary Author : Contact ID</displayNameOverride>
+            <field>Author__c.Id</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot : Primary Contact : Contact ID</displayNameOverride>
+            <field>Primary_Contact__c.Id</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot : Publication : Product Date</displayNameOverride>
+            <field>Publication__c.Product_Date__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Bio Takers Affino External ID</displayNameOverride>
+            <field>Bio_Takers_Affino_External_ID__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Primary Contact Affino External ID</displayNameOverride>
+            <field>Primary_Contact_Affino_External_ID__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Primary_Contact__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Reuse_Biography__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Created_via_Apex__c</field>
+            <table>Order.OrderItems.Content_Slots__r</table>
+        </columns>
+        <masterLabel>Content Slots</masterLabel>
+    </sections>
+    <sections>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Activated Date</displayNameOverride>
+            <field>ActivatedDate</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order Created Date</displayNameOverride>
+            <field>CreatedDate</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Deal End Year</displayNameOverride>
+            <field>Deal_End_Year__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Opportunity</displayNameOverride>
+            <field>Opportunity</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Opportunity_Close_Date__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Salesperson</displayNameOverride>
+            <field>Opportunity.Owner</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order : Renewal Opportunity : Opportunity Salesforce ID</displayNameOverride>
+            <field>Renewal_Opportunity__c.Opportunity_Salesforce_ID__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order Name</displayNameOverride>
+            <field>Name</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order Number</displayNameOverride>
+            <field>OrderNumber</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order Product Number</displayNameOverride>
+            <field>OrderItemNumber</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Primary Campaign Source</displayNameOverride>
+            <field>Primary_Campaign_Source__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Renewal Opportunity</displayNameOverride>
+            <field>Renewal_Opportunity__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Status</displayNameOverride>
+            <field>Status</field>
+            <table>Order</table>
+        </columns>
+        <masterLabel>Order and Opportunity Details</masterLabel>
+    </sections>
+    <sections>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Production Contact: First Name</displayNameOverride>
+            <field>Alternative_Production_Contact__c.FirstName</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Production Contact: Last Name</displayNameOverride>
+            <field>Alternative_Production_Contact__c.LastName</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Additional Production Contact: Email</displayNameOverride>
+            <field>Alternative_Production_Contact__c.Email</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Production Contact: Title</displayNameOverride>
+            <field>Alternative_Production_Contact__c.Salutation</field>
+            <table>Order</table>
+        </columns>
+        <masterLabel>Production Contact</masterLabel>
+    </sections>
+    <sections>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Bio Taker</displayNameOverride>
+            <field>Bio_Taker__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Slot</displayNameOverride>
+            <field>Content_Slot__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Type</displayNameOverride>
+            <field>Content_Type__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Content Channel</displayNameOverride>
+            <field>Content_Channel__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Finance Code</displayNameOverride>
+            <field>Finance_Code__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Number of Words</displayNameOverride>
+            <field>Number_of_Words__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Free Prose Title</displayNameOverride>
+            <field>Free_Prose_Title__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Free Prose Type</displayNameOverride>
+            <field>Free_Prose_Type__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Reduced</displayNameOverride>
+            <field>Reduced__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Quantity</displayNameOverride>
+            <field>Quantity</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Quantity</displayNameOverride>
+            <field>Quantity__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Product</displayNameOverride>
+            <field>Product2</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Top Level Chapter</displayNameOverride>
+            <field>Top_Level_Chapter__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Top Level Product</displayNameOverride>
+            <field>Top_Level_Product__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Available Quantity</displayNameOverride>
+            <field>AvailableQuantity</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Total Price</displayNameOverride>
+            <field>TotalPrice</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Required By</displayNameOverride>
+            <field>SBQQ__RequiredBy__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Promotion Information</displayNameOverride>
+            <field>Promotion_Information__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <masterLabel>Order Product</masterLabel>
+    </sections>
+    <sections>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order Product : Product : Distribution Copies</displayNameOverride>
+            <field>Product2.Distribution_Copies__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Brand</displayNameOverride>
+            <field>Product2.Brand__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Revenue Stream</displayNameOverride>
+            <field>Product2.Revenue_Stream__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order Product : Product : Edition</displayNameOverride>
+            <field>Product2.Edition__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Submission Deadline Date</displayNameOverride>
+            <field>Submission_Deadline_Date__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Production Start Date</displayNameOverride>
+            <field>Product2.Production_Start_Date__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Publication Date</displayNameOverride>
+            <field>Product2.Product_Date__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <masterLabel>Product Details</masterLabel>
+    </sections>
+    <sections>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Firm</displayNameOverride>
+            <field>Account.Name</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Firm Tel</displayNameOverride>
+            <field>Account.Phone</field>
+            <table>Order</table>
+        </columns>
+        <masterLabel>Account Details</masterLabel>
+    </sections>
+    <sections>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Primary Contact: Title</displayNameOverride>
+            <field>Contact__c.Salutation</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Primary Contact: First Name</displayNameOverride>
+            <field>Contact__c.FirstName</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Primary Contact: Last Name</displayNameOverride>
+            <field>Contact__c.LastName</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Primary Contact: Phone</displayNameOverride>
+            <field>Contact__c.Phone</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Primary Contact: Email</displayNameOverride>
+            <field>Contact__c.Email</field>
+            <table>Order</table>
+        </columns>
+        <masterLabel>Primary Contact Details</masterLabel>
+    </sections>
+    <sections>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order Number</displayNameOverride>
+            <field>Order_Number__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Invoice Contact: Email</displayNameOverride>
+            <field>Opportunity.Invoice_Contact__c.Email</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order Year</displayNameOverride>
+            <field>Order_Year__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order : Account Name : Shipping Street</displayNameOverride>
+            <field>Account.ShippingStreet</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order : Account Name : Shipping City</displayNameOverride>
+            <field>Account.ShippingCity</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order : Account Name : Shipping State/Province</displayNameOverride>
+            <field>Account.ShippingStateCode</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order : Account Name : Shipping Zip/Postal Code</displayNameOverride>
+            <field>Account.ShippingPostalCode</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order : Account Name : Shipping Country</displayNameOverride>
+            <field>Account.ShippingCountryCode</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order : Account Name : Fax</displayNameOverride>
+            <field>Account.Fax</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order : Account Name : Website</displayNameOverride>
+            <field>Account.Website</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order : Account Name : Tax / Importers Code</displayNameOverride>
+            <field>Account.Tax_Importers_Code__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order : Contact : Job Title</displayNameOverride>
+            <field>Contact__c.Title</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order : Account Name : Commercial Invoice</displayNameOverride>
+            <field>Account.Commercial_Invoice__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>LBR Legal Entity</displayNameOverride>
+            <field>LBR_Legal_Entity__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Subscription End Date</displayNameOverride>
+            <field>Subscription_End_Date__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Exclude from Print - Insight Guides</displayNameOverride>
+            <field>Exclude_from_Print_Insight_Guides__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Exclude from Print - Performance Data</displayNameOverride>
+            <field>Exclude_from_Print_Performance_Data__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Exclude from Print - Editorial Content</displayNameOverride>
+            <field>Exclude_from_Print_Editorial_Content__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Contact Email</displayNameOverride>
+            <field>Contact_Email__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Additional Contact for Production Email</displayNameOverride>
+            <field>Additional_Contact_for_Production_Email__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order : Account Name : Salesforce Account ID</displayNameOverride>
+            <field>Account.Salesforce_Account_ID__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order : Ultimate Parent : Salesforce Account ID</displayNameOverride>
+            <field>Ultimate_Parent__c.Salesforce_Account_ID__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Special Terms</displayNameOverride>
+            <field>Special_Terms__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Special Instructions</displayNameOverride>
+            <field>Special_Instructions__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order Special Instructions</displayNameOverride>
+            <field>Order_Special_Instructions__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order : Opportunity : Account Name : Billing Sub Region</displayNameOverride>
+            <field>Opportunity.Account.Billing_Sub_Region__c</field>
+            <table>Order</table>
+        </columns>
+        <masterLabel>Orders</masterLabel>
+    </sections>
+    <sections>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order Product Number</displayNameOverride>
+            <field>Order_Product_Number__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Workbooks Legacy WWL Product Descr</displayNameOverride>
+            <field>Workbooks_Legacy_WWL_Product_Descr__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Workbooks Legacy User Level</displayNameOverride>
+            <field>Workbooks_Legacy_User_Level__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Workbooks Legacy Tier</displayNameOverride>
+            <field>Workbooks_Legacy_Tier__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Workbooks Legacy Subscription Type</displayNameOverride>
+            <field>Workbooks_Legacy_Subscription_Type__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Topic</displayNameOverride>
+            <field>Topic__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Workbooks Legacy Price Discount %</displayNameOverride>
+            <field>Workbooks_Legacy_Price_Discount__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Jurisdiction</displayNameOverride>
+            <field>Jurisdiction__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Workbooks Legacy Id</displayNameOverride>
+            <field>Workbooks_Legacy_Id__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Dynamics Legacy Total Amount</displayNameOverride>
+            <field>Dynamics_Legacy_Total_Amount__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Dynamics Legacy Tax</displayNameOverride>
+            <field>Dynamics_Legacy_Tax__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Dynamics Legacy Order Primary Key</displayNameOverride>
+            <field>Dynamics_Legacy_Order_Primary_Key__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Dynamics Legacy Detail Amount</displayNameOverride>
+            <field>Dynamics_Legacy_Detail_Amount__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Workbooks Legacy Distribution Contact</displayNameOverride>
+            <field>Workbooks_Legacy_Distribution_Contact__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Workbooks Legacy Discount</displayNameOverride>
+            <field>Workbooks_Legacy_Discount__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Workbooks Legacy Created At</displayNameOverride>
+            <field>Workbooks_Legacy_Created_At__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Workbooks Legacy Copies</displayNameOverride>
+            <field>Workbooks_Legacy_Copies__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Workbooks Legacy Case Reference</displayNameOverride>
+            <field>Workbooks_Legacy_Case_Reference__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Workbooks Legacy Book Cards</displayNameOverride>
+            <field>Workbooks_Legacy_Book_Cards__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Workbooks Legacy Chapter</displayNameOverride>
+            <field>Workbooks_Legacy_Chapter__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order Product : Product : Financial Year</displayNameOverride>
+            <field>Product2.Financial_Year__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order Product : Product : Clean Product Code</displayNameOverride>
+            <field>Product2.Clean_Product_Code__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order Product : Product : Publication ID</displayNameOverride>
+            <field>Product2.Publication_ID__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order Product : Product : Product ID</displayNameOverride>
+            <field>Product2.Product_ID__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order Product : Product : Product ID</displayNameOverride>
+            <field>Product2.Id</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Workbooks Legacy Bespoke Copies</displayNameOverride>
+            <field>Workbooks_Legacy_Bespoke_Copies__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order Product : Product : Product Name</displayNameOverride>
+            <field>Product2.Name</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Dated Exchange Rate</displayNameOverride>
+            <field>Dated_Exchange_Rate__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Dated Total Price (converted)</displayNameOverride>
+            <field>Dated_Total_Price_converted__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Combined Number of Copies</displayNameOverride>
+            <field>Combined_Number_of_Copies__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Combined Financial Year</displayNameOverride>
+            <field>Combined_Financial_Year__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Top Level Product&apos;s Publication</displayNameOverride>
+            <field>Top_Level_Product_s_Publication__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Number of Recruiters</displayNameOverride>
+            <field>Number_of_Recruiters__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Firm Size</displayNameOverride>
+            <field>Firm_Size__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Reporting Stream</displayNameOverride>
+            <field>Reporting_Stream__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Top Level Product&apos;s Code</displayNameOverride>
+            <field>Top_Level_Product_s_Code__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Company Industry Classification</displayNameOverride>
+            <field>Company_Industry_Classification__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Mass Update Order Product</displayNameOverride>
+            <field>Mass_Update_Order_Product__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Used Quantity</displayNameOverride>
+            <field>Used_Quantity__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Last Contacted - Events Marketing</displayNameOverride>
+            <field>Last_Contacted_Events_Marketing__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Last Contacted - Event Operations</displayNameOverride>
+            <field>Last_Contacted_Event_Operations__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Events - Logo/Bio</displayNameOverride>
+            <field>Events_Logo_Bio__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Events - Speaking Slot</displayNameOverride>
+            <field>Events_Speaking_Slot__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Events - Sponsor Firm Code</displayNameOverride>
+            <field>Events_Sponsor_Firm_Code__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Events - Guest Code</displayNameOverride>
+            <field>Events_Guest_Code__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Events - General Notes</displayNameOverride>
+            <field>Events_Notes__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Print Copies Quantity</displayNameOverride>
+            <field>Print_Copies_Quantity__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Bespoke PDF Quantity</displayNameOverride>
+            <field>Bespoke_PDF_Quantity__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Order Product : Product : Publication</displayNameOverride>
+            <field>Product2.Publication__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Publication Title</displayNameOverride>
+            <field>Product2.Publication_Title__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <masterLabel>Order Products</masterLabel>
+    </sections>
+</ReportType>

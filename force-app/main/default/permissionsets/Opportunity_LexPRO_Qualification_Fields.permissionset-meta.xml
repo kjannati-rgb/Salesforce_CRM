@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Opportunity LexPRO Qualification Fields</label>
+    <description>REV-69 — field-level security for the three LexPRO qualification fields plus the LexPRO Qualifier Access custom permission. Assign to the Lexology Pro team and RevOps.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <classAccesses>
+        <apexClass>LexProCoverageController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <customPermissions>
+        <enabled>true</enabled>
+        <name>LexPRO_Qualifier_Access</name>
+    </customPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Opportunity.LexPRO_Qual_Jurisdiction_Coverage__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Opportunity.LexPRO_Qual_Content_Coverage__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Opportunity.LexPRO_Qual_Process_Improvement__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Opportunity.LexPRO_Qual_Jurisdictions__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Opportunity.LexPRO_Qual_Work_Areas__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Opportunity.LexPRO_Qual_Work_Area_Other__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Opportunity.LexPRO_Qual_Process_Other__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Opportunity.LexPRO_Qual_Jurisdiction_Other__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+</PermissionSet>

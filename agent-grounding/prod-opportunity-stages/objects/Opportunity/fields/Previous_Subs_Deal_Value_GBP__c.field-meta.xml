@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Previous_Subs_Deal_Value_GBP__c</fullName>
+    <description>Adjusted exchange rate used for reporting on renewal opportunities (current year renewals only).</description>
+    <externalId>false</externalId>
+    <formula>IF(  
+    Previous_Currency__c = &apos;USD&apos; || Previous_Currency__c = &apos;EUR&apos;,  
+    Previous_Subs_Deal_Value__c / Previous_Opportunity_Exchange_Rate__c,  
+    IF(  
+        Previous_Currency__c = &apos;GBP&apos;,  
+        Previous_Subs_Deal_Value__c / Exchange_Rate__c,  
+        Previous_Subs_Deal_Value__c  
+    )  
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>Adjusted exchange rate used for reporting on renewal opportunities (current year renewals only).</inlineHelpText>
+    <label>Previous Subs Deal Value GBP</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

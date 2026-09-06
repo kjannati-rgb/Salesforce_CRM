@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <actionCalls>
+        <name>Act_StampQuote</name>
+        <label>Stamp ALM Promo/Dispatch (Layer 1)</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <actionName>ALMPromoDispatchEngine</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Asn_CaptureGap</targetReference>
+        </connector>
+        <inputParameters>
+            <name>quoteIds</name>
+            <value>
+                <elementReference>in_Quote.Id</elementReference>
+            </value>
+        </inputParameters>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <assignments>
+        <name>Asn_CaptureGap</name>
+        <label>Capture Gap Signal</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <assignmentItems>
+            <assignToReference>out_hasGap</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Act_StampQuote.hasGap</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>out_gapMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Act_StampQuote.gapMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <description>REV-60 Layer 1 — calls the ALM Promo/Dispatch engine for this quote's lines (invoked from Quote_AfterSave_MasterFlow after REV-71's stamp) and surfaces the SAVE-TIME BACKSTOP signal (out_hasGap / out_gapMessage) to the record-triggered master flow, which raises the Custom Error (Custom Error elements aren't allowed in autolaunched flows). A gap = an in-scope ALM line still missing a required Promo/Dispatch code AFTER the engine filled everything it could; because the engine auto-fills, promo never blocks and only a rep-required dispatch (Law.com/LWKM/NYOM) can trip it. Kill switches, the additive guard and fault logging live in the engine (ALMPromoDispatchEngine); it is inert (out_hasGap stays false) until ALM_Code_Engine_Settings.Control switches are on.</description>
+    <environments>Default</environments>
+    <interviewLabel>Quote ALM PromoDispatch Stamp {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Quote ALM PromoDispatch Stamp</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Act_StampQuote</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>in_Quote</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>SBQQ__Quote__c</objectType>
+    </variables>
+    <variables>
+        <name>out_hasGap</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
+        <name>out_gapMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+</Flow>

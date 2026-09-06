@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PathAssistant xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <entityName>Pardot_Form_Completion__c</entityName>
+    <fieldName>Sales_Stage__c</fieldName>
+    <masterLabel>Pardot Form Completion</masterLabel>
+    <pathAssistantSteps>
+        <info>&lt;p&gt;This field will be updated &lt;b&gt;automatically&lt;/b&gt; when the Lead is converted and an Opportunity is created.&lt;/p&gt;</info>
+        <picklistValueName>Converted</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Reason_Disqualified__c</fieldNames>
+        <picklistValueName>Disqualified</picklistValueName>
+    </pathAssistantSteps>
+    <recordTypeName>__MASTER__</recordTypeName>
+</PathAssistant>

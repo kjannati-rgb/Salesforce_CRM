@@ -1,0 +1,85 @@
+:host {
+    /* ---- Brand (Lexology PRO) — confirm hex against official brand guide ---- */
+    --lex-ink: #00162d; /* Midnight navy — header / primary chrome */
+    --lex-ink-2: #0a2342;
+    --lex-blue: #0094ff; /* Lexology blue — primary action, "covered", positive */
+    --lex-blue-deep: #0a73d1; /* hover / pressed */
+    --lex-blue-tint: #e6f4ff;
+    --lex-paper: #fafafa;
+
+    /* ---- Neutrals ---- */
+    --surface: #ffffff;
+    --surface-2: #f6f8fb;
+    --line: #e5e9f0;
+    --line-2: #d4dae5;
+    --ink-1: #0e1b2e;
+    --ink-2: #586478;
+    --ink-3: #8a93a4;
+
+    /* ---- Functional status (NOT brand — encodes coverage truth) ---- */
+    --confirm: #b5790a;
+    --confirm-tint: #fbf1dc; /* beyond core / verify with content */
+    --gap: #cc4848;
+    --gap-tint: #fbeaea; /* no coverage / locked */
+
+    --r-sm: 8px;
+    --r: 12px;
+    --r-lg: 16px;
+    --r-xl: 22px;
+    --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+    display: block;
+}
+
+.lex-root {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    color: var(--ink-1);
+}
+
+.lex-root_modal {
+    border: none;
+    border-radius: 0;
+}
+
+.lex-header {
+    background: linear-gradient(135deg, var(--lex-ink) 0%, var(--lex-ink-2) 100%);
+    color: #fff;
+    padding: 1rem 1.25rem;
+}
+
+.lex-brand {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.lex-brand__pro {
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    color: var(--lex-blue);
+}
+
+.lex-brand__title {
+    font-weight: 600;
+    font-size: 1.05rem;
+}
+
+.lex-header__sub {
+    margin: 0.4rem 0 0;
+    color: #c9d6e5;
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+.lex-body {
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Records_Evaluated__c</fullName>
+    <label>Records Evaluated</label>
+    <description>Count of activated orders in scope that this run evaluated for renewal eligibility.</description>
+    <inlineHelpText>Total orders the run looked at, before deciding which ones needed a renewal.</inlineHelpText>
+    <type>Number</type>
+    <precision>18</precision>
+    <scale>0</scale>
+</CustomField>

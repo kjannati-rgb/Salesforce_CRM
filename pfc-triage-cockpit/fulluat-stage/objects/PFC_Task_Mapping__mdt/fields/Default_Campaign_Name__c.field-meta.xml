@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Default_Campaign_Name__c</fullName>
+    <description>REV-57: exact Campaign.Name to stamp on the PFC (Campaign__c) and add the person to as a member (Newsfeed = "Lexology - Free Newsfeed Subscribers"). Resolved to a Campaign Id at runtime by name (no hardcoded Ids). Blank = no campaign.</description>
+    <label>Default Campaign Name</label>
+    <type>Text</type>
+    <length>255</length>
+    <required>false</required>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,131 @@
+{
+  "status": 0,
+  "result": {
+    "records": [
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "StageName": "Identify",
+        "CurrencyIsoCode": "GBP",
+        "recs": 103,
+        "sumAmount": 98298.47,
+        "sumACV": 31209.8
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "StageName": "Identify",
+        "CurrencyIsoCode": "USD",
+        "recs": 3,
+        "sumAmount": 18464.29,
+        "sumACV": 6154.76
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "StageName": "Evaluate",
+        "CurrencyIsoCode": "GBP",
+        "recs": 32,
+        "sumAmount": 24600,
+        "sumACV": 8933.87
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "StageName": "Evaluate",
+        "CurrencyIsoCode": "USD",
+        "recs": 1,
+        "sumAmount": 0,
+        "sumACV": 0
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "StageName": "Closed Won",
+        "CurrencyIsoCode": "EUR",
+        "recs": 18,
+        "sumAmount": 76858.83,
+        "sumACV": null
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "StageName": "Closed Won",
+        "CurrencyIsoCode": "GBP",
+        "recs": 1089,
+        "sumAmount": 2888832.88,
+        "sumACV": 10959.65
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "StageName": "Closed Won",
+        "CurrencyIsoCode": "USD",
+        "recs": 22,
+        "sumAmount": 153605.36,
+        "sumACV": null
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "StageName": "Closed Lost",
+        "CurrencyIsoCode": "EUR",
+        "recs": 10,
+        "sumAmount": 30345.64,
+        "sumACV": 2624.87
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "StageName": "Closed Lost",
+        "CurrencyIsoCode": "GBP",
+        "recs": 1957,
+        "sumAmount": 12386553.17,
+        "sumACV": 203742.04
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "StageName": "Closed Lost",
+        "CurrencyIsoCode": "USD",
+        "recs": 55,
+        "sumAmount": 274830.28,
+        "sumACV": 16549.02
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "StageName": "Closed Won - Cancellation",
+        "CurrencyIsoCode": "GBP",
+        "recs": 19,
+        "sumAmount": 0,
+        "sumACV": null
+      }
+    ],
+    "totalSize": 11,
+    "done": true
+  },
+  "warnings": []
+}

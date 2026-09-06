@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>isNewBusiness__c</fullName>
+    <formula>IF(RecordType.Name = &quot;New Business&quot;,TRUE,FALSE)</formula>
+    <label>isNewBusiness</label>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

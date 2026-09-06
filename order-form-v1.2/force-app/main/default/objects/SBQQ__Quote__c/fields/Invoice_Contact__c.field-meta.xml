@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Invoice_Contact__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <inlineHelpText>Who receives invoices. Leave blank — the Order Form prints the Primary Contact. Set it only when invoices go to someone else (finance, accounts payable).</inlineHelpText>
+    <label>Invoice Contact</label>
+    <referenceTo>Contact</referenceTo>
+    <relationshipLabel>Quotes (Invoice Contact)</relationshipLabel>
+    <relationshipName>Quotes5</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

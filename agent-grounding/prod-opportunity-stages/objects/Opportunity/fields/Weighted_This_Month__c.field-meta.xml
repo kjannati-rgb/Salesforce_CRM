@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Weighted_This_Month__c</fullName>
+    <description>This field calculates the weighted amount only for opportunities whose close date in THIS MONTH</description>
+    <formula>IF(
+MONTH( CloseDate ) = MONTH(TODAY()),
+ Weighted_Amount__c ,
+0)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Weighted This Month</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <type>Currency</type>
+</CustomField>

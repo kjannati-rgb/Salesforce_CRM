@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>GIR_Old_Leads_for_Michael</fullName>
+    <columns>OWNER.FIRST_NAME</columns>
+    <columns>NAME</columns>
+    <columns>Prospect_Name__c</columns>
+    <columns>Job_Title__c</columns>
+    <columns>Company__c</columns>
+    <columns>Email__c</columns>
+    <columns>Phone__c</columns>
+    <columns>Country__c</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>Opportunity__c</columns>
+    <columns>Opportunity_Stage__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Sales_Stage__c</field>
+        <operation>equals</operation>
+        <value>New,Disqualified</value>
+    </filters>
+    <filters>
+        <field>Form_Name__c</field>
+        <operation>startsWith</operation>
+        <value>GIR - LeadGen - Subscribe - Short Form,GIR Lead Generation Form</value>
+    </filters>
+    <filters>
+        <field>CREATED_DATE</field>
+        <operation>greaterThan</operation>
+        <value>1/1/2023 12:00 AM</value>
+    </filters>
+    <filters>
+        <field>CREATED_DATE</field>
+        <operation>lessOrEqual</operation>
+        <value>1/1/2024 12:00 AM</value>
+    </filters>
+    <filters>
+        <field>OWNER.FIRST_NAME</field>
+        <operation>notEqual</operation>
+        <value>,Scott,Matthew,Jessica,Jess,Josh,Mark</value>
+    </filters>
+    <label>GIR Old Leads for Michael</label>
+</ListView>

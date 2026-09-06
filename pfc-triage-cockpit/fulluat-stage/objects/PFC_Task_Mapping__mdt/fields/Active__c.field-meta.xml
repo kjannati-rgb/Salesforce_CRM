@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Active__c</fullName>
+    <description>REV-57: master on/off switch for this prefix mapping. The orchestrator ignores inactive rows, so a source can be disabled without editing the flow.</description>
+    <label>Active</label>
+    <type>Checkbox</type>
+    <defaultValue>true</defaultValue>
+</CustomField>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>EVT_Sponsor_Click_Leads_Graham</fullName>
+    <columns>OWNER.ALIAS</columns>
+    <columns>OWNER.FIRST_NAME</columns>
+    <columns>NAME</columns>
+    <columns>Prospect_Name__c</columns>
+    <columns>Job_Title__c</columns>
+    <columns>Company__c</columns>
+    <columns>Email__c</columns>
+    <columns>Phone__c</columns>
+    <columns>Country__c</columns>
+    <columns>Sales_Stage__c</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>Opportunity__c</columns>
+    <columns>Opportunity_Stage__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Pardot_Form_Completion__c.Events_Sponsorship</value>
+    </filters>
+    <filters>
+        <field>Owner_Name__c</field>
+        <operation>equals</operation>
+        <value>B2BMA Integration</value>
+    </filters>
+    <filters>
+        <field>NAME</field>
+        <operation>contains</operation>
+        <value>EVT: Graham</value>
+    </filters>
+    <label>EVT Sponsor-Click Leads-Graham</label>
+</ListView>

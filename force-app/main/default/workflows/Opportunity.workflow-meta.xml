@@ -1,0 +1,637 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>Approval_email_notification</fullName>
+        <description>Approval email notification</description>
+        <protected>false</protected>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>SA_Opportunity_Email_Templates/Opportunity_Approved_Message</template>
+    </alerts>
+    <alerts>
+        <fullName>BadDebtorClosedLostEmailAlert</fullName>
+        <description>BadDebtorClosedLostEmailAlert</description>
+        <protected>false</protected>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <recipients>
+            <field>sbaa__SubmittedUser__c</field>
+            <type>userLookup</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>CPQ_AA_Opportunity_Email_Templates/TestBadDebtor</template>
+    </alerts>
+    <alerts>
+        <fullName>CS_Closed_lost_reasons</fullName>
+        <ccEmails>GxRCancellations@lbresearch.com</ccEmails>
+        <description>CS Closed lost reasons</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Specialist_platforms_Cancellation__c</field>
+            <type>email</type>
+        </recipients>
+        <recipients>
+            <recipient>robert.cole@lbresearch.com</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>romuz.miah@lbresearch.com</recipient>
+            <type>user</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/Closed_Lost_reasons_Opportunity</template>
+    </alerts>
+    <alerts>
+        <fullName>CS_Contact_Notification</fullName>
+        <description>CS Contact Notification</description>
+        <protected>false</protected>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/CS_Contact_Notification</template>
+    </alerts>
+    <alerts>
+        <fullName>CS_NB_Handshake</fullName>
+        <description>CS NB Handshake</description>
+        <protected>false</protected>
+        <recipients>
+            <recipient>Asia_PI_Team_Lead_SP_Renewals_and_Pro_AM</recipient>
+            <type>role</type>
+        </recipients>
+        <recipients>
+            <recipient>USA_Commercial_Director</recipient>
+            <type>role</type>
+        </recipients>
+        <recipients>
+            <recipient>Asia_PI_Lexology_Pro_Sales_Manager</recipient>
+            <type>roleSubordinatesInternal</type>
+        </recipients>
+        <recipients>
+            <recipient>Asia_PI_Team_Lead_SP_Renewals_and_Pro_AM</recipient>
+            <type>roleSubordinatesInternal</type>
+        </recipients>
+        <recipients>
+            <recipient>CS_Lexology_PRO_Head</recipient>
+            <type>roleSubordinatesInternal</type>
+        </recipients>
+        <recipients>
+            <recipient>PI_Global_Commercial_Director_Lexology_PRO</recipient>
+            <type>roleSubordinatesInternal</type>
+        </recipients>
+        <recipients>
+            <recipient>USA_Lex_Pro_New_Business_Sales_Manager</recipient>
+            <type>roleSubordinatesInternal</type>
+        </recipients>
+        <recipients>
+            <recipient>alex.morrall@lbresearch.com</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>amy.elderfield@lbresearch.com</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>daniel.cole@lbresearch.com</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>rosie.cresswell@lbresearch.com</recipient>
+            <type>user</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/NB_Sales_handshake_Lex_Pro</template>
+    </alerts>
+    <alerts>
+        <fullName>Closed_Won_Deal</fullName>
+        <description>Closed Won Deal</description>
+        <protected>false</protected>
+        <recipients>
+            <recipient>saurabh.patil@lbresearch.com</recipient>
+            <type>user</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/Closed_Won_Email_Alert_to_admin_1723627895026</template>
+    </alerts>
+    <alerts>
+        <fullName>Data_Team_Enrich_Account</fullName>
+        <description>Data Team Enrich Account</description>
+        <protected>false</protected>
+        <recipients>
+            <recipient>Data_Team</recipient>
+            <type>group</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/Data_Team_Enrich_Account</template>
+    </alerts>
+    <alerts>
+        <fullName>LexPro_Closed_Won_Alert</fullName>
+        <description>LexPro new opp 15k+</description>
+        <protected>false</protected>
+        <recipients>
+            <recipient>LexPro_Closed_Won_Email_Alert</recipient>
+            <type>group</type>
+        </recipients>
+        <recipients>
+            <recipient>saurabh.patil@lbresearch.com</recipient>
+            <type>user</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/LexPro_Opp_Closed_Won_1709065892738</template>
+    </alerts>
+    <alerts>
+        <fullName>Opportunity_Auto_Closed_Lost</fullName>
+        <description>Opportunity Auto Closed Lost</description>
+        <protected>false</protected>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>SA_Opportunity_Email_Templates/Opportunity_Auto_Closed_Lost</template>
+    </alerts>
+    <alerts>
+        <fullName>Opportunity_Direct_Debit_Card</fullName>
+        <ccEmails>finance@lbresearch.com</ccEmails>
+        <ccEmails>saurabh.patil@lbresearch.com</ccEmails>
+        <description>Opportunity: Direct Debit Card</description>
+        <protected>false</protected>
+        <recipients>
+            <recipient>Finance_Payment_Requests</recipient>
+            <type>group</type>
+        </recipients>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>CPQ_AA_Opportunity_Email_Templates/Requesting_for_Direct_Debit</template>
+    </alerts>
+    <alerts>
+        <fullName>Opportunity_Recall_email_notification</fullName>
+        <description>Opportunity Recall email notification</description>
+        <protected>false</protected>
+        <recipients>
+            <recipient>Finance_Approvers_Opportunity</recipient>
+            <type>group</type>
+        </recipients>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>SA_Opportunity_Email_Templates/Opportunity_Recall_Message</template>
+    </alerts>
+    <alerts>
+        <fullName>Opportunity_Rejection_email_notification</fullName>
+        <description>Opportunity Rejection email notification</description>
+        <protected>false</protected>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>SA_Opportunity_Email_Templates/Opportunity_Rejected_Message</template>
+    </alerts>
+    <alerts>
+        <fullName>PRO_Closed_lost_reasons</fullName>
+        <ccEmails>LexologyPRO_Newdeals_Discontinues@globeBPCRM.onmicrosoft.com</ccEmails>
+        <ccEmails>lexologypro_newdeals_discontinues@lbresearch.com</ccEmails>
+        <description>PRO Closed lost reasons</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Pro_Closed_Lost_reasons_email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/Closed_Lost_reasons_Opportunity</template>
+    </alerts>
+    <alerts>
+        <fullName>PRO_NB_Handshake</fullName>
+        <description>PRO NB Handshake</description>
+        <protected>false</protected>
+        <recipients>
+            <recipient>Asia_PI_Team_Lead_SP_Renewals_and_Pro_AM</recipient>
+            <type>role</type>
+        </recipients>
+        <recipients>
+            <recipient>USA_Commercial_Director</recipient>
+            <type>role</type>
+        </recipients>
+        <recipients>
+            <recipient>Asia_PI_Lexology_Pro_Sales_Manager</recipient>
+            <type>roleSubordinatesInternal</type>
+        </recipients>
+        <recipients>
+            <recipient>CS_Lexology_PRO_Head</recipient>
+            <type>roleSubordinatesInternal</type>
+        </recipients>
+        <recipients>
+            <recipient>PI_Global_Commercial_Director_Lexology_PRO</recipient>
+            <type>roleSubordinatesInternal</type>
+        </recipients>
+        <recipients>
+            <recipient>USA_Lex_Pro_New_Business_Sales_Manager</recipient>
+            <type>roleSubordinatesInternal</type>
+        </recipients>
+        <recipients>
+            <recipient>alex.morrall@lbresearch.com</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>amy.elderfield@lbresearch.com</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>daniel.cole@lbresearch.com</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>rosie.cresswell@lbresearch.com</recipient>
+            <type>user</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/NB_Sales_handshake_Lex_Pro</template>
+    </alerts>
+    <alerts>
+        <fullName>Rejection_email_notification</fullName>
+        <description>Rejection email notification</description>
+        <protected>false</protected>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>SA_Opportunity_Email_Templates/Opportunity_Rejected_Message</template>
+    </alerts>
+    <alerts>
+        <fullName>WWL_Annual_Licence_closed_won_email_alert</fullName>
+        <description>WWL Annual Licence closed won email alert</description>
+        <protected>false</protected>
+        <recipients>
+            <recipient>joshua.adetunji@lbresearch.com</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>saurabh.patil@lbresearch.com</recipient>
+            <type>user</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/WWL_Closed_Won_Opportunity_1719699423239</template>
+    </alerts>
+    <alerts>
+        <fullName>WWL_Annual_Report_closed_won_email_alert</fullName>
+        <description>WWL Annual Report closed won email alert</description>
+        <protected>false</protected>
+        <recipients>
+            <recipient>francesca.clixby@lbresearch.com</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>laura.mccallum@lbresearch.com</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>richard.morris@lbresearch.com</recipient>
+            <type>user</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/WWL_Closed_Won_Opportunity_1719699423239</template>
+    </alerts>
+    <alerts>
+        <fullName>WWL_closed_won_email_alert</fullName>
+        <description>WWL closed won email alert</description>
+        <protected>false</protected>
+        <recipients>
+            <recipient>joshua.adetunji@lbresearch.com</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>richard.morris@lbresearch.com</recipient>
+            <type>user</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/WWL_Closed_Won_Opportunity_1719699423239</template>
+    </alerts>
+    <alerts>
+        <fullName>opportunity_Credit_Card</fullName>
+        <ccEmails>finance@lbresearch.com</ccEmails>
+        <description>opportunity: Credit Card</description>
+        <protected>false</protected>
+        <recipients>
+            <recipient>Finance_Payment_Requests</recipient>
+            <type>group</type>
+        </recipients>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>CPQ_AA_Opportunity_Email_Templates/Opportunity_Credit_Card</template>
+    </alerts>
+    <fieldUpdates>
+        <fullName>Annual_Uplift</fullName>
+        <description>Update % Annual Uplift</description>
+        <field>Annual_Uplift__c</field>
+        <formula>(Annual_Contract_Value_converted__c/Previous_Annual_Contract_Value__c) - 1</formula>
+        <name>% Annual Uplift</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Auto_Assign_Loss_Reason</fullName>
+        <description>This field update is used as part of the Bad Debtor process to automatically to flag any Opportunities  set to Closed Loss with a Loss Reason of &quot;Bad Debtor.</description>
+        <field>Loss_Reason__c</field>
+        <literalValue>Bad Debtor</literalValue>
+        <name>Auto Assign Loss Reason</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Auto_Reject_Stage_Closed_Lost</fullName>
+        <field>StageName</field>
+        <literalValue>Closed Lost</literalValue>
+        <name>Auto Reject Stage Closed Lost</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Close_Date</fullName>
+        <field>CloseDate</field>
+        <formula>Today()</formula>
+        <name>Close Date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Closed_Won_Cancellation</fullName>
+        <field>StageName</field>
+        <literalValue>Closed Won - Cancellation</literalValue>
+        <name>Closed Won - Cancellation</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Finance_Submitted_to_Approval_True</fullName>
+        <field>Submitted_to_Approval_Process__c</field>
+        <literalValue>1</literalValue>
+        <name>Finance Submitted to Approval True</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Increment_Push_Counter_Field</fullName>
+        <description>Increment the Push Counter by 1</description>
+        <field>Push_Counter__c</field>
+        <formula>IF( 
+ISNULL( Push_Counter__c ), 
+1, 
+Push_Counter__c + 1 
+)</formula>
+        <name>Increment Push Counter Field</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Opportunity_Approved</fullName>
+        <description>Checks the &quot;Approved&quot; checkbox on the opportunity record so that the approval process does not fire a second time.</description>
+        <field>Approved__c</field>
+        <literalValue>1</literalValue>
+        <name>Opportunity Approved</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Opportunity_Approved_False</fullName>
+        <field>Approved__c</field>
+        <literalValue>0</literalValue>
+        <name>Opportunity Approved False</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Opportunity_Approved_True</fullName>
+        <description>Checks the &quot;Approved&quot; checkbox on the opportunity record so that the approval process does not fire a second time.</description>
+        <field>Approved__c</field>
+        <literalValue>1</literalValue>
+        <name>Opportunity Approved True</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Opportunity_Ordered</fullName>
+        <description>The Opportunity is Ordered.</description>
+        <field>SBQQ__Ordered__c</field>
+        <literalValue>1</literalValue>
+        <name>Opportunity Ordered</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Ordered</fullName>
+        <field>SBQQ__Ordered__c</field>
+        <literalValue>1</literalValue>
+        <name>Ordered</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Ordered_TRUE</fullName>
+        <field>SBQQ__Ordered__c</field>
+        <literalValue>1</literalValue>
+        <name>Ordered TRUE</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Recall_Opportunity_Approved_False</fullName>
+        <field>Approved__c</field>
+        <literalValue>0</literalValue>
+        <name>Recall Opportunity Approved False</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Recall_Stage_Close</fullName>
+        <description>Stage moved back to Contract out.</description>
+        <field>StageName</field>
+        <literalValue>Contract Out</literalValue>
+        <name>Recall Stage Contract Out</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Recall_Stage_Contract_Out</fullName>
+        <description>Stage moved back to Contract Out</description>
+        <field>StageName</field>
+        <literalValue>Contract Out</literalValue>
+        <name>Recall Stage Contract Out</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Recall_Submitted_for_Approval_False</fullName>
+        <field>Submitted_to_Approval_Process__c</field>
+        <literalValue>0</literalValue>
+        <name>Recall Submitted for Approval False</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Rejected_Submitted_for_Approval_False</fullName>
+        <description>Rejected_Submitted_for_Approval_False</description>
+        <field>Submitted_to_Approval_Process__c</field>
+        <literalValue>0</literalValue>
+        <name>Rejected Submitted for Approval False</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Rejected_Submitted_to_Approval_False</fullName>
+        <field>Submitted_to_Approval_Process__c</field>
+        <literalValue>0</literalValue>
+        <name>Rejected Submitted to Approval False</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Stage_Close</fullName>
+        <description>Stage moved back to Contract Out</description>
+        <field>StageName</field>
+        <literalValue>Contract Out</literalValue>
+        <name>Stage Contract Out</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Stage_Closed_Lost</fullName>
+        <field>StageName</field>
+        <literalValue>Closed Lost</literalValue>
+        <name>Stage Closed Lost</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Stage_Closed_Won</fullName>
+        <field>StageName</field>
+        <literalValue>Closed Won</literalValue>
+        <name>Stage Closed Won</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Stage_Closed_Won_Pending_Approval</fullName>
+        <field>StageName</field>
+        <literalValue>Closed Won – Pending Approval</literalValue>
+        <name>Stage Closed Won Pending Approval</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Stage_Contract_Out</fullName>
+        <field>StageName</field>
+        <literalValue>Contract Out</literalValue>
+        <name>Stage Contract Out</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Submitted_for_Approval</fullName>
+        <description>Checks the &quot;Submitted for Approval&quot; checkbox on the opportunity record so that the approval process does not fire a second time.</description>
+        <field>Submitted_to_Approval_Process__c</field>
+        <literalValue>1</literalValue>
+        <name>Submitted for Approval</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Submitted_for_Approval_True</fullName>
+        <description>Checks the &quot;Submitted for Approval&quot; checkbox on the opportunity record so that the approval process does not fire a second time.</description>
+        <field>Submitted_to_Approval_Process__c</field>
+        <literalValue>1</literalValue>
+        <name>Submitted for Approval True</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Approved</fullName>
+        <description>Checks the &quot;Approved&quot; checkbox on the opportunity record so that the approval process does not fire a second time.</description>
+        <field>Approved__c</field>
+        <literalValue>1</literalValue>
+        <name>Update Approved</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Close_date</fullName>
+        <field>CloseDate</field>
+        <formula>today()</formula>
+        <name>Update Close date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <rules>
+        <fullName>Push Counter</fullName>
+        <actions>
+            <name>Increment_Push_Counter_Field</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <description>Increment the Push Counter field by 1</description>
+        <formula>IF(  CloseDate &gt; PRIORVALUE( CloseDate ),  IF (MONTH(CloseDate) &lt;&gt; MONTH(PRIORVALUE( CloseDate )) ,  TRUE,  FALSE),  FALSE)</formula>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+</Workflow>

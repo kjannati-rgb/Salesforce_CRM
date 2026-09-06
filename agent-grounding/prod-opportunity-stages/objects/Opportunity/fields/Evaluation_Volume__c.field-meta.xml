@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Evaluation_Volume__c</fullName>
+    <description>Volume of Opportunities at the Evaluation stage, used for reporting.</description>
+    <externalId>false</externalId>
+    <formula>IF( TEXT(StageName) = &apos;Evaluate&apos;, 1, 0)</formula>
+    <inlineHelpText>Volume of Opportunities at the Evaluation stage, used for reporting.</inlineHelpText>
+    <label>Evaluate (Volume)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MBL_Seminars_BookingTransactionID__c</fullName>
+    <caseSensitive>false</caseSensitive>
+    <description>The MBL Seminars BookingTransactionID field is designed to store the unique identifier assigned to a booking by MBL Seminars in its system. This field ensures seamless data integration and synchronization between Salesforce and MBL Seminars&apos; platform.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>The MBL Seminars BookingTransactionID field is designed to store the unique identifier assigned to a booking by MBL Seminars in its system. This field ensures seamless data integration and synchronization between Salesforce and MBL Seminars&apos; platform.</inlineHelpText>
+    <label>MBL Seminars BookingTransactionID</label>
+    <length>7</length>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>true</unique>
+</CustomField>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Form_Name_Prefix_To_Strip__c</fullName>
+    <description>REV-57: when Parse_Form_Name_From_Subject__c is TRUE, the leading text removed from the Subject to produce Form_Name__c (e.g. "PFC:", "Lead scoring MQL:"). Mirrors the legacy flow's substitute() behaviour.</description>
+    <label>Form Name Prefix To Strip</label>
+    <type>Text</type>
+    <length>40</length>
+    <required>false</required>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Renewed_Volume__c</fullName>
+    <description>The volume of Closed Won Renewal Opportunities</description>
+    <externalId>false</externalId>
+    <formula>IF (
+AND(RecordType.DeveloperName = &quot;Renewals&quot;,
+TEXT( StageName) = &quot;Closed Won&quot;), 1, 0)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>The volume of Closed Won Renewal Opportunities</inlineHelpText>
+    <label>Renewed Volume</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

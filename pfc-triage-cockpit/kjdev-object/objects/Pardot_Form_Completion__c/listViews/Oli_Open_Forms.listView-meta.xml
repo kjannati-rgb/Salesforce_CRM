@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Oli_Open_Forms</fullName>
+    <columns>LAST_ACTIVITY</columns>
+    <columns>NAME</columns>
+    <columns>Sales_Stage__c</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>Prospect_Name__c</columns>
+    <columns>Company__c</columns>
+    <columns>Email__c</columns>
+    <columns>Phone__c</columns>
+    <columns>Job_Title__c</columns>
+    <columns>Country__c</columns>
+    <columns>Days_to_Conversion__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Sales_Stage__c</field>
+        <operation>notEqual</operation>
+        <value>Converted,Disqualified</value>
+    </filters>
+    <filters>
+        <field>OWNER.LAST_NAME</field>
+        <operation>equals</operation>
+        <value>Morris</value>
+    </filters>
+    <filters>
+        <field>OWNER.FIRST_NAME</field>
+        <operation>equals</operation>
+        <value>Oliver</value>
+    </filters>
+    <label>Oli Open Forms</label>
+</ListView>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Routing_Overdue__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Set by the PFC Routing SLA sweep when this record has sat in the PFC Triage Queue beyond the working-hours threshold (PFC_Settings__mdt.Routing_SLA_Hours__c) without being routed to a rep. Cleared automatically by PFC_Stamp_Work_Fields when a User takes ownership. Used for list-view filtering and escalation.</description>
+    <inlineHelpText>Routing SLA breached: this form completion waited too long in the triage queue. Clears automatically when a rep takes ownership.</inlineHelpText>
+    <label>Routing Overdue</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <available>true</available>
+    <description>Centellic AA Quote: Approved AVG</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Centellic AA Quote: Approved AVG</name>
+    <packageVersions>
+        <majorNumber>262</majorNumber>
+        <minorNumber>0</minorNumber>
+        <namespace>SBQQ</namespace>
+    </packageVersions>
+    <packageVersions>
+        <majorNumber>244</majorNumber>
+        <minorNumber>0</minorNumber>
+        <namespace>sbaa</namespace>
+    </packageVersions>
+    <style>none</style>
+    <subject>has been Approved!</subject>
+    <type>visualforce</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

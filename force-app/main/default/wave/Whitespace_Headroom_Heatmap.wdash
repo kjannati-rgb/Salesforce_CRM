@@ -1,0 +1,146 @@
+{
+  "dataSourceLinksInfo": {
+    "enableAutomaticLinking": false,
+    "excludeRelationships": [],
+    "links": []
+  },
+  "filters": [],
+  "gridLayouts": [
+    {
+      "maxWidth": 1280,
+      "name": "Default",
+      "numColumns": 12,
+      "pages": [
+        {
+          "label": "Heat Map",
+          "name": "heatmap_page",
+          "navigationHidden": false,
+          "widgets": [
+            {
+              "name": "Segment_list",
+              "column": 0,
+              "row": 0,
+              "colspan": 6,
+              "rowspan": 2,
+              "widgetStyle": { "backgroundColor": "#FFFFFF", "borderColor": "#E6ECF2", "borderEdges": [], "borderRadius": 1, "borderWidth": 1 }
+            },
+            {
+              "name": "Tier_list",
+              "column": 6,
+              "row": 0,
+              "colspan": 6,
+              "rowspan": 2,
+              "widgetStyle": { "backgroundColor": "#FFFFFF", "borderColor": "#E6ECF2", "borderEdges": [], "borderRadius": 1, "borderWidth": 1 }
+            },
+            {
+              "name": "hm_chart",
+              "column": 0,
+              "row": 2,
+              "colspan": 12,
+              "rowspan": 16,
+              "widgetStyle": { "backgroundColor": "#FFFFFF", "borderColor": "#E6ECF2", "borderEdges": [], "borderRadius": 1, "borderWidth": 1 }
+            }
+          ]
+        }
+      ],
+      "rowHeight": "fine",
+      "selectors": [],
+      "style": {},
+      "version": 1
+    }
+  ],
+  "layouts": [],
+  "widgetStyle": {
+    "backgroundColor": "#FFFFFF",
+    "borderColor": "#E6ECF2",
+    "borderEdges": [],
+    "borderRadius": 0,
+    "borderWidth": 0
+  },
+  "steps": {
+    "hm": {
+      "type": "aggregateflex",
+      "datasets": [ { "name": "Whitespace_Headroom" } ],
+      "isGlobal": false,
+      "useGlobal": false,
+      "selectMode": "none",
+      "query": {
+        "query": "{\"measures\":[[\"sum\",\"Headroom\"]],\"groups\":[\"Firm\",\"Family\"]}",
+        "version": -1
+      },
+      "visualizationParameters": { "options": {}, "visualizationType": "matrix" }
+    },
+    "Segment_sel": {
+      "type": "aggregateflex",
+      "datasets": [ { "name": "Whitespace_Headroom" } ],
+      "isGlobal": false,
+      "useGlobal": false,
+      "selectMode": "multi",
+      "query": {
+        "query": "{\"measures\":[[\"count\",\"*\"]],\"groups\":[\"Segment\"]}",
+        "version": -1
+      },
+      "visualizationParameters": { "options": {}, "visualizationType": "listselector" }
+    },
+    "Tier_sel": {
+      "type": "aggregateflex",
+      "datasets": [ { "name": "Whitespace_Headroom" } ],
+      "isGlobal": false,
+      "useGlobal": false,
+      "selectMode": "multi",
+      "query": {
+        "query": "{\"measures\":[[\"count\",\"*\"]],\"groups\":[\"Tier\"]}",
+        "version": -1
+      },
+      "visualizationParameters": { "options": {}, "visualizationType": "listselector" }
+    }
+  },
+  "widgets": {
+    "hm_chart": {
+      "type": "chart",
+      "parameters": {
+        "step": "hm",
+        "visualizationType": "matrix",
+        "exploreLink": true,
+        "showActionMenu": true,
+        "autoFitMode": "keepLabels",
+        "theme": "wave",
+        "title": {
+          "label": "White-Space Headroom (£) by Firm × Product Family",
+          "subtitleLabel": "Gap-to-benchmark; darker = more headroom. Filter by segment/tier above; use a cell's action menu to open the plan.",
+          "align": "center",
+          "fontSize": 14,
+          "subtitleFontSize": 11
+        },
+        "legend": { "show": true, "showHeader": true, "position": "right-top", "inside": false },
+        "applyConditionalFormatting": true
+      }
+    },
+    "Segment_list": {
+      "type": "listselector",
+      "parameters": {
+        "step": "Segment_sel",
+        "title": "Segment",
+        "displayMode": "combo",
+        "expanded": true,
+        "instant": true,
+        "compact": false,
+        "exploreLink": false,
+        "showActionMenu": false
+      }
+    },
+    "Tier_list": {
+      "type": "listselector",
+      "parameters": {
+        "step": "Tier_sel",
+        "title": "Plan Tier",
+        "displayMode": "combo",
+        "expanded": true,
+        "instant": true,
+        "compact": false,
+        "exploreLink": false,
+        "showActionMenu": false
+      }
+    }
+  }
+}

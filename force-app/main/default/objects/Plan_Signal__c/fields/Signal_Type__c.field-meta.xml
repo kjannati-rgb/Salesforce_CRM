@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Signal_Type__c</fullName>
+    <label>Signal Type</label>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value><fullName>Risk</fullName><default>false</default><label>Risk</label></value>
+            <value><fullName>Churn</fullName><default>false</default><label>Churn</label></value>
+            <value><fullName>Expansion</fullName><default>false</default><label>Expansion</label></value>
+            <value><fullName>Intent</fullName><default>false</default><label>Intent</label></value>
+            <value><fullName>Relationship</fullName><default>false</default><label>Relationship</label></value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

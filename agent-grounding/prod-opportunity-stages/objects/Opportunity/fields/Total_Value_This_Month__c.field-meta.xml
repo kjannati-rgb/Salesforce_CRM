@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Value_This_Month__c</fullName>
+    <description>Total value this month (for NB&apos;s reports - do not delete)</description>
+    <formula>IF(
+AND(
+MONTH(CloseDate) = MONTH(TODAY()),
+text(Opportunity_Type_Forecast__c) = &quot;New Business&quot;
+),
+Amount,
+0)</formula>
+    <inlineHelpText>Total value this month (for NB&apos;s reports - do not delete)</inlineHelpText>
+    <label>Total Value This Month</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <type>Currency</type>
+</CustomField>

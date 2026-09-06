@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <label>Team - WNS (offshore) - SREN</label>
+    <protected>false</protected>
+    <values>
+        <field>Row_Type__c</field>
+        <value xsi:type="xsd:string">Team Override</value>
+    </values>
+    <values>
+        <field>Match_Key__c</field>
+        <value xsi:type="xsd:string">Sales Executive WNS</value>
+    </values>
+    <values>
+        <field>Base_Promo_Code__c</field>
+        <value xsi:type="xsd:string">!SREN</value>
+    </values>
+    <values>
+        <field>Opp_Types__c</field>
+        <value xsi:type="xsd:string">Renewal;Upsell</value>
+    </values>
+    <values>
+        <field>Dispatch_Code__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Apply_Year_Suffix__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Z_Eligible__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>Write_On_Blank_Only__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Active__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>Notes__c</field>
+        <value xsi:type="xsd:string">DEACTIVATED 17 Jul: !SREN seeded as a team base counted as ALM-owned, so non-WNS-renewal paths overwrote a rep's !SREN with !SJSI (proven Q-217368/393). Off =&gt; !SREN never overwritten. Brady: per-deal choice, default loss OK.</value>
+    </values>
+</CustomMetadata>

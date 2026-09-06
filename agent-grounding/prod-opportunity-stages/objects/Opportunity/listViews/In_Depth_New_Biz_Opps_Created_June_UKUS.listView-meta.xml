@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>In_Depth_New_Biz_Opps_Created_June_UKUS</fullName>
+    <columns>OPPORTUNITY.NAME</columns>
+    <columns>ACCOUNT.NAME</columns>
+    <columns>OPPORTUNITY.AMOUNT</columns>
+    <columns>OPPORTUNITY.TYPE</columns>
+    <columns>OPPORTUNITY.STAGE_NAME</columns>
+    <columns>CORE.USERS.FULL_NAME</columns>
+    <columns>Next_Contact_Date__c</columns>
+    <columns>OPPORTUNITY.CLOSE_DATE</columns>
+    <columns>Notes__c</columns>
+    <columns>Workbooks_CRM_Legacy_Opportunity_Name__c</columns>
+    <columns>Sales_Manager__c</columns>
+    <columns>Lex_Inform_2021_Renewal__c</columns>
+    <columns>Opportunity_Number__c</columns>
+    <columns>Submitted_to_Approval_Process__c</columns>
+    <columns>Workbooks_CRM_Legacy_Reference__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>OPPORTUNITY.TYPE</field>
+        <operation>equals</operation>
+        <value>New Business,Upsell</value>
+    </filters>
+    <filters>
+        <field>CORE.USERS.LAST_NAME</field>
+        <operation>contains</operation>
+        <value>mogridge,kaur,gajjar,barette,sargent,mason</value>
+    </filters>
+    <filters>
+        <field>OPPORTUNITY.CREATED_DATE</field>
+        <operation>greaterThan</operation>
+        <value>5/31/2025 12:00 AM</value>
+    </filters>
+    <filters>
+        <field>OPPORTUNITY.AMOUNT</field>
+        <operation>greaterThan</operation>
+        <value>GBP 0</value>
+    </filters>
+    <filters>
+        <field>OPPORTUNITY.CREATED_DATE</field>
+        <operation>lessThan</operation>
+        <value>7/1/2025 12:00 AM</value>
+    </filters>
+    <label>In-Depth New Biz Opps Created June UKUS</label>
+</ListView>

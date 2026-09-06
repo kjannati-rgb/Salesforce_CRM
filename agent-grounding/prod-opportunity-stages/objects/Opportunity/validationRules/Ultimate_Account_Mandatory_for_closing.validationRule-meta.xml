@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Ultimate_Account_Mandatory_for_closing</fullName>
+    <active>true</active>
+    <description>Validation to prevent an opportunity from being closed won if the associated account does not have a parent account.</description>
+    <errorConditionFormula>AND(NOT( $Setup.Application_Settings__c.Disable_Validation_Rules__c ),ISPICKVAL (StageName, &apos;Closed Won&apos;),
+ISBLANK ( Account.Ultimate_Account__c))</errorConditionFormula>
+    <errorMessage>Please make sure the Account has an associated Ultimate Account before proceeding.</errorMessage>
+</ValidationRule>

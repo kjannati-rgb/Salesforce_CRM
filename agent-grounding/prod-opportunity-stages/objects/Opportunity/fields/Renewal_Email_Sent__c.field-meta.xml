@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Renewal_Email_Sent__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Indicates whether the renewal communication email (including the branded PDF) has been sent to the client.</description>
+    <inlineHelpText>Tick this box once the renewal email has been sent to the client and a copy of the email (with attached PDF) has been uploaded to the related Opportunity. This helps track communication progress and ensures visibility across teams.</inlineHelpText>
+    <label>Renewal Email Sent</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

@@ -1,0 +1,141 @@
+:host {
+    display: block;
+}
+
+.lex-core {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 1rem 1.25rem 1.25rem;
+    border-top: 1px solid var(--line, #e5e9f0);
+    background: var(--surface-2, #f6f8fb);
+}
+
+/* ---- progress ring ---- */
+.lex-ring {
+    position: relative;
+    width: 72px;
+    height: 72px;
+    flex: 0 0 auto;
+}
+
+.lex-ring__svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.lex-ring__track {
+    fill: none;
+    stroke: var(--line-2, #d4dae5);
+    stroke-width: 8;
+}
+
+.lex-ring__fill {
+    fill: none;
+    stroke: var(--lex-blue, #0094ff);
+    stroke-width: 8;
+    stroke-linecap: round;
+    transition: stroke-dasharray 0.5s var(--ease, ease);
+}
+
+.lex-ring__center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.lex-ring__num {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--lex-ink, #00162d);
+}
+
+.lex-ring__den {
+    font-size: 0.62rem;
+    color: var(--ink-3, #8a93a4);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ---- meta ---- */
+.lex-core__meta {
+    flex: 1 1 auto;
+    min-width: 8rem;
+}
+
+.lex-core__progress {
+    margin: 0 0 0.35rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--ink-1, #0e1b2e);
+}
+
+.lex-fit {
+    display: inline-block;
+    padding: 0.18rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.lex-fit_strong {
+    background: var(--lex-blue-tint, #e6f4ff);
+    color: var(--lex-blue-deep, #0a73d1);
+}
+
+.lex-fit_moderate {
+    background: var(--confirm-tint, #fbf1dc);
+    color: var(--confirm, #b5790a);
+}
+
+.lex-fit_caution {
+    background: var(--gap-tint, #fbeaea);
+    color: var(--gap, #cc4848);
+}
+
+.lex-fit_pending {
+    background: #eef1f6;
+    color: var(--ink-3, #8a93a4);
+}
+
+/* ---- advance button ---- */
+.lex-advance {
+    flex: 0 0 auto;
+    border: none;
+    border-radius: var(--r-sm, 8px);
+    background: var(--lex-ink, #00162d);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 0.6rem 1.1rem;
+    cursor: pointer;
+    transition: background 0.15s var(--ease, ease);
+}
+
+.lex-advance:hover:not(:disabled) {
+    background: var(--lex-blue-deep, #0a73d1);
+}
+
+.lex-advance:disabled {
+    background: var(--line-2, #d4dae5);
+    color: var(--ink-3, #8a93a4);
+    cursor: not-allowed;
+}
+
+.lex-advance:focus-visible {
+    outline: 2px solid var(--lex-blue, #0094ff);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lex-ring__fill,
+    .lex-advance {
+        transition: none;
+    }
+}

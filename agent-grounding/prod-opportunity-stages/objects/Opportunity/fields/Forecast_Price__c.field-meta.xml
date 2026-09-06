@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Forecast_Price__c</fullName>
+    <description>The forecast price for one year only (first year if a multi-year deal, or the total value if a one year deal)</description>
+    <inlineHelpText>The forecast price for one year only (first year if a multi-year deal, or the total value if a one year deal)</inlineHelpText>
+    <label>Forecast Price First Year Value</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Currency</type>
+</CustomField>

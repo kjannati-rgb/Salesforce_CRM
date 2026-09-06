@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Covered__c</fullName>
+    <description>REV-69: regions only — is this region covered by Lexology PRO? Unchecked renders as a coverage gap.</description>
+    <defaultValue>false</defaultValue>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Covered</label>
+    <type>Checkbox</type>
+</CustomField>

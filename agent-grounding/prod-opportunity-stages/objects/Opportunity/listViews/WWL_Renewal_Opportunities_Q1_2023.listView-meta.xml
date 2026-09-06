@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>WWL_Renewal_Opportunities_Q1_2023</fullName>
+    <columns>Opportunity_Salesforce_ID__c</columns>
+    <columns>OPPORTUNITY.NAME</columns>
+    <columns>Campaign__c</columns>
+    <columns>ACCOUNT.NAME</columns>
+    <columns>OPPORTUNITY.STAGE_NAME</columns>
+    <columns>OPPORTUNITY.CLOSE_DATE</columns>
+    <columns>Aspirational_Price__c</columns>
+    <columns>OPPORTUNITY.AMOUNT</columns>
+    <columns>CORE.USERS.ALIAS</columns>
+    <columns>OPPORTUNITY_SCORE</columns>
+    <columns>Primary_Contact__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>OPPORTUNITY.NAME</field>
+        <operation>startsWith</operation>
+        <value>WWL</value>
+    </filters>
+    <filters>
+        <field>CORE.USERS.ALIAS</field>
+        <operation>contains</operation>
+        <value>Sam.Lim</value>
+    </filters>
+    <filters>
+        <field>Opportunity_Owner_Team__c</field>
+        <operation>equals</operation>
+        <value>Benchmarking</value>
+    </filters>
+    <filters>
+        <field>OPPORTUNITY.STAGE_NAME</field>
+        <operation>contains</operation>
+        <value>Qualify,Evaluation</value>
+    </filters>
+    <label>WWL Renewal Opportunities - Q1 2023</label>
+</ListView>

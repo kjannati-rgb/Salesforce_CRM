@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>nonresponsive_IAM_leads_2024v_2025</fullName>
+    <columns>OWNER.FIRST_NAME</columns>
+    <columns>NAME</columns>
+    <columns>Prospect_Name__c</columns>
+    <columns>Job_Title__c</columns>
+    <columns>Company__c</columns>
+    <columns>Email__c</columns>
+    <columns>Phone__c</columns>
+    <columns>Country__c</columns>
+    <columns>Sales_Stage__c</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>Opportunity__c</columns>
+    <columns>Opportunity_Stage__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Sales_Stage__c</field>
+        <operation>equals</operation>
+        <value>New,Working,Disqualified</value>
+    </filters>
+    <filters>
+        <field>NAME</field>
+        <operation>contains</operation>
+        <value>IAM</value>
+    </filters>
+    <filters>
+        <field>CREATED_DATE</field>
+        <operation>greaterThan</operation>
+        <value>12/31/2024 12:00 AM</value>
+    </filters>
+    <filters>
+        <field>CREATED_DATE</field>
+        <operation>lessThan</operation>
+        <value>6/30/2025 12:00 AM</value>
+    </filters>
+    <filters>
+        <field>NAME</field>
+        <operation>notContain</operation>
+        <value>Market,Lexology,Docket</value>
+    </filters>
+    <filters>
+        <field>Job_Title__c</field>
+        <operation>notContain</operation>
+        <value>,Student,trainee,PHD,Intern,Associate,Translator</value>
+    </filters>
+    <filters>
+        <field>Country__c</field>
+        <operation>notContain</operation>
+        <value>,China,Korea,Japan,India,Thailand,Indonesia,Taiwan,Singapore,Vietnam,Philippines,Australia,New Zealand,Republic of,Viet Nam,Hong Kong,Pakistan,Russia</value>
+    </filters>
+    <filters>
+        <field>Company__c</field>
+        <operation>notContain</operation>
+        <value>Person Account</value>
+    </filters>
+    <filters>
+        <field>NAME</field>
+        <operation>notContain</operation>
+        <value>GCR,GIR</value>
+    </filters>
+    <filters>
+        <field>Company__c</field>
+        <operation>notContain</operation>
+        <value>University</value>
+    </filters>
+    <label>nonresponsive IAM leads 2024v 2025</label>
+</ListView>

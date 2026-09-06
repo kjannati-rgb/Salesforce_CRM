@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>GAR_Previous_Leads</fullName>
+    <columns>OWNER.FIRST_NAME</columns>
+    <columns>NAME</columns>
+    <columns>Prospect_Name__c</columns>
+    <columns>Job_Title__c</columns>
+    <columns>Company__c</columns>
+    <columns>Email__c</columns>
+    <columns>Phone__c</columns>
+    <columns>Country__c</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>Opportunity__c</columns>
+    <columns>Opportunity_Stage__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Sales_Stage__c</field>
+        <operation>equals</operation>
+        <value>Converted,Disqualified</value>
+    </filters>
+    <filters>
+        <field>Form_Name__c</field>
+        <operation>startsWith</operation>
+        <value>GCR - LeadGen - Subscribe - Short Form,GCR - LeadGen - Content download</value>
+    </filters>
+    <filters>
+        <field>CREATED_DATE</field>
+        <operation>greaterOrEqual</operation>
+        <value>6/1/2023 12:00 AM</value>
+    </filters>
+    <filters>
+        <field>Country__c</field>
+        <operation>equals</operation>
+        <value>United Kingdom,United States,France,Germany,Canada,United Arab Emirates</value>
+    </filters>
+    <filters>
+        <field>Job_Title__c</field>
+        <operation>notContain</operation>
+        <value>Student,none,intern,trainee,N/A</value>
+    </filters>
+    <label>GAR Previous Leads</label>
+</ListView>

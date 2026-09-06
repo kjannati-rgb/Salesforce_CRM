@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Alert_Email__c</fullName>
+    <description>Email address notified in real time when the Contact Role Check before-save flow faults (a save proceeded UNCHECKED). Blank = log only, no email.</description>
+    <label>Fault Alert Email</label>
+    <type>Email</type>
+    <required>false</required>
+    <unique>false</unique>
+</CustomField>

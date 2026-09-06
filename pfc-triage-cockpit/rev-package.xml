@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- PFC Triage Cockpit - prod deployment manifest (Phase F2).
+     Deploy from pfc-triage-cockpit/kjdev-build/ (source of truth for this feature).
+     NOTE: flows land as Draft in prod (org setting) - activation via FlowDefinition
+     is a separate, confirmed step in the runbook. The CustomObject actionOverrides
+     patch and the standard-app profileActionOverrides patch are ALSO separate
+     activation-time steps (retrieve fresh from prod, patch, deploy) and are NOT
+     in this manifest. -->
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>PFC_Triage_Queue</members>
+        <name>Queue</name>
+    </types>
+    <types>
+        <members>Pardot_Form_Completion__c.Routing_Overdue__c</members>
+        <members>Pardot_Form_Completion__c.Next_Step__c</members>
+        <members>Pardot_Form_Completion__c.Next_Contact_Date__c</members>
+        <members>PFC_Settings__mdt.Routing_SLA_Hours__c</members>
+        <members>PFC_Settings__mdt.Alert_Chatter_Group__c</members>
+        <members>PFC_Settings__mdt.Sweep_Disabled__c</members>
+        <members>PFC_Settings__mdt.Route_Preferred_Roles__c</members>
+        <members>Freemail_Domain__mdt.Domain__c</members>
+        <members>Brand_Family_Map__mdt.Brand__c</members>
+        <members>Brand_Family_Map__mdt.Product_Family__c</members>
+        <name>CustomField</name>
+    </types>
+    <types>
+        <members>PFC_Settings__mdt</members>
+        <members>Freemail_Domain__mdt</members>
+        <members>Brand_Family_Map__mdt</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>PFC_Settings.Default</members>
+        <members>Freemail_Domain.gmail_com</members>
+        <members>Freemail_Domain.googlemail_com</members>
+        <members>Freemail_Domain.yahoo_com</members>
+        <members>Freemail_Domain.yahoo_co_uk</members>
+        <members>Freemail_Domain.hotmail_com</members>
+        <members>Freemail_Domain.hotmail_co_uk</members>
+        <members>Freemail_Domain.outlook_com</members>
+        <members>Freemail_Domain.live_com</members>
+        <members>Freemail_Domain.msn_com</members>
+        <members>Freemail_Domain.aol_com</members>
+        <members>Freemail_Domain.icloud_com</members>
+        <members>Freemail_Domain.me_com</members>
+        <members>Freemail_Domain.protonmail_com</members>
+        <members>Freemail_Domain.proton_me</members>
+        <members>Freemail_Domain.gmx_com</members>
+        <members>Freemail_Domain.mail_com</members>
+        <members>Freemail_Domain.qq_com</members>
+        <members>Freemail_Domain.D163_com</members>
+        <members>Freemail_Domain.yandex_com</members>
+        <members>Brand_Family_Map.Lexology</members>
+        <members>Brand_Family_Map.GAR</members>
+        <members>Brand_Family_Map.GCR</members>
+        <members>Brand_Family_Map.GIR</members>
+        <members>Brand_Family_Map.GRR</members>
+        <members>Brand_Family_Map.IAM</members>
+        <members>Brand_Family_Map.WTR</members>
+        <members>Brand_Family_Map.Latin_Lawyer</members>
+        <name>CustomMetadata</name>
+    </types>
+    <types>
+        <members>PFCRoutingSlaService</members>
+        <members>PFCRoutingSlaSweepSchedulable</members>
+        <members>PFCRoutingSlaServiceTest</members>
+        <members>PFCQualityCardController</members>
+        <members>PFCQualityCardControllerTest</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>Pardot_Create_PFC_Orchestrator</members>
+        <members>PFC_Stamp_Work_Fields</members>
+        <members>PFC_Disqualify</members>
+        <members>PFC_Route_to_Account_Team</members>
+        <members>Pardot_Form_completion_Create_task_based_on_Next_Contact_date</members>
+        <name>Flow</name>
+    </types>
+    <types>
+        <members>Pardot_Form_Completion__c</members>
+        <name>Workflow</name>
+    </types>
+    <types>
+        <members>Pardot_Form_Completion__c-Pardot Form Completion Layout</members>
+        <members>Pardot_Form_Completion__c-Scored Leads Layout</members>
+        <name>Layout</name>
+    </types>
+    <types>
+        <members>Pardot_Form_Completion__c.Disqualify</members>
+        <members>Pardot_Form_Completion__c.Route_to_Account_Team</members>
+        <name>QuickAction</name>
+    </types>
+    <types>
+        <members>Pardot_Form_Completion_PFC</members>
+        <name>PathAssistant</name>
+    </types>
+    <types>
+        <members>PFC_Triage_Cockpit_Record_Page</members>
+        <name>FlexiPage</name>
+    </types>
+    <types>
+        <members>pfcQualityCard</members>
+        <name>LightningComponentBundle</name>
+    </types>
+    <types>
+        <members>PFC_Clay_Integration</members>
+        <members>PFC_Triage_Cockpit_Fields</members>
+        <name>PermissionSet</name>
+    </types>
+    <types>
+        <members>Pardot_Form_Completion__c.My_Triage</members>
+        <members>Pardot_Form_Completion__c.Team_Triage</members>
+        <name>ListView</name>
+    </types>
+    <version>62.0</version>
+</Package>

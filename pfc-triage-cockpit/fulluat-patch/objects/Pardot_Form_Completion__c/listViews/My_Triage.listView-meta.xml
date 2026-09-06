@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>My_Triage</fullName>
+    <columns>NAME</columns>
+    <columns>Prospect_Name__c</columns>
+    <columns>Product_Brand__c</columns>
+    <columns>Fit_Score__c</columns>
+    <columns>Sales_Stage__c</columns>
+    <columns>Routing_Overdue__c</columns>
+    <columns>Next_Step__c</columns>
+    <columns>Next_Contact_Date__c</columns>
+    <columns>PFC_Source__c</columns>
+    <columns>CREATED_DATE</columns>
+    <filterScope>Mine</filterScope>
+    <filters>
+        <field>Sales_Stage__c</field>
+        <operation>equals</operation>
+        <value>New,Working</value>
+    </filters>
+    <label>My Triage</label>
+</ListView>

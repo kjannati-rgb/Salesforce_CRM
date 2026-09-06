@@ -1,0 +1,46 @@
+{
+  "status": 0,
+  "result": {
+    "records": [
+      {
+        "attributes": {
+          "type": "User",
+          "url": "/services/data/v66.0/sobjects/User/0056g000005rqzOAAQ"
+        },
+        "Id": "0056g000005rqzOAAQ",
+        "Name": "Danica Alagon",
+        "IsActive": true,
+        "Username": "danica.alagon@lbresearch.com",
+        "LBR_Legal_Entity__c": "Law Business Research (UK) Ltd.",
+        "CompanyName": "Law Business Research (UK) Ltd."
+      },
+      {
+        "attributes": {
+          "type": "User",
+          "url": "/services/data/v66.0/sobjects/User/0054L000001164IQAQ"
+        },
+        "Id": "0054L000001164IQAQ",
+        "Name": "Joey Kwok",
+        "IsActive": true,
+        "Username": "joey.kwok@lbresearch.com",
+        "LBR_Legal_Entity__c": "ALM Global, LLC",
+        "CompanyName": "Law Business Research (Asia) Ltd."
+      },
+      {
+        "attributes": {
+          "type": "User",
+          "url": "/services/data/v66.0/sobjects/User/0056g000005rr0QAAQ"
+        },
+        "Id": "0056g000005rr0QAAQ",
+        "Name": "Rebecca Mogridge",
+        "IsActive": true,
+        "Username": "rebecca.mogridge@lbresearch.com",
+        "LBR_Legal_Entity__c": "Law Business Research LLC",
+        "CompanyName": "Law Business Research LLC"
+      }
+    ],
+    "totalSize": 3,
+    "done": true
+  },
+  "warnings": []
+}

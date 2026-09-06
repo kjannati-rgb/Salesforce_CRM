@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>CRM Support Agent Program</label>
+    <description>Field-level security for the CRM Support Agentforce agent program plumbing: article review-date tracking on Knowledge and the agent-created case origin marker used for KPI reporting. Assign to CRM team admins and the agent integration user.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Case.Agent_Created__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Knowledge__kav.Review_Date__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+</PermissionSet>

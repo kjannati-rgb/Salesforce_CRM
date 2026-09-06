@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Master</fullName>
+    <active>true</active>
+    <compactLayoutAssignment>Master</compactLayoutAssignment>
+    <label>Master</label>
+    <picklistValues>
+        <picklist>Form_Name__c</picklist>
+        <values>
+            <fullName>Lexology - LeadGen - Lexology PRO - Subscribe</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WTR - LeadGen - Subscribe - Marketing Form - Gated Content</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Reason_Disqualified__c</picklist>
+        <values>
+            <fullName>Can%E2%80%99t afford</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Duplicate Enquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Existing customer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Moved Company</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No response</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Interested</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Product%2Fservice gap</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Student enquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Test%2FInvalid enquiry</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Sales_Stage__c</picklist>
+        <values>
+            <fullName>Converted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Disqualified</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nurturing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Working</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

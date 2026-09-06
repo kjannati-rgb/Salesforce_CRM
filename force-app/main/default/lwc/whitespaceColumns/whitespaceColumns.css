@@ -1,0 +1,52 @@
+.hdr-actions {
+    display: flex;
+    gap: 0.4rem;
+}
+.cform {
+    background: #fafafa;
+    border: 1px solid #e5e5e5;
+    border-radius: 0.35rem;
+    padding: 0.5rem 0.75rem 0.75rem;
+    margin-bottom: 0.75rem;
+}
+.cform .formtitle {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #032d60;
+    margin-bottom: 0.25rem;
+}
+.formbtns {
+    margin-top: 0.75rem;
+    text-align: right;
+}
+table.cols {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.74rem;
+}
+table.cols th {
+    text-align: left;
+    font-weight: 600;
+    color: #5c5c5c;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 0.3rem 0.4rem;
+}
+table.cols td {
+    padding: 0.3rem 0.4rem;
+    border-bottom: 1px solid #f0f0f0;
+    color: #2b2b2b;
+}
+table.cols .pname {
+    font-weight: 600;
+    color: #181818;
+}
+.col.off td {
+    color: #b0b8c4;
+}
+.col.off .pname {
+    color: #98a3b3;
+    text-decoration: line-through;
+}
+.ta-r {
+    text-align: right;
+}

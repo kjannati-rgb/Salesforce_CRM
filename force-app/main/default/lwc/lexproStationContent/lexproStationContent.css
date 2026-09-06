@@ -1,0 +1,178 @@
+:host {
+    display: block;
+}
+
+/* ---- shared station shell ---- */
+.lex-station {
+    border: 1px solid var(--line, #e5e9f0);
+    border-radius: var(--r, 12px);
+    background: var(--surface, #fff);
+    padding: 0.85rem 0.95rem;
+}
+
+.lex-station__head {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+}
+
+.lex-badge {
+    flex: 0 0 auto;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 7px;
+    background: var(--lex-ink, #00162d);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lex-station__titles {
+    flex: 1 1 auto;
+}
+
+.lex-station__title {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink-1, #0e1b2e);
+}
+
+.lex-station__q {
+    margin: 0.15rem 0 0;
+    font-size: 0.8rem;
+    color: var(--ink-2, #586478);
+    line-height: 1.35;
+}
+
+.lex-tick {
+    flex: 0 0 auto;
+    color: var(--lex-blue, #0094ff);
+    font-weight: 700;
+}
+
+.lex-hint {
+    margin: 0.6rem 0 0;
+    padding: 0.45rem 0.6rem;
+    background: var(--lex-blue-tint, #e6f4ff);
+    border-radius: var(--r-sm, 8px);
+    color: var(--lex-ink, #00162d);
+    font-size: 0.74rem;
+    line-height: 1.35;
+}
+
+/* ---- work-area chips ---- */
+.lex-group {
+    margin-top: 0.7rem;
+}
+
+.lex-group__label {
+    margin: 0 0 0.35rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-3, #8a93a4);
+}
+
+.lex-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.lex-chip {
+    border: 1px solid var(--line-2, #d4dae5);
+    background: #fff;
+    color: var(--ink-2, #586478);
+    border-radius: 999px;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.76rem;
+    cursor: pointer;
+    transition: all 0.15s var(--ease, ease);
+}
+
+.lex-chip_core.lex-chip_on {
+    background: var(--lex-blue, #0094ff);
+    border-color: var(--lex-blue, #0094ff);
+    color: #fff;
+    font-weight: 600;
+}
+
+.lex-chip_beyond.lex-chip_on {
+    background: var(--confirm-tint, #fbf1dc);
+    border-color: var(--confirm, #b5790a);
+    color: var(--confirm, #b5790a);
+    font-weight: 600;
+}
+
+.lex-chip_other.lex-chip_on {
+    background: var(--surface-2, #f6f8fb);
+    border-color: var(--ink-2, #586478);
+    color: var(--ink-1, #0e1b2e);
+    font-weight: 600;
+}
+
+.lex-chip:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.lex-other {
+    margin-top: 0.5rem;
+    width: 100%;
+    min-height: 3rem;
+    box-sizing: border-box;
+    border: 1px solid var(--line-2, #d4dae5);
+    border-radius: var(--r-sm, 8px);
+    padding: 0.5rem 0.6rem;
+    font: inherit;
+    font-size: 0.8rem;
+    resize: vertical;
+}
+
+.lex-other:focus-visible {
+    outline: 2px solid var(--lex-blue, #0094ff);
+    outline-offset: 2px;
+}
+
+/* ---- segmented Yes / No ---- */
+.lex-seggroup {
+    display: inline-flex;
+    margin-top: 0.8rem;
+    border: 1px solid var(--line-2, #d4dae5);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.lex-seg {
+    border: none;
+    background: #fff;
+    color: var(--ink-2, #586478);
+    padding: 0.35rem 1.1rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.lex-seg + .lex-seg {
+    border-left: 1px solid var(--line-2, #d4dae5);
+}
+
+.lex-seg_on {
+    background: var(--lex-blue, #0094ff);
+    color: #fff;
+    font-weight: 600;
+}
+
+button:focus-visible {
+    outline: 2px solid var(--lex-blue, #0094ff);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lex-chip {
+        transition: none;
+    }
+}

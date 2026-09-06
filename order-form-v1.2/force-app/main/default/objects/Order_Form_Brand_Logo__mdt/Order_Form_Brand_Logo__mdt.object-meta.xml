@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Order Form Brand Logo</label>
+    <pluralLabel>Order Form Brand Logos</pluralLabel>
+    <description>Maps a product Family pattern to the brand logo Document printed in the Order Form header (brand-led per the Aug 2026 interim brand guidance; invoices are brand-specific and Order Forms follow). The Is_Default row (Centellic) is the fallback for unmapped families and un-derivable quotes. Adding a brand = upload the approved logo Document + one record here. All Text fields on purpose - long-text CMDT fields void the SOQL exemption.</description>
+    <visibility>Public</visibility>
+</CustomObject>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Approved__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>This checkbox determines whether an opportunity linked to a bad debtor has been approved by finance</description>
+    <inlineHelpText>This checkbox determines whether an opportunity linked to a bad debtor has been approved by finance</inlineHelpText>
+    <label>Approved</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

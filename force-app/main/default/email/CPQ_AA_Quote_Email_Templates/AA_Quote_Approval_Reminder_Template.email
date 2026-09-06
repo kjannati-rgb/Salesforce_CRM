@@ -1,0 +1,162 @@
+<messaging:emailTemplate subject="Approval Reminder for Quote: {!relatedTo.Quote__r.Name}!" recipientType="User" relatedToType="sbaa__Approval__c">
+<messaging:htmlEmailBody >
+<html>
+    <body>
+        
+        <div id="logo"><apex:image url="https://lawbusinessresearch.file.force.com/servlet/servlet.ImageServer?id=0154L000000lef5&oid=00D6g0000081IOg&lastMod=1625680913000" width="70" height="70" alt="Company Logo"  /></div>
+        
+        <h3 style="color:#008f96;">{!relatedTo.Quote__r.SBQQ__SalesRep__r.Name} has requested approval for Quote: {!relatedTo.Quote__r.Name}</h3>
+        <h4>Please reply to this email with the word 'Approve' or 'Reject' in the first line</h4>
+        <h5>Any additional comments can be included on the second line.</h5>
+       <table style="border-collapse:collapse; width:70%;">
+            <thead>
+                <tr style="width:100%;">
+                    <th colspan="5" style="width:5%; background-color:#008f96; color:#fff; padding:5px; border:solid 1pt #008f96;">
+                        Deal Information
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align:left; width:20%; padding:5px;font-family:source sans pro;">
+                        Account
+                    </td>
+                    
+                    <td style="text-align:right; width:25%;padding:5px;font-family:source sans pro;">
+                        {!relatedTo.Quote__r.SBQQ__Account__r.Name}
+                    </td>
+                    <td style="text-align:left width:10%; padding:5px;"></td>
+                    <td style="text-align:left; width:20%; padding:5px;font-family:source sans pro;">
+                        Quote Amount
+                    </td>
+                    <td style="text-align:right; width:25%;padding:5px;font-family:source sans pro;">
+                         {!relatedTo.Quote__r.CurrencyIsoCode}
+                            {!relatedTo.Quote__r.SBQQ__NetAmount__c}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:left; width:20%; padding:5px;font-family:source sans pro;">
+                        Date Requested
+                    </td>
+                    <td style="text-align:right; width:25%;padding:5px;font-family:source sans pro;">
+                        <apex:outputText value="{0,date,d / M / y }">
+                            <apex:param value="{!relatedTo.Quote__r.SubmittedDate__c}" />
+                        </apex:outputText>
+                    </td>
+                    <td style="text-align:left width:10%; padding:5px;"></td>
+                    <td style="text-align:left; width:20%; padding:5px;font-family:source sans pro;">
+                        Discount %
+                    </td>
+                    <td style="text-align:right; width:25%;padding:5px;font-family:source sans pro;">
+                        <p><apex:outputText value="{0, number}">
+                            <apex:param value="{!relatedTo.Quote__r.SBQQ__AverageCustomerDiscount__c}" />
+                        </apex:outputText>%</p>
+                    </td>
+                </tr>
+                
+                
+                <tr>
+                    <td style="text-align:left; width:20%; padding:5px;font-family:source sans pro;">
+                        Opportunity:
+                    </td>
+                    <td style="text-align:right; width:25%;padding:5px;font-family:source sans pro;">
+                        <a href="{!relatedTo.Quote__r.BaseUrl__c}{!relatedTo.Quote__r.SBQQ__Opportunity2__r.Id}">{!relatedTo.Quote__r.SBQQ__Opportunity2__r.Name}</a>
+                    </td>
+                    <td style="text-align:left width:10%; padding:5px;"></td>
+                    <td style="text-align:left; width:20%; padding:5px;font-family:source sans pro;">
+                        Billing Frequency
+                    </td>
+                    <td style="text-align:right; width:25%;padding:5px;font-family:source sans pro;">
+                        {!relatedTo.Quote__r.SBQQ__BillingFrequency__c}
+                    </td>
+                </tr>
+                
+                
+                <tr>
+                    <!--<td style="text-align:left; width:20%; padding:5px;">
+                        Stage
+                    </td>-->
+                    <!--<td style="text-align:right; width:25%;padding:5px;">
+                        {!relatedTo.Opp_Stage__c}
+                    </td>-->
+                    
+                    <td style="text-align:left; width:20%; padding:5px;font-family:source sans pro;">
+                        Special Terms Identified
+                    </td>
+                    <td style="text-align:right; width:25%;padding:5px;font-family:source sans pro;">
+                        {!relatedTo.Quote__r.Special_Terms_Identified__c}
+                    </td>
+
+                    
+                    <td style="text-align:left width:10%; padding:5px;"></td>
+                    <td style="text-align:left; width:20%; padding:5px;font-family:source sans pro;">
+                        Payment Terms
+                    </td>
+                    <td style="text-align:right; width:25%;padding:5px;font-family:source sans pro;">
+                        {!relatedTo.Quote__r.SBQQ__PaymentTerms__c}
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td style="text-align:left; width:20%; padding:5px;font-family:source sans pro;">
+                        Special Instructions
+                    </td>
+                    <td style="text-align:right; width:25%;padding:5px;font-family:source sans pro;">
+                        {!relatedTo.Quote__r.Special_Instructions__c}
+                    </td>
+                    <td style="text-align:left width:10%; padding:5px;"></td>
+                    <td style="text-align:left; width:20%; padding:5px;font-family:source sans pro;">
+                        Payment Type
+                    </td>
+                    <td style="text-align:right; width:25%;padding:5px;font-family:source sans pro;">
+                        {!relatedTo.Quote__r.Payment_Type__c}
+                    </td>
+                </tr>
+                
+                                <tr>
+                    <td style="text-align:left; width:20%; padding:5px;font-family:source sans pro;">
+                        Discount Reason
+                    </td>
+                    <td style="text-align:right; width:25%;padding:5px;font-family:source sans pro;">
+                        {!relatedTo.Quote__r.Discount_reasons__c}
+                    </td>
+                    <td style="text-align:left width:10%; padding:5px;"></td>
+                    <td style="text-align:left; width:20%; padding:5px;font-family:source sans pro;">
+                        Other Discount Reason
+                    </td>
+                    <td style="text-align:right; width:25%;padding:5px;font-family:source sans pro;">
+                        {!relatedTo.Quote__r.Other_discount_reasons__c}
+                    </td>
+</tr>
+                
+                
+                
+                <tr>
+                    <td style="text-align:left; width:20%; padding:5px;font-family:source sans pro;">
+                        Reason
+                    </td>
+                    <td style="text-align:right; width:25%;padding:5px;font-family:source sans pro;">
+                        {!relatedTo.sbaa__Rule__r.Name}
+                    </td>
+                    <td style="text-align:left width:10%; padding:5px;"></td>
+                    <td style="text-align:left; width:20%; padding:5px;font-family:source sans pro;">
+                        Approval Status
+                    </td>
+                    <td style="text-align:right; width:25%;padding:5px;font-family:source sans pro;">
+                        {!relatedTo.sbaa__Status__c}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p></p>
+        <p>Click <a href="{!relatedTo.Quote__r.BaseUrl__c}{!relatedTo.Quote__c}">here</a> to view the Quote.</p>
+        <p style="color:white;visibility: hidden;"><apex:outputText value="{!relatedTo.Quote__r.Id}"/></p>
+        <p style="color:white;visibility: hidden;"><apex:outputText value="{!relatedTo.ID}"/></p>
+
+        
+    </body>
+</html>
+</messaging:htmlEmailBody>
+</messaging:emailTemplate>

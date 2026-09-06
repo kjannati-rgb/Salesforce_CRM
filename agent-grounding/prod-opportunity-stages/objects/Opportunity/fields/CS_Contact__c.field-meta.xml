@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CS_Contact__c</fullName>
+    <description>CS Contacts from Opportunity Team Member object</description>
+    <inlineHelpText>CS Contacts from Opportunity Team Member</inlineHelpText>
+    <label>CS Contact</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Alexander Mounayer-Rigby</fullName>
+                <default>false</default>
+                <label>Alexander Mounayer-Rigby</label>
+            </value>
+            <value>
+                <fullName>Alexandra Papadopoulos</fullName>
+                <default>false</default>
+                <label>Alexandra Papadopoulos</label>
+            </value>
+            <value>
+                <fullName>Alice Dearman</fullName>
+                <default>false</default>
+                <label>Alice Dearman</label>
+            </value>
+            <value>
+                <fullName>Amy Elderfield</fullName>
+                <default>false</default>
+                <label>Amy Elderfield</label>
+            </value>
+            <value>
+                <fullName>Ankit Chauhan</fullName>
+                <default>false</default>
+                <label>Ankit Chauhan</label>
+            </value>
+            <value>
+                <fullName>Beatrice Redgrave-Scott</fullName>
+                <default>false</default>
+                <label>Beatrice Redgrave-Scott</label>
+            </value>
+            <value>
+                <fullName>Chris Riley</fullName>
+                <default>false</default>
+                <label>Chris Riley</label>
+            </value>
+            <value>
+                <fullName>Cristina Costa</fullName>
+                <default>false</default>
+                <label>Cristina Costa</label>
+            </value>
+            <value>
+                <fullName>Francesca Clixby</fullName>
+                <default>false</default>
+                <label>Francesca Clixby</label>
+            </value>
+            <value>
+                <fullName>Hashim Ali</fullName>
+                <default>false</default>
+                <label>Hashim Ali</label>
+            </value>
+            <value>
+                <fullName>HJ Sirott</fullName>
+                <default>false</default>
+                <label>HJ Sirott</label>
+            </value>
+            <value>
+                <fullName>Isobel Eastwood</fullName>
+                <default>false</default>
+                <label>Isobel Eastwood</label>
+            </value>
+            <value>
+                <fullName>Jermaine Elu</fullName>
+                <default>false</default>
+                <label>Jermaine Elu</label>
+            </value>
+            <value>
+                <fullName>Joe Turner</fullName>
+                <default>false</default>
+                <label>Joe Turner</label>
+            </value>
+            <value>
+                <fullName>Kathy Tse</fullName>
+                <default>false</default>
+                <label>Kathy Tse</label>
+            </value>
+            <value>
+                <fullName>Katrina Pimentel</fullName>
+                <default>false</default>
+                <label>Katrina Pimentel</label>
+            </value>
+            <value>
+                <fullName>Laura McCallum</fullName>
+                <default>false</default>
+                <label>Laura McCallum</label>
+            </value>
+            <value>
+                <fullName>Maya Engledow</fullName>
+                <default>false</default>
+                <label>Maya Engledow</label>
+            </value>
+            <value>
+                <fullName>Oliver Spurr</fullName>
+                <default>false</default>
+                <label>Oliver Spurr</label>
+            </value>
+            <value>
+                <fullName>Omkar Bayannavar</fullName>
+                <default>false</default>
+                <label>Omkar Bayannavar</label>
+            </value>
+            <value>
+                <fullName>Reyhan Alhas</fullName>
+                <default>false</default>
+                <label>Reyhan Alhas</label>
+            </value>
+            <value>
+                <fullName>Shazia Ishaq</fullName>
+                <default>false</default>
+                <label>Shazia Ishaq</label>
+            </value>
+            <value>
+                <fullName>Shubhankar Bhardi</fullName>
+                <default>false</default>
+                <label>Shubhankar Bhardi</label>
+            </value>
+            <value>
+                <fullName>Theo Billing</fullName>
+                <default>false</default>
+                <label>Theo Billing</label>
+            </value>
+            <value>
+                <fullName>Theodore Hutton</fullName>
+                <default>false</default>
+                <label>Theodore Hutton</label>
+            </value>
+            <value>
+                <fullName>Tom Blower</fullName>
+                <default>false</default>
+                <label>Tom Blower</label>
+            </value>
+            <value>
+                <fullName>Victor Babatunde</fullName>
+                <default>false</default>
+                <label>Victor Babatunde</label>
+            </value>
+            <value>
+                <fullName>Vishnu Kumar</fullName>
+                <default>false</default>
+                <label>Vishnu Kumar</label>
+            </value>
+            <value>
+                <fullName>Yee Tang</fullName>
+                <default>false</default>
+                <label>Yee Tang</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

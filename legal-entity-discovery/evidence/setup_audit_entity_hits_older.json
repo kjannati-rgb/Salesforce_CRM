@@ -1,0 +1,342 @@
+[
+ {
+  "attributes": {
+   "type": "SetupAuditTrail",
+   "url": "/services/data/v66.0/sobjects/SetupAuditTrail/0YmPx00000MvksfKAB"
+  },
+  "CreatedDate": "2026-05-05T09:29:41.000+0000",
+  "CreatedBy": {
+   "attributes": {
+    "type": "User",
+    "url": "/services/data/v66.0/sobjects/User/0056g000004hOppAAE"
+   },
+   "Name": "Automated Process"
+  },
+  "Action": "createdCF",
+  "Section": null,
+  "Display": "Created custom field: Legal Entity Identifier (Text)"
+ },
+ {
+  "attributes": {
+   "type": "SetupAuditTrail",
+   "url": "/services/data/v66.0/sobjects/SetupAuditTrail/0YmPx00000MvjrPKAR"
+  },
+  "CreatedDate": "2026-05-05T09:28:36.000+0000",
+  "CreatedBy": {
+   "attributes": {
+    "type": "User",
+    "url": "/services/data/v66.0/sobjects/User/0056g000004hOppAAE"
+   },
+   "Name": "Automated Process"
+  },
+  "Action": "createdCF",
+  "Section": null,
+  "Display": "Created custom field: Legal Entity Id (Text)"
+ },
+ {
+  "attributes": {
+   "type": "SetupAuditTrail",
+   "url": "/services/data/v66.0/sobjects/SetupAuditTrail/0YmPx00000MvjrHKAR"
+  },
+  "CreatedDate": "2026-05-05T09:28:36.000+0000",
+  "CreatedBy": {
+   "attributes": {
+    "type": "User",
+    "url": "/services/data/v66.0/sobjects/User/0056g000004hOppAAE"
+   },
+   "Name": "Automated Process"
+  },
+  "Action": "createdCF",
+  "Section": null,
+  "Display": "Created custom field: Legal Entity Accounting Period Id (Text)"
+ },
+ {
+  "attributes": {
+   "type": "SetupAuditTrail",
+   "url": "/services/data/v66.0/sobjects/SetupAuditTrail/0YmPx00000MvjrKKAR"
+  },
+  "CreatedDate": "2026-05-05T09:28:36.000+0000",
+  "CreatedBy": {
+   "attributes": {
+    "type": "User",
+    "url": "/services/data/v66.0/sobjects/User/0056g000004hOppAAE"
+   },
+   "Name": "Automated Process"
+  },
+  "Action": "createdCF",
+  "Section": null,
+  "Display": "Created custom field: Legal Entity (Text)"
+ },
+ {
+  "attributes": {
+   "type": "SetupAuditTrail",
+   "url": "/services/data/v66.0/sobjects/SetupAuditTrail/0YmPx00000MvjrRKAR"
+  },
+  "CreatedDate": "2026-05-05T09:28:36.000+0000",
+  "CreatedBy": {
+   "attributes": {
+    "type": "User",
+    "url": "/services/data/v66.0/sobjects/User/0056g000004hOppAAE"
+   },
+   "Name": "Automated Process"
+  },
+  "Action": "createdCF",
+  "Section": null,
+  "Display": "Created custom field: Legal Entity Address (Text)"
+ },
+ {
+  "attributes": {
+   "type": "SetupAuditTrail",
+   "url": "/services/data/v66.0/sobjects/SetupAuditTrail/0YmPx00000MvjeQKAR"
+  },
+  "CreatedDate": "2026-05-05T09:28:29.000+0000",
+  "CreatedBy": {
+   "attributes": {
+    "type": "User",
+    "url": "/services/data/v66.0/sobjects/User/0056g000004hOppAAE"
+   },
+   "Name": "Automated Process"
+  },
+  "Action": "createdCF",
+  "Section": null,
+  "Display": "Created custom field: Legal Entity (Text)"
+ },
+ {
+  "attributes": {
+   "type": "SetupAuditTrail",
+   "url": "/services/data/v66.0/sobjects/SetupAuditTrail/0YmPx00000MvjePKAR"
+  },
+  "CreatedDate": "2026-05-05T09:28:29.000+0000",
+  "CreatedBy": {
+   "attributes": {
+    "type": "User",
+    "url": "/services/data/v66.0/sobjects/User/0056g000004hOppAAE"
+   },
+   "Name": "Automated Process"
+  },
+  "Action": "createdCF",
+  "Section": null,
+  "Display": "Created custom field: Legal Entity Accounting Period (Text)"
+ },
+ {
+  "attributes": {
+   "type": "SetupAuditTrail",
+   "url": "/services/data/v66.0/sobjects/SetupAuditTrail/0YmPx00000MvjdgKAB"
+  },
+  "CreatedDate": "2026-05-05T09:28:28.000+0000",
+  "CreatedBy": {
+   "attributes": {
+    "type": "User",
+    "url": "/services/data/v66.0/sobjects/User/0056g000004hOppAAE"
+   },
+   "Name": "Automated Process"
+  },
+  "Action": "createdCF",
+  "Section": null,
+  "Display": "Created custom field: Legal Entity (Text)"
+ },
+ {
+  "attributes": {
+   "type": "SetupAuditTrail",
+   "url": "/services/data/v66.0/sobjects/SetupAuditTrail/0YmPx00000Mvi4CKAR"
+  },
+  "CreatedDate": "2026-05-05T09:26:49.000+0000",
+  "CreatedBy": {
+   "attributes": {
+    "type": "User",
+    "url": "/services/data/v66.0/sobjects/User/0056g000004hOppAAE"
+   },
+   "Name": "Automated Process"
+  },
+  "Action": "createdCF",
+  "Section": null,
+  "Display": "Created custom field: Legal Entity (Text)"
+ },
+ {
+  "attributes": {
+   "type": "SetupAuditTrail",
+   "url": "/services/data/v66.0/sobjects/SetupAuditTrail/0YmPx00000Mvi3YKAR"
+  },
+  "CreatedDate": "2026-05-05T09:26:49.000+0000",
+  "CreatedBy": {
+   "attributes": {
+    "type": "User",
+    "url": "/services/data/v66.0/sobjects/User/0056g000004hOppAAE"
+   },
+   "Name": "Automated Process"
+  },
+  "Action": "createdCF",
+  "Section": null,
+  "Display": "Created custom field: Legal Entity (Text)"
+ },
+ {
+  "attributes": {
+   "type": "SetupAuditTrail",
+   "url": "/services/data/v66.0/sobjects/SetupAuditTrail/0YmPx00000MvgtyKAB"
+  },
+  "CreatedDate": "2026-05-05T09:25:42.000+0000",
+  "CreatedBy": {
+   "attributes": {
+    "type": "User",
+    "url": "/services/data/v66.0/sobjects/User/0056g000004hOppAAE"
+   },
+   "Name": "Automated Process"
+  },
+  "Action": "createdCF",
+  "Section": null,
+  "Display": "Created custom field: Legal Entity (Text)"
+ },
+ {
+  "attributes": {
+   "type": "SetupAuditTrail",
+   "url": "/services/data/v66.0/sobjects/SetupAuditTrail/0YmPx00000MvgtxKAB"
+  },
+  "CreatedDate": "2026-05-05T09:25:42.000+0000",
+  "CreatedBy": {
+   "attributes": {
+    "type": "User",
+    "url": "/services/data/v66.0/sobjects/User/0056g000004hOppAAE"
+   },
+   "Name": "Automated Process"
+  },
+  "Action": "createdCF",
+  "Section": null,
+  "Display": "Created custom field: Legal Entity Accounting Period (Text)"
+ },
+ {
+  "attributes": {
+   "type": "SetupAuditTrail",
+   "url": "/services/data/v66.0/sobjects/SetupAuditTrail/0YmPx00000MvgiHKAR"
+  },
+  "CreatedDate": "2026-05-05T09:25:36.000+0000",
+  "CreatedBy": {
+   "attributes": {
+    "type": "User",
+    "url": "/services/data/v66.0/sobjects/User/0056g000004hOppAAE"
+   },
+   "Name": "Automated Process"
+  },
+  "Action": "createdCF",
+  "Section": null,
+  "Display": "Created custom field: Legal Entity (Text)"
+ },
+ {
+  "attributes": {
+   "type": "SetupAuditTrail",
+   "url": "/services/data/v66.0/sobjects/SetupAuditTrail/0YmPx00000MUjapKAD"
+  },
+  "CreatedDate": "2026-04-21T13:54:15.000+0000",
+  "CreatedBy": {
+   "attributes": {
+    "type": "User",
+    "url": "/services/data/v66.0/sobjects/User/0054L0000048InRQAU"
+   },
+   "Name": "Sergio Otero Felipe"
+  },
+  "Action": "PermSetFlsChanged",
+  "Section": "Manage Users",
+  "Display": "Changed permission set ALM events legacy fields All users: field-level security for Opportunity: ALM Legal Entity was changed from No Access to Read Only"
+ },
+ {
+  "attributes": {
+   "type": "SetupAuditTrail",
+   "url": "/services/data/v66.0/sobjects/SetupAuditTrail/0YmPx00000MRbnhKAD"
+  },
+  "CreatedDate": "2026-04-20T08:51:48.000+0000",
+  "CreatedBy": {
+   "attributes": {
+    "type": "User",
+    "url": "/services/data/v66.0/sobjects/User/0054L000003kLUGQA2"
+   },
+   "Name": "Saurabh Patil"
+  },
+  "Action": "PermSetFlsChanged",
+  "Section": "Manage Users",
+  "Display": "Changed permission set ALM FIelds - Admin Only: field-level security for Opportunity: LBR Legal Entity was changed from No Access to Read Only"
+ },
+ {
+  "attributes": {
+   "type": "SetupAuditTrail",
+   "url": "/services/data/v66.0/sobjects/SetupAuditTrail/0YmPx00000MRbjgKAD"
+  },
+  "CreatedDate": "2026-04-20T08:51:48.000+0000",
+  "CreatedBy": {
+   "attributes": {
+    "type": "User",
+    "url": "/services/data/v66.0/sobjects/User/0054L000003kLUGQA2"
+   },
+   "Name": "Saurabh Patil"
+  },
+  "Action": "PermSetFlsChanged",
+  "Section": "Manage Users",
+  "Display": "Changed permission set ALM FIelds - Admin Only: field-level security for Opportunity: ALM Legal Entity was changed from No Access to Read/Write"
+ },
+ {
+  "attributes": {
+   "type": "SetupAuditTrail",
+   "url": "/services/data/v66.0/sobjects/SetupAuditTrail/0YmPx00000MQco5KAD"
+  },
+  "CreatedDate": "2026-04-19T19:00:30.000+0000",
+  "CreatedBy": {
+   "attributes": {
+    "type": "User",
+    "url": "/services/data/v66.0/sobjects/User/0054L000003kLUGQA2"
+   },
+   "Name": "Saurabh Patil"
+  },
+  "Action": "PermSetFlsChanged",
+  "Section": "Manage Users",
+  "Display": "Changed permission set ALM Phase 2 Fields Access: field-level security for Opportunity Product: LBR Legal Entity for SUN was changed from No Access to Read Only"
+ },
+ {
+  "attributes": {
+   "type": "SetupAuditTrail",
+   "url": "/services/data/v66.0/sobjects/SetupAuditTrail/0YmPx00000Lqc3VKAR"
+  },
+  "CreatedDate": "2026-03-30T09:07:04.000+0000",
+  "CreatedBy": {
+   "attributes": {
+    "type": "User",
+    "url": "/services/data/v66.0/sobjects/User/005Tm000001co4rIAA"
+   },
+   "Name": "Puja Bhandari"
+  },
+  "Action": "custmdtypelayout",
+  "Section": "Custom Metadata Types",
+  "Display": "Changed Renewal Policy Owner Legal Entity page layout Renewal Policy Owner Legal Entity Layout"
+ },
+ {
+  "attributes": {
+   "type": "SetupAuditTrail",
+   "url": "/services/data/v66.0/sobjects/SetupAuditTrail/0YmPx00000LqYTcKAN"
+  },
+  "CreatedDate": "2026-03-30T08:52:56.000+0000",
+  "CreatedBy": {
+   "attributes": {
+    "type": "User",
+    "url": "/services/data/v66.0/sobjects/User/005Tm000001co4rIAA"
+   },
+   "Name": "Puja Bhandari"
+  },
+  "Action": "createdCFCustom",
+  "Section": "Custom Metadata Types",
+  "Display": "Created custom field LBR Legal Entity (Picklist) on Renewal Policy Owner Legal Entities"
+ },
+ {
+  "attributes": {
+   "type": "SetupAuditTrail",
+   "url": "/services/data/v66.0/sobjects/SetupAuditTrail/0YmPx00000LqYTCKA3"
+  },
+  "CreatedDate": "2026-03-30T08:52:53.000+0000",
+  "CreatedBy": {
+   "attributes": {
+    "type": "User",
+    "url": "/services/data/v66.0/sobjects/User/005Tm000001co4rIAA"
+   },
+   "Name": "Puja Bhandari"
+  },
+  "Action": "createdCustMdType",
+  "Section": "Custom Metadata Types",
+  "Display": "Created custom metadata type: Renewal Policy Owner Legal Entity"
+ }
+]

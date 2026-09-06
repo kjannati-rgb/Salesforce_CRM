@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LexPRO_Qual_Process_Improvement__c</fullName>
+    <description>REV-69 LexPRO qualification — X (eXisting Process). How can Lexology PRO improve the prospect&apos;s current monitoring/research process? Multi-select.</description>
+    <inlineHelpText>How can Lexology PRO improve their process? Select all that apply.</inlineHelpText>
+    <label>LexPRO Qual: Process Improvement</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Help keep up with the influx of regulatory change</fullName>
+                <default>false</default>
+                <label>Help keep up with the influx of regulatory change</label>
+            </value>
+            <value>
+                <fullName>Providing a reliable source of data</fullName>
+                <default>false</default>
+                <label>Providing a reliable source of data</label>
+            </value>
+            <value>
+                <fullName>Reducing Cost of External Counsel</fullName>
+                <default>false</default>
+                <label>Reducing Cost of External Counsel</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

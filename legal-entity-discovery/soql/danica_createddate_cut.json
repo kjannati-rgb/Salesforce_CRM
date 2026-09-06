@@ -1,0 +1,142 @@
+{
+  "status": 0,
+  "result": {
+    "records": [
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research (UK) Ltd.",
+        "StageName": "Identify",
+        "CurrencyIsoCode": "GBP",
+        "recs": 1,
+        "sumAmount": 4686,
+        "sumACV": 1562
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research (UK) Ltd.",
+        "StageName": "Identify",
+        "CurrencyIsoCode": "USD",
+        "recs": 3,
+        "sumAmount": 31500,
+        "sumACV": 10500
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research (UK) Ltd.",
+        "StageName": "Qualify",
+        "CurrencyIsoCode": "GBP",
+        "recs": 4,
+        "sumAmount": 62750,
+        "sumACV": 20916.67
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research (UK) Ltd.",
+        "StageName": "Qualify",
+        "CurrencyIsoCode": "USD",
+        "recs": 3,
+        "sumAmount": 64610.53,
+        "sumACV": 21536.84
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research (UK) Ltd.",
+        "StageName": "Evaluate",
+        "CurrencyIsoCode": "GBP",
+        "recs": 1,
+        "sumAmount": 8450,
+        "sumACV": 8450
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research (UK) Ltd.",
+        "StageName": "Evaluate",
+        "CurrencyIsoCode": "USD",
+        "recs": 1,
+        "sumAmount": 14097.74,
+        "sumACV": 4699.25
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research (UK) Ltd.",
+        "StageName": "Contract Out",
+        "CurrencyIsoCode": "USD",
+        "recs": 1,
+        "sumAmount": 14097.74,
+        "sumACV": 4699.25
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research (UK) Ltd.",
+        "StageName": "Closed Won",
+        "CurrencyIsoCode": "GBP",
+        "recs": 593,
+        "sumAmount": 4678199,
+        "sumACV": 3508.33
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research (UK) Ltd.",
+        "StageName": "Closed Won",
+        "CurrencyIsoCode": "USD",
+        "recs": 25,
+        "sumAmount": 378543.77,
+        "sumACV": 4509.75
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research (UK) Ltd.",
+        "StageName": "Closed Lost",
+        "CurrencyIsoCode": "GBP",
+        "recs": 872,
+        "sumAmount": 4753473.7,
+        "sumACV": 334248.27
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research (UK) Ltd.",
+        "StageName": "Closed Lost",
+        "CurrencyIsoCode": "USD",
+        "recs": 34,
+        "sumAmount": 396255.22,
+        "sumACV": 138578.62
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "LBR_Legal_Entity__c": "Law Business Research (UK) Ltd.",
+        "StageName": "Closed Won - Cancellation",
+        "CurrencyIsoCode": "GBP",
+        "recs": 10,
+        "sumAmount": -18635,
+        "sumACV": null
+      }
+    ],
+    "totalSize": 12,
+    "done": true
+  },
+  "warnings": []
+}

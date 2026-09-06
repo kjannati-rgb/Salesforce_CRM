@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Count_of_LBR_Interactions__c</fullName>
+    <description>Number of LBR Interactions linked to this Contact. Maintained by the LBRInteractionCount trigger; replaces the former roll-up summary that was removed when Contact__c became a Lookup (REV-68).</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Number of LBR Interactions linked to this Contact.</inlineHelpText>
+    <label>Count of LBR Interactions</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

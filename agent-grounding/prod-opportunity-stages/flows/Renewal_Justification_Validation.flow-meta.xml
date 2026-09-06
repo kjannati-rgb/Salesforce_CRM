@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <customErrors>
+        <name>Both_Auto_Renewal_Removed</name>
+        <label>Both - Auto Renewal Removed</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <customErrorMessages>
+            <errorMessage>Please add Renewal Term Justification if Auto renewal is Removed</errorMessage>
+            <fieldSelection>Renewal_Terms_Justification__c</fieldSelection>
+            <isFieldError>true</isFieldError>
+        </customErrorMessages>
+        <customErrorMessages>
+            <errorMessage>Please add Special Terms if Auto renewal is Removed</errorMessage>
+            <fieldSelection>Special_Terms__c</fieldSelection>
+            <isFieldError>true</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <customErrors>
+        <name>Both_Both</name>
+        <label>Both - Both</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <customErrorMessages>
+            <errorMessage>Please add Renewal Term Justification if Auto renewal is Removed and Renewal Uplift is less than 7.5%</errorMessage>
+            <fieldSelection>Renewal_Terms_Justification__c</fieldSelection>
+            <isFieldError>true</isFieldError>
+        </customErrorMessages>
+        <customErrorMessages>
+            <errorMessage>Please add Special Terms if Auto renewal is Removed and Renewal Uplift is less than 7.5%</errorMessage>
+            <fieldSelection>Special_Terms__c</fieldSelection>
+            <isFieldError>true</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <customErrors>
+        <name>Both_Justification</name>
+        <label>Both - Justification</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <customErrorMessages>
+            <errorMessage>Please add Renewal Term Justification if Auto renewal is Removed and Renewal Uplift is less than 7.5%</errorMessage>
+            <fieldSelection>Renewal_Terms_Justification__c</fieldSelection>
+            <isFieldError>true</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <customErrors>
+        <name>Both_Renewal_Uplift</name>
+        <label>Both - Renewal Uplift</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <customErrorMessages>
+            <errorMessage>Please add Renewal Term Justification if Renewal Uplift is less than 7.5%</errorMessage>
+            <fieldSelection>Renewal_Terms_Justification__c</fieldSelection>
+            <isFieldError>true</isFieldError>
+        </customErrorMessages>
+        <customErrorMessages>
+            <errorMessage>Please add Special Terms if Renewal Uplift is less than 7.5%</errorMessage>
+            <fieldSelection>Special_Terms__c</fieldSelection>
+            <isFieldError>true</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <customErrors>
+        <name>Both_Special_Terms</name>
+        <label>Both - Special Terms</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <customErrorMessages>
+            <errorMessage>Please add Special Terms if Auto renewal is Removed and Renewal Uplift is less than 7.5%</errorMessage>
+            <fieldSelection>Special_Terms__c</fieldSelection>
+            <isFieldError>true</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <customErrors>
+        <name>Justification_Auto_Renewal_Removed</name>
+        <label>Justification - Auto Renewal Removed</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <customErrorMessages>
+            <errorMessage>Please add Renewal Term Justification if Auto renewal is Removed</errorMessage>
+            <fieldSelection>Renewal_Terms_Justification__c</fieldSelection>
+            <isFieldError>true</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <customErrors>
+        <name>Justification_Renewal_Uplift</name>
+        <label>Justification - Renewal Uplift</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <customErrorMessages>
+            <errorMessage>Please add Renewal Term Justification if Renewal Uplift is less than 7.5%</errorMessage>
+            <fieldSelection>Renewal_Terms_Justification__c</fieldSelection>
+            <isFieldError>true</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <customErrors>
+        <name>Special_Terms_Auto_Renewal_Removed</name>
+        <label>Special Terms - Auto Renewal Removed</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <customErrorMessages>
+            <errorMessage>Please add Special Terms if Auto renewal is Removed</errorMessage>
+            <fieldSelection>Special_Terms__c</fieldSelection>
+            <isFieldError>true</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <customErrors>
+        <name>Special_Terms_Renewal_Uplift</name>
+        <label>Special Terms - Renewal Uplift</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <customErrorMessages>
+            <errorMessage>Please add Special Terms if Renewal Uplift is less than 7.5%</errorMessage>
+            <fieldSelection>Special_Terms__c</fieldSelection>
+            <isFieldError>true</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <decisions>
+        <name>Check_for_Renewal_Uplift_and_Auto_renewal_removed</name>
+        <label>Check for Renewal Uplift and Auto renewal removed</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Path</defaultConnectorLabel>
+        <rules>
+            <name>Renewal_Uplift_AND_Auto_renewal_removed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Renewal_Uplift__c</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <numberValue>7.5</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Auto_renewal_removed__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_for_special_terms_and_justification</targetReference>
+            </connector>
+            <label>Renewal Uplift AND Auto renewal removed</label>
+        </rules>
+        <rules>
+            <name>Renewal_Uplift_removed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Renewal_Uplift__c</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <numberValue>7.5</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_for_special_terms_and_justification_Renewal_Uplift</targetReference>
+            </connector>
+            <label>Renewal Uplift removed</label>
+        </rules>
+        <rules>
+            <name>Auto_renewal_removed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Auto_renewal_removed__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_for_special_terms_and_justification_Auto_Renewal_removed</targetReference>
+            </connector>
+            <label>Auto renewal removed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_for_running_user</name>
+        <label>Check for running user</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Check_if_Quote_is_approved</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Admin_Data</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Profile.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>System Administrator</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Profile.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Custom: Data Management</stringValue>
+                </rightValue>
+            </conditions>
+            <label>Admin/Data</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_for_special_terms_and_justification</name>
+        <label>Check for special terms and justification</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Value</defaultConnectorLabel>
+        <rules>
+            <name>Both_are_blank</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Renewal_Terms_Justification__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Special_Terms__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Both_Both</targetReference>
+            </connector>
+            <label>Both are blank</label>
+        </rules>
+        <rules>
+            <name>Justification_missing1</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Renewal_Terms_Justification__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Both_Justification</targetReference>
+            </connector>
+            <label>Justification missing</label>
+        </rules>
+        <rules>
+            <name>Special_Terms_missing1</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Special_Terms__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Both_Special_Terms</targetReference>
+            </connector>
+            <label>Special Terms missing</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_for_special_terms_and_justification_Auto_Renewal_removed</name>
+        <label>Check for special terms and justification - Auto Renewal removed</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Value</defaultConnectorLabel>
+        <rules>
+            <name>Both_are_blank_Auto_Renewal_removed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Renewal_Terms_Justification__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Special_Terms__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Both_Auto_Renewal_Removed</targetReference>
+            </connector>
+            <label>Both are blank - Auto Renewal removed</label>
+        </rules>
+        <rules>
+            <name>Justification_missing_Auto_Renewal_removed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Renewal_Terms_Justification__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Justification_Auto_Renewal_Removed</targetReference>
+            </connector>
+            <label>Justification missing - Auto Renewal removed</label>
+        </rules>
+        <rules>
+            <name>Special_Terms_missing_Auto_Renewal_removed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Special_Terms__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Special_Terms_Auto_Renewal_Removed</targetReference>
+            </connector>
+            <label>Special Terms missing - Auto Renewal removed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_for_special_terms_and_justification_Renewal_Uplift</name>
+        <label>Check for special terms and justification - Renewal Uplift</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Value</defaultConnectorLabel>
+        <rules>
+            <name>Both_are_blank_Renewal_Uplift</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Renewal_Terms_Justification__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Special_Terms__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Both_Renewal_Uplift</targetReference>
+            </connector>
+            <label>Both are blank - Renewal Uplift</label>
+        </rules>
+        <rules>
+            <name>Justification_missing_Renewal_Uplift</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Renewal_Terms_Justification__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Justification_Renewal_Uplift</targetReference>
+            </connector>
+            <label>Justification missing - Renewal Uplift</label>
+        </rules>
+        <rules>
+            <name>Special_Terms_missing_Renewal_Uplift</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Special_Terms__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Special_Terms_Renewal_Uplift</targetReference>
+            </connector>
+            <label>Special Terms missing - Renewal Uplift</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_if_non_event_and_non_mbl_product_exist</name>
+        <label>Check if non event and non mbl product exist?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Exist</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Non_events_and_non_mbl_products</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_for_Renewal_Uplift_and_Auto_renewal_removed</targetReference>
+            </connector>
+            <label>Exist</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_if_Quote_is_approved</name>
+        <label>Check if Quote is approved</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Get_Non_events_and_non_mbl_products</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Approved</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.ApprovalStatus__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Approved</stringValue>
+                </rightValue>
+            </conditions>
+            <label>Approved</label>
+        </rules>
+    </decisions>
+    <description>This validation hits to non event and non mbl products if Auto renewal checkbox is flagged and/or renewal uplift is reduced below 7.5%</description>
+    <environments>Default</environments>
+    <interviewLabel>Renewal_Justification_Validation {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Auto-Renewal-Removed_Renewal-Uplift_Validation</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Non_events_and_non_mbl_products</name>
+        <label>Get Non events and non mbl products</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_if_non_event_and_non_mbl_product_exist</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SBQQ__ProductFamily__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Events</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>SBQQ__ProductFamily__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Subs - MBL Seminars</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>SBQQ__ProductFamily__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Webinars</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>SBQQ__Quote__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>SBQQ__QuoteLine__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_for_running_user</targetReference>
+        </connector>
+        <object>SBQQ__Quote__c</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

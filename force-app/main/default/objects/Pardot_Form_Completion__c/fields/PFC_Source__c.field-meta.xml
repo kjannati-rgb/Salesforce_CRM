@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PFC_Source__c</fullName>
+    <description>REV-57: provenance of the Pardot Form Completion, stamped by the orchestrator from PFC_Task_Mapping__mdt.Source__c. Lets reps and reporting separate Newsfeed from inbound without record-type filtering.</description>
+    <label>PFC Source</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Inbound Form</fullName>
+                <default>false</default>
+                <label>Inbound Form</label>
+            </value>
+            <value>
+                <fullName>Scored Lead</fullName>
+                <default>false</default>
+                <label>Scored Lead</label>
+            </value>
+            <value>
+                <fullName>Event</fullName>
+                <default>false</default>
+                <label>Event</label>
+            </value>
+            <value>
+                <fullName>Newsfeed</fullName>
+                <default>false</default>
+                <label>Newsfeed</label>
+            </value>
+            <value>
+                <fullName>Import</fullName>
+                <default>false</default>
+                <label>Import</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

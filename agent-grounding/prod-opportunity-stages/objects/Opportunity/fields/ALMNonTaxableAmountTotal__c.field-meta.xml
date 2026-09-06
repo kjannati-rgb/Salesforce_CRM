@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ALMNonTaxableAmountTotal__c</fullName>
+    <description>Displays the total amount of all campaign items sold which are nontaxable or have a tax exempt.|Advendio. MediaCampaign</description>
+    <label>ALM Nontaxable Amount (VAT Total)</label>
+    <precision>10</precision>
+    <required>false</required>
+    <scale>9</scale>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Currency</type>
+</CustomField>

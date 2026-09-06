@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>API_Access__c</fullName>
+    <description>Mirrors the product API Access flag so flows can filter on it and the Order Form can mark the line.</description>
+    <externalId>false</externalId>
+    <formula>SBQQ__Product__r.API_Access__c</formula>
+    <label>API Access</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Checkbox</type>
+</CustomField>

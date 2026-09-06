@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Target_Renewal_Date__c</fullName>
+    <description>This field is calculated to be 90 days before the contract end date, although this is field can be editable by the Sales Person so the date may change. This logic only fires on the creation of Renewal Opportunities. Requested by AllHires.</description>
+    <inlineHelpText>This field is calculated to be 90 days before the contract end date, although this is field can be editable by the Sales Person so the date may change. This logic only fires on the creation of Renewal Opportunities.</inlineHelpText>
+    <label>Target Renewal Date</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Date</type>
+</CustomField>

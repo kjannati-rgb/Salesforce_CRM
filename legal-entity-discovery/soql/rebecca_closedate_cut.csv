@@ -1,0 +1,8 @@
+LBR_Legal_Entity__c,StageName,CurrencyIsoCode,recs,sumAmount,sumACV
+Law Business Research LLC,Closed Won,EUR,18,76858.83,
+Law Business Research LLC,Closed Won,GBP,1026,2480359.85,-25559.24
+Law Business Research LLC,Closed Won,USD,15,87507.83,
+Law Business Research LLC,Closed Lost,EUR,10,30345.64,2624.87
+Law Business Research LLC,Closed Lost,GBP,1891,11922649.31,49112.83
+Law Business Research LLC,Closed Lost,USD,49,237440.61,3121
+Law Business Research LLC,Closed Won - Cancellation,GBP,19,0,

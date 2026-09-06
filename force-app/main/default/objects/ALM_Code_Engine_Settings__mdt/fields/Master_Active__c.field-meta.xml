@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Master_Active__c</fullName>
+    <description>REV-60 master kill switch. When false the entire engine is inert regardless of the per-layer switches. Ships false (Phase A scaffold).</description>
+    <defaultValue>false</defaultValue>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Master Active</label>
+    <type>Checkbox</type>
+</CustomField>

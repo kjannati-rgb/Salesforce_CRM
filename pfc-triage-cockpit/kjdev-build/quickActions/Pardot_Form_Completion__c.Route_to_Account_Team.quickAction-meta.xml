@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QuickAction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Contact-linked PFCs at existing firms: routes to the firm's Account Team (preferred role from PFC Settings), with Chatter @mention + review Task. Replaces Route_to_Account_Owner per UAT decision 21-Jul-2026.</description>
+    <flowDefinition>PFC_Route_to_Account_Team</flowDefinition>
+    <label>Route to Account Team</label>
+    <optionsCreateFeedItem>false</optionsCreateFeedItem>
+    <type>Flow</type>
+</QuickAction>

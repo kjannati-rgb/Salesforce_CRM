@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>My_Renewal_Opportunities5</fullName>
+    <columns>Budget_Renewal_Date__c</columns>
+    <columns>Account_Name__c</columns>
+    <columns>OPPORTUNITY.STAGE_NAME</columns>
+    <columns>OPPORTUNITY.CLOSE_DATE</columns>
+    <columns>OPPORTUNITY.AMOUNT</columns>
+    <columns>Forecast_Status__c</columns>
+    <columns>CORE.USERS.ALIAS</columns>
+    <columns>OPPORTUNITY_SCORE</columns>
+    <columns>OPPORTUNITY.NAME</columns>
+    <filterScope>Mine</filterScope>
+    <filters>
+        <field>OPPORTUNITY.TYPE</field>
+        <operation>equals</operation>
+        <value>Auto-Renewal,Renewal,Repeat Business</value>
+    </filters>
+    <filters>
+        <field>OPPORTUNITY.STAGE_NAME</field>
+        <operation>equals</operation>
+        <value>Identify,Qualify,Evaluate,Negotiate,Contract Out,Closed Won – Pending Approval</value>
+    </filters>
+    <label>My Renewal Opportunities</label>
+    <sharedTo>
+        <group>Nishant_Patel_s_Team</group>
+    </sharedTo>
+</ListView>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LexPRO_Qual_Work_Areas__c</fullName>
+    <description>REV-69: the specific work areas selected on the LexPRO qualifier — the detail behind the Content Coverage Yes/No. &quot;Other&quot; indicates an area not in our list (see Work Area (Other)). Set by the LexPRO Deal Qualifier component.</description>
+    <inlineHelpText>Work areas selected in the LexPRO Deal Qualifier.</inlineHelpText>
+    <label>LexPRO Qual: Work Areas</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Financial regulation</fullName>
+                <default>false</default>
+                <label>Financial regulation</label>
+            </value>
+            <value>
+                <fullName>Data protection</fullName>
+                <default>false</default>
+                <label>Data protection</label>
+            </value>
+            <value>
+                <fullName>Sanctions monitoring</fullName>
+                <default>false</default>
+                <label>Sanctions monitoring</label>
+            </value>
+            <value>
+                <fullName>ESG &amp; sustainability</fullName>
+                <default>false</default>
+                <label>ESG &amp; sustainability</label>
+            </value>
+            <value>
+                <fullName>Employment</fullName>
+                <default>false</default>
+                <label>Employment</label>
+            </value>
+            <value>
+                <fullName>Trade &amp; customs</fullName>
+                <default>false</default>
+                <label>Trade &amp; customs</label>
+            </value>
+            <value>
+                <fullName>Competition &amp; antitrust</fullName>
+                <default>false</default>
+                <label>Competition &amp; antitrust</label>
+            </value>
+            <value>
+                <fullName>Tax</fullName>
+                <default>false</default>
+                <label>Tax</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>9</visibleLines>
+</CustomField>

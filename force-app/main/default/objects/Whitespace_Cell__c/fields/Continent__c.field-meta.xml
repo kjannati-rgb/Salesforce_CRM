@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Continent__c</fullName>
+    <description>Macro region (EMEA / North America / APAC / LATAM) of the office node, resolved from
+        BillingCountry via RegionMappingService/Country_Region__mdt at generation time. Backs the
+        White-Space Matrix's "By Region" view.</description>
+    <label>Continent</label>
+    <length>40</length>
+    <required>false</required>
+    <type>Text</type>
+</CustomField>

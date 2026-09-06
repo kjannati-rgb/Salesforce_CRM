@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Forecast_Price_Total_Deal_Value__c</fullName>
+    <description>Forecast price for the whole deal/opportunity (please use the Forecast Price First Year field to define the forecast for the first year).</description>
+    <inlineHelpText>Forecast price for the whole deal/opportunity (please use the Forecast Price First Year field to define the forecast for the first year).</inlineHelpText>
+    <label>Forecast Price Total Deal Value</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Currency</type>
+</CustomField>

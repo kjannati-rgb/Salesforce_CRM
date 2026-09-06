@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PathAssistant xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <entityName>Opportunity</entityName>
+    <fieldName>StageName</fieldName>
+    <masterLabel>Cancellation</masterLabel>
+    <pathAssistantSteps>
+        <fieldNames>Amount</fieldNames>
+        <fieldNames>CloseDate</fieldNames>
+        <fieldNames>Closed_Lost_primary_reason__c</fieldNames>
+        <fieldNames>Note__c</fieldNames>
+        <info>&lt;p&gt;&lt;b&gt;Cancellation logged - awaiting approval.&lt;/b&gt; This is an internal churn-processing step, not a sale.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Record the cancellation reason and a note&lt;/li&gt;&lt;li&gt;Submit for approval - it must be approved before it can close&lt;/li&gt;&lt;/ul&gt;</info>
+        <picklistValueName>Cancellation - Pending Review</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Amount</fieldNames>
+        <fieldNames>CloseDate</fieldNames>
+        <fieldNames>Closed_Lost_primary_reason__c</fieldNames>
+        <info>&lt;p&gt;&lt;b&gt;Approved and processed.&lt;/b&gt; The cancellation or reduction is finalised.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Ensure the reason is recorded for churn analysis&lt;/li&gt;&lt;/ul&gt;</info>
+        <picklistValueName>Closed Won - Cancellation</picklistValueName>
+    </pathAssistantSteps>
+    <recordTypeName>Cancellations</recordTypeName>
+</PathAssistant>

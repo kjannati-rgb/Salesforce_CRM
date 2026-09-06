@@ -1,0 +1,13 @@
+Id NB=[SELECT Id FROM RecordType WHERE SobjectType='Opportunity' AND DeveloperName='New_Business' LIMIT 1].Id;
+Account a=new Account(Name='CRCTEST Obs Acc'); insert a;
+Opportunity o=new Opportunity(Name='CRCTEST Obs',AccountId=a.Id,StageName='Identify',Probability=10,CloseDate=Date.today().addMonths(2),RecordTypeId=NB);
+insert o;
+Integer b0=[SELECT COUNT() FROM Flow_Log__c WHERE Flow_Name__c='Check Completeness of Contact Roles'];
+Opportunity o2=new Opportunity(Id=o.Id);
+o2.put('Contact_Role_Check_Has_Error__c', true);
+o2.put('Contact_Role_Check_Last_Error__c', 'SIMULATED FAULT for observability test');
+update o2;
+Integer aft=[SELECT COUNT() FROM Flow_Log__c WHERE Flow_Name__c='Check Completeness of Contact Roles'];
+System.debug('CRCTEST: OBS logs before='+b0+' after='+aft+' (expect +1)');
+List<Flow_Log__c> fls=[SELECT Class_Name__c,Record_Name__c,Error_Description__c FROM Flow_Log__c WHERE Flow_Name__c='Check Completeness of Contact Roles' ORDER BY CreatedDate DESC LIMIT 1];
+if(!fls.isEmpty()) System.debug('CRCTEST: OBS newest => rec='+fls[0].Record_Name__c+' | class='+fls[0].Class_Name__c+' | err='+fls[0].Error_Description__c);

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Date_Completed__c</fullName>
+    <description>Date the Form was either Converted or Disqualified</description>
+    <inlineHelpText>Date the Form was either Converted or Disqualified. Stamped automatically when the Form stage is changed.</inlineHelpText>
+    <label>Date Completed</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>DateTime</type>
+</CustomField>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cold__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Field to flag cold target opportunities being worked by Key Account Managers</description>
+    <inlineHelpText>Field to flag cold target opportunities being worked by Key Account Managers</inlineHelpText>
+    <label>Cold</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

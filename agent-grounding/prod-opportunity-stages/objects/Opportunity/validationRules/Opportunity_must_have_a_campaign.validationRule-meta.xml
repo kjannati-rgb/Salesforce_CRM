@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity_must_have_a_campaign</fullName>
+    <active>false</active>
+    <description>Opportunity must have a campaign before moving to any stage</description>
+    <errorConditionFormula>(
+OR(
+  ISPICKVAL(Owner.Team__c, &quot;Benchmarking&quot;),
+  INCLUDES(Owner.Brands__c, &quot;Expert Insight - GXRs&quot;),
+  INCLUDES(Owner.Brands__c, &quot;Expert Insight - IP&quot;)
+)
+&amp;&amp;
+ISPICKVAL(StageName, &quot;Closed Won – Pending Approval&quot;) 
+&amp;&amp; 
+ISBLANK(Campaign__c)
+&amp;&amp; $Profile.Name &lt;&gt; &apos;System Administrator&apos;
+)
+||
+(
+text(Owner.Team__c )= &apos;Performance Data - Lexology WWL&apos;
+&amp;&amp;
+ISBLANK(Campaign__c)
+&amp;&amp;
+text(StageName )&lt;&gt; &apos;Identify&apos;
+&amp;&amp;
+$Profile.Name &lt;&gt; &apos;System Administrator&apos;
+)</errorConditionFormula>
+    <errorDisplayField>Campaign__c</errorDisplayField>
+    <errorMessage>A campaign must be selected before saving this opportunity. Please go back and choose a campaign from the Campaign field, then try saving again</errorMessage>
+</ValidationRule>

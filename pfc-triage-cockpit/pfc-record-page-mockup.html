@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pardot Form Completion — Record Page Redesign (Mockup)</title>
+<style>
+  :root{
+    --sf-bg:#f3f3f3; --sf-card:#ffffff; --sf-border:#e5e5e5; --sf-text:#181818;
+    --sf-text-weak:#5c5c5c; --sf-label:#747474; --sf-blue:#0176d3; --sf-blue-dark:#014486;
+    --sf-teal:#0b827c; --sf-green:#2e844a; --sf-amber:#dd7a01; --sf-red:#ba0517;
+    --sf-purple:#9050e9; --radius:.5rem; --note:#5a1ba9;
+    font-size:15px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--sf-bg);color:var(--sf-text);padding-bottom:4rem}
+  button{font:inherit;cursor:pointer}
+
+  .mock-banner{background:#181818;color:#fff;padding:.55rem 1rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;font-size:.82rem}
+  .mock-banner strong{font-weight:700}
+  .mock-banner .spacer{flex:1}
+  .persona{display:flex;border:1px solid #4a4a4a;border-radius:2rem;overflow:hidden}
+  .persona button{background:#2e2e2e;color:#bbb;border:0;padding:.32rem .85rem;font-size:.78rem;font-weight:600}
+  .persona button.on{background:#0176d3;color:#fff}
+  .toggle{display:flex;align-items:center;gap:.45rem;background:#2e2e2e;border:1px solid #4a4a4a;color:#fff;border-radius:2rem;padding:.3rem .8rem;font-size:.8rem}
+  .toggle .dot{width:.7rem;height:.7rem;border-radius:50%;background:#666;transition:background .15s}
+  body.notes-on .toggle .dot{background:#c29ef1}
+
+  .lx-header{background:linear-gradient(90deg,#0b5cab,#0176d3);height:6px}
+  .lx-tabbar{background:#fff;border-bottom:1px solid var(--sf-border);padding:0 1rem;display:flex;gap:1.5rem;font-size:.85rem;overflow-x:auto}
+  .lx-tabbar span{padding:.7rem .1rem;color:var(--sf-text-weak);white-space:nowrap}
+  .lx-tabbar span.active{color:var(--sf-blue-dark);border-bottom:3px solid var(--sf-blue);font-weight:600}
+
+  .page{max-width:1200px;margin:1rem auto;padding:0 1rem;display:grid;grid-template-columns:1fr 330px;gap:1rem}
+  @media(max-width:960px){.page{grid-template-columns:1fr}}
+  .main{min-width:0}
+  .card{background:var(--sf-card);border:1px solid var(--sf-border);border-radius:var(--radius);box-shadow:0 1px 2px rgba(0,0,0,.04);margin-bottom:1rem;position:relative}
+
+  /* persona switching */
+  .contact-only{display:none!important}
+  body.persona-contact .contact-only{display:revert!important}
+  body.persona-contact .lead-only{display:none!important}
+
+  .highlights{padding:1rem 1.25rem}
+  .hl-top{display:flex;align-items:flex-start;gap:.9rem;flex-wrap:wrap}
+  .obj-icon{width:2.6rem;height:2.6rem;border-radius:.45rem;background:var(--sf-purple);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1rem;flex-shrink:0}
+  .hl-title .eyebrow{font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;color:var(--sf-label)}
+  .hl-title h1{font-size:1.25rem;font-weight:700;line-height:1.25}
+  .hl-actions{margin-left:auto;display:flex;gap:.5rem;flex-wrap:wrap}
+  .btn{border:1px solid #c9c9c9;background:#fff;color:var(--sf-blue-dark);border-radius:.35rem;padding:.42rem .9rem;font-size:.83rem;font-weight:500}
+  .btn:hover{background:#f4f8fd}
+  .btn.brand{background:var(--sf-blue);border-color:var(--sf-blue);color:#fff}
+  .btn.brand:hover{background:var(--sf-blue-dark)}
+  .btn.danger{color:var(--sf-red)}
+  .hl-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.9rem 1.4rem;margin-top:1rem;padding-top:.9rem;border-top:1px solid var(--sf-border)}
+  .fld .lbl{font-size:.72rem;color:var(--sf-label);margin-bottom:.15rem}
+  .fld .val{font-size:.9rem;font-weight:500;word-break:break-word}
+  .fld .val a{color:var(--sf-blue);text-decoration:none}
+  .fld .val a:hover{text-decoration:underline}
+
+  .path-wrap{padding:.9rem 1.25rem}
+  .path{display:flex;overflow-x:auto;gap:2px}
+  .step{flex:1;min-width:110px;position:relative;background:#e5e5e5;color:#514f4d;font-size:.8rem;font-weight:600;text-align:center;padding:.55rem .5rem .55rem 1.1rem;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 50%,calc(100% - 12px) 100%,0 100%,12px 50%);white-space:nowrap;border:0}
+  .step:first-child{clip-path:polygon(0 0,calc(100% - 12px) 0,100% 50%,calc(100% - 12px) 100%,0 100%);padding-left:.6rem}
+  .step.done{background:#0b827c;color:#fff}
+  .step.current{background:#014486;color:#fff}
+  .step:hover{filter:brightness(1.06)}
+  .path-guidance{margin-top:.8rem;background:#eef4ff;border:1px solid #d8e6fe;border-radius:.4rem;padding:.8rem 1rem;font-size:.84rem;display:flex;gap:1.5rem;flex-wrap:wrap}
+  .path-guidance .col{flex:1;min-width:220px}
+  .path-guidance h4{font-size:.72rem;text-transform:uppercase;letter-spacing:.03em;color:var(--sf-blue-dark);margin-bottom:.35rem}
+  .path-guidance ul{list-style:none}
+  .path-guidance li{padding:.15rem 0;color:#32436b}
+  .path-guidance li::before{content:"›";margin-right:.4rem;color:var(--sf-blue)}
+  .mark-btn{align-self:center;flex-shrink:0}
+
+  .lq{padding:1rem 1.25rem}
+  .lq-head{display:flex;align-items:center;gap:.6rem;margin-bottom:.9rem}
+  .lq-head .sq{width:1.7rem;height:1.7rem;border-radius:.35rem;background:linear-gradient(135deg,#9050e9,#0176d3);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.85rem}
+  .lq-head h2{font-size:.95rem;font-weight:700}
+  .lq-grid{display:grid;grid-template-columns:150px 1fr;gap:1.2rem;align-items:center}
+  @media(max-width:640px){.lq-grid{grid-template-columns:1fr}}
+  .gauge{position:relative;width:150px;height:96px;margin:0 auto}
+  .gauge svg{width:100%;height:100%}
+  .gauge .num{position:absolute;left:0;right:0;bottom:2px;text-align:center}
+  .gauge .num b{font-size:1.7rem;color:var(--sf-green)}
+  .gauge .num span{display:block;font-size:.68rem;color:var(--sf-label);text-transform:uppercase;letter-spacing:.05em}
+  .bignum{text-align:center}
+  .bignum b{font-size:2rem;color:var(--sf-blue-dark);display:block;line-height:1}
+  .bignum span{font-size:.68rem;color:var(--sf-label);text-transform:uppercase;letter-spacing:.05em}
+  .bignum .fam{font-size:.78rem;color:var(--sf-text-weak);margin-top:.3rem;display:block;text-transform:none;letter-spacing:0}
+  .badges{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:.7rem}
+  .badge{display:inline-flex;align-items:center;gap:.35rem;font-size:.75rem;font-weight:600;padding:.28rem .65rem;border-radius:2rem;border:1px solid transparent}
+  .badge.good{background:#ebf7e6;color:#2e844a;border-color:#cdefc4}
+  .badge.info{background:#eef4ff;color:#014486;border-color:#d8e6fe}
+  .badge.warn{background:#fef1dd;color:#8c4b02;border-color:#fbdcab}
+  .reason{font-size:.84rem;color:var(--sf-text-weak);line-height:1.45;background:#fafaf9;border:1px solid #eee;border-radius:.4rem;padding:.7rem .85rem}
+  .dupe{margin-top:.9rem;border:1px solid #fbdcab;background:#fef8ef;border-radius:.4rem;padding:.7rem .9rem;font-size:.84rem;display:flex;gap:.6rem;align-items:flex-start}
+  .dupe.crit{border-color:#f3b0b8;background:#fdf2f3}
+  .dupe .ic{color:var(--sf-amber);font-size:1rem;line-height:1.3}
+  .dupe.crit .ic{color:var(--sf-red)}
+  .dupe a{color:var(--sf-blue);text-decoration:none;font-weight:600}
+
+  .tabs{border-bottom:1px solid var(--sf-border);display:flex;gap:.25rem;padding:0 .75rem}
+  .tab{border:0;background:none;padding:.75rem .9rem;font-size:.87rem;color:var(--sf-text-weak);border-bottom:3px solid transparent;font-weight:500}
+  .tab.active{color:var(--sf-blue-dark);border-bottom-color:var(--sf-blue);font-weight:700}
+  .panel{display:none;padding:1.1rem 1.25rem}
+  .panel.active{display:block}
+  .sec-title{font-size:.75rem;text-transform:uppercase;letter-spacing:.04em;color:var(--sf-label);margin:1.1rem 0 .55rem;padding-bottom:.3rem;border-bottom:1px solid #efefef}
+  .sec-title:first-child{margin-top:0}
+  .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem 2rem}
+  @media(max-width:640px){.fgrid{grid-template-columns:1fr}}
+  .fitem{border-bottom:1px dotted #e8e8e8;padding-bottom:.4rem}
+  .fitem .lbl{font-size:.72rem;color:var(--sf-label)}
+  .fitem .val{font-size:.9rem;padding-top:.1rem}
+  .fitem .val.empty{color:#b0adab;font-style:italic}
+  .chip{display:inline-block;background:#f3f3f3;border:1px solid #e5e5e5;border-radius:2rem;padding:.15rem .6rem;font-size:.76rem;margin:.12rem .2rem .12rem 0}
+  .hidden-note{font-size:.78rem;color:var(--sf-label);background:#fafaf9;border:1px dashed #ddd;border-radius:.4rem;padding:.55rem .8rem;margin-top:.9rem}
+
+  .side .card{padding:1rem 1.1rem}
+  .side h3{font-size:.9rem;font-weight:700;margin-bottom:.7rem;display:flex;align-items:center;gap:.5rem}
+  .side .mini-icon{width:1.4rem;height:1.4rem;border-radius:.3rem;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:.7rem;font-weight:700}
+  .prospect-line{display:flex;gap:.7rem;align-items:center;margin-bottom:.6rem}
+  .avatar{width:2.3rem;height:2.3rem;border-radius:50%;background:#e8f1fb;color:var(--sf-blue-dark);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0}
+  .prospect-line .nm{font-weight:600;font-size:.9rem}
+  .prospect-line .sub{font-size:.78rem;color:var(--sf-text-weak)}
+  .kv{font-size:.82rem;display:flex;justify-content:space-between;padding:.32rem 0;border-bottom:1px dotted #eee;gap:1rem}
+  .kv .k{color:var(--sf-label)}
+  .kv .v{text-align:right;font-weight:500}
+  .kv .v a{color:var(--sf-blue);text-decoration:none}
+  .tl{list-style:none;font-size:.82rem}
+  .tl li{display:flex;gap:.6rem;padding:.45rem 0;border-bottom:1px dotted #eee}
+  .tl .t-ic{width:1.5rem;height:1.5rem;border-radius:.3rem;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.68rem}
+  .tl .when{color:var(--sf-label);font-size:.74rem}
+
+  .note-tag{display:none;position:absolute;top:-.55rem;right:.75rem;background:var(--note);color:#fff;font-size:.66rem;font-weight:700;letter-spacing:.03em;padding:.2rem .55rem;border-radius:2rem;z-index:5;box-shadow:0 2px 6px rgba(90,27,169,.35)}
+  .note-body{display:none;border-top:2px solid var(--note);background:#f7f2ff;color:#3c1478;font-size:.8rem;line-height:1.5;padding:.7rem 1.25rem;border-radius:0 0 var(--radius) var(--radius)}
+  body.notes-on .note-tag,body.notes-on .note-body{display:block}
+  body.notes-on .card{outline:1px dashed #c9aef2;outline-offset:2px}
+  body.notes-on.persona-contact .note-body.contact-only{display:block!important}
+  body.persona-contact .note-body.contact-only{display:none!important}
+  body.notes-on.persona-contact .note-body.lead-only{display:none!important}
+
+  .overlay{display:none;position:fixed;inset:0;background:rgba(24,24,24,.5);z-index:50;align-items:center;justify-content:center;padding:1rem}
+  .overlay.open{display:flex}
+  .modal{background:#fff;border-radius:.6rem;max-width:460px;width:100%;box-shadow:0 12px 40px rgba(0,0,0,.3)}
+  .modal header{padding:1rem 1.25rem;border-bottom:1px solid var(--sf-border);font-weight:700}
+  .modal .body{padding:1.1rem 1.25rem;font-size:.88rem}
+  .modal label{display:block;font-size:.78rem;color:var(--sf-label);margin:.8rem 0 .25rem}
+  .modal select,.modal textarea{width:100%;border:1px solid #c9c9c9;border-radius:.35rem;padding:.5rem .6rem;font:inherit;font-size:.87rem}
+  .modal footer{padding:.9rem 1.25rem;border-top:1px solid var(--sf-border);display:flex;justify-content:flex-end;gap:.6rem}
+  .stamp{font-size:.78rem;color:var(--sf-text-weak);background:#fafaf9;border:1px solid #eee;border-radius:.35rem;padding:.5rem .7rem;margin-top:.9rem}
+  .toast{position:fixed;left:50%;transform:translateX(-50%) translateY(20px);bottom:1.5rem;background:#2e844a;color:#fff;padding:.7rem 1.3rem;border-radius:.5rem;font-size:.87rem;opacity:0;pointer-events:none;transition:all .25s;z-index:60}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<div class="mock-banner">
+  <strong>MOCKUP</strong>
+  <span>Pardot Form Completion · record page redesign</span>
+  <div class="persona">
+    <button id="pL" class="on" onclick="setPersona('lead')">Lead-linked</button>
+    <button id="pC" onclick="setPersona('contact')">Contact-linked</button>
+  </div>
+  <span class="spacer"></span>
+  <button class="toggle" onclick="document.body.classList.toggle('notes-on')"><span class="dot"></span> Design notes</button>
+</div>
+
+<div class="lx-header"></div>
+<div class="lx-tabbar">
+  <span>Home</span><span>Leads</span><span>Contacts</span><span>Opportunities</span><span class="active">Pardot Form Completions</span><span>Campaigns</span><span>Reports</span>
+</div>
+
+<div class="page">
+<div class="main">
+
+  <!-- HIGHLIGHTS -->
+  <div class="card">
+    <span class="note-tag">1 · Highlights panel</span>
+    <div class="highlights">
+      <div class="hl-top">
+        <div class="obj-icon">PF</div>
+        <div class="hl-title">
+          <div class="eyebrow">Pardot Form Completion</div>
+          <h1 class="lead-only">Paul Buchanan | Lexology PRO Landing Page — Subscribe</h1>
+          <h1 class="contact-only">Cyril Riffaud | IAM — Subscribe Short Form</h1>
+        </div>
+        <div class="hl-actions">
+          <button class="btn brand lead-only" onclick="toast('Opportunity creation flow would launch')">Convert to Opp</button>
+          <button class="btn brand contact-only" onclick="toast('Would notify the account owner / CSM with form context')">Route to Account Owner</button>
+          <button class="btn" onclick="toast('Task logger would open')">Log Outreach</button>
+          <button class="btn danger" onclick="openModal()">Disqualify</button>
+        </div>
+      </div>
+      <div class="hl-fields lead-only">
+        <div class="fld"><div class="lbl">Prospect</div><div class="val"><a href="#">Paul Buchanan</a></div></div>
+        <div class="fld"><div class="lbl">Job Title</div><div class="val">Senior Employment Counsel (EMEA)</div></div>
+        <div class="fld"><div class="lbl">Company</div><div class="val">OpenAI</div></div>
+        <div class="fld"><div class="lbl">Country</div><div class="val">Ireland</div></div>
+        <div class="fld"><div class="lbl">Product Brand</div><div class="val">Lexology</div></div>
+        <div class="fld"><div class="lbl">Sales Rep</div><div class="val"><a href="#">Emlyn James</a></div></div>
+      </div>
+      <div class="hl-fields contact-only">
+        <div class="fld"><div class="lbl">Prospect</div><div class="val"><a href="#">Cyril Riffaud</a></div></div>
+        <div class="fld"><div class="lbl">Job Title</div><div class="val">Counsel</div></div>
+        <div class="fld"><div class="lbl">Account</div><div class="val"><a href="#">Clifford Chance LLP</a></div></div>
+        <div class="fld"><div class="lbl">Country</div><div class="val">France</div></div>
+        <div class="fld"><div class="lbl">Product Brand</div><div class="val">IAM</div></div>
+        <div class="fld"><div class="lbl">Account Owner</div><div class="val"><a href="#">Key Accounts — GxR</a></div></div>
+      </div>
+    </div>
+    <div class="note-body lead-only"><b>Why:</b> answers "should I call this person?" in two seconds. Six fields only. Quick actions live here so updating the record is one click.</div>
+    <div class="note-body contact-only"><b>Contact variant:</b> Company becomes the Account link, Sales Rep becomes Account Owner, and the primary action flips from "Convert to Opp" to "Route to Account Owner" — because on an existing account the completion is a signal for the owning team, not a cold lead. Conditional visibility on Contact__c ≠ null.</div>
+  </div>
+
+  <!-- PATH -->
+  <div class="card">
+    <span class="note-tag">2 · Path on Sales Stage</span>
+    <div class="path-wrap">
+      <div class="path" id="path"></div>
+      <div class="path-guidance lead-only">
+        <div class="col">
+          <h4>Guidance — New</h4>
+          <ul>
+            <li>Review Lead Quality card before outreach</li>
+            <li>First touch within 1 business day</li>
+            <li>Set Next Step + Next Contact Date</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h4>Key fields for this stage</h4>
+          <ul>
+            <li>Next Step — <i>empty</i></li>
+            <li>Next Contact Date — <i>empty</i></li>
+          </ul>
+        </div>
+        <button class="btn brand mark-btn" onclick="advance()">Mark as Working</button>
+      </div>
+      <div class="path-guidance contact-only">
+        <div class="col">
+          <h4>Guidance — New (existing account)</h4>
+          <ul>
+            <li>Check entitlement before any outreach</li>
+            <li>Firm may already hold this product — verify at firm level</li>
+            <li>Loop in account owner / CSM, don't cold-pitch</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h4>Key fields for this stage</h4>
+          <ul>
+            <li>Next Step — <i>empty</i></li>
+            <li>Next Contact Date — <i>empty</i></li>
+          </ul>
+        </div>
+        <button class="btn brand mark-btn" onclick="advance()">Mark as Working</button>
+      </div>
+    </div>
+    <div class="note-body"><b>Why:</b> the stage picklist becomes a visible workflow, with guidance that changes by persona — cold-lead cadence for Leads, entitlement-first etiquette for Contacts at existing accounts.</div>
+  </div>
+
+  <!-- QUALITY / ACCOUNT CONTEXT -->
+  <div class="card">
+    <span class="note-tag">3 · Quality / Context LWC (custom)</span>
+
+    <div class="lq lead-only">
+      <div class="lq-head"><div class="sq">◆</div><h2>Lead Quality</h2></div>
+      <div class="lq-grid">
+        <div class="gauge">
+          <svg viewBox="0 0 100 60">
+            <path d="M8 55 A45 45 0 0 1 92 55" fill="none" stroke="#eee" stroke-width="9" stroke-linecap="round"/>
+            <path d="M8 55 A45 45 0 0 1 92 55" fill="none" stroke="#2e844a" stroke-width="9" stroke-linecap="round"
+                  stroke-dasharray="141" stroke-dashoffset="24" />
+          </svg>
+          <div class="num"><b>83</b><span>Fit score</span></div>
+        </div>
+        <div>
+          <div class="badges">
+            <span class="badge good">✓ Corporate domain · openai.com</span>
+            <span class="badge info">◆ Clay routed</span>
+            <span class="badge info">Inbound Form</span>
+          </div>
+          <div class="reason"><b>Score reasoning:</b> Senior in-house counsel at a high-growth technology company; EMEA employment remit matches Lexology PRO in-house ICP. Work areas span data privacy, employment and litigation. Strong title and organisation-type fit.</div>
+        </div>
+      </div>
+      <div class="dupe">
+        <div class="ic">⚠</div>
+        <div><b>2 other completions</b> from this prospect in the last 90 days — <a href="#" onclick="toast('Would filter the Linked Form Completions related list');return false;">view &amp; link them</a>. Consider working the earliest and disqualifying the rest as <i>Duplicate Enquiry</i>.</div>
+      </div>
+    </div>
+
+    <div class="lq contact-only">
+      <div class="lq-head"><div class="sq">◆</div><h2>Account Context</h2></div>
+      <div class="lq-grid">
+        <div class="bignum">
+          <b>36</b><span>Active subscriptions</span>
+          <span class="fam">across 7 product families<br>(firm-wide)</span>
+        </div>
+        <div>
+          <div class="badges">
+            <span class="badge good">✓ Existing customer — firm level</span>
+            <span class="badge info">Firm: Clifford Chance LLP</span>
+            <span class="badge info">Office: Paris</span>
+          </div>
+          <div class="reason"><b>Holdings summary:</b> 21× Specialist Platforms · 3× Lexology Pro · 3× Panoramic · 3× Lexology Intelligence · 2× Lexology Index · 2× GxR/IP Performance Data · 2× ILO. Rolled up via Ultimate Account across all offices.</div>
+        </div>
+      </div>
+      <div class="dupe crit">
+        <div class="ic">⚑</div>
+        <div><b>Entitlement check:</b> prospect requested <b>IAM</b> — the firm holds 21 Specialist Platforms subscriptions, which is the family IAM sits in. Verify whether Cyril is covered by an existing licence before selling. If covered → route to CSM as a seat/access request. If not → genuine expansion signal for the account owner.</div>
+      </div>
+    </div>
+
+    <div class="note-body lead-only"><b>Why:</b> the signature piece. Domain check, Clay status, Fit Score gauge with reasoning, duplicate detector. Fit Score simulated — the Clay write-back isn't landing in prod yet.</div>
+    <div class="note-body contact-only"><b>Contact variant:</b> the card re-skins itself as <b>Account Context</b>. Fit scoring is pointless for a known contact at a 36-subscription firm; what the rep needs is holdings and an entitlement check. One LWC, two render modes, switched on Contact__c ≠ null. Subscription rollup runs via Ultimate_Account__c so office-level completions see firm-level truth.</div>
+  </div>
+
+  <!-- TABS -->
+  <div class="card">
+    <span class="note-tag">4 · Tabbed detail + Dynamic Forms</span>
+    <div class="tabs">
+      <button class="tab active" data-p="p1" onclick="switchTab(this)">Triage</button>
+      <button class="tab" data-p="p2" onclick="switchTab(this)">Attribution</button>
+      <button class="tab" data-p="p3" onclick="switchTab(this)">Outcome</button>
+    </div>
+
+    <div class="panel active" id="p1">
+      <div class="sec-title">Working the lead</div>
+      <div class="fgrid">
+        <div class="fitem"><div class="lbl">Sales Stage</div><div class="val">New</div></div>
+        <div class="fitem lead-only"><div class="lbl">Sales Rep</div><div class="val">Emlyn James</div></div>
+        <div class="fitem contact-only"><div class="lbl">Sales Rep</div><div class="val">Key Accounts — GxR</div></div>
+        <div class="fitem"><div class="lbl">Next Step</div><div class="val empty">Click to add…</div></div>
+        <div class="fitem"><div class="lbl">Next Contact Date</div><div class="val empty">Click to add…</div></div>
+        <div class="fitem" style="grid-column:1/-1"><div class="lbl">Comments</div><div class="val empty">Click to add…</div></div>
+      </div>
+      <div class="sec-title">Prospect detail</div>
+      <div class="fgrid lead-only">
+        <div class="fitem"><div class="lbl">Email</div><div class="val">paulbuchanan@openai.com</div></div>
+        <div class="fitem"><div class="lbl">Phone (Pardot)</div><div class="val empty">—</div></div>
+        <div class="fitem"><div class="lbl">Organisation Type</div><div class="val">Corporate — In-house</div></div>
+        <div class="fitem"><div class="lbl">Region</div><div class="val">EMEA</div></div>
+        <div class="fitem" style="grid-column:1/-1"><div class="lbl">Work Areas</div><div class="val">
+          <span class="chip">Data privacy</span><span class="chip">Data security</span><span class="chip">Employee Benefits &amp; Pensions</span><span class="chip">Immigration</span><span class="chip">Information Technology</span><span class="chip">Internet &amp; Social Media</span><span class="chip">Labour &amp; employment</span><span class="chip">Litigation</span>
+        </div></div>
+      </div>
+      <div class="fgrid contact-only">
+        <div class="fitem"><div class="lbl">Email</div><div class="val">cyril.riffaud@cliffordchance.com</div></div>
+        <div class="fitem"><div class="lbl">Phone (Pardot)</div><div class="val empty">—</div></div>
+        <div class="fitem"><div class="lbl">Organisation Type</div><div class="val">Law Firm</div></div>
+        <div class="fitem"><div class="lbl">Region</div><div class="val">EMEA</div></div>
+        <div class="fitem" style="grid-column:1/-1"><div class="lbl">Work Areas</div><div class="val">
+          <span class="chip">Intellectual property</span><span class="chip">Patents</span><span class="chip">Trademarks</span>
+        </div></div>
+      </div>
+      <div class="hidden-note">Dynamic Forms: <b>Reason Disqualified</b> hidden (stage ≠ Disqualified) · <b>Newsfeed Subscriber Date</b> hidden (source ≠ Newsfeed) · funnel counter fields removed from layout entirely (report-only).</div>
+    </div>
+
+    <div class="panel" id="p2">
+      <div class="sec-title">Source</div>
+      <div class="fgrid lead-only">
+        <div class="fitem"><div class="lbl">Form Name</div><div class="val">Lexology - LeadGen - Lexology PRO Landing Page - Subscribe</div></div>
+        <div class="fitem"><div class="lbl">PFC Source</div><div class="val">Inbound Form</div></div>
+        <div class="fitem"><div class="lbl">Campaign</div><div class="val"><a href="#">Lexology PRO — Always-on Subscribe</a></div></div>
+        <div class="fitem"><div class="lbl">Product Brand</div><div class="val">Lexology</div></div>
+      </div>
+      <div class="fgrid contact-only">
+        <div class="fitem"><div class="lbl">Form Name</div><div class="val">IAM - LeadGen - Subscribe - Short Form</div></div>
+        <div class="fitem"><div class="lbl">PFC Source</div><div class="val">Inbound Form</div></div>
+        <div class="fitem"><div class="lbl">Campaign</div><div class="val empty">—</div></div>
+        <div class="fitem"><div class="lbl">Product Brand</div><div class="val">IAM</div></div>
+      </div>
+      <div class="hidden-note">UTM section (Source / Medium / Campaign / Term / Content) hidden — all five values blank on this record. Renders only when UTM Source is populated.</div>
+    </div>
+
+    <div class="panel" id="p3">
+      <div class="sec-title">Conversion</div>
+      <div class="fgrid">
+        <div class="fitem"><div class="lbl">Opportunity</div><div class="val empty">Not yet converted</div></div>
+        <div class="fitem"><div class="lbl">Days to Conversion</div><div class="val empty">—</div></div>
+        <div class="fitem"><div class="lbl">Date Completed</div><div class="val empty">—</div></div>
+        <div class="fitem"><div class="lbl">Converted to Sale</div><div class="val">☐</div></div>
+      </div>
+      <div class="hidden-note">Opportunity Stage, Close Date and days-to-close fields appear here only once an Opportunity is linked.</div>
+    </div>
+    <div class="note-body"><b>Why:</b> Triage / Attribution / Outcome replaces one long scroll. Dynamic Forms visibility rules kill the blank-field graveyard.</div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<div class="side">
+  <div class="card lead-only">
+    <span class="note-tag">5 · Prospect context</span>
+    <h3><span class="mini-icon" style="background:#f2a45f">L</span> Lead</h3>
+    <div class="prospect-line">
+      <div class="avatar">PB</div>
+      <div><div class="nm"><a href="#" style="color:var(--sf-blue);text-decoration:none">Paul Buchanan</a></div><div class="sub">Senior Employment Counsel (EMEA) · OpenAI</div></div>
+    </div>
+    <div class="kv"><span class="k">Lead Status</span><span class="v">Open</span></div>
+    <div class="kv"><span class="k">Lead Source</span><span class="v">Pardot Form</span></div>
+    <div class="kv"><span class="k">Newsfeed Subscriber</span><span class="v">Yes — 12 Jun 2026</span></div>
+  </div>
+
+  <div class="card contact-only">
+    <span class="note-tag">5 · Prospect + account context</span>
+    <h3><span class="mini-icon" style="background:#9050e9">C</span> Contact</h3>
+    <div class="prospect-line">
+      <div class="avatar">CR</div>
+      <div><div class="nm"><a href="#" style="color:var(--sf-blue);text-decoration:none">Cyril Riffaud</a></div><div class="sub">Counsel · Clifford Chance LLP (Paris)</div></div>
+    </div>
+    <div class="kv"><span class="k">Office Account</span><span class="v"><a href="#">Clifford Chance LLP</a></span></div>
+    <div class="kv"><span class="k">Ultimate (Firm)</span><span class="v"><a href="#">Clifford Chance LLP</a></span></div>
+    <div class="kv"><span class="k">Active subs (firm)</span><span class="v">36</span></div>
+    <div class="kv"><span class="k">Account Owner</span><span class="v">Key Accounts — GxR</span></div>
+    <div class="note-body contact-only" style="margin:0 -1.1rem -1rem;border-radius:0 0 var(--radius) var(--radius)"><b>Why:</b> office → firm hierarchy made visible, so nobody treats a Paris-office signup as a stranger when the firm is a top account.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="mini-icon" style="background:#0b827c">✓</span> Activity</h3>
+    <ul class="tl lead-only">
+      <li><div class="t-ic" style="background:#9050e9">◆</div><div>Form completed — <b>Lexology PRO Landing Page</b><div class="when">Today, 09:14</div></div></li>
+      <li><div class="t-ic" style="background:#0176d3">✉</div><div>Autoresponder sent — Welcome to Lexology PRO<div class="when">Today, 09:15</div></div></li>
+      <li><div class="t-ic" style="background:#747474">◆</div><div>Clay enrichment + routing run<div class="when">Today, 09:21</div></div></li>
+    </ul>
+    <ul class="tl contact-only">
+      <li><div class="t-ic" style="background:#9050e9">◆</div><div>Form completed — <b>IAM Subscribe Short Form</b><div class="when">Today, 11:02</div></div></li>
+      <li><div class="t-ic" style="background:#0176d3">✉</div><div>Autoresponder sent — IAM welcome<div class="when">Today, 11:03</div></div></li>
+      <li><div class="t-ic" style="background:#dd7a01">⚑</div><div>Entitlement check pending — existing account<div class="when">Today, 11:04</div></div></li>
+    </ul>
+  </div>
+
+  <div class="card lead-only">
+    <h3><span class="mini-icon" style="background:#dd7a01">≡</span> Linked Form Completions (2)</h3>
+    <div class="kv"><span class="k">14 May 2026</span><span class="v"><a href="#">PRO — Content Download</a></span></div>
+    <div class="kv"><span class="k">02 Apr 2026</span><span class="v"><a href="#">PRO — Scanner</a></span></div>
+  </div>
+
+  <div class="card contact-only">
+    <h3><span class="mini-icon" style="background:#dd7a01">≡</span> Firm completions — 90 days (4)</h3>
+    <div class="kv"><span class="k">Today</span><span class="v"><a href="#">Cyril Riffaud — IAM</a></span></div>
+    <div class="kv"><span class="k">21 Jun 2026</span><span class="v"><a href="#">A. Meyer — WTR</a></span></div>
+    <div class="kv"><span class="k">03 Jun 2026</span><span class="v"><a href="#">S. Novak — GCR</a></span></div>
+    <div class="kv"><span class="k">18 May 2026</span><span class="v"><a href="#">T. Okafor — IAM</a></span></div>
+  </div>
+</div>
+</div>
+
+<!-- DISQUALIFY MODAL -->
+<div class="overlay" id="ov">
+  <div class="modal">
+    <header>Disqualify form completion</header>
+    <div class="body">
+      <label for="rsn">Reason Disqualified</label>
+      <select id="rsn">
+        <option class="contact-only" selected>Existing customer</option>
+        <option>Duplicate Enquiry</option><option>Not ICP – Job Title</option>
+        <option>Not ICP – Company Size</option><option>Student enquiry</option><option>Test/Invalid enquiry</option>
+        <option>No response</option><option>Other</option>
+      </select>
+      <label for="cmt">Comments (optional)</label>
+      <textarea id="cmt" rows="3" placeholder="Add context for reporting…"></textarea>
+      <div class="stamp">On save: Sales Stage → <b>Disqualified</b> · Date Completed stamped automatically · Days to Conversion calculated.</div>
+    </div>
+    <footer>
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn brand" onclick="closeModal();toast('Disqualified — Date Completed stamped')">Disqualify</button>
+    </footer>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const stages=["New","Working","Nurturing","Converted","Disqualified"];
+let current=0;
+function renderPath(){
+  const p=document.getElementById('path');p.innerHTML='';
+  stages.forEach((s,i)=>{
+    const b=document.createElement('button');b.className='step'+(i<current?' done':i===current?' current':'');
+    b.textContent=(i<current?'✓ ':'')+s;b.onclick=()=>{current=i;renderPath();toast('Stage set to '+s+(s==='Disqualified'||s==='Converted'?' — Date Completed stamped':''));};
+    p.appendChild(b);
+  });
+}
+function advance(){if(current<stages.length-1){current++;renderPath();toast('Stage set to '+stages[current]);}}
+function switchTab(el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');document.getElementById(el.dataset.p).classList.add('active');
+}
+function setPersona(p){
+  document.body.classList.toggle('persona-contact',p==='contact');
+  document.getElementById('pL').classList.toggle('on',p==='lead');
+  document.getElementById('pC').classList.toggle('on',p==='contact');
+}
+function openModal(){document.getElementById('ov').classList.add('open')}
+function closeModal(){document.getElementById('ov').classList.remove('open')}
+document.getElementById('ov').addEventListener('click',e=>{if(e.target.id==='ov')closeModal()});
+let tt;
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2600)}
+renderPath();
+</script>
+</body>
+</html>

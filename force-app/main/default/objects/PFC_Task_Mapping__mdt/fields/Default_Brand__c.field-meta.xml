@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Default_Brand__c</fullName>
+    <description>REV-57: value stamped into Product_Brand__c when set (Newsfeed = "Lexology"). Leave blank to let brand derive from Form_Name__c via the Brand__c formula.</description>
+    <label>Default Brand</label>
+    <type>Text</type>
+    <length>40</length>
+    <required>false</required>
+    <unique>false</unique>
+</CustomField>

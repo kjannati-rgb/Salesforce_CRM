@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Failure_Detail__c</fullName>
+    <label>Failure Detail</label>
+    <description>Per-order detail for every record that failed to renew, pulled from Flow_Log__c after the run - the order id and the error each one hit.</description>
+    <inlineHelpText>One line per failed order with its error message. Cross-reference Flow_Log__c for the full detail.</inlineHelpText>
+    <type>LongTextArea</type>
+    <length>131072</length>
+    <visibleLines>10</visibleLines>
+</CustomField>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Order_Form_VAT_Req_No_Label__c</fullName>
+    <description>Visible label next to the No radio; blank when the account already holds a Sales Tax Number.</description>
+    <externalId>false</externalId>
+    <formula>IF(ISBLANK(Customer_VAT_Number__c), "No", "")</formula>
+    <formulaTreatBlanksAs>BlankAsBlank</formulaTreatBlanksAs>
+    <label>Order Form VAT Registered No Label</label>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

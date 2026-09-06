@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Order_Form_Brand_Logo_URL__c</fullName>
+    <description>Absolute URL of the brand logo the Order Form header prints (img src merge - must NEVER be blank on a rendered quote or the doc engine 400s; the stamp flow always writes at least the Centellic default). Lead brand = family of the quote's highest-value line, mapped via Order_Form_Brand_Logo__mdt.</description>
+    <externalId>false</externalId>
+    <label>Order Form Brand Logo URL</label>
+    <length>255</length>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

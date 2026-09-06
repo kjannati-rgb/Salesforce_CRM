@@ -1,0 +1,157 @@
+ »   Warning: @salesforce/cli update available from 2.135.7 to 2.138.6.
+
+ ──────────────── Resuming Deploy ────────────────
+
+
+ ◼ Preparing
+ ◼ Waiting for the org to respond
+ ◼ Deploying Metadata
+ ◼ Running Tests
+ ◼ Updating Source Tracking
+ ◼ Done
+
+ Status: -
+ Elapsed Time: 0ms
+
+[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+ ──────────────── Resuming Deploy ────────────────
+
+
+ - Preparing 0ms
+ ◼ Waiting for the org to respond
+ ◼ Deploying Metadata
+ ◼ Running Tests
+ ◼ Updating Source Tracking
+ ◼ Done
+
+ Status: -
+ Deploy ID: 0AfAd00000RW2C1KAL
+ Target Org: kamyar.jannati@lbresearch.com.fulluat
+ Elapsed Time: 24ms
+
+[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+ ──────────────── Resuming Deploy ────────────────
+
+
+ - Preparing 30ms
+ ◼ Waiting for the org to respond
+ ◼ Deploying Metadata
+ ◼ Running Tests
+ ◼ Updating Source Tracking
+ ◼ Done
+
+ Status: -
+ Deploy ID: 0AfAd00000RW2C1KAL
+ Target Org: kamyar.jannati@lbresearch.com.fulluat
+ Elapsed Time: 68ms
+
+[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+ ──────────────── Resuming Deploy ────────────────
+
+
+ - Preparing 77ms
+ ◼ Waiting for the org to respond
+ ◼ Deploying Metadata
+ ◼ Running Tests
+ ◼ Updating Source Tracking
+ ◼ Done
+
+ Status: -
+ Deploy ID: 0AfAd00000RW2C1KAL
+ Target Org: kamyar.jannati@lbresearch.com.fulluat
+ Elapsed Time: 115ms
+
+[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+ ──────────────── Resuming Deploy ────────────────
+
+
+ - Preparing 110ms
+ ◼ Waiting for the org to respond
+ ◼ Deploying Metadata
+ ◼ Running Tests
+ ◼ Updating Source Tracking
+ ◼ Done
+
+ Status: \
+ Deploy ID: 0AfAd00000RW2C1KAL
+ Target Org: kamyar.jannati@lbresearch.com.fulluat
+ Elapsed Time: 147ms
+
+[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+ ──────────────── Resuming Deploy ────────────────
+
+
+ \ Preparing 156ms
+ ◼ Waiting for the org to respond
+ ◼ Deploying Metadata
+ ◼ Running Tests
+ ◼ Updating Source Tracking
+ ◼ Done
+
+ Status: \
+ Deploy ID: 0AfAd00000RW2C1KAL
+ Target Org: kamyar.jannati@lbresearch.com.fulluat
+ Elapsed Time: 180ms
+
+[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+ ──────────────── Resuming Deploy ────────────────
+
+
+ \ Preparing 167ms
+ ◼ Waiting for the org to respond
+ ◼ Deploying Metadata
+ ◼ Running Tests
+ ◼ Updating Source Tracking
+ ◼ Done
+
+ Status: Failed
+ Deploy ID: 0AfAd00000RW2C1KAL
+ Target Org: kamyar.jannati@lbresearch.com.fulluat
+ Elapsed Time: 190ms
+
+[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+ ──────────────── Resuming Deploy ────────────────
+
+
+ ✘ Preparing 167ms
+ ◼ Waiting for the org to respond
+ ◼ Deploying Metadata
+ ◼ Running Tests
+ ◼ Updating Source Tracking
+ ◼ Done
+
+ Status: Failed
+ Deploy ID: 0AfAd00000RW2C1KAL
+ Target Org: kamyar.jannati@lbresearch.com.fulluat
+ Elapsed Time: 190ms
+
+
+Component Failures [9]
+┌──────────────────────────┬─────────────────────────────┬────────────────────────────────────────────────────────────────────────────────────────────────┬─────────────┐
+│ Type                     │ Name                        │ Problem                                                                                        │ Line:Column │
+├──────────────────────────┼─────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────┼─────────────┤
+│ ApexClass                │ LeadConvertInvocable        │ Invalid type: LBRInteractionReparentService.ConvertedLead (49:9)                               │ 49:9        │
+│ ApexClass                │ LeadConvertInvocable        │ Variable does not exist: converts (61:17)                                                      │ 61:17       │
+│ ApexClass                │ LeadConvertInvocable        │ Invalid type: LBRInteractionReparentService.ConvertedLead (61:30)                              │ 61:30       │
+│ ApexClass                │ LeadConvertInvocable        │ Variable does not exist: converts (72:14)                                                      │ 72:14       │
+│ ApexClass                │ LeadConvertInvocable        │ Variable does not exist: LBRInteractionReparentService (73:13)                                 │ 73:13       │
+│ ApexClass                │ LeadConvertInvocable_Test   │ Dependent class is invalid and needs recompilation:                                          │ 49:9        │
+│                          │                             │ Class LeadConvertInvocable : Invalid type: LBRInteractionReparentService.ConvertedLead (49:9)  ││
+│ ApexClass                │ SmartConvertController      │ Dependent class is invalid and needs recompilation:                                          │ 49:9        │
+│                          │                             │ Class LeadConvertInvocable : Invalid type: LBRInteractionReparentService.ConvertedLead (49:9)  ││
+│ ApexClass                │ SmartConvertController_Test │ Dependent class is invalid and needs recompilation:                                          │ 49:9        │
+│                          │                             │ Class SmartConvertController : Dependent class is invalid and needs recompilation:           ││
+│                          │                             │ Class LeadConvertInvocable : Invalid type: LBRInteractionReparentService.ConvertedLead (49:9)  ││
+│ LightningComponentBundle │ smartConvert                │ Unable to find Apex action class referenced as 'SmartConvertController'.│             │
+│                          │                             │ Unable to find Apex action class referenced as 'SmartConvertController'.││
+│                          │                             │ Unable to find Apex action class referenced as 'SmartConvertController'.││
+│                          │                             │ Unable to find Apex action class referenced as 'SmartConvertController'.││
+│                          │                             │ Unable to find Apex action class referenced as 'SmartConvertController'.││
+│                          │                             │ Unable to find Apex action class referenced as 'SmartConvertController'.                       ││
+└──────────────────────────┴─────────────────────────────┴────────────────────────────────────────────────────────────────────────────────────────────────┴─────────────┘
+
+
+Test Results Summary
+Passing: 0
+Failing: 0
+Total: 0

@@ -1,0 +1,31 @@
+<template>
+    <section class="lex-station">
+        <div class="lex-station__head">
+            <span class="lex-badge">X</span>
+            <div class="lex-station__titles">
+                <h3 class="lex-station__title">Existing Process</h3>
+                <p class="lex-station__q">How can Lexology PRO improve their process?</p>
+            </div>
+            <template if:true={answered}>
+                <span class="lex-tick" title="Resolved">&#10003;</span>
+            </template>
+        </div>
+
+        <div class="lex-cards" role="group" aria-label="Process improvement drivers — select all that apply">
+            <template for:each={drivers} for:item="d">
+                <button key={d.value} type="button" class={d.cls} data-val={d.value}
+                    aria-pressed={d.pressed} onclick={toggle}>{d.label}</button>
+            </template>
+        </div>
+
+        <template if:true={showOther}>
+            <textarea
+                class="lex-other"
+                placeholder="Add detail for &quot;Other&quot; (optional)"
+                value={otherText}
+                onchange={handleOther}
+                aria-label="Other process driver detail"
+            ></textarea>
+        </template>
+    </section>
+</template>

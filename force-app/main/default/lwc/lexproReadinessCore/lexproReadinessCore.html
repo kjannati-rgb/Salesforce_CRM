@@ -1,0 +1,28 @@
+<template>
+    <section class="lex-core">
+        <div class="lex-ring" aria-hidden="true">
+            <svg viewBox="0 0 120 120" class="lex-ring__svg">
+                <circle class="lex-ring__track" cx="60" cy="60" r="52"></circle>
+                <circle class="lex-ring__fill" cx="60" cy="60" r="52" style={ringStyle}></circle>
+            </svg>
+            <div class="lex-ring__center">
+                <span class="lex-ring__num">{count}</span>
+                <span class="lex-ring__den">of 3</span>
+            </div>
+        </div>
+
+        <div class="lex-core__meta">
+            <p class="lex-core__progress">{progressLabel}</p>
+            <span class={fitClass}>{fitLabel}</span>
+        </div>
+
+        <button
+            type="button"
+            class="lex-advance"
+            disabled={buttonDisabled}
+            onclick={handleAdvance}
+        >
+            {buttonLabel}
+        </button>
+    </section>
+</template>

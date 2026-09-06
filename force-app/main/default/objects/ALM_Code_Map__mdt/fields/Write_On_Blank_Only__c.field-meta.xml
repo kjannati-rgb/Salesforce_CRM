@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Write_On_Blank_Only__c</fullName>
+    <description>REV-60: when true, this row's base is a non-deterministic DEFAULT the rep can override — the engine fills it only on a blank line and never overwrites a value the rep set. Used for the WNS !SREN default (a WNS renewal can legitimately be !SJSI or !SREN, so the rep's choice always wins).</description>
+    <defaultValue>false</defaultValue>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Write On Blank Only</label>
+    <type>Checkbox</type>
+</CustomField>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Billing_Entity__c</fullName>
+    <label>Billing Entity</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>LBR</fullName>
+                <default>false</default>
+                <label>LBR</label>
+            </value>
+            <value>
+                <fullName>GHK</fullName>
+                <default>false</default>
+                <label>GHK</label>
+            </value>
+            <value>
+                <fullName>LLC</fullName>
+                <default>false</default>
+                <label>LLC</label>
+            </value>
+            <value>
+                <fullName>MBL</fullName>
+                <default>false</default>
+                <label>MBL</label>
+            </value>
+            <value>
+                <fullName>ALM</fullName>
+                <default>false</default>
+                <label>ALM</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

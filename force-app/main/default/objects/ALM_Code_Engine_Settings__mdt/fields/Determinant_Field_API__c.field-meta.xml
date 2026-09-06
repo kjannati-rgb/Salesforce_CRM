@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Determinant_Field_API__c</fullName>
+    <description>REV-60 spec §7.1 documentation: the API name of the quote-line field carrying the base-promo determinant. Wired directly in-flow once confirmed (Flow cannot reference a field by dynamic name); this field records the decision.</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Determinant Field API</label>
+    <length>255</length>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

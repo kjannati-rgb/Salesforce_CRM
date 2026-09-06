@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity_mandatory_for_LexPro</fullName>
+    <active>true</active>
+    <description>This validation ensures that the Opportunity field is populated for lexpro products</description>
+    <errorConditionFormula>isblank(Opportunity__c )
+&amp;&amp;
+text( Product__r.Family) =&apos;Subs - LexPro&apos;</errorConditionFormula>
+    <errorDisplayField>Opportunity__c</errorDisplayField>
+    <errorMessage>Please link opportunity to the record</errorMessage>
+</ValidationRule>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Marketing_led_renewals__c</fullName>
+    <description>A field to show outcomes of the reply to automated email campaigns</description>
+    <inlineHelpText>A field to show outcomes of the reply to automated email campaigns</inlineHelpText>
+    <label>Marketing-led renewals</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Replied -Confirmed renewal</fullName>
+                <default>false</default>
+                <label>Replied -Confirmed renewal</label>
+            </value>
+            <value>
+                <fullName>Replied – Question re renewal</fullName>
+                <default>false</default>
+                <label>Replied – Question re renewal</label>
+            </value>
+            <value>
+                <fullName>Replied - Requested to cancel</fullName>
+                <default>false</default>
+                <label>Replied - Requested to cancel</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

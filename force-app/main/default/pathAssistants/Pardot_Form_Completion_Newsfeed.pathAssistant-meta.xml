@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PathAssistant xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <entityName>Pardot_Form_Completion__c</entityName>
+    <fieldName>Sales_Stage__c</fieldName>
+    <masterLabel>Pardot Form Completion - Newsfeed</masterLabel>
+    <pathAssistantSteps>
+        <fieldNames>Reason_Disqualified__c</fieldNames>
+        <picklistValueName>Disqualified</picklistValueName>
+    </pathAssistantSteps>
+    <recordTypeName>Newsfeed_Subscribers</recordTypeName>
+</PathAssistant>

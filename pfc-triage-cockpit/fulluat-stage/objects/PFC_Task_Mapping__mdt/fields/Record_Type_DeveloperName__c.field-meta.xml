@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Record_Type_DeveloperName__c</fullName>
+    <description>REV-57: DeveloperName of the Pardot_Form_Completion__c record type to apply. Resolved to an Id at runtime via Get Records (no hardcoded record-type Ids).</description>
+    <label>Record Type DeveloperName</label>
+    <type>Text</type>
+    <length>80</length>
+    <required>false</required>
+    <unique>false</unique>
+</CustomField>

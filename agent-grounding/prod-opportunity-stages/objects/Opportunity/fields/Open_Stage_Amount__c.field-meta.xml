@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Open_Stage_Amount__c</fullName>
+    <formula>IF(
+OR(TEXT(StageName) = &quot;Identify&quot;,
+TEXT(StageName) = &quot;Qualify&quot;,
+TEXT(StageName) = &quot;Evaluate&quot;,
+TEXT(StageName) = &quot;Negotiate&quot;,
+TEXT(StageName) = &quot;Contract Out&quot;,
+TEXT(StageName) = &quot;Closed Won – Pending Approval&quot;
+
+
+),
+
+ Amount , 0
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Open Stage Amount</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <type>Currency</type>
+</CustomField>

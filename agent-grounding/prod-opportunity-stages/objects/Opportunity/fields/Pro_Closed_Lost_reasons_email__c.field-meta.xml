@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Pro_Closed_Lost_reasons_email__c</fullName>
+    <defaultValue>&quot;dist_lexology-newdeals&amp;discontinues@gbp.co.uk&quot;</defaultValue>
+    <externalId>false</externalId>
+    <label>Pro Closed Lost reasons email</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Email</type>
+    <unique>false</unique>
+</CustomField>

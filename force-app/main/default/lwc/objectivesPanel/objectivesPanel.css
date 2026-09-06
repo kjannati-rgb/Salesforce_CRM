@@ -1,0 +1,154 @@
+.obj {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+.obj:last-child {
+    border-bottom: none;
+}
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+}
+.title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #181818;
+}
+.prog {
+    height: 0.45rem;
+    background: #eee;
+    border-radius: 0.25rem;
+    overflow: hidden;
+    margin-top: 0.4rem;
+}
+.prog > i {
+    display: block;
+    height: 100%;
+    background: #0176d3;
+}
+.meta {
+    font-size: 0.68rem;
+    color: #5c5c5c;
+    margin-top: 0.25rem;
+}
+.meta .pct {
+    font-weight: 700;
+    color: #032d60;
+}
+.badge {
+    font-size: 0.62rem;
+    font-weight: 700;
+    border-radius: 0.7rem;
+    padding: 0.1rem 0.5rem;
+    white-space: nowrap;
+}
+.st-ns {
+    background: #f3f3f3;
+    color: #5c5c5c;
+}
+.st-ip {
+    background: #eef4ff;
+    color: #0b5cab;
+}
+.st-risk {
+    background: #fff4e6;
+    color: #dd7a01;
+}
+.st-done {
+    background: #ebf7ee;
+    color: #2e844a;
+}
+.objform {
+    background: #fafafa;
+    border: 1px solid #e5e5e5;
+    border-radius: 0.35rem;
+    padding: 0.5rem 0.75rem 0.75rem;
+    margin-bottom: 0.75rem;
+}
+.objform .formtitle {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #032d60;
+    margin-bottom: 0.25rem;
+}
+.formbtns {
+    margin-top: 0.75rem;
+    text-align: right;
+}
+.rowbtns {
+    float: right;
+}
+.suggblock {
+    background: #f6f9ff;
+    border: 1px solid #d8e3f8;
+    border-radius: 0.35rem;
+    padding: 0.4rem 0.6rem 0.5rem;
+    margin-bottom: 0.75rem;
+}
+.suggtitle {
+    font-size: 0.66rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #0b5cab;
+    margin-bottom: 0.35rem;
+}
+.sugg {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.35rem 0;
+    border-top: 1px solid #e6eefc;
+}
+.sugg:first-of-type {
+    border-top: none;
+}
+.suggmain {
+    flex: 1;
+    min-width: 0;
+}
+.suggttl {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: #181818;
+}
+.suggmeta {
+    font-size: 0.66rem;
+    color: #5c5c5c;
+    margin-top: 0.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+.sbadge {
+    font-size: 0.58rem;
+    font-weight: 700;
+    border-radius: 0.6rem;
+    padding: 0.05rem 0.4rem;
+    white-space: nowrap;
+}
+.sbadge.sig {
+    background: #fff4e6;
+    color: #dd7a01;
+}
+.autobadge {
+    font-size: 0.58rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    border-radius: 0.6rem;
+    padding: 0.05rem 0.4rem;
+    white-space: nowrap;
+    background: #eaf7f4;
+    color: #0a7d63;
+    margin-left: 0.3rem;
+}
+.fieldnote {
+    font-size: 0.66rem;
+    color: #706e6b;
+    margin: -0.35rem 0 0.5rem;
+    line-height: 1.35;
+}

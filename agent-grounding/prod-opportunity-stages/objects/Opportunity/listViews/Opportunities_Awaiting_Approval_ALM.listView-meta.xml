@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunities_Awaiting_Approval_ALM</fullName>
+    <columns>Opportunity_Number__c</columns>
+    <columns>OPPORTUNITY.LAST_STAGE_CHANGE</columns>
+    <columns>OPPORTUNITY.NAME</columns>
+    <columns>CORE.USERS.FULL_NAME</columns>
+    <columns>OPPORTUNITY.AMOUNT</columns>
+    <columns>Bad_Debtor_Status__c</columns>
+    <columns>Notes__c</columns>
+    <columns>Online_Card_Payment_Reference__c</columns>
+    <columns>Opportunity_Owner_Team__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>OPPORTUNITY.STAGE_NAME</field>
+        <operation>equals</operation>
+        <value>Closed Won – Pending Approval</value>
+    </filters>
+    <filters>
+        <field>ALM_Event_Opportunity__c</field>
+        <operation>equals</operation>
+        <value>1</value>
+    </filters>
+    <label>Opportunities Awaiting Approval - ALM</label>
+    <sharedTo>
+        <group>ALM_Credit_Control</group>
+    </sharedTo>
+</ListView>

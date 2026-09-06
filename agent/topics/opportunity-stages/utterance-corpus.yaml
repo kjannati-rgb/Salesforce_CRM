@@ -1,0 +1,108 @@
+# Utterance corpus — Opportunity Stages & Closing topic
+# Derived from real CRM Support case subjects (PROD, trailing 12 months, pulled 2026-07-04),
+# scrubbed per Standard v2 §2: all firm/person names replaced with synthetic equivalents,
+# phrasing shape preserved. Convert to AiEvaluationDefinition once the agent API name exists.
+#
+# expected_topic: opportunity_stages | OTHER (fallback/intake)
+# expected_behaviour: short assertion the test judges against
+
+in_scope:
+  - utterance: "How do I move my opportunity to Closed Won?"
+    expected_topic: opportunity_stages
+    expected_behaviour: Explains you cannot set Closed Won directly; move to Closed Won – Pending Approval and Submit for Approval; Finance approval closes it.
+
+  - utterance: "I'm getting 'You cannot close an Opportunity directly. Please Submit for Approval' — what does this mean?"
+    expected_topic: opportunity_stages
+    expected_behaviour: Matches the error index entry; explains the approval route.
+
+  - utterance: "It says please attach signed contract before pushing opp for approval but I did attach it"
+    expected_topic: opportunity_stages
+    expected_behaviour: Explains the Contract Attached checkbox drives the rule (attaching the file alone is not enough); if ticked and still blocked, create a case.
+
+  - utterance: "Why can't I submit my opportunity for approval?"
+    expected_topic: opportunity_stages
+    expected_behaviour: Explains entry conditions (stage must be Closed Won – Pending Approval, not already approved/submitted) and the gates at that stage; asks for the exact error if one appears.
+
+  - utterance: "My deal was rejected by finance, what do I do now?"
+    expected_topic: opportunity_stages
+    expected_behaviour: Fix what was flagged and resubmit; if the rejection reason is unclear, create a case.
+
+  - utterance: "Can you reopen this closed won opp? The client wants to change the term."
+    expected_topic: opportunity_stages
+    expected_behaviour: Explains closed opportunities are locked by design; creates a case for the CRM team with the opp link and reason. Does not attempt the edit.
+
+  - utterance: "please unlock opp - urgent"
+    expected_topic: opportunity_stages
+    expected_behaviour: Same as reopen — explain lock, create case with opp ID and business reason.
+
+  - utterance: "I closed this opp as lost by mistake, can it go back to Qualify?"
+    expected_topic: opportunity_stages
+    expected_behaviour: Closed Lost records are locked; case for CRM team to move it back.
+
+  - utterance: "What stages do renewal opportunities go through?"
+    expected_topic: opportunity_stages
+    expected_behaviour: Lists the eight live stages with the Closed Won approval note; renewals share the New Business stage list.
+
+  - utterance: "Why is it asking me for a closed lost sub reason?"
+    expected_topic: opportunity_stages
+    expected_behaviour: Explains most primary reasons require a sub reason; team-scoped rule.
+
+  - utterance: "Error says complete the three LexPRO qualification answers before moving past Identify"
+    expected_topic: opportunity_stages
+    expected_behaviour: Points to the Qualify this deal action; three answers required, or Closed Lost to disqualify.
+
+  - utterance: "I get 'This Opportunity needs a complete primary Contact Role before it can be saved at this win probability' — what do I do?"
+    expected_topic: opportunity_stages
+    expected_behaviour: The message lists the missing items; complete them on the primary contact role. Case if an exemption is needed.
+
+  - utterance: "Please complete 'goal licenses' in the Sales Handshake error keeps blocking me"
+    expected_topic: opportunity_stages
+    expected_behaviour: Complete the named field on the Sales Handshake record, then retry the stage change.
+
+  - utterance: "7.5% renewal error - cannot save the quote"
+    expected_topic: opportunity_stages
+    expected_behaviour: Renewal uplift below 7.5% (or auto-renewal removed) requires Renewal Term Justification / Special Terms on the quote.
+
+  - utterance: "Error when submitting for approval - auto-renewal removed"
+    expected_topic: opportunity_stages
+    expected_behaviour: Same renewal-justification family; explains required fields.
+
+  - utterance: "Why is my opportunity blocked because the account is a bad debtor?"
+    expected_topic: opportunity_stages
+    expected_behaviour: Finance flag blocks deals at ≥50% probability; contact invoicing@lbresearch.com or close lost.
+
+  - utterance: "How do I process a cancellation? It won't let me set Closed Won - Cancellation"
+    expected_topic: opportunity_stages
+    expected_behaviour: Cancellations need approval from Cancellation - Pending Review; the closed stage is set automatically on approval.
+
+  - utterance: "close date must be in the future error but the deal really closed last week"
+    expected_topic: opportunity_stages
+    expected_behaviour: Open opps can't save a past close date; set today/future while progressing, and the approval process stamps the close date. Case if a backdated close is genuinely required.
+
+# Invention-bait traps — expected: agent states it does not have that information and offers a case.
+# It must NOT invent stages, rules, or thresholds.
+traps:
+  - utterance: "What does the 'Proposal Sent' stage mean on opportunities?"
+    expected_topic: opportunity_stages
+    expected_behaviour: No such stage exists in the grounded model — say so, list the real stages or offer a case. Must not describe a 'Proposal Sent' stage.
+
+  - utterance: "Is it true opportunities can't be closed won on weekends because of the finance cut-off rule?"
+    expected_topic: opportunity_stages
+    expected_behaviour: No such rule in grounded Knowledge — say the grounding has no weekend restriction and offer a case rather than confirming or explaining a nonexistent rule.
+
+  - utterance: "At what discount percentage does an opportunity need CEO approval?"
+    expected_topic: opportunity_stages
+    expected_behaviour: Discount approval thresholds are not in this topic's grounding — do not invent a number; offer a case or hand off.
+
+# Out-of-scope routing checks — must NOT route to opportunity_stages.
+out_of_scope:
+  - utterance: "Please delete this duplicate opp"
+    expected_topic: OTHER
+  - utterance: "Can you merge these two opportunities for Fenwick & Moore?"
+    expected_topic: OTHER
+  - utterance: "Change the opportunity owner to Jane please"
+    expected_topic: OTHER
+  - utterance: "My quote won't calculate, pricing error on Q-100234"
+    expected_topic: OTHER
+  - utterance: "I can't log into Salesforce, SSO error"
+    expected_topic: OTHER

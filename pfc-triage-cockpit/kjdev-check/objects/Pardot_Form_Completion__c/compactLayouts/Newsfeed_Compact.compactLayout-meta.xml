@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CompactLayout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Newsfeed_Compact</fullName>
+    <fields>Sales_Stage__c</fields>
+    <fields>Product_Brand__c</fields>
+    <fields>PFC_Source__c</fields>
+    <fields>Campaign__c</fields>
+    <fields>Prospect_Name__c</fields>
+    <fields>Sales_Rep__c</fields>
+    <label>Newsfeed Compact</label>
+</CompactLayout>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Workbooks_CRM_Legacy_Opportunity_Name__c</fullName>
+    <description>This field was historically used to link opportunities together i.e. opportunity A (previous opportunity) to opportunity B (renewal opportunity).</description>
+    <externalId>false</externalId>
+    <inlineHelpText>This field was historically used to link opportunities together i.e. opportunity A (previous opportunity) to opportunity B (renewal opportunity).</inlineHelpText>
+    <label>Workbooks CRM Legacy Opportunity Name</label>
+    <length>255</length>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

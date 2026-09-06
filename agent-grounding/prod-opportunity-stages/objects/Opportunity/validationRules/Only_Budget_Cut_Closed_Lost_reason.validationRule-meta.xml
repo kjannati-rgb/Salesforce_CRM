@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Only_Budget_Cut_Closed_Lost_reason</fullName>
+    <active>false</active>
+    <errorConditionFormula>IF( INCLUDES(Closed_Lost_Reason__c, &quot;Budget cut&quot;), 
+            NOT( OR(
+                            INCLUDES(Closed_Lost_Reason__c, &quot;No ROI/not worth cost&quot;), 
+                            INCLUDES(Closed_Lost_Reason__c, &quot;Not producing content/didn&apos;t write&quot;), 
+                            INCLUDES(Closed_Lost_Reason__c, &quot;Don&apos;t know what to do with data&quot;), 
+                            INCLUDES(Closed_Lost_Reason__c, &quot;No response/no reason given&quot;), 
+                            INCLUDES(Closed_Lost_Reason__c, &quot;Change of content strategy&quot;), 
+                            INCLUDES(Closed_Lost_Reason__c, &quot;Issues with LBR service&quot;), 
+                            INCLUDES(Closed_Lost_Reason__c, &quot;Wrong audience reading&quot;),
+                            INCLUDES(Closed_Lost_Reason__c, &quot;Change in audience targeting&quot;), 
+                            INCLUDES(Closed_Lost_Reason__c, &quot;Consolidating Lexology products&quot;),
+                            INCLUDES(Closed_Lost_Reason__c, &quot;Switching to competitor&quot;),
+                            INCLUDES(Closed_Lost_Reason__c, &quot;Primary contact/purchaser left/not in budget&quot;),
+                            INCLUDES(Closed_Lost_Reason__c, &quot;Bad debtor&quot;),
+                            INCLUDES(Closed_Lost_Reason__c, &quot;Persistent product issues&quot;),
+                            INCLUDES(Closed_Lost_Reason__c, &quot;Dissolved/Merged&quot;),
+                            INCLUDES(Closed_Lost_Reason__c, &quot;Data not detailed enough&quot;),
+                            INCLUDES(Closed_Lost_Reason__c, &quot;No time to make use of data/tools&quot;) ) ), false )
+                                &amp;&amp;
+    text(StageName)=&quot;Closed Lost&quot;
+    &amp;&amp;
+text( Opportunity_Type_Forecast__c )= &quot;Renewal&quot; 
+    &amp;&amp;
+    Owner.Business_Group__c =&quot;Market Intelligence&quot;</errorConditionFormula>
+    <errorMessage>Budget Cut cannot be selected as a Closed Lost Reason on its own – please add at least one other Closed Lost Reason</errorMessage>
+</ValidationRule>

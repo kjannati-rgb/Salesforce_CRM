@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Charlie_Hub_Unassigned_Forms</fullName>
+    <columns>OWNER.FIRST_NAME</columns>
+    <columns>NAME</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>Country__c</columns>
+    <columns>Prospect_Name__c</columns>
+    <columns>Email__c</columns>
+    <columns>Company__c</columns>
+    <columns>Sales_Stage__c</columns>
+    <columns>Organisation_Type__c</columns>
+    <columns>Job_Role__c</columns>
+    <columns>Job_Title__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>NAME</field>
+        <operation>contains</operation>
+        <value>GAR,GIR,GRR,GBRR,GCR,IAM,WTR,Latin</value>
+    </filters>
+    <filters>
+        <field>Sales_Stage__c</field>
+        <operation>equals</operation>
+        <value>New</value>
+    </filters>
+    <filters>
+        <field>CREATED_DATE</field>
+        <operation>greaterThan</operation>
+        <value>1/1/2023 12:00 AM</value>
+    </filters>
+    <filters>
+        <field>NAME</field>
+        <operation>notContain</operation>
+        <value>Lexology,docket,IAM Market</value>
+    </filters>
+    <filters>
+        <field>OWNER.FIRST_NAME</field>
+        <operation>equals</operation>
+        <value>B2BMA</value>
+    </filters>
+    <label>Charlie Hub Unassigned Forms</label>
+</ListView>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <label>Dispatch - NYOM (NYLJ online) - ON</label>
+    <protected>false</protected>
+    <values>
+        <field>Row_Type__c</field>
+        <value xsi:type="xsd:string">Dispatch</value>
+    </values>
+    <values>
+        <field>Match_Key__c</field>
+        <value xsi:type="xsd:string">NYOM</value>
+    </values>
+    <values>
+        <field>Base_Promo_Code__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Dispatch_Code__c</field>
+        <value xsi:type="xsd:string">ON</value>
+    </values>
+    <values>
+        <field>Apply_Year_Suffix__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>Z_Eligible__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>Write_On_Blank_Only__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>Active__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Notes__c</field>
+        <value xsi:type="xsd:string">Added 22 Jul. NYOM (NYLJ online) defaults to ON: 74.7% of 4,806 historical lines are ON, 90% ON-family. Blank-only write, so a rep's OS/OE/OL is never overwritten. Ends the NYOM hard-blocks; LAWM/LWKM stay unfilled (genuinely split).</value>
+    </values>
+</CustomMetadata>

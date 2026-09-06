@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Form_Name__c</fullName>
+    <label>Form Name</label>
+    <required>false</required>
+    <trackFeedHistory>true</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>GAR - LeadGen Form - ROI Campaign</fullName>
+                <default>false</default>
+                <label>GAR - LeadGen Form - ROI Campaign</label>
+            </value>
+            <value>
+                <fullName>GAR - LeadGen - Subscribe - Short Form</fullName>
+                <default>false</default>
+                <label>GAR - LeadGen - Subscribe - Short Form</label>
+            </value>
+            <value>
+                <fullName>GBRR - LeadGen - Subscribe - Short Form</fullName>
+                <default>false</default>
+                <label>GBRR - LeadGen - Subscribe - Short Form</label>
+            </value>
+            <value>
+                <fullName>GCR - LeadGen - APAC enquiry</fullName>
+                <default>false</default>
+                <label>GCR - LeadGen - APAC enquiry</label>
+            </value>
+            <value>
+                <fullName>GCR - LeadGen - Content download</fullName>
+                <default>false</default>
+                <label>GCR - LeadGen - Content download</label>
+            </value>
+            <value>
+                <fullName>GCR - LeadGen Form - Subscriber upgrade</fullName>
+                <default>false</default>
+                <label>GCR - LeadGen Form - Subscriber upgrade</label>
+            </value>
+            <value>
+                <fullName>GCR - LeadGen - September 2022 - Scanner</fullName>
+                <default>false</default>
+                <label>GCR - LeadGen - September 2022 - Scanner</label>
+            </value>
+            <value>
+                <fullName>GCR - LeadGen - Subscribe - Short Form</fullName>
+                <default>false</default>
+                <label>GCR - LeadGen - Subscribe - Short Form</label>
+            </value>
+            <value>
+                <fullName>GDR - LeadGen - Content download</fullName>
+                <default>false</default>
+                <label>GDR - LeadGen - Content download</label>
+            </value>
+            <value>
+                <fullName>GDR - LeadGen - Subscribe - Short Form</fullName>
+                <default>false</default>
+                <label>GDR - LeadGen - Subscribe - Short Form</label>
+            </value>
+            <value>
+                <fullName>GIR Lead Generation Form</fullName>
+                <default>false</default>
+                <label>GIR Lead Generation Form</label>
+            </value>
+            <value>
+                <fullName>GIR - LeadGen - Subscribe - Short Form</fullName>
+                <default>false</default>
+                <label>GIR - LeadGen - Subscribe - Short Form</label>
+            </value>
+            <value>
+                <fullName>GRR - LeadGen - Content Download</fullName>
+                <default>false</default>
+                <label>GRR - LeadGen - Content Download</label>
+            </value>
+            <value>
+                <fullName>GRR - LeadGen - Subscribe - Short Form</fullName>
+                <default>false</default>
+                <label>GRR - LeadGen - Subscribe - Short Form</label>
+            </value>
+            <value>
+                <fullName>IAM - LeadGen - Subscribe - Short Form</fullName>
+                <default>false</default>
+                <label>IAM - LeadGen - Subscribe - Short Form</label>
+            </value>
+            <value>
+                <fullName>Latin Lawyer - LeadGen - Subscribe - Short Form</fullName>
+                <default>false</default>
+                <label>Latin Lawyer - LeadGen - Subscribe - Short Form</label>
+            </value>
+            <value>
+                <fullName>Legal Monitor - LeadGen - Book Demo</fullName>
+                <default>false</default>
+                <label>Legal Monitor - LeadGen - Book Demo</label>
+            </value>
+            <value>
+                <fullName>Lexology - IBA Annual 2022 - ROI</fullName>
+                <default>false</default>
+                <label>Lexology - IBA Annual 2022 - ROI</label>
+            </value>
+            <value>
+                <fullName>Lexology - LeadGen - Lexology Lexy - Subscribe</fullName>
+                <default>false</default>
+                <label>Lexology - LeadGen - Lexology Lexy - Subscribe</label>
+            </value>
+            <value>
+                <fullName>Lexology - LeadGen - LexologyPRO - APAC - Gated Content</fullName>
+                <default>false</default>
+                <label>Lexology - LeadGen - LexologyPRO - APAC - Gated Content</label>
+            </value>
+            <value>
+                <fullName>Lexology - LeadGen - Lexology PRO - APAC Subscribe</fullName>
+                <default>false</default>
+                <label>Lexology - LeadGen - Lexology PRO - APAC Subscribe</label>
+            </value>
+            <value>
+                <fullName>Lexology - LeadGen - Lexology PRO - Content Download</fullName>
+                <default>false</default>
+                <label>Lexology - LeadGen - Lexology PRO - Content Download</label>
+            </value>
+            <value>
+                <fullName>Lexology - LeadGen - Lexology PRO - Content Download - UK and ROW</fullName>
+                <default>false</default>
+                <label>Lexology - LeadGen - Lexology PRO - Content Download - UK and ROW</label>
+            </value>
+            <value>
+                <fullName>Lexology - LeadGen - Lexology PRO - Content Download - UK Practical resources</fullName>
+                <default>false</default>
+                <label>Lexology - LeadGen - Lexology PRO - Content Download - UK Practical resources</label>
+            </value>
+            <value>
+                <fullName>Lexology - LeadGen - Lexology PRO - Content Download - US Practical resources</fullName>
+                <default>false</default>
+                <label>Lexology - LeadGen - Lexology PRO - Content Download - US Practical resources</label>
+            </value>
+            <value>
+                <fullName>Lexology - LeadGen - Lexology PRO - Content Download - Welcome Campaign</fullName>
+                <default>false</default>
+                <label>Lexology - LeadGen - Lexology PRO - Content Download - Welcome Campaign</label>
+            </value>
+            <value>
+                <fullName>Lexology - LeadGen - Lexology PRO - Events - ACC Prize Draw</fullName>
+                <default>false</default>
+                <label>Lexology - LeadGen - Lexology PRO - Events - ACC Prize Draw</label>
+            </value>
+            <value>
+                <fullName>Lexology - LeadGen - Lexology PRO In-house - ACC</fullName>
+                <default>false</default>
+                <label>Lexology - LeadGen - Lexology PRO In-house - ACC</label>
+            </value>
+            <value>
+                <fullName>Lexology - LeadGen - Lexology PRO In-house - Subscribe</fullName>
+                <default>false</default>
+                <label>Lexology - LeadGen - Lexology PRO In-house - Subscribe</label>
+            </value>
+            <value>
+                <fullName>Lexology - LeadGen - Lexology PRO In-house - Subscribe - ACC</fullName>
+                <default>false</default>
+                <label>Lexology - LeadGen - Lexology PRO In-house - Subscribe - ACC</label>
+            </value>
+            <value>
+                <fullName>Lexology - LeadGen - Lexology PRO Landing Page - ACC</fullName>
+                <default>false</default>
+                <label>Lexology - LeadGen - Lexology PRO Landing Page - ACC</label>
+            </value>
+            <value>
+                <fullName>Lexology - LeadGen - Lexology PRO Landing Page - Subscribe</fullName>
+                <default>false</default>
+                <label>Lexology - LeadGen - Lexology PRO Landing Page - Subscribe</label>
+            </value>
+            <value>
+                <fullName>Lexology - LeadGen - Lexology PRO - Marketing - Gated Content</fullName>
+                <default>false</default>
+                <label>Lexology - LeadGen - Lexology PRO - Marketing - Gated Content</label>
+            </value>
+            <value>
+                <fullName>Lexology - LeadGen - Lexology PRO - Scanner</fullName>
+                <default>false</default>
+                <label>Lexology - LeadGen - Lexology PRO - Scanner</label>
+            </value>
+            <value>
+                <fullName>Lexology - LeadGen - Lexology PRO - Scanner - Email Marketing</fullName>
+                <default>false</default>
+                <label>Lexology - LeadGen - Lexology PRO - Scanner - Email Marketing</label>
+            </value>
+            <value>
+                <fullName>Lexology - LeadGen - Lexology PRO - Scanner - Email Marketing - APAC</fullName>
+                <default>false</default>
+                <label>Lexology - LeadGen - Lexology PRO - Scanner - Email Marketing - APAC</label>
+            </value>
+            <value>
+                <fullName>Lexology - LeadGen - Lexology PRO - Subscribe</fullName>
+                <default>false</default>
+                <label>Lexology - LeadGen - Lexology PRO - Subscribe</label>
+            </value>
+            <value>
+                <fullName>Lexology - LeadGen - Lexology PRO - Subscribe - ACC</fullName>
+                <default>false</default>
+                <label>Lexology - LeadGen - Lexology PRO - Subscribe - ACC</label>
+            </value>
+            <value>
+                <fullName>Lexology - LeadGen - Lexology PRO UK Marketing - Gated Content</fullName>
+                <default>false</default>
+                <label>Lexology - LeadGen - Lexology PRO UK Marketing - Gated Content</label>
+            </value>
+            <value>
+                <fullName>Lexology PRO Lead Generation Form</fullName>
+                <default>false</default>
+                <label>Lexology PRO Lead Generation Form</label>
+            </value>
+            <value>
+                <fullName>Subscriptions - Lexology PRO - Content Download – APAC V.2</fullName>
+                <default>false</default>
+                <label>Subscriptions - Lexology PRO - Content Download – APAC V.2</label>
+            </value>
+            <value>
+                <fullName>Subscriptions - Lexology PRO - Content Download – Main Form</fullName>
+                <default>false</default>
+                <label>Subscriptions - Lexology PRO - Content Download – Main Form</label>
+            </value>
+            <value>
+                <fullName>Subscriptions - Lexology PRO - Content Download – NON APAC</fullName>
+                <default>false</default>
+                <label>Subscriptions - Lexology PRO - Content Download – NON APAC</label>
+            </value>
+            <value>
+                <fullName>Subscriptions - Lexology PRO - LinkedIn PPC</fullName>
+                <default>false</default>
+                <label>Subscriptions - Lexology PRO - LinkedIn PPC</label>
+            </value>
+            <value>
+                <fullName>WTR - LeadGen - Subscribe - Marketing Form - Gated Content</fullName>
+                <default>false</default>
+                <label>WTR - LeadGen - Subscribe - Marketing Form - Gated Content</label>
+            </value>
+            <value>
+                <fullName>WTR - LeadGen - Subscribe - Short Form</fullName>
+                <default>false</default>
+                <label>WTR - LeadGen - Subscribe - Short Form</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

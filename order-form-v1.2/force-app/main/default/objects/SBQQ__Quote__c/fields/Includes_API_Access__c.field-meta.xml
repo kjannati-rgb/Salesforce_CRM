@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Includes_API_Access__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>At least one quote line product includes API access. Recomputed on every quote save by the Quote - Stamp Terms flow; drives the conditional API Terms sentence on the Order Form.</description>
+    <externalId>false</externalId>
+    <label>Includes API Access</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Checkbox</type>
+</CustomField>

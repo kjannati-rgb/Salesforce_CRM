@@ -1,0 +1,304 @@
+<template>
+    <section class="lex-station">
+        <div class="lex-station__head">
+            <span class="lex-badge">L</span>
+            <div class="lex-station__titles">
+                <h3 class="lex-station__title">Locations</h3>
+                <p class="lex-station__q">
+                    Do they work over multiple jurisdictions for which we have coverage?
+                </p>
+            </div>
+            <template if:true={answered}>
+                <span class="lex-tick" title="Resolved">&#10003;</span>
+            </template>
+        </div>
+
+        <div class="lex-map" role="group" aria-label="Coverage map — select the regions the prospect operates in">
+            <svg class="lex-worldmap" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                <path class="lex-worldlink" d="M17,22 Q31.5,16.5 46,19"></path>
+                <path class="lex-worldlink" d="M46,19 Q54.0,25.0 62,39"></path>
+                <path class="lex-worldlink" d="M62,39 Q71.0,32.0 80,33"></path>
+                <path class="lex-worldlink" d="M46,19 Q49.5,28.0 53,45"></path>
+                <path class="lex-worldlink" d="M17,22 Q19.5,37.0 22,60"></path>
+                <path class="lex-worldlink" d="M53,45 Q66.5,35.0 80,33"></path>
+                <circle class="lex-worlddot" cx="6.67" cy="6.56" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="11.99" cy="6.32" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="15.41" cy="6.14" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="20.6" cy="6.36" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="7.6" cy="9.42" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="12.44" cy="9.51" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="20.46" cy="8.9" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="22.64" cy="8.68" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="1.71" cy="11.9" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="7.04" cy="11.75" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="12.4" cy="11.84" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="14.47" cy="11.73" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="17.05" cy="12.13" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="20.17" cy="12.05" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="22.61" cy="11.82" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="25.71" cy="11.37" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="5.12" cy="13.97" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="6.69" cy="14.71" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="12.75" cy="14.13" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="22.95" cy="14.73" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="27.95" cy="14.22" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="40.67" cy="14.19" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="43.89" cy="14.17" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="45.85" cy="14.23" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="51.46" cy="14.06" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="76.93" cy="14.66" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="4.39" cy="16.84" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="7.07" cy="16.97" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="9.47" cy="17.01" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="12.14" cy="16.55" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="14.5" cy="16.47" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="17.31" cy="17.09" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="23.22" cy="16.88" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="43.8" cy="17.21" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="45.68" cy="16.6" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="48.37" cy="17.37" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="72.19" cy="16.87" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="75.0" cy="17.29" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="77.56" cy="16.54" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="79.73" cy="17.27" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="82.67" cy="16.46" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="2.53" cy="20.08" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="7.14" cy="19.35" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="10.29" cy="19.28" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="14.6" cy="19.95" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="18.03" cy="19.82" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="20.64" cy="19.58" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="22.25" cy="19.59" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="25.18" cy="19.2" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="38.17" cy="19.46" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="41.55" cy="19.7" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="43.52" cy="19.35" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="45.76" cy="19.97" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="49.28" cy="19.32" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="51.41" cy="19.26" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="67.28" cy="19.76" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="69.1" cy="20.07" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="72.17" cy="19.43" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="75.06" cy="20.12" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="77.57" cy="19.38" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="79.88" cy="19.23" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="82.28" cy="20.05" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="87.74" cy="19.2" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="4.5" cy="22.11" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="7.06" cy="22.02" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="9.56" cy="22.71" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="14.69" cy="21.95" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="20.58" cy="22.61" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="43.89" cy="22.15" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="45.69" cy="22.51" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="49.26" cy="22.36" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="54.22" cy="21.77" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="67.16" cy="22.62" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="72.43" cy="21.99" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="74.8" cy="22.39" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="79.7" cy="21.69" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="82.51" cy="22.4" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="85.53" cy="22.46" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="87.48" cy="22.72" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="14.61" cy="24.31" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="40.84" cy="25.3" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="44.11" cy="24.48" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="46.55" cy="25.15" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="48.3" cy="24.77" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="51.86" cy="24.46" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="67.44" cy="24.62" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="70.1" cy="24.93" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="72.44" cy="24.6" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="77.55" cy="25.29" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="83.1" cy="24.68" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="90.76" cy="25.1" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="15.54" cy="27.14" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="20.14" cy="27.11" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="67.09" cy="27.87" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="70.0" cy="27.34" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="72.51" cy="27.89" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="74.91" cy="27.53" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="77.26" cy="27.01" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="82.27" cy="26.86" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="85.4" cy="27.05" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="87.47" cy="27.72" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="89.92" cy="26.96" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="15.55" cy="29.85" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="17.85" cy="29.67" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="22.7" cy="30.42" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="62.16" cy="29.65" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="64.29" cy="30.02" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="70.04" cy="29.5" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="74.38" cy="30.11" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="77.54" cy="29.79" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="82.54" cy="29.93" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="85.33" cy="29.99" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="88.09" cy="30.31" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="90.05" cy="29.97" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="17.86" cy="32.95" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="49.0" cy="33.03" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="51.71" cy="32.18" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="64.14" cy="33.14" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="66.85" cy="32.89" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="69.24" cy="32.87" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="77.19" cy="32.05" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="79.61" cy="32.73" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="82.61" cy="33.04" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="84.9" cy="32.77" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="87.25" cy="32.44" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="90.24" cy="32.3" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="12.29" cy="34.94" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="15.16" cy="35.27" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="22.3" cy="35.23" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="51.36" cy="35.47" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="53.7" cy="34.77" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="61.54" cy="35.26" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="64.72" cy="35.23" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="67.16" cy="35.71" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="70.02" cy="34.67" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="85.42" cy="35.59" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="88.05" cy="35.28" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="90.08" cy="35.33" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="12.66" cy="37.32" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="20.66" cy="38.29" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="22.48" cy="37.37" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="48.8" cy="38.19" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="50.88" cy="37.7" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="58.75" cy="38.15" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="64.93" cy="37.25" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="66.99" cy="38.13" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="71.94" cy="38.29" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="74.49" cy="38.02" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="76.97" cy="37.95" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="82.74" cy="37.64" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="85.08" cy="38.23" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="88.23" cy="37.28" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="15.27" cy="40.04" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="17.9" cy="40.49" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="20.16" cy="40.82" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="50.97" cy="40.08" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="59.16" cy="40.01" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="80.23" cy="40.54" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="15.36" cy="43.02" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="20.08" cy="43.29" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="61.76" cy="42.77" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="63.99" cy="43.37" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="72.12" cy="42.65" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="75.04" cy="42.76" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="77.18" cy="42.98" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="80.15" cy="43.18" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="25.43" cy="45.87" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="23.25" cy="48.32" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="25.54" cy="48.42" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="48.71" cy="48.0" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="51.56" cy="48.68" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="54.07" cy="47.69" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="17.95" cy="50.34" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="22.78" cy="50.32" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="27.61" cy="51.13" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="30.76" cy="50.94" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="49.16" cy="50.91" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="51.32" cy="51.23" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="17.26" cy="53.06" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="20.42" cy="53.25" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="22.69" cy="53.42" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="24.9" cy="53.95" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="30.22" cy="53.51" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="49.31" cy="53.13" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="51.07" cy="53.05" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="85.65" cy="53.77" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="17.06" cy="56.24" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="19.69" cy="56.47" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="25.0" cy="55.94" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="46.1" cy="55.62" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="49.17" cy="55.82" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="53.58" cy="56.53" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="82.42" cy="55.6" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="85.57" cy="56.03" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="87.73" cy="56.45" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="90.48" cy="55.6" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="17.5" cy="58.84" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="23.2" cy="58.59" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="46.0" cy="58.83" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="51.9" cy="58.59" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="54.03" cy="58.64" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="82.59" cy="58.6" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="84.78" cy="58.5" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="87.9" cy="59.0" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="90.48" cy="58.87" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="17.95" cy="61.58" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="25.25" cy="61.23" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="46.4" cy="60.95" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="49.27" cy="61.33" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="82.83" cy="61.16" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="85.32" cy="61.17" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="87.52" cy="60.89" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="90.27" cy="61.29" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="17.86" cy="63.37" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="20.71" cy="64.06" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="51.81" cy="63.92" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="56.37" cy="63.68" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="14.89" cy="66.47" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="18.02" cy="66.91" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="48.94" cy="66.51" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="51.94" cy="66.55" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="53.9" cy="66.72" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="23.15" cy="68.78" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="48.38" cy="69.04" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="51.29" cy="68.52" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="54.36" cy="68.84" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="15.07" cy="71.39" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="20.0" cy="71.78" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="22.87" cy="71.45" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="51.12" cy="71.98" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="20.34" cy="74.15" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="23.02" cy="74.12" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="20.37" cy="76.53" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="17.73" cy="79.74" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="20.39" cy="79.52" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="22.88" cy="79.9" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="17.23" cy="82.27" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="17.35" cy="84.35" r="0.6"></circle>
+                <circle class="lex-worlddot" cx="19.94" cy="84.68" r="0.6"></circle>
+            </svg>
+            <template for:each={mapRegions} for:item="r">
+                <button
+                    key={r.key}
+                    type="button"
+                    class={r.cls}
+                    style={r.style}
+                    data-key={r.key}
+                    aria-pressed={r.pressed}
+                    disabled={pickerDisabled}
+                    onclick={togglePin}
+                    title={r.label}
+                >
+                    <span class="lex-pin__dot"></span>
+                    <span class="lex-pin__label">{r.label}</span>
+                </button>
+            </template>
+        </div>
+
+        <template if:true={gapNote}>
+            <p class="lex-gapnote">{gapNote}</p>
+        </template>
+
+        <div class="lex-group" role="group" aria-label="Other jurisdiction">
+            <p class="lex-group__label">Other</p>
+            <div class="lex-chips">
+                <button type="button" class={otherClass} aria-pressed={otherPressed}
+                        disabled={pickerDisabled} onclick={toggleOther}>Other region</button>
+            </div>
+            <template if:true={showOther}>
+                <textarea class="lex-other" placeholder="Which region? (optional)" value={otherText}
+                          disabled={pickerDisabled} onchange={handleOther}
+                          aria-label="Other region detail"></textarea>
+            </template>
+        </div>
+
+        <div class="lex-seggroup" role="radiogroup" aria-label="Jurisdiction coverage answer">
+            <button type="button" class={yesClass} role="radio" aria-checked={yesPressed} data-val="Yes" onclick={pick}>Yes</button>
+            <button type="button" class={noClass} role="radio" aria-checked={noPressed} data-val="No" onclick={pick}>No</button>
+        </div>
+    </section>
+</template>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Yash_s_leads1</fullName>
+    <booleanFilter>1 AND 2 AND (3 OR 5) AND 4</booleanFilter>
+    <columns>Next_Contact_Date__c</columns>
+    <columns>NAME</columns>
+    <columns>Company__c</columns>
+    <columns>Prospect_Name__c</columns>
+    <columns>Country__c</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>Sales_Stage__c</columns>
+    <columns>OWNER.ALIAS</columns>
+    <columns>Sales_Rep__c</columns>
+    <columns>Next_Step__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
+    </filters>
+    <filters>
+        <field>OWNER.FIRST_NAME</field>
+        <operation>startsWith</operation>
+        <value>Yash</value>
+    </filters>
+    <filters>
+        <field>Prospect_s_Region__c</field>
+        <operation>equals</operation>
+        <value>Asia</value>
+    </filters>
+    <filters>
+        <field>Country__c</field>
+        <operation>notEqual</operation>
+        <value>united arab emirates,turkey,jordan,Kazakhstan,Uzbekistan Qatar,Israel,Oman,Iran</value>
+    </filters>
+    <filters>
+        <field>Country__c</field>
+        <operation>equals</operation>
+        <value>Australia</value>
+    </filters>
+    <label>Yash&apos;s leads</label>
+</ListView>

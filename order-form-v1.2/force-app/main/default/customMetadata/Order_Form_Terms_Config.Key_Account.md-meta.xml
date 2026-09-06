@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Key Account</label>
+    <protected>false</protected>
+    <values>
+        <field>Role_Pattern__c</field>
+        <value xsi:type="xsd:string">Global Enterprise Solutions &amp; Memberships</value>
+    </values>
+    <values>
+        <field>Terms_URL__c</field>
+        <value xsi:type="xsd:string">https://www.centellic.com/general-subscription-terms-of-business-key-account/</value>
+    </values>
+    <values>
+        <field>Terms_Label__c</field>
+        <value xsi:type="xsd:string">General Subscription Terms of Business (Key Account)</value>
+    </values>
+    <values>
+        <field>Is_Default__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+</CustomMetadata>

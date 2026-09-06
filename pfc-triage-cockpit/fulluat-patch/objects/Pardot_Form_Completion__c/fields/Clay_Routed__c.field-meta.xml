@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Clay_Routed__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Indicates whether this form completion record was created or routed via Clay Labs automation. Used for attribution, reporting, and tracking automated inbound lead flows across Pardot and Salesforce.</description>
+    <inlineHelpText>Checked when this form completion is associated with a Clay-routed lead or process. Automatically populated. Do not edit manually.</inlineHelpText>
+    <label>Clay Routed</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

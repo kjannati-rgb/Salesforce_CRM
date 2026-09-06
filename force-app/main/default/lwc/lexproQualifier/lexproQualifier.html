@@ -1,0 +1,45 @@
+<template>
+    <div class={rootClass}>
+        <header class="lex-header">
+            <div class="lex-brand">
+                <span class="lex-brand__pro">Lexology&nbsp;PRO</span>
+                <span class="lex-brand__title">Deal Qualifier</span>
+            </div>
+            <p class="lex-header__sub">
+                Three checks confirm this is a LexPRO-fit deal before it advances to Qualify.
+            </p>
+        </header>
+
+        <div class="lex-body">
+            <c-lexpro-station-locations
+                regions={regions}
+                value={lValue}
+                selected-regions={lRegions}
+                other-text={lOther}
+                onresolve={handleResolve}
+            ></c-lexpro-station-locations>
+
+            <c-lexpro-station-content
+                work-areas={workAreas}
+                value={eValue}
+                selected-areas={eAreas}
+                other-text={eOther}
+                onresolve={handleResolve}
+            ></c-lexpro-station-content>
+
+            <c-lexpro-station-process
+                values={xValues}
+                other-text={xOther}
+                onresolve={handleResolve}
+            ></c-lexpro-station-process>
+        </div>
+
+        <c-lexpro-readiness-core
+            count={count}
+            complete={complete}
+            fit={fit}
+            submitted={submitted}
+            onadvance={handleAdvance}
+        ></c-lexpro-readiness-core>
+    </div>
+</template>

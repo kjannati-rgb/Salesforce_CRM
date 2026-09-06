@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Validate_Invoice_Contact_Account_ID</fullName>
+    <active>false</active>
+    <description>Invoice Contact must have the same Account ID as the Opportunity.</description>
+    <errorConditionFormula>AND(
+NOT($Setup.Application_Settings__c.Disable_Validation_Rules__c), NOT( ISBLANK( Invoice_Contact__c ) ), Invoice_Contact__r.AccountId &lt;&gt; AccountId,
+$Profile.Name &lt;&gt; &apos;Custom: Fin/Ops/HR&apos;,
+$Profile.Name &lt;&gt; &apos;ALM - Custom: Fin/Ops/HR&apos;
+)</errorConditionFormula>
+    <errorMessage>Invoice Contact must have the same Account ID as the Opportunity.</errorMessage>
+</ValidationRule>

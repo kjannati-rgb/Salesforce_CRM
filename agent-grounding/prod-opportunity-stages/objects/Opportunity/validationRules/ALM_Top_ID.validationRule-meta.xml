@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ALM_Top_ID</fullName>
+    <active>false</active>
+    <description>Top ID required for ALM Closed Won Opps</description>
+    <errorConditionFormula>AND(
+NOT( $Setup.Application_Settings__c.Disable_Validation_Rules__c ),
+ISPICKVAL( StageName , &apos;Closed won – pending approval&apos;),
+ISBLANK (  Top_ID__c ),
+CONTAINS(Opportunity_Owner_Team__c, &apos;ALM&apos;) == True,
+Opportunity_Owner_Team__c &lt;&gt; &apos;Events - ALM Sponsorship&apos;,
+Opportunity_Owner_Team__c &lt;&gt; &apos;Events - ALM Delegates&apos;
+)</errorConditionFormula>
+    <errorDisplayField>Top_ID__c</errorDisplayField>
+    <errorMessage>Please add Top ID before pushing opp to &apos;Closed Won - Pending Approval&apos;</errorMessage>
+</ValidationRule>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Previous_Annual_Contract_Value__c</fullName>
+    <description>Average annualized amount per customer contract.</description>
+    <externalId>false</externalId>
+    <formula>(  Previous_Subs_Deal_Value_GBP__c   / Previous_Deal_Length__c) * 12</formula>
+    <inlineHelpText>Average annualized amount per customer contract.</inlineHelpText>
+    <label>Previous Annual Contract Value</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

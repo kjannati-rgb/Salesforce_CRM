@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Block_Converted_Lead</fullName>
+    <active>true</active>
+    <description>Prevent linking an interaction to a Lead that has already been converted; the resulting Contact should be used instead (REV-68). Re-parenting clears Lead__c in the same DML, so this does not fire during conversion handling.</description>
+    <errorConditionFormula>AND(
+  NOT(ISBLANK(Lead__c)),
+  Lead__r.IsConverted
+)</errorConditionFormula>
+    <errorDisplayField>Lead__c</errorDisplayField>
+    <errorMessage>This Lead has already been converted. Link the interaction to the resulting Contact instead.</errorMessage>
+</ValidationRule>

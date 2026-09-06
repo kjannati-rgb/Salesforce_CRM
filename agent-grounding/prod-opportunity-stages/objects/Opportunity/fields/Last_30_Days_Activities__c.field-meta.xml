@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Last_30_Days_Activities__c</fullName>
+    <description>Activity Metrics - The number of activities completed in the last 30 days.</description>
+    <externalId>false</externalId>
+    <formula>ENCODED:{!ID:ActivityMetricRollup.TotalActivities30Days}</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>Activity Metrics - The number of activities completed in the last 30 days for this Opportunity.</inlineHelpText>
+    <label>Last 30 Days Activities</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

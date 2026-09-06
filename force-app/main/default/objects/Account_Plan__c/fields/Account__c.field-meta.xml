@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Account__c</fullName>
+    <label>Account (Plan Node)</label>
+    <description>The plan node - ultimate parent (enterprise) or a regional anchor account.</description>
+    <type>Lookup</type>
+    <referenceTo>Account</referenceTo>
+    <relationshipName>Account_Plans</relationshipName>
+    <relationshipLabel>Account Plans</relationshipLabel>
+    <required>false</required>
+    <deleteConstraint>SetNull</deleteConstraint>
+</CustomField>

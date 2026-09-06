@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Closed_Lost_Reason__c</fullName>
+    <description>Salesrep can choose multiple options related to the closed lost opportunity.</description>
+    <label>Closed Lost Reason</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Analytics/features</fullName>
+                <default>false</default>
+                <label>Analytics/features</label>
+            </value>
+            <value>
+                <fullName>Audience</fullName>
+                <default>false</default>
+                <label>Audience</label>
+            </value>
+            <value>
+                <fullName>Bad debtor</fullName>
+                <default>false</default>
+                <label>Bad debtor</label>
+            </value>
+            <value>
+                <fullName>Budget</fullName>
+                <default>false</default>
+                <label>Budget</label>
+            </value>
+            <value>
+                <fullName>Budget cut</fullName>
+                <default>false</default>
+                <label>Budget cut</label>
+            </value>
+            <value>
+                <fullName>Change in audience targeting</fullName>
+                <default>false</default>
+                <label>Change in audience targeting</label>
+            </value>
+            <value>
+                <fullName>Change of content strategy</fullName>
+                <default>false</default>
+                <label>Change of content strategy</label>
+            </value>
+            <value>
+                <fullName>Competitor - JD Supra</fullName>
+                <default>false</default>
+                <label>Competitor - JD Supra</label>
+            </value>
+            <value>
+                <fullName>Competitor - Mondaq</fullName>
+                <default>false</default>
+                <label>Competitor - Mondaq</label>
+            </value>
+            <value>
+                <fullName>Competitor - Other</fullName>
+                <default>false</default>
+                <label>Competitor - Other</label>
+            </value>
+            <value>
+                <fullName>Consolidating Lexology products</fullName>
+                <default>false</default>
+                <label>Consolidating Lexology products</label>
+            </value>
+            <value>
+                <fullName>Data not detailed enough</fullName>
+                <default>false</default>
+                <label>Data not detailed enough</label>
+            </value>
+            <value>
+                <fullName>Dissolved/Merged</fullName>
+                <default>false</default>
+                <label>Dissolved/Merged</label>
+            </value>
+            <value>
+                <fullName>Don&apos;t know what to do with data</fullName>
+                <default>false</default>
+                <label>Don&apos;t know what to do with data</label>
+            </value>
+            <value>
+                <fullName>Issues with LBR service</fullName>
+                <default>false</default>
+                <label>Issues with LBR service</label>
+            </value>
+            <value>
+                <fullName>No response/no reason given</fullName>
+                <default>false</default>
+                <label>No response/no reason given</label>
+            </value>
+            <value>
+                <fullName>No ROI/not worth cost</fullName>
+                <default>false</default>
+                <label>No ROI/not worth cost</label>
+            </value>
+            <value>
+                <fullName>Not enough content</fullName>
+                <default>false</default>
+                <label>Not enough content</label>
+            </value>
+            <value>
+                <fullName>No time to make use of data/tools</fullName>
+                <default>false</default>
+                <label>No time to make use of data/tools</label>
+            </value>
+            <value>
+                <fullName>Not Paid</fullName>
+                <default>false</default>
+                <label>Not Paid</label>
+            </value>
+            <value>
+                <fullName>Not producing content/didn&apos;t write</fullName>
+                <default>false</default>
+                <label>Not producing content/didn&apos;t write</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+            <value>
+                <fullName>Persistent product issues</fullName>
+                <default>false</default>
+                <label>Persistent product issues</label>
+            </value>
+            <value>
+                <fullName>Primary contact/purchaser left/not in budget</fullName>
+                <default>false</default>
+                <label>Primary contact/purchaser left/not in budget</label>
+            </value>
+            <value>
+                <fullName>Switching to competitor</fullName>
+                <default>false</default>
+                <label>Switching to competitor</label>
+            </value>
+            <value>
+                <fullName>Timing</fullName>
+                <default>false</default>
+                <label>Timing</label>
+            </value>
+            <value>
+                <fullName>Uncontactable</fullName>
+                <default>false</default>
+                <label>Uncontactable</label>
+            </value>
+            <value>
+                <fullName>Wrong audience reading</fullName>
+                <default>false</default>
+                <label>Wrong audience reading</label>
+            </value>
+            <value>
+                <fullName>No longer ranked</fullName>
+                <default>false</default>
+                <label>No longer ranked</label>
+            </value>
+            <value>
+                <fullName>Now covered by licence</fullName>
+                <default>false</default>
+                <label>Now covered by licence</label>
+            </value>
+            <value>
+                <fullName>Product discontinued</fullName>
+                <default>false</default>
+                <label>Product discontinued</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>10</visibleLines>
+</CustomField>

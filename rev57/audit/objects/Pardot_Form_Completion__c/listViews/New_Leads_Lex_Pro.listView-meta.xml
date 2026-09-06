@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>New_Leads_Lex_Pro</fullName>
+    <columns>CREATED_DATE</columns>
+    <columns>NAME</columns>
+    <columns>Company__c</columns>
+    <columns>Sales_Stage__c</columns>
+    <columns>Opportunity__c</columns>
+    <columns>OWNER.FIRST_NAME</columns>
+    <columns>Contact__c</columns>
+    <columns>Opportunity_Stage__c</columns>
+    <columns>Opportunity_Close_Date__c</columns>
+    <columns>Country__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Sales_Stage__c</field>
+        <operation>equals</operation>
+        <value>New</value>
+    </filters>
+    <filters>
+        <field>CREATED_DATE</field>
+        <operation>greaterThan</operation>
+        <value>1/1/2026 12:00 AM</value>
+    </filters>
+    <filters>
+        <field>NAME</field>
+        <operation>contains</operation>
+        <value>Lexology</value>
+    </filters>
+    <label>New Leads - Lex Pro</label>
+</ListView>

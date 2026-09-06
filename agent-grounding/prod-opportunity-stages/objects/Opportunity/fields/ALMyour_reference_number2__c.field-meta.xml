@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ALMyour_reference_number2__c</fullName>
+    <description>The reference number will be displayed on the proposal and is the reference number of the agency.|Advendio. MediaCampaign</description>
+    <externalId>false</externalId>
+    <label>ALM Ref/PO Number</label>
+    <length>50</length>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

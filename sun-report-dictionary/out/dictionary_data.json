@@ -1,0 +1,4138 @@
+{
+ "columns": [
+  {
+   "n": 1,
+   "label": "Contract Code",
+   "token": "Opportunity.Opportunity_Number__c",
+   "source_object": "Opportunity",
+   "field_api": "Opportunity_Number__c",
+   "field_label": "Opportunity Number",
+   "data_type": "string",
+   "len_prec": "30",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": "report column label differs from field label \"Opportunity Number\""
+  },
+  {
+   "n": 2,
+   "label": "Desc",
+   "token": "OpportunityLineItemSchedule.Desc__c",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "Desc__c",
+   "field_label": "Desc",
+   "data_type": "string",
+   "len_prec": "4",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Blank field for Sun Report.",
+   "notes": ""
+  },
+  {
+   "n": 3,
+   "label": "Lookup",
+   "token": "Opportunity.Order__c.SUNLookup__c",
+   "source_object": "Order",
+   "field_api": "SUNLookup__c",
+   "field_label": "Lookup",
+   "data_type": "string",
+   "len_prec": "5",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "This field exists for the Sun report only.",
+   "notes": ""
+  },
+  {
+   "n": 4,
+   "label": "Contract Type Code",
+   "token": "OpportunityLineItem.Contract_Type_Code__c",
+   "source_object": "OpportunityLineItem",
+   "field_api": "Contract_Type_Code__c",
+   "field_label": "Contract Type Code",
+   "data_type": "string",
+   "len_prec": "1300",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "CASE(\r\nTEXT(PricebookEntry.Product2.Revenue_Stream__c),\r\n'Subs', 'SUB',\r\n'Law Careers Net', 'SUB',\r\n'Advertising Online', 'SUB',\r\n'Advertising Print', 'SUB',\r\n'Other', 'SUB',\r\n'Conferences', 'CONF',\r\n'PUB', 'PUB',\r\n\r\n'Expert Insights',  IF( TotalPrice = 0, 'ZERO', 'PUB') ,\r\n\r\n'Performance Data',  IF(  PricebookEntry.Product2.Clean_Product_Code__c = '10116484000', 'SUB', 'PUB') ,\r\n\r\n\r\n\r\n\r\n'UNSET'\r\n)",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Used for the SUN report. Generated the Contract Type Code based on Revenue Stream and Amount.",
+   "notes": ""
+  },
+  {
+   "n": 5,
+   "label": "Cust Code",
+   "token": "Opportunity.Invoice_Contact__c.SUN_Legacy_ID__c",
+   "source_object": "Contact",
+   "field_api": "SUN_Legacy_ID__c",
+   "field_label": "SUN Legacy ID",
+   "data_type": "string",
+   "len_prec": "50",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": "report column label differs from field label \"SUN Legacy ID\""
+  },
+  {
+   "n": 6,
+   "label": "inv Add Code",
+   "token": "Opportunity.Invoice_Contact__c.inv_Add_Code__c",
+   "source_object": "Contact",
+   "field_api": "inv_Add_Code__c",
+   "field_label": "inv Add Code",
+   "data_type": "string",
+   "len_prec": "1300",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "SUN_Legacy_ID__c",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "SUN Legacy ID repeated for the Finance SUN Report.",
+   "notes": ""
+  },
+  {
+   "n": 7,
+   "label": "Ack Addr Code",
+   "token": "Opportunity.Invoice_Contact__c.Ack_Addr_Code__c",
+   "source_object": "Contact",
+   "field_api": "Ack_Addr_Code__c",
+   "field_label": "Ack Addr Code",
+   "data_type": "string",
+   "len_prec": "1300",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "SUN_Legacy_ID__c",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "SUN Legacy ID repeated for the Finance SUN Report (2nd).",
+   "notes": ""
+  },
+  {
+   "n": 8,
+   "label": "Start Date Time",
+   "token": "CDF1",
+   "source_object": "Report-defined",
+   "field_api": "CDF1",
+   "field_label": "Row-level formula",
+   "data_type": "date",
+   "len_prec": "",
+   "custom": "n/a",
+   "formula": "Yes",
+   "formula_text": "IF\n\n((IF(OpportunityLineItemSchedule.lineReviewDate__c <= OpportunityLineItem.SBQQ__QuoteLine__c.Start_Date_SUN_Report__c, OpportunityLineItemSchedule.lineReviewDate__c, OpportunityLineItem.SBQQ__QuoteLine__c.Start_Date_SUN_Report__c))\n\n<= OpportunityLineItem.SBQQ__QuoteLine__c.End_Date_SUN_Report__c,\n\n\n(IF(OpportunityLineItemSchedule.lineReviewDate__c <= OpportunityLineItem.SBQQ__QuoteLine__c.Start_Date_SUN_Report__c, OpportunityLineItemSchedule.lineReviewDate__c, OpportunityLineItem.SBQQ__QuoteLine__c.Start_Date_SUN_Report__c)),\n\nOpportunityLineItem.SBQQ__QuoteLine__c.End_Date_SUN_Report__c\n\n)",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": "Row-level formula, label \"Start Date Time\", returns date"
+  },
+  {
+   "n": 9,
+   "label": "End Date Time",
+   "token": "OpportunityLineItemSchedule.End_Date_Time__c",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "End_Date_Time__c",
+   "field_label": "End Date Time",
+   "data_type": "string",
+   "len_prec": "1",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Used for the Finance SUN Report.",
+   "notes": ""
+  },
+  {
+   "n": 10,
+   "label": "Review Date",
+   "token": "OpportunityLineItemSchedule.Review_Date__c",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "Review_Date__c",
+   "field_label": "Review Date",
+   "data_type": "string",
+   "len_prec": "1",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Blank field used in the SUN Finance Report.",
+   "notes": ""
+  },
+  {
+   "n": 11,
+   "label": "Cust Ref",
+   "token": "OpportunityLineItemSchedule.Cust_Ref__c",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "Cust_Ref__c",
+   "field_label": "Cust Ref",
+   "data_type": "string",
+   "len_prec": "1",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Blank field used in the SUN Finance Report.",
+   "notes": ""
+  },
+  {
+   "n": 12,
+   "label": "Comment",
+   "token": "OpportunityLineItemSchedule.Comment__c",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "Comment__c",
+   "field_label": "Comment",
+   "data_type": "string",
+   "len_prec": "1",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Schedule",
+   "notes": ""
+  },
+  {
+   "n": 13,
+   "label": "Misc Descr 1",
+   "token": "Opportunity.Misc_Descr_1__c",
+   "source_object": "Opportunity",
+   "field_api": "Misc_Descr_1__c",
+   "field_label": "Misc Descr 1",
+   "data_type": "string",
+   "len_prec": "1300",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "Opportunity_Number__c",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Used for the Finance SUN Report.",
+   "notes": ""
+  },
+  {
+   "n": 14,
+   "label": "BLANK",
+   "token": "OpportunityLineItemSchedule.BLANK__c",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "BLANK__c",
+   "field_label": "BLANK",
+   "data_type": "string",
+   "len_prec": "1",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Blank field for SUN Report.",
+   "notes": ""
+  },
+  {
+   "n": 15,
+   "label": "Line No",
+   "token": "OpportunityLineItemSchedule.Line_No__c",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "Line_No__c",
+   "field_label": "Line No",
+   "data_type": "string",
+   "len_prec": "1",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Blank field for SUN Report.",
+   "notes": ""
+  },
+  {
+   "n": 16,
+   "label": "Item Code",
+   "token": "OpportunityLineItem.PricebookEntry.Product2.Clean_Product_Code__c",
+   "source_object": "Product2",
+   "field_api": "Clean_Product_Code__c",
+   "field_label": "Clean Product Code",
+   "data_type": "string",
+   "len_prec": "1300",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "LEFT( ProductCode, 11)",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": "report column label differs from field label \"Clean Product Code\""
+  },
+  {
+   "n": 17,
+   "label": "Recurrence",
+   "token": "OpportunityLineItemSchedule.Recurrence__c",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "Recurrence__c",
+   "field_label": "Recurrence",
+   "data_type": "string",
+   "len_prec": "1",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Blank field for SUN Report.",
+   "notes": ""
+  },
+  {
+   "n": 18,
+   "label": "Line Start Date",
+   "token": "OpportunityLineItem.Start_Date_SUN_Report__c",
+   "source_object": "OpportunityLineItem",
+   "field_api": "Start_Date_SUN_Report__c",
+   "field_label": "Start Date SUN Report",
+   "data_type": "date",
+   "len_prec": "",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": "report column label differs from field label \"Start Date SUN Report\""
+  },
+  {
+   "n": 19,
+   "label": "Line End Date",
+   "token": "OpportunityLineItem.End_Date_SUN_Report__c",
+   "source_object": "OpportunityLineItem",
+   "field_api": "End_Date_SUN_Report__c",
+   "field_label": "End Date SUN Report",
+   "data_type": "date",
+   "len_prec": "",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": "report column label differs from field label \"End Date SUN Report\""
+  },
+  {
+   "n": 20,
+   "label": "Line Review Date",
+   "token": "OpportunityLineItemSchedule.lineReviewDate__c",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "lineReviewDate__c",
+   "field_label": "Line Review Date",
+   "data_type": "date",
+   "len_prec": "",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "ScheduleDate",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "This field exists for the Sun report only.",
+   "notes": ""
+  },
+  {
+   "n": 21,
+   "label": "Misc Input 1-PID",
+   "token": "OpportunityLineItemSchedule.Misc_Input_1_PID__c",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "Misc_Input_1_PID__c",
+   "field_label": "Misc Input 1-PID",
+   "data_type": "string",
+   "len_prec": "1",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Blank field used in the SUN Finance Report.",
+   "notes": ""
+  },
+  {
+   "n": 22,
+   "label": "Misc Ref 1-Lawyer Name",
+   "token": "OpportunityLineItemSchedule.Misc_Ref_1_Lawyer_Name__c",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "Misc_Ref_1_Lawyer_Name__c",
+   "field_label": "Misc Ref 1-Lawyer Name",
+   "data_type": "string",
+   "len_prec": "1",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Blank field used in the SUN Finance Report.",
+   "notes": ""
+  },
+  {
+   "n": 23,
+   "label": "Misc Input 2-Old ref No",
+   "token": "OpportunityLineItemSchedule.Misc_Input_2_Old_ref_No__c",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "Misc_Input_2_Old_ref_No__c",
+   "field_label": "Misc Input 2-Old ref No",
+   "data_type": "string",
+   "len_prec": "1",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Blank field used in the SUN Finance Report.",
+   "notes": ""
+  },
+  {
+   "n": 24,
+   "label": "Misc Ref 2-Contract Name",
+   "token": "OpportunityLineItemSchedule.Misc_Ref_2_Contract_Name__c",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "Misc_Ref_2_Contract_Name__c",
+   "field_label": "Misc Ref 2-Contract Name",
+   "data_type": "string",
+   "len_prec": "1",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Blank field used in the SUN Finance Report.",
+   "notes": ""
+  },
+  {
+   "n": 25,
+   "label": "Sales Defn Code",
+   "token": "OpportunityLineItemSchedule.Sales_Defn_Code__c",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "Sales_Defn_Code__c",
+   "field_label": "Sales Defn Code",
+   "data_type": "string",
+   "len_prec": "1300",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "IF(\r\nAND(\r\nOpportunityLineItem.Opportunity.Invoice_Contact__r.MailingCountry  = \"United States\",\r\nOpportunityLineItem.Contract_Type_Code__c=\"SUB\",\r\nRevenue > 0,\r\ntext(OpportunityLineItem.Opportunity.Owner.LBR_Legal_Entity__c) <> 'Law Business Research (Asia) Ltd.'),\r\n'SIUS',\r\nif(\r\nAND(\r\nOpportunityLineItem.Opportunity.Invoice_Contact__r.MailingCountry = \"United States\",\r\nOpportunityLineItem.Contract_Type_Code__c=\"SUB\",\r\nRevenue <= 0,\r\ntext(OpportunityLineItem.Opportunity.Owner.LBR_Legal_Entity__c) <> 'Law Business Research (Asia) Ltd.'),\r\n'SCUS',\r\nif(\r\nRevenue > 0, 'SI','SC'\r\n)\r\n)\r\n)",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Used in the SUN Finance Report to define if the document is a Credit Note or an Invoice.",
+   "notes": ""
+  },
+  {
+   "n": 26,
+   "label": "Val Defn Code",
+   "token": "OpportunityLineItemSchedule.Val_Defn_Code__c",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "Val_Defn_Code__c",
+   "field_label": "Val Defn Code",
+   "data_type": "string",
+   "len_prec": "1300",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "IF(\r\nAND(\r\nOpportunityLineItem.Opportunity.Invoice_Contact__r.MailingCountry= \"United States\",\r\nOpportunityLineItem.Contract_Type_Code__c =\"SUB\",\r\nRevenue > 0,\r\ntext(OpportunityLineItem.Opportunity.Owner.LBR_Legal_Entity__c) <> 'Law Business Research (Asia) Ltd.'),\r\n'SIUS',\r\nif(\r\nAND(\r\nOpportunityLineItem.Opportunity.Invoice_Contact__r.MailingCountry= \"United States\",\r\nOpportunityLineItem.Contract_Type_Code__c =\"SUB\",\r\nRevenue <= 0,\r\ntext(OpportunityLineItem.Opportunity.Owner.LBR_Legal_Entity__c) <> 'Law Business Research (Asia) Ltd.'),\r\n'SCUS',\r\nif(\r\nRevenue > 0, 'SI','SC'\r\n)\r\n)\r\n)",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Blank field for the Finance Report.",
+   "notes": ""
+  },
+  {
+   "n": 27,
+   "label": "Cr Defn Code",
+   "token": "OpportunityLineItemSchedule.Cr_Defn_Code__c",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "Cr_Defn_Code__c",
+   "field_label": "Cr Defn Code",
+   "data_type": "string",
+   "len_prec": "1300",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "IF(\r\n AND(\r\nOpportunityLineItem.Opportunity.Invoice_Contact__r.MailingCountry = \"United States\",\r\nOpportunityLineItem.Contract_Type_Code__c=\"SUB\",\r\nRevenue > 0,\r\ntext(OpportunityLineItem.Opportunity.Owner.LBR_Legal_Entity__c) <> 'Law Business Research (Asia) Ltd.'),\r\n'SIUS',\r\nif(\r\nAND(\r\nOpportunityLineItem.Opportunity.Invoice_Contact__r.MailingCountry= \"United States\",\r\nOpportunityLineItem.Contract_Type_Code__c=\"SUB\",\r\nRevenue <= 0,\r\ntext(OpportunityLineItem.Opportunity.Owner.LBR_Legal_Entity__c) <> 'Law Business Research (Asia) Ltd.'),\r\n'SCUS',\r\nif(\r\n Revenue > 0, 'SI','SC'\r\n)\r\n)\r\n)",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Blank field for the Finance SUN Report.",
+   "notes": ""
+  },
+  {
+   "n": 28,
+   "label": "Company",
+   "token": "OpportunityLineItem.Company2__c",
+   "source_object": "OpportunityLineItem",
+   "field_api": "Company2__c",
+   "field_label": "Company2",
+   "data_type": "string",
+   "len_prec": "1300",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "IF(\r\n\r\nAND(NOT(CONTAINS(PricebookEntry.Product2.Name, 'Webinar')), TEXT(PricebookEntry.Product2.Revenue_Stream__c) = 'Conferences'),\r\n\r\nCASE(\r\nPricebookEntry.Product2.Event_Location_Country__c,\r\n'United States', 'LLC',\r\n'United States of America', 'LLC',\r\n'USA', 'LLC',\r\n'Hong Kong', 'GHK',\r\nIF( TEXT(Opportunity.Owner.LBR_Legal_Entity__c) = 'Law Business Research (Asia) Ltd.', 'GHK', IF( TEXT(Opportunity.Owner.LBR_Legal_Entity__c) = 'Law Business Research LLC',  'LLC', 'LBR'))\r\n),\r\n\r\nIF( TEXT(Opportunity.Owner.LBR_Legal_Entity__c) = 'Law Business Research (Asia) Ltd.', 'GHK', IF( TEXT(Opportunity.Owner.LBR_Legal_Entity__c) = 'Law Business Research LLC',  'LLC', 'LBR'))\r\n)",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Modified LBR Legal Entity (taking into account Event Location) used in the Finance SUN Report.",
+   "notes": "report column label differs from field label \"Company2\""
+  },
+  {
+   "n": 29,
+   "label": "Chapter Region Code for SUN",
+   "token": "OpportunityLineItem.Chapter_Region_Code_for_SUN__c",
+   "source_object": "OpportunityLineItem",
+   "field_api": "Chapter_Region_Code_for_SUN__c",
+   "field_label": "Chapter Region Code for SUN",
+   "data_type": "string",
+   "len_prec": "1300",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "\"ZZZ\"",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": ""
+  },
+  {
+   "n": 30,
+   "label": "New/Renewal",
+   "token": "OpportunityLineItem.Finance_Code_for_SUN__c",
+   "source_object": "OpportunityLineItem",
+   "field_api": "Finance_Code_for_SUN__c",
+   "field_label": "Finance Code for SUN",
+   "data_type": "string",
+   "len_prec": "1300",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "RIGHT( TEXT( Finance_Code__c ), 4)",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": "report column label differs from field label \"Finance Code for SUN\""
+  },
+  {
+   "n": 31,
+   "label": "Employee Number",
+   "token": "Opportunity.Owner.EmployeeNumber",
+   "source_object": "User",
+   "field_api": "EmployeeNumber",
+   "field_label": "Employee Number",
+   "data_type": "string",
+   "len_prec": "20",
+   "custom": "No",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": ""
+  },
+  {
+   "n": 32,
+   "label": "VAT",
+   "token": "OpportunityLineItem.VAT__c",
+   "source_object": "OpportunityLineItem",
+   "field_api": "VAT__c",
+   "field_label": "VAT",
+   "data_type": "string",
+   "len_prec": "1300",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "CASE(\r\nPricebookEntry.Product2.Default_Tax_Code__c,\r\n\r\n'Zero VAT Rate UK (UK Output Zero): OUKZ' , 'OUKZ',\r\n'Zero VAT Rate UK (UK Output Zero): OUKZ', 'OUKZ',\r\n'LBR Standard UK VAT: OUKS' , 'OUKS',\r\n'OUKS', 'OUKS',\r\n'Output Sponsorship (Rate Depends): OSPN' , 'OSPN',\r\n'Output Sponsorship (Rate Depends)' , 'OSPN',\r\n'OSPN', 'OSPN',\r\n'Output Sponsorship (Rate Depends): OSPN', 'OSPN',\r\n'UK Output Ticket: OUKT' , 'OUKT',\r\n'UK Output Ticket: OUKT', 'OUKT',\r\n'LBR Standard UK VAT', 'OUKS',\r\n'Output Sponsorship (Belgium): OSPNBEL' , 'OSPNBEL',\r\n'No Sales Tax Registered: N-GB' , 'N-GB',\r\n'BE Output Ticket: OBET' , 'OBET',\r\n'FR Output Ticket: OFRT' , 'OFRT',\r\n'FR Output Standard: OFRS' , 'OFRS',\r\n'IRL Output Ticket: OIET' , 'OIET',\r\n'Output Sponsorship (Ireland): OSPNIRL' , 'OSPNIRL',\r\n'Output Sponsorship (UK): OSPNGBR' , 'OSPNGBR',\r\n'BE Output Ticket: OBEE' , 'OBEE',\r\n'Standard VAT Rate UK: S-GB' , 'S-GB',\r\n'UK Output Exempt: OUKE' , 'OUKE',\r\n'FR Output Exempt: OFRE' , 'OFRE',\r\n'FR Output Zero: OFRZ' , 'OFRZ',\r\n'BE Output Zero: OBEZ' , 'OBEZ',\r\n'Standard TVA rate: TVS' , 'TVS',\r\n'UK Output Ticket: OUKT', 'OUKT',\r\nRIGHT(TEXT(PricebookEntry.Product2.Default_Tax_Code__c),4)\r\n)\r\n\r\n&\r\n\r\nLEFT(Opportunity.Invoice_Contact__r.Account.Sales_Tax_Country_Code__c,3)",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Used in the Finance SUN Report.",
+   "notes": ""
+  },
+  {
+   "n": 33,
+   "label": "Currency ISO Code",
+   "token": "OpportunityLineItemSchedule.CurrencyIsoCode",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "CurrencyIsoCode",
+   "field_label": "Currency ISO Code",
+   "data_type": "picklist",
+   "len_prec": "3",
+   "custom": "No",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "Yes",
+   "picklist_values": "AUD; GBP; CAD; EUR; ZAR; USD; AED",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": "record currency code - drives interpretation of record-currency amounts"
+  },
+  {
+   "n": 34,
+   "label": "Quantity",
+   "token": "OpportunityLineItem.quantityRepeat__c",
+   "source_object": "OpportunityLineItem",
+   "field_api": "quantityRepeat__c",
+   "field_label": "Quantity Repeat",
+   "data_type": "double",
+   "len_prec": "18.0",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "ABS(Quantity)",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "used in the sun report only.",
+   "notes": "report column label differs from field label \"Quantity Repeat\""
+  },
+  {
+   "n": 35,
+   "label": "SUN Unit Price2",
+   "token": "OpportunityLineItemSchedule.SUN_Unit_Price2__c",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "SUN_Unit_Price2__c",
+   "field_label": "SUN Unit Price2",
+   "data_type": "double",
+   "len_prec": "18.2",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "IF(Sales_Defn_Code__c = 'SI' || Sales_Defn_Code__c = 'SIUS',  \r\nRevenue / OpportunityLineItem.Quantity,\r\n(Revenue / OpportunityLineItem.Quantity)*-1)",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Used for the Finance SUN Report.",
+   "notes": ""
+  },
+  {
+   "n": 36,
+   "label": "Net Price",
+   "token": "OpportunityLineItemSchedule.Net_Price__c",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "Net_Price__c",
+   "field_label": "Net Price",
+   "data_type": "double",
+   "len_prec": "18.2",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "Revenue",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Used for the Finance Report",
+   "notes": ""
+  },
+  {
+   "n": 37,
+   "label": "TAX%",
+   "token": "OpportunityLineItemSchedule.TAX__c",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "TAX__c",
+   "field_label": "TAX%",
+   "data_type": "double",
+   "len_prec": "1.0",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Always zero, used for the Finance SUN Report.",
+   "notes": ""
+  },
+  {
+   "n": 38,
+   "label": "Tax",
+   "token": "OpportunityLineItemSchedule.Tax2__c",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "Tax2__c",
+   "field_label": "Tax",
+   "data_type": "double",
+   "len_prec": "18.0",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Field for the SUN Report, always zero.",
+   "notes": ""
+  },
+  {
+   "n": 39,
+   "label": "Total Gross",
+   "token": "OpportunityLineItemSchedule.TOTAL_GROSS__c",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "TOTAL_GROSS__c",
+   "field_label": "Total Gross",
+   "data_type": "double",
+   "len_prec": "18.2",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "Revenue",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Field for the Finance SUN Report.",
+   "notes": ""
+  },
+  {
+   "n": 40,
+   "label": "Item Code Lookup",
+   "token": "OpportunityLineItem.Item_Code_Lookup__c",
+   "source_object": "OpportunityLineItem",
+   "field_api": "Item_Code_Lookup__c",
+   "field_label": "Item Code Lookup",
+   "data_type": "string",
+   "len_prec": "1300",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "PricebookEntry.Product2.Clean_Product_Code__c",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Product Code (again) for the Finance SUN Report.",
+   "notes": ""
+  },
+  {
+   "n": 41,
+   "label": "Line Recurrence",
+   "token": "OpportunityLineItemSchedule.Line_Recurrence__c",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "Line_Recurrence__c",
+   "field_label": "Line Recurrence",
+   "data_type": "string",
+   "len_prec": "1",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Blank field for the Finance SUN Report.",
+   "notes": ""
+  },
+  {
+   "n": 42,
+   "label": "WeekNumber",
+   "token": "Opportunity.WeekNumber__c",
+   "source_object": "Opportunity",
+   "field_api": "WeekNumber__c",
+   "field_label": "WeekNumber",
+   "data_type": "string",
+   "len_prec": "1300",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "Text(YEAR(CloseDate)) & \" - \" &\r\ntext(ISOWEEK( CloseDate ))",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": ""
+  },
+  {
+   "n": 43,
+   "label": "Additional Description 1",
+   "token": "OpportunityLineItem.Additional_Description_1__c",
+   "source_object": "OpportunityLineItem",
+   "field_api": "Additional_Description_1__c",
+   "field_label": "Additional Description 1",
+   "data_type": "string",
+   "len_prec": "60",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Additional product description to go on the invoice, 60 characters max.",
+   "notes": ""
+  },
+  {
+   "n": 44,
+   "label": "Additional Description 2",
+   "token": "OpportunityLineItem.Additional_Description_2__c",
+   "source_object": "OpportunityLineItem",
+   "field_api": "Additional_Description_2__c",
+   "field_label": "Additional Description 2",
+   "data_type": "string",
+   "len_prec": "30",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Additional product description to go on the invoice, 30 characters max.",
+   "notes": ""
+  },
+  {
+   "n": 45,
+   "label": "Payment Terms",
+   "token": "OpportunityLineItem.SBQQ__QuoteLine__c.SBQQ__Quote__c.Payment_Terms_for_SUN_Report__c",
+   "source_object": "SBQQ__Quote__c",
+   "field_api": "Payment_Terms_for_SUN_Report__c",
+   "field_label": "Payment Terms for SUN Report",
+   "data_type": "string",
+   "len_prec": "1300",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "CASE(\r\n SBQQ__PaymentTerms__c,\r\n'Due Upon Receipt of Invoice', '0',\r\n'Net 15', '15',\r\n'Net 30', '30',\r\n'Net 45', '45',\r\n'Net 60', '60',\r\n'Net 90', '90',\r\n'BLANK'\r\n)",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Used in the SUN Report. Transforms the original values of the Payment Terms picklist.",
+   "notes": "report column label differs from field label \"Payment Terms for SUN Report\""
+  },
+  {
+   "n": 46,
+   "label": "Schedule Number",
+   "token": "OpportunityLineItemSchedule.Schedule_Number__c",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "Schedule_Number__c",
+   "field_label": "Schedule Number",
+   "data_type": "string",
+   "len_prec": "1300",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "IF(Revenue < 0, \"CR\", \"IN\") &  Schedule_Autonumber__c",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": ""
+  },
+  {
+   "n": 47,
+   "label": "Close Date",
+   "token": "Opportunity.CloseDate",
+   "source_object": "Opportunity",
+   "field_api": "CloseDate",
+   "field_label": "Close Date",
+   "data_type": "date",
+   "len_prec": "",
+   "custom": "No",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": ""
+  },
+  {
+   "n": 48,
+   "label": "Invoice Internal Comments",
+   "token": "Opportunity.Invoice_Internal_Comments__c",
+   "source_object": "Opportunity",
+   "field_api": "Invoice_Internal_Comments__c",
+   "field_label": "Invoice Internal Comments",
+   "data_type": "string",
+   "len_prec": "255",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Notes for Finance (for internal use only).",
+   "notes": ""
+  },
+  {
+   "n": 49,
+   "label": "Online/Card Payment Reference",
+   "token": "Opportunity.Online_Card_Payment_Reference__c",
+   "source_object": "Opportunity",
+   "field_api": "Online_Card_Payment_Reference__c",
+   "field_label": "Online/Card Payment Reference",
+   "data_type": "string",
+   "len_prec": "255",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Online/Card Payment Reference.",
+   "notes": ""
+  },
+  {
+   "n": 50,
+   "label": "Bio Taker: Full Name",
+   "token": "OpportunityLineItem.Bio_Taker__c.Name",
+   "source_object": "Contact",
+   "field_api": "Name",
+   "field_label": "Full Name",
+   "data_type": "string",
+   "len_prec": "121",
+   "custom": "No",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": ""
+  },
+  {
+   "n": 51,
+   "label": "Comments",
+   "token": "OpportunityLineItemSchedule.Description",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "Description",
+   "field_label": "Comments",
+   "data_type": "string",
+   "len_prec": "80",
+   "custom": "No",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": ""
+  },
+  {
+   "n": 52,
+   "label": "Invoice Contact's Account",
+   "token": "Opportunity.Account_Alternative_Name__c",
+   "source_object": "Opportunity",
+   "field_api": "Account_Alternative_Name__c",
+   "field_label": "Invoice Contact's Account",
+   "data_type": "string",
+   "len_prec": "1300",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "Invoice_Contact__r.Account.Name",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": ""
+  },
+  {
+   "n": 53,
+   "label": "Invoice Contact Name",
+   "token": "Opportunity.Invoice_Contact__c.Name",
+   "source_object": "Contact",
+   "field_api": "Name",
+   "field_label": "Full Name",
+   "data_type": "string",
+   "len_prec": "121",
+   "custom": "No",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": "report column label differs from field label \"Full Name\""
+  },
+  {
+   "n": 54,
+   "label": "Invoice Contact Address",
+   "token": "Opportunity.Invoice_Contact__c.Account.BillingStreet",
+   "source_object": "Account",
+   "field_api": "BillingStreet",
+   "field_label": "Billing Street",
+   "data_type": "textarea",
+   "len_prec": "255",
+   "custom": "No",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": "report column label differs from field label \"Billing Street\""
+  },
+  {
+   "n": 55,
+   "label": "Invoice Contact City",
+   "token": "Opportunity.Invoice_Contact__c.Account.BillingCity",
+   "source_object": "Account",
+   "field_api": "BillingCity",
+   "field_label": "Billing City",
+   "data_type": "string",
+   "len_prec": "40",
+   "custom": "No",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": "report column label differs from field label \"Billing City\""
+  },
+  {
+   "n": 56,
+   "label": "Invoice Contact Postcode",
+   "token": "Opportunity.Invoice_Contact__c.Account.BillingPostalCode",
+   "source_object": "Account",
+   "field_api": "BillingPostalCode",
+   "field_label": "Billing Zip/Postal Code",
+   "data_type": "string",
+   "len_prec": "20",
+   "custom": "No",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": "report column label differs from field label \"Billing Zip/Postal Code\""
+  },
+  {
+   "n": 57,
+   "label": "Invoice Contact Country",
+   "token": "Opportunity.Invoice_Contact__c.Account.BillingCountryCode",
+   "source_object": "Account",
+   "field_api": "BillingCountryCode",
+   "field_label": "Billing Country Code",
+   "data_type": "picklist",
+   "len_prec": "10",
+   "custom": "No",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "Yes",
+   "picklist_values": "see Picklists sheet - 251 values",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": "report column label differs from field label \"Billing Country Code\""
+  },
+  {
+   "n": 58,
+   "label": "Invoice Contact VAT Number",
+   "token": "Opportunity.Invoice_Contact__c.Account.Sales_Tax_Number__c",
+   "source_object": "Account",
+   "field_api": "Sales_Tax_Number__c",
+   "field_label": "Sales Tax Number",
+   "data_type": "string",
+   "len_prec": "255",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "The sales tax number of the account, including VAT.",
+   "notes": "report column label differs from field label \"Sales Tax Number\""
+  },
+  {
+   "n": 59,
+   "label": "Invoice Contact Email",
+   "token": "Opportunity.Invoice_Contact__c.Email",
+   "source_object": "Contact",
+   "field_api": "Email",
+   "field_label": "Email",
+   "data_type": "email",
+   "len_prec": "80",
+   "custom": "No",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": "report column label differs from field label \"Email\""
+  },
+  {
+   "n": 60,
+   "label": "Invoice Contact Phone",
+   "token": "Opportunity.Invoice_Contact__c.Phone",
+   "source_object": "Contact",
+   "field_api": "Phone",
+   "field_label": "Business Phone",
+   "data_type": "phone",
+   "len_prec": "40",
+   "custom": "No",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": "report column label differs from field label \"Business Phone\""
+  },
+  {
+   "n": 61,
+   "label": "Product Name",
+   "token": "OpportunityLineItem.PricebookEntry.Product2.Name",
+   "source_object": "Product2",
+   "field_api": "Name",
+   "field_label": "Product Name",
+   "data_type": "string",
+   "len_prec": "255",
+   "custom": "No",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": ""
+  },
+  {
+   "n": 62,
+   "label": "Opportunity Name",
+   "token": "Opportunity.Name",
+   "source_object": "Opportunity",
+   "field_api": "Name",
+   "field_label": "Name",
+   "data_type": "string",
+   "len_prec": "120",
+   "custom": "No",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": "report column label differs from field label \"Name\""
+  },
+  {
+   "n": 63,
+   "label": "Employee",
+   "token": "Opportunity.Owner.Name",
+   "source_object": "User",
+   "field_api": "Name",
+   "field_label": "Full Name",
+   "data_type": "string",
+   "len_prec": "121",
+   "custom": "No",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": "report column label differs from field label \"Full Name\""
+  },
+  {
+   "n": 64,
+   "label": "Original Opportunity",
+   "token": "Opportunity.Order__c.OriginalOrder.Opportunity.Name",
+   "source_object": "Opportunity",
+   "field_api": "Name",
+   "field_label": "Name",
+   "data_type": "string",
+   "len_prec": "120",
+   "custom": "No",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": "report column label differs from field label \"Name\""
+  },
+  {
+   "n": 65,
+   "label": "Original Opportunity ID",
+   "token": "Opportunity.Order__c.OriginalOrder.Opportunity.Opportunity_Salesforce_ID__c",
+   "source_object": "Opportunity",
+   "field_api": "Opportunity_Salesforce_ID__c",
+   "field_label": "Opportunity Salesforce ID",
+   "data_type": "string",
+   "len_prec": "1300",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "CASESAFEID(Id)",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": "report column label differs from field label \"Opportunity Salesforce ID\""
+  },
+  {
+   "n": 66,
+   "label": "Primary Quote: PO Number",
+   "token": "Opportunity.SBQQ__PrimaryQuote__c.PO_Number__c",
+   "source_object": "SBQQ__Quote__c",
+   "field_api": "PO_Number__c",
+   "field_label": "PO Number",
+   "data_type": "string",
+   "len_prec": "255",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": ""
+  },
+  {
+   "n": 67,
+   "label": "Revenue (converted)",
+   "token": "OpportunityLineItemSchedule.Revenue.CONVERT",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "Revenue",
+   "field_label": "Revenue",
+   "data_type": "currency",
+   "len_prec": "18.2",
+   "custom": "No",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": "converted (ACM) - report converts to report currency GBP. report column label differs from field label \"Revenue\""
+  },
+  {
+   "n": 68,
+   "label": "Type",
+   "token": "Opportunity.Type",
+   "source_object": "Opportunity",
+   "field_api": "Type",
+   "field_label": "Opportunity Type",
+   "data_type": "picklist",
+   "len_prec": "255",
+   "custom": "No",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "Yes",
+   "picklist_values": "Auto-Renewal; Downgrade; New Business; Renewal; Repeat Business; Upsell; Cancellation; Auto-Repeat Business",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": "report column label differs from field label \"Opportunity Type\""
+  },
+  {
+   "n": 69,
+   "label": "Opportunity ID",
+   "token": "Opportunity.Id",
+   "source_object": "Opportunity",
+   "field_api": "Id",
+   "field_label": "Opportunity ID",
+   "data_type": "id",
+   "len_prec": "18",
+   "custom": "No",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": ""
+  },
+  {
+   "n": 70,
+   "label": "Quote Line: Product Date",
+   "token": "OpportunityLineItem.SBQQ__QuoteLine__c.Product_Date__c",
+   "source_object": "SBQQ__QuoteLine__c",
+   "field_api": "Product_Date__c",
+   "field_label": "Product Date",
+   "data_type": "date",
+   "len_prec": "",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": ""
+  },
+  {
+   "n": 71,
+   "label": "Primary Quote: Start Date",
+   "token": "Opportunity.SBQQ__PrimaryQuote__c.SBQQ__StartDate__c",
+   "source_object": "SBQQ__Quote__c",
+   "field_api": "SBQQ__StartDate__c",
+   "field_label": "Start Date",
+   "data_type": "date",
+   "len_prec": "",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Start date for subscriptions in this quote.",
+   "notes": ""
+  },
+  {
+   "n": 72,
+   "label": "Primary Quote: Subscription Term",
+   "token": "Opportunity.SBQQ__PrimaryQuote__c.SBQQ__SubscriptionTerm__c",
+   "source_object": "SBQQ__Quote__c",
+   "field_api": "SBQQ__SubscriptionTerm__c",
+   "field_label": "Subscription Term",
+   "data_type": "double",
+   "len_prec": "5.0",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Subscription term used to prorate eligible products by day or month.  This has been set by your administrator.",
+   "notes": ""
+  },
+  {
+   "n": 73,
+   "label": "Quote: SUN End Date",
+   "token": "OpportunityLineItem.SBQQ__QuoteLine__c.End_Date_SUN_Report__c",
+   "source_object": "SBQQ__QuoteLine__c",
+   "field_api": "End_Date_SUN_Report__c",
+   "field_label": "End Date SUN Report",
+   "data_type": "date",
+   "len_prec": "",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "IF\r\n\r\n(\r\nAND(NOT(ISBLANK(Original_End_Date__c)), TEXT(SBQQ__Quote__r.SBQQ__Type__c) = \"Amendment\")\r\n,\r\n\r\nOriginal_End_Date__c,\r\n\r\n\r\n\r\nCASE(SBQQ__Product__r.Date_Logic_Group__c,\r\n\"1\", SBQQ__Product__r.Product_Date__c,\r\n\"2\", Effective_End_Date__c,\r\n\"3\", Effective_End_Date__c,\r\n\"4\", SBQQ__Quote__r.SBQQ__Opportunity2__r.CloseDate,\r\n\"5\", ADDMONTHS(SBQQ__Quote__r.SBQQ__Opportunity2__r.CloseDate,2),\r\n\"6\", SBQQ__EffectiveStartDate__c,\r\n\"7\",DATE(YEAR(SBQQ__Product__r.Product_Date__c)+1, MONTH(SBQQ__Product__r.Product_Date__c), 15),\r\n\"8\",DATE(YEAR(SBQQ__Product__r.Product_Date__c)+2, MONTH(SBQQ__Product__r.Product_Date__c), 15),\r\nNULL\r\n)\r\n\r\n)",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Combined End Date for SUN Report",
+   "notes": "report column label differs from field label \"End Date SUN Report\""
+  },
+  {
+   "n": 74,
+   "label": "Company3",
+   "token": "OpportunityLineItem.Company3__c",
+   "source_object": "OpportunityLineItem",
+   "field_api": "Company3__c",
+   "field_label": "Company3",
+   "data_type": "string",
+   "len_prec": "1300",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "IF(\r\n\r\nAND(NOT(CONTAINS(PricebookEntry.Product2.Name, 'Webinar')), TEXT(PricebookEntry.Product2.Revenue_Stream__c) = 'Conferences'),\r\n\r\nCASE(\r\n PricebookEntry.Product2.Event_Location_Country__c,\r\n 'United States', 'LLC',\r\n 'United States of America', 'LLC',\r\n 'USA', 'LLC',\r\n 'Hong Kong', 'GHK',\r\n IF( TEXT(Opportunity.Owner.LBR_Legal_Entity__c) = 'Law Business Research (Asia) Ltd.', 'GHK', 'LBR')\r\n),\r\n\r\nIF( TEXT(Opportunity.Owner.LBR_Legal_Entity__c) = 'Law Business Research (Asia) Ltd.', 'GHK', 'LBR') \r\n)",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "to test the new logic behind the Company2 field",
+   "notes": ""
+  },
+  {
+   "n": 75,
+   "label": "Quote Line: Start Date SUN Report2",
+   "token": "OpportunityLineItem.SBQQ__QuoteLine__c.Start_Date_SUN_Report2__c",
+   "source_object": "SBQQ__QuoteLine__c",
+   "field_api": "Start_Date_SUN_Report2__c",
+   "field_label": "Start Date SUN Report2",
+   "data_type": "date",
+   "len_prec": "",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "CASE(SBQQ__Product__r.Date_Logic_Group__c,\r\n\"1\", SBQQ__Product__r.Product_Date__c,\r\n\"2\", SBQQ__EffectiveStartDate__c,\r\n\"3\", SBQQ__EffectiveStartDate__c,\r\n\"4\", SBQQ__Quote__r.SBQQ__Opportunity2__r.CloseDate,\r\n\"5\", ADDMONTHS(SBQQ__Quote__r.SBQQ__Opportunity2__r.CloseDate,2),\r\n\"6\", SBQQ__EffectiveStartDate__c,\r\n\"7\",DATE(YEAR( SBQQ__Product__r.Product_Date__c), MONTH(SBQQ__Product__r.Product_Date__c), 16),\r\n\"8\",DATE(YEAR( SBQQ__Product__r.Product_Date__c), MONTH(SBQQ__Product__r.Product_Date__c), 16),\r\nNULL\r\n)",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Field to test the new SUN start date report formula",
+   "notes": ""
+  },
+  {
+   "n": 76,
+   "label": "Quote Line: End Date SUN Report2",
+   "token": "OpportunityLineItem.SBQQ__QuoteLine__c.End_Date_SUN_Report2__c",
+   "source_object": "SBQQ__QuoteLine__c",
+   "field_api": "End_Date_SUN_Report2__c",
+   "field_label": "End Date SUN Report2",
+   "data_type": "date",
+   "len_prec": "",
+   "custom": "Yes",
+   "formula": "Yes",
+   "formula_text": "CASE(SBQQ__Product__r.Date_Logic_Group__c,\r\n\"1\", SBQQ__Product__r.Product_Date__c,\r\n\"2\", Effective_End_Date__c,\r\n\"3\", Effective_End_Date__c,\r\n\"4\", SBQQ__Quote__r.SBQQ__Opportunity2__r.CloseDate,\r\n\"5\", ADDMONTHS(SBQQ__Quote__r.SBQQ__Opportunity2__r.CloseDate,2),\r\n\"6\", SBQQ__EffectiveStartDate__c,\r\n\"7\",DATE(YEAR(SBQQ__Product__r.Product_Date__c)+1, MONTH(SBQQ__Product__r.Product_Date__c), 15),\r\n\"8\",DATE(YEAR(SBQQ__Product__r.Product_Date__c)+2, MONTH(SBQQ__Product__r.Product_Date__c), 15),\r\nNULL\r\n)",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "Field to test the new SUN start date report formula",
+   "notes": ""
+  },
+  {
+   "n": 77,
+   "label": "Invoice Email Address",
+   "token": "Opportunity.Account.Invoice_Email_Address__c",
+   "source_object": "Account",
+   "field_api": "Invoice_Email_Address__c",
+   "field_label": "Invoice Email Address",
+   "data_type": "email",
+   "len_prec": "80",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "An extra email that the invoice will be sent to",
+   "notes": ""
+  },
+  {
+   "n": 78,
+   "label": "Price Book Entry: Product: Reporting Stream",
+   "token": "OpportunityLineItem.PricebookEntry.Product2.Reporting_Stream__c",
+   "source_object": "Product2",
+   "field_api": "Reporting_Stream__c",
+   "field_label": "Reporting Stream",
+   "data_type": "picklist",
+   "len_prec": "255",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "Yes",
+   "picklist_values": "see Picklists sheet - 122 values",
+   "lookup_to": "",
+   "help_text": "This field is used for reporting purposes.",
+   "notes": ""
+  },
+  {
+   "n": 79,
+   "label": "CPQ Amendment - Invoice/Credit Note",
+   "token": "OpportunityLineItem.CPQ_Amendment_Invoice_Credit_Note__c",
+   "source_object": "OpportunityLineItem",
+   "field_api": "CPQ_Amendment_Invoice_Credit_Note__c",
+   "field_label": "CPQ Amendment - Invoice/Credit Note",
+   "data_type": "boolean",
+   "len_prec": "",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "No",
+   "picklist_values": "",
+   "lookup_to": "",
+   "help_text": "This temporary field is used to flag opportunities with a credit note and invoice line item generated through the CPQ Amendment process.",
+   "notes": ""
+  },
+  {
+   "n": 80,
+   "label": "Billing Entity",
+   "token": "Opportunity.Billing_Entity__c",
+   "source_object": "Opportunity",
+   "field_api": "Billing_Entity__c",
+   "field_label": "Billing Entity",
+   "data_type": "picklist",
+   "len_prec": "255",
+   "custom": "Yes",
+   "formula": "No",
+   "formula_text": "",
+   "picklist": "Yes",
+   "picklist_values": "LBR; GHK; LLC; MBL; ALM",
+   "lookup_to": "",
+   "help_text": "",
+   "notes": ""
+  }
+ ],
+ "filters": [
+  {
+   "n": 1,
+   "token": "Opportunity.StageName",
+   "source_object": "Opportunity",
+   "field_api": "StageName",
+   "operator": "equals",
+   "value": "Closed Won,Closed Won - Cancellation",
+   "notes": "picklist filter"
+  },
+  {
+   "n": 2,
+   "token": "OpportunityLineItemSchedule.TOTAL_GROSS__c",
+   "source_object": "OpportunityLineItemSchedule",
+   "field_api": "TOTAL_GROSS__c",
+   "operator": "notEqual",
+   "value": "0.00",
+   "notes": ""
+  },
+  {
+   "n": 3,
+   "token": "Opportunity.Name",
+   "source_object": "Opportunity",
+   "field_api": "Name",
+   "operator": "notContain",
+   "value": "delete,duplicate",
+   "notes": ""
+  },
+  {
+   "n": 4,
+   "token": "OpportunityLineItem.Product_Family__c",
+   "source_object": "OpportunityLineItem",
+   "field_api": "Product_Family__c",
+   "operator": "notEqual",
+   "value": "Subs - MBL Seminars,Subs - Docket Navigator",
+   "notes": ""
+  },
+  {
+   "n": 5,
+   "token": "OpportunityLineItem.PricebookEntry.Product2.Division__c",
+   "source_object": "Product2",
+   "field_api": "Division__c",
+   "operator": "notEqual",
+   "value": "ALM",
+   "notes": "picklist filter"
+  },
+  {
+   "n": 6,
+   "token": "OpportunityLineItem.PricebookEntry.Product2.Event_Category__c",
+   "source_object": "Product2",
+   "field_api": "Event_Category__c",
+   "operator": "notEqual",
+   "value": "ALM",
+   "notes": "picklist filter"
+  }
+ ],
+ "picklists": [
+  [
+   "Account",
+   "BillingCountryCode",
+   "AF",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "AX",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "AL",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "DZ",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "AS",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "AD",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "AO",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "AI",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "AQ",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "AG",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "AR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "AM",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "AW",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "AU",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "AT",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "AZ",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "BS",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "BH",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "BD",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "BB",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "BY",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "BE",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "BZ",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "BJ",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "BM",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "BT",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "BO",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "BQ",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "BA",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "BW",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "BV",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "BR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "IO",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "BN",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "BG",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "BF",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "BI",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "KH",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "CM",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "CA",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "CV",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "KY",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "CF",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "TD",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "CL",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "CN",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "CX",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "CC",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "CO",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "KM",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "CG",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "CD",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "CK",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "CR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "CI",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "HR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "CU",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "CW",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "CY",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "CZ",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "DK",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "DJ",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "DM",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "DO",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "EC",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "EG",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "SV",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "GQ",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "ER",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "EE",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "ET",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "FK",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "FO",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "FJ",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "FI",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "FR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "GF",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "PF",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "TF",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "GA",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "GM",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "GE",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "DE",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "GH",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "GI",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "GR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "GL",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "GD",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "GP",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "GU",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "GT",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "GG",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "GN",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "GW",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "GY",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "HT",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "HM",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "VA",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "HN",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "HK",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "HU",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "IS",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "IN",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "ID",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "IR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "IQ",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "IE",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "IM",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "IL",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "IT",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "JM",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "JP",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "JE",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "JO",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "KZ",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "KE",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "KI",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "KP",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "KR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "KW",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "KG",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "LA",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "LV",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "LB",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "LS",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "LR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "LY",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "LI",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "LT",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "LU",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "MO",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "MK",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "MG",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "MW",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "MY",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "MV",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "ML",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "MT",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "MH",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "MQ",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "MR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "MU",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "YT",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "MX",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "FM",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "MD",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "MC",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "MN",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "ME",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "MS",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "MA",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "MZ",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "MM",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "NA",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "NR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "NP",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "NL",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "AN",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "NC",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "NZ",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "NI",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "NE",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "NG",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "NU",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "NF",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "MP",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "NO",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "OM",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "PK",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "PW",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "PS",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "PA",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "PG",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "PY",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "PE",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "PH",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "PN",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "PL",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "PT",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "QA",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "KOS",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "RE",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "RO",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "RU",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "RW",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "BL",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "SH",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "KN",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "LC",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "MF",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "PM",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "VC",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "WS",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "SM",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "ST",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "SA",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "SN",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "RS",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "CS",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "SC",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "SL",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "SG",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "SX",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "SK",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "SI",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "SB",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "SO",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "ZA",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "GS",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "SS",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "ES",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "LK",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "SD",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "SR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "SJ",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "SZ",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "SE",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "CH",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "SY",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "TWN",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "TJ",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "TZ",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "TH",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "TL",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "TG",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "TK",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "TO",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "TT",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "TN",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "TR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "TM",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "TC",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "TV",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "UG",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "UA",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "AE",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "GB",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "US",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "UM",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "UY",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "UZ",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "VU",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "VE",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "VN",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "VG",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "VIR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "WF",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "EH",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "YE",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "ZM",
+   "Yes",
+   "No"
+  ],
+  [
+   "Account",
+   "BillingCountryCode",
+   "ZW",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Advertising - GAR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Advertising - GBRR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Advertising - GCR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Advertising - GDR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Advertising - GIR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Advertising - GRR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Advertising - IAM",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Advertising - LACCA",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Advertising - Lexology",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Advertising - LL",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Advertising - WTR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "AllHires",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "ALM - Regional Publication",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "ALM - Subscription",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Consulting",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - CCF",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - GAR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - GAR Masterclass",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - GBRR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - GBRR Masterclass",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - GCC",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - GCR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - GCR Masterclass",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - GDR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - GDR Masterclass",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - GE",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - GIL",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - GILFF",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - GIR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - GIR Masterclass",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - GLC",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - GLL",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - GRR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - GRR Masterclass",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - iam",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - IAM Masterclass",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - Innovation Awards",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - IPBC",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - IP Masterclass",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - LACCA",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - Lawyer Awards",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - Leadership",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - Legal Awards",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - Legal Week",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - Lex Masterclass",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - Lexology",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - Lexology Index",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - LIL",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - LL",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - LL Masterclass",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - PCE",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - PCGE",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - Roundtable",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - STF",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - Tech Awards",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - WIPL",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - Women's Legal Awards",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - WTR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - WTR Masterclass",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Expert Insight - GAR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Expert Insight - GCR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Expert Insight - GDR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Expert Insight - GIR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Expert Insight - GRR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Expert Insight - iam",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Expert Insight - Lacca",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Expert Insight - Latin Lawyer",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Expert Insight - Lexology In-Depth",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Expert Insight - Lexology Panoramic",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Expert Insight - Lexology Panoramic License Agreements",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Expert Insight - WTR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Instruct Counsel",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "LawCareers.Net",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Not Applicable",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Other - Lex (Advertising & CCdirectory)",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Performance Data - GAR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Performance Data - GBRR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Performance Data - GCR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Performance Data - GDR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Performance Data - GIR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Performance Data - GRR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Performance Data - iam",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Performance Data - Lexology",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Performance Data - Lexology Index",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Performance Data - LL",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Performance Data - WTR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Placeholder",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "POS - LJP",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "POS - Reports",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "POS - VSROC",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - CLE",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - CLP",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - Docket Navigator",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - DRA",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - ILO",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - Law.com",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - Legal Monitor",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - Lexology Academic",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - Lexology Compete",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - Lexology Intelligence",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - Lexology Pro",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - Lexology Pro LMI",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - Licences Lexology Panoramic",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - LJN",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - LJP",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - MBL Seminars",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - Memberships",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - Regional",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - Reports",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - Specialist Platforms GAR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - Specialist Platforms GBRR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - Specialist Platforms GCR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - Specialist Platforms GDR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - Specialist Platforms GIR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - Specialist Platforms GRR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - Specialist Platforms iam",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - Specialist Platforms LL",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - Specialist Platforms WTR",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Subs - VS",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - Law Awards",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "Events - Journal Awards",
+   "Yes",
+   "No"
+  ],
+  [
+   "Product2",
+   "Reporting_Stream__c",
+   "POS - Law.com",
+   "Yes",
+   "No"
+  ]
+ ],
+ "meta": {
+  "reportType": {
+   "label": "Opportunities With or Without Products & Schedules",
+   "type": "Opportunities_With_or_Without_Products_Schedules__c"
+  },
+  "scope": "organization",
+  "currency": "GBP",
+  "booleanFilter": null,
+  "standardDateFilter": {
+   "column": "Opportunity.CloseDate",
+   "durationValue": "THIS_MONTH",
+   "endDate": "2026-08-31",
+   "startDate": "2026-08-01"
+  },
+  "cdf": {
+   "CDF1": {
+    "dataType": "date",
+    "decimalPlaces": 2,
+    "description": null,
+    "formula": "IF\n\n((IF(OpportunityLineItemSchedule.lineReviewDate__c <= OpportunityLineItem.SBQQ__QuoteLine__c.Start_Date_SUN_Report__c, OpportunityLineItemSchedule.lineReviewDate__c, OpportunityLineItem.SBQQ__QuoteLine__c.Start_Date_SUN_Report__c))\n\n<= OpportunityLineItem.SBQQ__QuoteLine__c.End_Date_SUN_Report__c,\n\n\n(IF(OpportunityLineItemSchedule.lineReviewDate__c <= OpportunityLineItem.SBQQ__QuoteLine__c.Start_Date_SUN_Report__c, OpportunityLineItemSchedule.lineReviewDate__c, OpportunityLineItem.SBQQ__QuoteLine__c.Start_Date_SUN_Report__c)),\n\nOpportunityLineItem.SBQQ__QuoteLine__c.End_Date_SUN_Report__c\n\n)",
+    "formulaType": "date",
+    "label": "Start Date Time"
+   }
+  }
+ }
+}

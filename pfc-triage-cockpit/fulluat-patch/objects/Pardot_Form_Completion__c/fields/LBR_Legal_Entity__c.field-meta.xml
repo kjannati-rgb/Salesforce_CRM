@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LBR_Legal_Entity__c</fullName>
+    <externalId>false</externalId>
+    <formula>CASE( Sales_Rep__r.LBR_Legal_Entity__c,
+&quot;Law Business Research (UK) Ltd.&quot;, &quot;UK&quot;,
+&quot;Law Business Research (Asia) Ltd.&quot;, &quot;Asia&quot;,
+&quot;Law Business Research LLC&quot;, &quot;US&quot;,
+&quot;Unknown&quot;
+
+
+)</formula>
+    <inlineHelpText>LBR Legal Entity of the Sales Rep assigned to the Form Completion</inlineHelpText>
+    <label>LBR Legal Entity</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

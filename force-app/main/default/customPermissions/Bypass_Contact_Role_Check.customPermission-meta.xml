@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomPermission xmlns="http://soap.sforce.com/2006/04/metadata">
+    <isLicensed>false</isLicensed>
+    <label>Bypass Contact Role Check</label>
+    <description>Users/profiles with this permission are exempt from the Opportunity Contact Role completeness block. Replaces the old hardcoded profile-name list in the validation rule.</description>
+</CustomPermission>

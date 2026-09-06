@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Unassigned_Forms_Lex_Pro</fullName>
+    <columns>NAME</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>Country__c</columns>
+    <columns>Prospect_Name__c</columns>
+    <columns>Company__c</columns>
+    <columns>Organisation_Type__c</columns>
+    <columns>Job_Role__c</columns>
+    <columns>Job_Title__c</columns>
+    <columns>UPDATEDBY_USER</columns>
+    <columns>Sales_Stage__c</columns>
+    <columns>OWNER.FIRST_NAME</columns>
+    <columns>Lead__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>NAME</field>
+        <operation>contains</operation>
+        <value>Lexology PRO</value>
+    </filters>
+    <filters>
+        <field>OWNER.ALIAS</field>
+        <operation>contains</operation>
+        <value>B2BMA</value>
+    </filters>
+    <filters>
+        <field>CREATED_DATE</field>
+        <operation>greaterThan</operation>
+        <value>6/1/2023 12:00 AM</value>
+    </filters>
+    <filters>
+        <field>Sales_Stage__c</field>
+        <operation>notEqual</operation>
+        <value>Working,Nurturing,Converted,Disqualified</value>
+    </filters>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Pardot_Form_Completion__c.Form_Completion</value>
+    </filters>
+    <label>Unassigned Forms: Lex Pro</label>
+</ListView>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Annual_Uplift__c</fullName>
+    <description>Previous Annual Contract Value vs Annual Contract Value</description>
+    <inlineHelpText>Previous Annual Contract Value vs Annual Contract Value</inlineHelpText>
+    <label>% Annual Uplift</label>
+    <precision>8</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Percent</type>
+</CustomField>

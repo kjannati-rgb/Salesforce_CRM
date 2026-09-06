@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sales_Development_Representative__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Stores the User record of the Sales Development Representative (SDR) associated to the Opportunity via the Opportunity Contact Role where Role = “Sales Development Representative”. This field is used to enable reporting, filtering, and searchability (e.g. in Clari Inspect) for SDR contribution where the SDR is not the Opportunity Owner.</description>
+    <inlineHelpText>Auto-populated from the Opportunity Contact Role where Role = “Sales Development Representative”. Used for visibility and reporting of SDR involvement. Do not manually edit.</inlineHelpText>
+    <label>Sales Development Representative</label>
+    <referenceTo>User</referenceTo>
+    <relationshipName>Opportunities4</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Lookup</type>
+</CustomField>

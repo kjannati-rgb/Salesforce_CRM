@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cancellation_Reason__c</fullName>
+    <label>Cancellation Reason</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Duplicate opportunity has been entered</fullName>
+                <default>false</default>
+                <label>Duplicate opportunity has been entered</label>
+            </value>
+            <value>
+                <fullName>Opportunity has been finalized as part of a larger deal, or under a different firm</fullName>
+                <default>false</default>
+                <label>Opportunity has been finalized as part of a larger deal, or under a different firm</label>
+            </value>
+            <value>
+                <fullName>Products have been discontinued</fullName>
+                <default>false</default>
+                <label>Products have been discontinued</label>
+            </value>
+            <value>
+                <fullName>Other circumstances as agreed by Sales Management for one-off reasons</fullName>
+                <default>false</default>
+                <label>Other circumstances as agreed by Sales Management for one-off reasons</label>
+            </value>
+            <value>
+                <fullName>No Fault Cancellations</fullName>
+                <default>false</default>
+                <label>No Fault Cancellations</label>
+            </value>
+            <value>
+                <fullName>Cancellation to be Reissued</fullName>
+                <default>false</default>
+                <label>Cancellation to be Reissued</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

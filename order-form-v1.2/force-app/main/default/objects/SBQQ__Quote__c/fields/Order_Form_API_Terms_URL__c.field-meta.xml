@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Order_Form_API_Terms_URL__c</fullName>
+    <description>API Terms URL for the Order Form intro anchor; blank when the quote has no API-access product so the hardcoded anchor renders nothing.</description>
+    <externalId>false</externalId>
+    <formula>IF(Includes_API_Access__c, 'https://www.centellic.com/product-specific-terms-api-terms/', '')</formula>
+    <formulaTreatBlanksAs>BlankAsBlank</formulaTreatBlanksAs>
+    <label>Order Form API Terms URL</label>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

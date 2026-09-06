@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>isRenewal__c</fullName>
+    <description>Used for Reporting</description>
+    <formula>IF(
+
+RecordType.Name = &quot;New Business&quot;, FALSE, TRUE
+
+)</formula>
+    <inlineHelpText>Used for Reporting</inlineHelpText>
+    <label>isRenewal</label>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

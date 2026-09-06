@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Nascent_flag__c</fullName>
+    <formula>IF ( ISPICKVAL(Previous_Opportunity__r.Type,&apos;New Business&apos;), True, false)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>First time an Opportunity is renewed.</inlineHelpText>
+    <label>Nascent flag</label>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

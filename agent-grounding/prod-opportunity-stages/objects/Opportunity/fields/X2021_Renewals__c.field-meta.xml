@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>X2021_Renewals__c</fullName>
+    <description>Used to reconcile the renewal opportunities during migration. To be removed at a later stage.</description>
+    <label>2021 Renewals</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>GDR</fullName>
+                <default>false</default>
+                <label>GDR</label>
+            </value>
+            <value>
+                <fullName>GCR</fullName>
+                <default>false</default>
+                <label>GCR</label>
+            </value>
+            <value>
+                <fullName>GAR</fullName>
+                <default>false</default>
+                <label>GAR</label>
+            </value>
+            <value>
+                <fullName>GIR</fullName>
+                <default>false</default>
+                <label>GIR</label>
+            </value>
+            <value>
+                <fullName>GRR</fullName>
+                <default>false</default>
+                <label>GRR</label>
+            </value>
+            <value>
+                <fullName>LL</fullName>
+                <default>false</default>
+                <label>LL</label>
+            </value>
+            <value>
+                <fullName>IAM</fullName>
+                <default>false</default>
+                <label>IAM</label>
+            </value>
+            <value>
+                <fullName>WTR</fullName>
+                <default>false</default>
+                <label>WTR</label>
+            </value>
+            <value>
+                <fullName>Lex Pro</fullName>
+                <default>false</default>
+                <label>Lex Pro</label>
+            </value>
+            <value>
+                <fullName>Lex ILO</fullName>
+                <default>false</default>
+                <label>Lex ILO</label>
+            </value>
+            <value>
+                <fullName>Lex Inform</fullName>
+                <default>false</default>
+                <label>Lex Inform</label>
+            </value>
+            <value>
+                <fullName>Lex GTDT</fullName>
+                <default>false</default>
+                <label>Lex GTDT</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

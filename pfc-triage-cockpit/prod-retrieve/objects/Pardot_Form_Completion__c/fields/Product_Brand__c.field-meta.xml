@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Product_Brand__c</fullName>
+    <description>REV-57: filterable brand-grain stamp set by the PFC orchestrator (Newsfeed = Lexology). Enables cross-link matching that the Brand__c formula cannot, since Brand__c returns &quot;Other&quot; when Form_Name__c is null (all newsfeed records).</description>
+    <label>Product Brand</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Lexology</fullName>
+                <default>false</default>
+                <label>Lexology</label>
+            </value>
+            <value>
+                <fullName>GAR</fullName>
+                <default>false</default>
+                <label>GAR</label>
+            </value>
+            <value>
+                <fullName>GCR</fullName>
+                <default>false</default>
+                <label>GCR</label>
+            </value>
+            <value>
+                <fullName>GIR</fullName>
+                <default>false</default>
+                <label>GIR</label>
+            </value>
+            <value>
+                <fullName>GRR</fullName>
+                <default>false</default>
+                <label>GRR</label>
+            </value>
+            <value>
+                <fullName>GDR</fullName>
+                <default>false</default>
+                <label>GDR</label>
+            </value>
+            <value>
+                <fullName>Latin Lawyer</fullName>
+                <default>false</default>
+                <label>Latin Lawyer</label>
+            </value>
+            <value>
+                <fullName>GBRR</fullName>
+                <default>false</default>
+                <label>GBRR</label>
+            </value>
+            <value>
+                <fullName>IAM</fullName>
+                <default>false</default>
+                <label>IAM</label>
+            </value>
+            <value>
+                <fullName>WTR</fullName>
+                <default>false</default>
+                <label>WTR</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Renewal_Opportunties_Sub_No_Lines</fullName>
+    <columns>OPPORTUNITY.NAME</columns>
+    <columns>ACCOUNT.NAME</columns>
+    <columns>OPPORTUNITY.STAGE_NAME</columns>
+    <columns>OPPORTUNITY.CLOSE_DATE</columns>
+    <columns>OPPORTUNITY.AMOUNT</columns>
+    <columns>CORE.USERS.ALIAS</columns>
+    <columns>OPPORTUNITY_SCORE</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>No_of_Line_Items__c</field>
+        <operation>equals</operation>
+        <value>0</value>
+    </filters>
+    <filters>
+        <field>OPPORTUNITY.TYPE</field>
+        <operation>equals</operation>
+        <value>Auto-Renewal,Renewal,Repeat Business</value>
+    </filters>
+    <filters>
+        <field>Opportunity_Owner_Team__c</field>
+        <operation>contains</operation>
+        <value>Content sub,Lexology Pro,Lex Pro</value>
+    </filters>
+    <filters>
+        <field>Budget_Renewal_Date__c</field>
+        <operation>equals</operation>
+        <value>THIS_YEAR</value>
+    </filters>
+    <label>Renewal Opportunties - Sub No Lines</label>
+</ListView>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Route_Preferred_Roles__c</fullName>
+    <description>Comma-separated Account Team roles, in priority order, that "Route to Account Team" prefers when picking the recipient on the firm's account team (e.g. "LexPro BDM,Customer Success Manager"). Earlier in the list wins. Blank = first team member.</description>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Route Preferred Roles</label>
+    <length>255</length>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

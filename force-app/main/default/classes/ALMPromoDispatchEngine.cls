@@ -44,10 +44,86 @@ public without sharing class ALMPromoDispatchEngine {
         @InvocableVariable public String gapMessage;        // human-readable list for the save-time Custom Error
     }
 
+    // ====================================================================
+    // Transaction idempotency cache (2026-08-27, SOQL-101 incident follow-up).
+    // CPQ saves the same quote several times inside one transaction (opp sync,
+    // calc), so Layer 1 used to run its full query+derive 3-4x per save chain.
+    // Repeat invocations now cost ONE probe query: if the quote's line set and
+    // derivation inputs are unchanged since this transaction's last run, the
+    // cached FlowResult (incl. hasGap for the save-time Custom Error) is
+    // returned untouched. Any change falls through to a full fresh run.
+    // ====================================================================
+    @TestVisible static Map<Id, FlowResult> txnResultByQuote = new Map<Id, FlowResult>();
+    @TestVisible static Map<Id, String> txnSignatureByQuote = new Map<Id, String>();
+    @TestVisible static Boolean txnCacheEnabled = !Test.isRunningTest();
+
+    @TestVisible
+    static String lineSignature(List<SBQQ__QuoteLine__c> lines) {
+        List<String> parts = new List<String>();
+        for (SBQQ__QuoteLine__c ln : lines) {
+            parts.add(ln.Id + ':' + ln.SBQQ__ProductCode__c + ':' + ln.Promo_Code__c + ':' + ln.Dispatch_Method_Code__c
+                + ':' + ln.SBQQ__RequiredBy__c + ':' + ln.SBQQ__ProductOption__c + ':' + ln.CurrencyIsoCode
+                + ':' + ln.SBQQ__BillingFrequency__c + ':' + ln.SBQQ__SubscriptionTerm__c
+                + ':' + (ln.SBQQ__Quote__r != null ? ln.SBQQ__Quote__r.SBQQ__SubscriptionTerm__c + ':' + ln.SBQQ__Quote__r.SBQQ__BillingFrequency__c + ':' + ln.SBQQ__Quote__r.SBQQ__Primary__c : ''));
+        }
+        parts.sort();
+        return String.join(parts, '|');
+    }
+
     @InvocableMethod(label='REV-60 Stamp ALM Promo/Dispatch — Layer 1 (Quote)'
         description='Derives & stamps Promo_Code__c / Dispatch_Method_Code__c on the quote\'s ALM lines, reconciling OLIs when the quote is primary. CMDT-driven, additive, kill-switchable.')
     public static List<FlowResult> stampQuote(List<Id> quoteIds) {
-        return runLayer1(quoteIds, loadConfig());
+        if (!txnCacheEnabled || quoteIds.isEmpty()) {
+            return rememberResults(quoteIds, runLayer1(quoteIds, loadConfig()));
+        }
+        List<Id> repeats = new List<Id>();
+        for (Id qId : quoteIds) if (txnResultByQuote.containsKey(qId)) repeats.add(qId);
+        Map<Id, FlowResult> resolved = new Map<Id, FlowResult>();
+        if (!repeats.isEmpty() && hasQueryHeadroom(1)) {
+            Map<Id, List<SBQQ__QuoteLine__c>> probe = new Map<Id, List<SBQQ__QuoteLine__c>>();
+            for (Id qId : repeats) probe.put(qId, new List<SBQQ__QuoteLine__c>());
+            for (SBQQ__QuoteLine__c ln : [
+                SELECT Id, SBQQ__Quote__c, SBQQ__ProductCode__c, Promo_Code__c, Dispatch_Method_Code__c,
+                       SBQQ__RequiredBy__c, SBQQ__ProductOption__c, CurrencyIsoCode,
+                       SBQQ__BillingFrequency__c, SBQQ__SubscriptionTerm__c,
+                       SBQQ__Quote__r.SBQQ__SubscriptionTerm__c, SBQQ__Quote__r.SBQQ__BillingFrequency__c,
+                       SBQQ__Quote__r.SBQQ__Primary__c
+                FROM SBQQ__QuoteLine__c WHERE SBQQ__Quote__c IN :repeats
+            ]) probe.get(ln.SBQQ__Quote__c).add(ln);
+            for (Id qId : repeats) {
+                if (lineSignature(probe.get(qId)) == txnSignatureByQuote.get(qId)) {
+                    resolved.put(qId, txnResultByQuote.get(qId));  // unchanged since last run this transaction
+                }
+            }
+        }
+        List<Id> fresh = new List<Id>();
+        for (Id qId : quoteIds) if (!resolved.containsKey(qId)) fresh.add(qId);
+        if (!fresh.isEmpty()) {
+            List<FlowResult> ran = rememberResults(fresh, runLayer1(fresh, loadConfig()));
+            for (Integer i = 0; i < fresh.size(); i++) resolved.put(fresh[i], ran[i]);
+        }
+        return ordered(quoteIds, resolved);
+    }
+
+    /** Records each quote's fresh result + current line signature for same-transaction reuse. */
+    static List<FlowResult> rememberResults(List<Id> quoteIds, List<FlowResult> results) {
+        if (txnCacheEnabled && !quoteIds.isEmpty() && hasQueryHeadroom(1)) {
+            Map<Id, List<SBQQ__QuoteLine__c>> sig = new Map<Id, List<SBQQ__QuoteLine__c>>();
+            for (Id qId : quoteIds) sig.put(qId, new List<SBQQ__QuoteLine__c>());
+            for (SBQQ__QuoteLine__c ln : [
+                SELECT Id, SBQQ__Quote__c, SBQQ__ProductCode__c, Promo_Code__c, Dispatch_Method_Code__c,
+                       SBQQ__RequiredBy__c, SBQQ__ProductOption__c, CurrencyIsoCode,
+                       SBQQ__BillingFrequency__c, SBQQ__SubscriptionTerm__c,
+                       SBQQ__Quote__r.SBQQ__SubscriptionTerm__c, SBQQ__Quote__r.SBQQ__BillingFrequency__c,
+                       SBQQ__Quote__r.SBQQ__Primary__c
+                FROM SBQQ__QuoteLine__c WHERE SBQQ__Quote__c IN :quoteIds
+            ]) sig.get(ln.SBQQ__Quote__c).add(ln);
+            for (Integer i = 0; i < quoteIds.size(); i++) {
+                txnResultByQuote.put(quoteIds[i], results[i]);
+                txnSignatureByQuote.put(quoteIds[i], lineSignature(sig.get(quoteIds[i])));
+            }
+        }
+        return results;
     }
 
     /** Layer 2 entry point. The @InvocableMethod wrapper lives in ALMPromoDispatchOppAction
@@ -59,11 +135,26 @@ public without sharing class ALMPromoDispatchEngine {
     // ====================================================================
     // Layer runners — query + build context + derive + DML. cfg injected for testability.
     // ====================================================================
+    /** True when the transaction has at least `needed` unused synchronous SOQL queries left. A governor
+        "Too many SOQL queries" LimitException is UNCATCHABLE (the try/catch below cannot swallow it), so
+        the only safe move on a saturated transaction is to not run the query at all. */
+    @TestVisible
+    static Boolean hasQueryHeadroom(Integer needed) {
+        return (Limits.getLimitQueries() - Limits.getQueries()) >= needed;
+    }
+
     @TestVisible
     static List<FlowResult> runLayer1(List<Id> quoteIds, EngineConfig cfg) {
         Map<Id, FlowResult> byQuote = new Map<Id, FlowResult>();
         for (Id qId : quoteIds) byQuote.put(qId, new FlowResult());
         if (cfg == null || !cfg.masterActive || !cfg.layer1Active) {
+            return ordered(quoteIds, byQuote);
+        }
+        if (!hasQueryHeadroom(cfg.soqlMinHeadroom)) {   // saturated transaction — yield (see runLayer2 note)
+            logFault('REV-60 Layer 1 — skipped (SOQL headroom)',
+                'Skipped to avoid the query governor limit (' + Limits.getQueries() + '/' + Limits.getLimitQueries()
+                + ' used); codes reconcile on the next quote save.',
+                quoteIds.isEmpty() ? null : String.valueOf(quoteIds[0]));
             return ordered(quoteIds, byQuote);
         }
         try {
@@ -74,15 +165,19 @@ public without sharing class ALMPromoDispatchEngine {
                        SBQQ__Opportunity2__r.Type,
                        SBQQ__Opportunity2__r.Owner.Name,
                        SBQQ__Opportunity2__r.Owner.UserRole.Name,
+                       SBQQ__Opportunity2__r.GroupID__c,
                        SBQQ__Opportunity2__r.Account.Model_Segmentation__c,
-                       SBQQ__Opportunity2__r.Account.Ultimate_Account__r.Model_Segmentation__c
+                       SBQQ__Opportunity2__r.Account.Number_of_Attorneys__c,
+                       SBQQ__Opportunity2__r.Account.Ultimate_Account__r.Model_Segmentation__c,
+                       SBQQ__Opportunity2__r.Account.Ultimate_Account__r.Number_of_Attorneys__c
                 FROM SBQQ__Quote__c WHERE Id IN :quoteIds
             ]);
             Map<Id, List<SBQQ__QuoteLine__c>> linesByQuote = new Map<Id, List<SBQQ__QuoteLine__c>>();
             for (SBQQ__QuoteLine__c ln : [
                 SELECT Id, SBQQ__Quote__c, SBQQ__ProductCode__c, Promo_Code__c, Dispatch_Method_Code__c,
                        SBQQ__RequiredBy__c, SBQQ__ProductOption__c, CurrencyIsoCode, CreatedDate,
-                       SBQQ__BillingFrequency__c, SBQQ__SubscriptionTerm__c
+                       SBQQ__BillingFrequency__c, SBQQ__SubscriptionTerm__c,
+                       SBQQ__Number__c, SBQQ__ProductName__c
                 FROM SBQQ__QuoteLine__c WHERE SBQQ__Quote__c IN :quoteIds
             ]) {
                 if (!linesByQuote.containsKey(ln.SBQQ__Quote__c)) linesByQuote.put(ln.SBQQ__Quote__c, new List<SBQQ__QuoteLine__c>());
@@ -116,7 +211,10 @@ public without sharing class ALMPromoDispatchEngine {
                     primaryOppByQuote.put(qId, q.SBQQ__Opportunity2__c);
                 }
             }
-            if (!qlUpdates.isEmpty()) update qlUpdates.values();
+            if (!qlUpdates.isEmpty()) {
+                saveAllowingPartial(qlUpdates.values(), 'REV-60 Layer 1 - quote line code write',
+                    quoteIds.isEmpty() ? null : String.valueOf(quoteIds[0]));
+            }
 
             // Primary-quote OLI reconciliation — CPQ twin-field sync lags one save on updates.
             // Reuses the quote's context (same opportunity / same deal).
@@ -132,7 +230,10 @@ public without sharing class ALMPromoDispatchEngine {
                     for (SObject u : o.updates) oliUpdates.put((Id) u.get('Id'), u);
                     byQuote.get(qId).recordsUpdated += o.updates.size();
                 }
-                if (!oliUpdates.isEmpty()) update oliUpdates.values();
+                if (!oliUpdates.isEmpty()) {
+                    saveAllowingPartial(oliUpdates.values(), 'REV-60 Layer 1 - OLI reconciliation write',
+                        quoteIds.isEmpty() ? null : String.valueOf(quoteIds[0]));
+                }
             }
         } catch (Exception e) {
             for (Id qId : quoteIds) byQuote.get(qId).faultMessage = 'REV-60 Layer 1 fault on quote ' + qId + ': ' + e.getMessage();
@@ -148,12 +249,28 @@ public without sharing class ALMPromoDispatchEngine {
         if (cfg == null || !cfg.masterActive || !cfg.layer2Active) {
             return ordered(oppIds, byOpp);
         }
+        // Governor-limit guard. Layer 2 runs LATE in a crowded Opportunity-save transaction (REV-71 Layer 2,
+        // Customer Journey, etc. all fire on the same save). A "Too many SOQL queries" LimitException is
+        // UNCATCHABLE, so at query 101 it escapes the try below and emails admins a flow fault (live 17 Aug,
+        // opp 006Px00000SMDcoIAH, an Events opp with no ALM lines — Layer 2 had nothing to do yet still
+        // crashed). Yield gracefully: Layer 1 + CPQ twin-field sync already carry the codes, and Layer 2
+        // (the reconciliation safety-net) reruns on the next, uncrowded opp save.
+        if (!hasQueryHeadroom(cfg.soqlMinHeadroom)) {
+            logFault('REV-60 Layer 2 — skipped (SOQL headroom)',
+                'Skipped to avoid the query governor limit (' + Limits.getQueries() + '/' + Limits.getLimitQueries()
+                + ' used); codes come from Layer 1 + twin sync and reconcile on the next opp save.',
+                oppIds.isEmpty() ? null : String.valueOf(oppIds[0]));
+            return ordered(oppIds, byOpp);
+        }
         try {
             Map<Id, List<OpportunityLineItem>> olisByOpp = groupOlis([
                 SELECT Id, OpportunityId, ProductCode, Promo_Code__c, Dispatch_Method_Code__c, SBQQ__ParentID__c, CurrencyIsoCode, CreatedDate,
                        Opportunity.Type, Opportunity.Owner.Name, Opportunity.Owner.UserRole.Name,
                        Opportunity.Account.Model_Segmentation__c,
                        Opportunity.Account.Ultimate_Account__r.Model_Segmentation__c,
+                       Opportunity.GroupID__c,
+                       Opportunity.Account.Number_of_Attorneys__c,
+                       Opportunity.Account.Ultimate_Account__r.Number_of_Attorneys__c,
                        Opportunity.SBQQ__PrimaryQuote__r.SBQQ__SubscriptionTerm__c,
                        Opportunity.SBQQ__PrimaryQuote__r.SBQQ__BillingFrequency__c
                 FROM OpportunityLineItem WHERE OpportunityId IN :oppIds
@@ -173,7 +290,10 @@ public without sharing class ALMPromoDispatchEngine {
                 fr.hasGap = o.missingCount > 0;
                 fr.gapMessage = gapSummary(o, cfg);
             }
-            if (!updates.isEmpty()) update updates.values();
+            if (!updates.isEmpty()) {
+                saveAllowingPartial(updates.values(), 'REV-60 Layer 2 - OLI code write',
+                    oppIds.isEmpty() ? null : String.valueOf(oppIds[0]));
+            }
         } catch (Exception e) {
             for (Id oId : oppIds) byOpp.get(oId).faultMessage = 'REV-60 Layer 2 fault on opportunity ' + oId + ': ' + e.getMessage();
             logFault('REV-60 Layer 2 — flow fault', e.getMessage() + ' :: ' + e.getStackTraceString(), oppIds.isEmpty() ? null : String.valueOf(oppIds[0]));
@@ -193,6 +313,8 @@ public without sharing class ALMPromoDispatchEngine {
         public String quoteFrequency;  // Quote-level SBQQ__BillingFrequency__c — QUOTE-FIRST (the line value is CPQ product-default noise)
         public String repSignal;       // matched Rep Override key (benefitting-group reps -> !EMEA/BE, !APAC/BA)
         public Boolean isMidMarketPro = false; // deal contains a Mid Market Pro Bundle line -> +Z on the deal's ALM lines
+        public Decimal attorneyCount;  // firm attorney count (Ultimate_Account, falling back to the buying account)
+        public Boolean hasGroupId = false; // Opportunity.GroupID__c populated -> small-firm !SREN must NOT apply
     }
 
     @TestVisible
@@ -203,6 +325,8 @@ public without sharing class ALMPromoDispatchEngine {
             ctx.teamSignal = resolveTeamSignal(ownerRole(opp), cfg);
             ctx.oppType = opp.Type;
             if (opp.Owner != null) ctx.repSignal = resolveRepSignal(opp.Owner.Name, cfg); // Layer 2: no quote Sales Rep — owner only
+            ctx.attorneyCount = firmAttorneyCount(opp);
+            ctx.hasGroupId = hasGroupId(opp);
             // ctx.campaignSignal — pending Brady's !MCLG trigger definition.
         }
         ctx.isMidMarketPro = hasMidMarketProduct(records, fs, cfg);
@@ -255,6 +379,24 @@ public without sharing class ALMPromoDispatchEngine {
         return seg;
     }
 
+    /** Attorney count on the FIRM (Ultimate_Account) falling back to the buying account — same shape as
+        firmSegment(). Business named the firm as the grain; the fallback recovers the ~4% of deals where
+        only the buying account is populated (measured 22 Jul: firm-only covers 26.3% of lines, adding the
+        fallback takes it to ~30%). Null = unknown, and an unknown count must never trigger the rule. */
+    @TestVisible
+    static Decimal firmAttorneyCount(Opportunity opp) {
+        if (opp == null || opp.Account == null) return null;
+        Decimal n = (opp.Account.Ultimate_Account__r != null) ? opp.Account.Ultimate_Account__r.Number_of_Attorneys__c : null;
+        if (n == null) n = opp.Account.Number_of_Attorneys__c;
+        return n;
+    }
+
+    /** Group ID lives on the Opportunity. The business rule is explicit: do NOT use !SREN with Group IDs. */
+    @TestVisible
+    static Boolean hasGroupId(Opportunity opp) {
+        return (opp != null && String.isNotBlank(opp.GroupID__c));
+    }
+
     static String ownerRole(Opportunity opp) {
         if (opp == null || opp.Owner == null || opp.Owner.UserRole == null) return null;
         return opp.Owner.UserRole.Name;
@@ -293,6 +435,8 @@ public without sharing class ALMPromoDispatchEngine {
             req.oppType = (ctx != null) ? ctx.oppType : null;
             req.repSignal = (ctx != null) ? ctx.repSignal : null;
             req.isMidMarketPro = (ctx != null && ctx.isMidMarketPro == true);
+            req.attorneyCount = (ctx != null) ? ctx.attorneyCount : null;
+            req.hasGroupId = (ctx != null && ctx.hasGroupId == true);
             try { req.currencyCode = str(rec.get('CurrencyIsoCode')); } catch (Exception ex) { /* single-currency org */ }
             try { req.lineCreatedDate = (Datetime) rec.get('CreatedDate'); } catch (Exception ex) { /* CreatedDate not queried on this record */ }
             req.contractYearIndex = resolveYearIndex(rec, cfg, ctx);
@@ -312,7 +456,7 @@ public without sharing class ALMPromoDispatchEngine {
             if (r.missingPromo || r.missingDispatch) {
                 out.missingCount++;
                 String which = (r.missingPromo && r.missingDispatch) ? 'promo+dispatch' : (r.missingPromo ? 'promo' : 'dispatch');
-                out.gaps.add(blankToEmpty(req.productCode) + ' (' + which + ')');
+                out.gaps.add(describeLine(rec, fs, req.productCode) + ' (' + which + ')');
             }
         }
         return out;
@@ -435,8 +579,18 @@ public without sharing class ALMPromoDispatchEngine {
             rb.base = e.basePromo;
             return rb;
         }
-        // (5) Non-AmLaw cascade: default (!SJSI) -> team override -> campaign override.
+        // (5) Non-AmLaw cascade: default (!SJSI) -> SMALL FIRM (!SREN) -> team override -> campaign override.
         rb.base = blankToEmpty(cfg.defaultBase);                                  // Non-AmLaw default (!SJSI)
+        // Small-firm rule (business 22 Jul): solo / single-user institutions / <=N attorneys -> !SREN,
+        // explicitly NOT where the Opportunity carries a Group ID. Write-on-blank-only: measured 72-79%
+        // agreement with historical coding, so it is a smart default a rep can always override, never a
+        // correction. An unknown attorney count deliberately falls through to the !SJSI default.
+        if (String.isNotBlank(cfg.smallFirmBase) && cfg.smallFirmAttorneyMax != null
+            && r.attorneyCount != null && r.attorneyCount <= cfg.smallFirmAttorneyMax
+            && r.hasGroupId != true) {
+            rb.base = cfg.smallFirmBase;
+            rb.blankOnly = true;
+        }
         if (r.teamSignal != null && cfg.teamOverrides.containsKey(r.teamSignal)) {
             Set<String> allowedTypes = cfg.teamOverrideTypes.get(r.teamSignal);   // empty/null = applies to any Opp Type
             if (allowedTypes == null || allowedTypes.isEmpty() || (r.oppType != null && allowedTypes.contains(r.oppType))) {
@@ -505,10 +659,26 @@ public without sharing class ALMPromoDispatchEngine {
     @TestVisible
     static Boolean isAlmOwnedPromo(EngineConfig cfg, String current) {
         if (String.isBlank(current)) return false;
+        if (isBareSuffix(current)) return true;   // structural fragment -> ours to repair
         for (String b : cfg.allKnownBases()) {
             if (matchesBase(current, b)) return true;
         }
         return false;
+    }
+
+    /** A promo consisting ONLY of composition suffixes (frequency / year / Z) with no base is a
+        structural fragment, not a rep's deliberate code. Live example: 30 lines stamped just 'Y3'
+        (Khaitan & Co / Joey Kwok, Q-217944/50/51, Q-218019/28) where the correct value is !APACY3 —
+        the engine even wrote dispatch BA on those same rows while declining the promo, so the one
+        opportunity carries two different promos across its quotes. Without this they are both
+        unrepairable (the additive guard refuses any non-base value) and invisible (missingPromo is
+        blank-only). Deliberately narrow: verified 22 Jul that across 6,885 coded in-scope lines over
+        180 days the ONLY value of this shape is 'Y3' — the legacy A6xx / ISIJ / S9xx / SAxx families
+        do not match and remain protected by the additive guard. */
+    @TestVisible
+    static Boolean isBareSuffix(String current) {
+        if (String.isBlank(current)) return false;
+        return Pattern.matches('(M|Q|H)?(Y[2-5])?Z?', current.trim().toUpperCase());
     }
 
     static Boolean matchesBase(String current, String base) {
@@ -564,6 +734,8 @@ public without sharing class ALMPromoDispatchEngine {
             cfg.dispatchBackstopHint = s.Dispatch_Backstop_Hint__c;
             cfg.enforceDispatchAfter = s.Enforce_Dispatch_After__c;
             cfg.midMarketProProductCodes = splitCsv(s.Mid_Market_Pro_Product_Codes__c);
+            cfg.smallFirmAttorneyMax = s.Small_Firm_Attorney_Max__c;
+            cfg.smallFirmBase        = s.Small_Firm_Base_Promo__c;
         }
         for (ALM_Code_Map__mdt m : ALM_Code_Map__mdt.getAll().values()) {
             if (m.Active__c != true) continue;
@@ -618,13 +790,17 @@ public without sharing class ALMPromoDispatchEngine {
     // ====================================================================
     public class FieldSet {
         public String product, promo, dispatch, child1, child2;
+        public String lineNo, productName; // optional: used only to make the backstop error locatable by a rep
     }
-    static final FieldSet FIELDS_QL = buildFs('SBQQ__ProductCode__c', 'Promo_Code__c', 'Dispatch_Method_Code__c', 'SBQQ__RequiredBy__c', 'SBQQ__ProductOption__c');
-    static final FieldSet FIELDS_OLI = buildFs('ProductCode', 'Promo_Code__c', 'Dispatch_Method_Code__c', 'SBQQ__ParentID__c', null);
+    static final FieldSet FIELDS_QL = buildFs('SBQQ__ProductCode__c', 'Promo_Code__c', 'Dispatch_Method_Code__c', 'SBQQ__RequiredBy__c', 'SBQQ__ProductOption__c', 'SBQQ__Number__c', 'SBQQ__ProductName__c');
+    // OLI: no line number, and Name isn't queried — gaps there fall back to the product code (Layer 2 never
+    // raises the rep-facing Custom Error; the backstop lives on the quote save).
+    static final FieldSet FIELDS_OLI = buildFs('ProductCode', 'Promo_Code__c', 'Dispatch_Method_Code__c', 'SBQQ__ParentID__c', null, null, null);
 
-    static FieldSet buildFs(String p, String pr, String d, String c1, String c2) {
+    static FieldSet buildFs(String p, String pr, String d, String c1, String c2, String ln, String pn) {
         FieldSet f = new FieldSet();
         f.product = p; f.promo = pr; f.dispatch = d; f.child1 = c1; f.child2 = c2;
+        f.lineNo = ln; f.productName = pn;
         return f;
     }
 
@@ -658,7 +834,11 @@ public without sharing class ALMPromoDispatchEngine {
         if (v != null) {
             try {
                 Decimal raw = Decimal.valueOf(String.valueOf(v));
-                return (raw >= 6) ? (raw / 12).setScale(0, System.RoundingMode.HALF_UP) : raw;
+                // CPQ stores the term in MONTHS. The old ": raw" branch returned a sub-6 value verbatim,
+                // so a 2-month stub became year index 2 and shipped as !SJSIY2 (live 22 Jul: Q-218007
+                // QL-0700823 and Q-218107 QL-0701068, both WEB term 2, the latter on a PRIMARY quote so
+                // the bad code synced to the OLI). Any term under 6 months is year 1 = no suffix.
+                return (raw >= 6) ? (raw / 12).setScale(0, System.RoundingMode.HALF_UP) : 1;
             } catch (Exception ex) { /* fall through */ }
         }
         return 1;
@@ -702,6 +882,7 @@ public without sharing class ALMPromoDispatchEngine {
         public String defaultBase; // "else Non-AmLaw" fallback base (e.g. !SJSI)
         public String dispatchBackstopHint; // appended to the backstop error when a dispatch is missing — names the valid codes
         public Datetime enforceDispatchAfter; // dispatch backstop grandfathering: only enforce a required-but-blank dispatch on lines created ON/AFTER this cutoff (null = enforce always). Lets us re-arm LAWM/LWKM/NYOM without hard-blocking the legacy open quotes.
+        public Integer soqlMinHeadroom = 5;   // min free SOQL queries required before a layer runs its own query — yields gracefully on a saturated Opp/Quote-save transaction instead of throwing an uncatchable LimitException
         public Set<String> almProductCodes = new Set<String>();
         public Set<String> segmentPromoProducts = new Set<String>(); // products whose promo = firm-segment cascade (Law.com umbrella)
         public Set<String> dispatchRequiredProducts = new Set<String>(); // products the backstop requires a non-blank dispatch on
@@ -719,6 +900,9 @@ public without sharing class ALMPromoDispatchEngine {
         public Map<String, String> dispatchByProduct = new Map<String, String>(); // product code -> dispatch code
         public Map<String, String> repOverrides = new Map<String, String>();         // rep full name -> base (!EMEA / !APAC)
         public Map<String, String> repOverrideDispatch = new Map<String, String>();  // rep full name -> dispatch (BE / BA)
+        // Small-firm rule (business 22 Jul): solo / single-user / <=N attorneys -> !SREN, but NEVER with a Group ID.
+        public Decimal smallFirmAttorneyMax;  // null disables the rule
+        public String smallFirmBase;          // !SREN — deliberately NOT in allKnownBases() (see below)
 
         public void addEntry(MapEntry e) {
             if (e.active != true) return;
@@ -727,7 +911,14 @@ public without sharing class ALMPromoDispatchEngine {
             if (String.isNotBlank(e.dispatchCode)) allDispatch.add(e.dispatchCode);
         }
 
-        /** Every base this engine could author — for the additive ALM-owned guard. */
+        /** Every base this engine could author — for the additive ALM-owned guard.
+            DELIBERATELY EXCLUDES smallFirmBase (!SREN). Adding it here would make isAlmOwnedPromo('!SREN')
+            true, and on any path where the small-firm rule does not fire (big firm, Group ID deal, unknown
+            attorney count) isPromoWritable would then OVERWRITE a rep's deliberate !SREN with !SJSI — the
+            exact clobber proven live on Q-217368/Q-217393 and fixed on 22 Jul. Keeping it out means the
+            engine may FILL a blank with !SREN but can never rewrite one. Trade-off accepted: the engine
+            also will not refresh its own !SREN (e.g. add a Yn on a term change) — a stale suffix is far
+            cheaper than silently rewriting a rep's chosen code. */
         public Set<String> allKnownBases() {
             Set<String> b = new Set<String>(allBases);
             if (String.isNotBlank(defaultBase)) b.add(defaultBase);
@@ -747,6 +938,8 @@ public without sharing class ALMPromoDispatchEngine {
     public class Request {
         public Id recordId;
         public String productCode;
+        public Decimal attorneyCount;       // firm attorney count -> small-firm !SREN rule (null = unknown, rule skipped)
+        public Boolean hasGroupId = false;  // Opportunity Group ID present -> small-firm rule must NOT apply
         public String determinantKey;       // firm segment (A/N/G); null -> Non-AmLaw cascade
         public Decimal contractYearIndex;
         public String frequencyCode;        // "" | M | Q | H
@@ -825,11 +1018,70 @@ public without sharing class ALMPromoDispatchEngine {
     @TestVisible
     static String gapSummary(ApplyOutcome o, EngineConfig cfg) {
         if (o == null || o.missingCount == 0) return null;
-        String msg = o.missingCount + ' ALM line(s) still need a required code: ' + String.join(o.gaps, ', ');
+        // List at most 5 lines then "+N more" — the old code joined every gap and hard-truncated at 500,
+        // which could cut mid-entry and leave a rep with a half-named line.
+        List<String> shown = new List<String>();
+        for (Integer i = 0; i < o.gaps.size() && i < 5; i++) shown.add(o.gaps[i]);
+        String gapList = String.join(shown, '; ');   // NB: 'list' is a reserved word in Apex
+        if (o.gaps.size() > shown.size()) gapList += '; +' + (o.gaps.size() - shown.size()) + ' more';
+        String msg = o.missingCount + ' ALM line(s) still need a required code: ' + gapList;
         if (cfg != null && String.isNotBlank(cfg.dispatchBackstopHint) && msg.contains('dispatch')) {
             msg += '. ' + cfg.dispatchBackstopHint;
         }
         return msg.length() > 500 ? msg.substring(0, 500) : msg;
+    }
+
+    /** Rep-locatable label for a gapping line. The original backstop named only the product code, so on a
+        multi-line quote a rep could not tell WHICH line was blocking the save — they would be looking at a
+        line that already had a code while a different, untouched line was the culprit (reported live by
+        Andrew Barsody 22 Jul: blocked by a NYOM line while viewing a line showing dispatch OE).
+        Falls back cleanly: no line number -> name only; no name (OLI) -> product code. */
+    @TestVisible
+    static String describeLine(SObject rec, FieldSet fs, String productCode) {
+        String num;
+        if (fs != null && fs.lineNo != null) {
+            try {
+                Object v = rec.get(fs.lineNo);
+                if (v != null) {
+                    String s = String.valueOf(v);           // no (Decimal) cast: a number field can come back
+                    Integer dot = s.indexOf('.');           // as Integer OR Decimal and the cast would throw
+                    num = (dot > 0) ? s.substring(0, dot) : s;  // 4.0 -> 4
+                }
+            } catch (Exception e) { /* field not queried on this record type */ }
+        }
+        String name;
+        if (fs != null && fs.productName != null) {
+            try { name = str(rec.get(fs.productName)); } catch (Exception e) { /* not queried */ }
+        }
+        String code = blankToEmpty(productCode);
+        String label = String.isNotBlank(name)
+            ? (String.isNotBlank(code) ? name + ' [' + code + ']' : name)
+            : code;
+        return String.isNotBlank(num) ? ('Line ' + num + ': ' + label) : label;
+    }
+
+    /** Partial-success code write. A single bad row must never roll back every other line's codes.
+        The old all-or-nothing `update` produced a SILENT TOTAL NO-OP: on Q-211011 (21 Jul, Flow_Log
+        a6LPx00000AAi22MAD) one untouched MDQ line tripped an unrelated org validation ("Expected number
+        of segments = 3, segments created = 1"), the whole quote update rolled back, every code was lost —
+        and because the backstop tests the write we INTENDED rather than what committed, it reported
+        no gap and the quote saved clean with nothing stamped. Silent wrong data beats a loud block.
+        Every per-row failure is logged to Flow_Log__c so a lost code is never invisible again.
+        Returns the number of rows that actually committed. */
+    @TestVisible
+    static Integer saveAllowingPartial(List<SObject> records, String context, String recordName) {
+        if (records == null || records.isEmpty()) return 0;
+        Integer committed = 0;
+        List<Database.SaveResult> results = Database.update(records, false);
+        for (Integer i = 0; i < results.size(); i++) {
+            if (results[i].isSuccess()) { committed++; continue; }
+            String errs = '';
+            for (Database.Error err : results[i].getErrors()) {
+                errs += err.getStatusCode() + ': ' + err.getMessage() + ' | ';
+            }
+            logFault(context, 'ALM code write FAILED for ' + records[i].get('Id') + ' -> ' + errs, recordName);
+        }
+        return committed;
     }
 
     /** Fail-open fault log to Flow_Log__c — the same destination PFC_Log_Fault writes to — so the

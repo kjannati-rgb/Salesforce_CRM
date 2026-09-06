@@ -59,6 +59,11 @@
                 <default>false</default>
                 <label>Bespoke License</label>
             </value>
+            <value>
+                <fullName>Included</fullName>
+                <default>false</default>
+                <label>Included</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

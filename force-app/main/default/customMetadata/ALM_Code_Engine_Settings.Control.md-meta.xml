@@ -15,16 +15,42 @@
         <value xsi:type="xsd:boolean">false</value>
     </values>
     <values>
+        <!-- Bare "GLBM" REMOVED 22 Jul: it is the bundle CONTAINER, never the invoiced line. Verified
+             across 18 quotes Apr-Jul the container promo/dispatch are ALWAYS blank and the CHILD
+             ("GLBM - Team Membership" / "- Individual Membership") carries MSHP. Because the container
+             is not a child it passed the child-exclusion test, so the engine stamped MSHP/ME onto it
+             (Q-217531, 19 Jul) - inverting the convention. The two membership codes stay in scope; they
+             are children so the engine still skips them and reps hand-type MSHP exactly as before.
+             Automating the child (a Derive_Child_Product_Codes setting, like the Mid Market Pro carve-out)
+             is a deliberate enhancement, not a regression fix - do that separately. -->
         <field>ALM_Product_Codes__c</field>
-        <value xsi:type="xsd:string">LAWM;LWKM;GLBM;GLBM - Team Membership;GLBM - Individual Membership;NYLM;NYOM;Law.com Pro;PCEM;LNVM;LGCM;LGLM;LRCM;VSCM;WEB;TIOM;DROM;RCOM;TALM;ALLM;CHLM;DBOM;NJOM;NJLM</value>
+        <value xsi:type="xsd:string">LAWM;LWKM;GLBM - Team Membership;GLBM - Individual Membership;NYLM;NYOM;Law.com Pro;PCEM;LNVM;LGCM;LGLM;LRCM;VSCM;WEB;TIOM;DROM;RCOM;TALM;ALLM;CHLM;DBOM;NJOM;NJLM</value>
     </values>
     <values>
         <field>Segment_Promo_Product_Codes__c</field>
         <value xsi:type="xsd:string">LAWM;LWKM;Law.com Pro;NYLM;NYOM;LNVM;LGCM;LGLM;LRCM;VSCM;WEB;TIOM;DROM;RCOM;TALM;ALLM;CHLM;DBOM;NJOM;NJLM</value>
     </values>
     <values>
+        <!-- ONLY products whose dispatch the engine can AUTO-FILL belong here (GLBM family -> ME,
+             NYLM -> PO). Those can never leave a gap, so the backstop can never block on them.
+
+             INVARIANT: every code listed here MUST have an active ALM_Code_Map Dispatch row. Then the
+             engine always fills it, no line can ever gap, and the save-time Custom Error can never fire.
+
+             DO NOT RE-ADD LAWM / LWKM. Their dispatch is genuinely non-deterministic (LAWM: ON 33% / OE 32%
+             / OS 17% / OL 11% over 6,807 lines; LWKM similar), which is why their Dispatch rows are
+             Active=false. With no way to fill them, the "backstop" is not a backstop - it fires on EVERY
+             blank line. Live on 22 Jul that produced reps with quotes that would not save, and - because
+             the Custom Error is raised after-save in a flow - an unhandled SBQQ.ValidationException through
+             CPQ ServiceRouter that emailed 4 admins per occurrence (Saurabh Patil 14:43; Andrew Barsody).
+             Pre-REV-60 a blank Law.com dispatch was allowed for everyone bar 2-3 named reps, so mandating
+             it org-wide was never the ask. If the business does want it mandatory, implement it as a scoped
+             CPQ Validation Product Rule (native QLE message, fires BEFORE save) - NOT via this field.
+
+             NYOM stays listed because it now auto-fills: 4,806 historical lines are 74.7% ON and 90.0%
+             ON-family, so ON is a safe write-on-blank default (a rep's OS/OE is never overwritten). -->
         <field>Dispatch_Required_Product_Codes__c</field>
-        <value xsi:type="xsd:string">LAWM;LWKM;GLBM;GLBM - Team Membership;GLBM - Individual Membership;NYLM;NYOM</value>
+        <value xsi:type="xsd:string">GLBM - Team Membership;GLBM - Individual Membership;NYLM;NYOM</value>
     </values>
     <values>
         <!-- Grandfathering cutoff for the re-armed LAWM/LWKM/NYOM dispatch backstop, set at the
@@ -33,7 +59,7 @@
              genuinely new lines must carry a dispatch. It is deliberately the RE-ARM instant, not
              go-live: the ~914 legacy open quotes AND everything quoted during the softened weekend
              window are grandfathered. Blank would mean "enforce on every line" and would
-             retroactively block all of them — never clear this without re-checking. -->
+             retroactively block all of them - never clear this without re-checking. -->
         <field>Enforce_Dispatch_After__c</field>
         <value xsi:type="xsd:dateTime">2026-07-20T15:35:00.000Z</value>
     </values>
@@ -68,6 +94,19 @@
     <values>
         <field>Default_Base_Promo__c</field>
         <value xsi:type="xsd:string">!SJSI</value>
+    </values>
+    <values>
+        <!-- Small-firm rule, business-stated 22 Jul: solo / single-user institutions / small law firms of
+             4 or fewer attorneys use !SREN, and it must NOT be used where the Opportunity has a Group ID.
+             Verified against 4,738 live !SREN/!SJSI lines: of !SREN lines with a known attorney count 74.5%
+             are <=4, versus 9.6% for !SJSI. Write-on-blank-only and NOT in allKnownBases(), so it fills an
+             empty promo but can never overwrite a rep. Blank either field to disable the rule. -->
+        <field>Small_Firm_Attorney_Max__c</field>
+        <value xsi:type="xsd:double">4</value>
+    </values>
+    <values>
+        <field>Small_Firm_Base_Promo__c</field>
+        <value xsi:type="xsd:string">!SREN</value>
     </values>
     <values>
         <field>Mid_Market_Pro_Product_Codes__c</field>

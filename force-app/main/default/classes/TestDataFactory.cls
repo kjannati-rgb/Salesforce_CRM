@@ -91,7 +91,12 @@ public class TestDataFactory {
         return q;
     }
 
-    /** Quote line on a quote (price fields set consistently). */
+    /**
+     * Quote line on a quote (price fields set consistently). Start/End dates are set
+     * because the org's "Opportunity Product: Sum Schedules" flow (fires on every
+     * OpportunityLineItem create/update, no bypass available) faults when the synced
+     * OpportunityLineItem has no schedule bounds to sum over.
+     */
     public static SBQQ__QuoteLine__c quoteLine(Id quoteId, Id product2Id, Id pbeId, Decimal price, Integer lineNumber) {
         SBQQ__QuoteLine__c ql = new SBQQ__QuoteLine__c(
             SBQQ__Quote__c = quoteId,
@@ -101,7 +106,9 @@ public class TestDataFactory {
             SBQQ__ListPrice__c = price,
             SBQQ__CustomerPrice__c = price,
             SBQQ__NetPrice__c = price,
-            SBQQ__Number__c = lineNumber);
+            SBQQ__Number__c = lineNumber,
+            SBQQ__StartDate__c = Date.today(),
+            SBQQ__EndDate__c = Date.today().addMonths(12));
         insert ql;
         return ql;
     }
@@ -114,5 +121,41 @@ public class TestDataFactory {
             UnitPrice = price);
         insert o;
         return o;
+    }
+
+    /** Closed Won opportunity, ready to be the "previous" side of a renewal clone. */
+    public static Opportunity closedWonOpportunity(Id accountId) {
+        Opportunity o = new Opportunity(
+            Name = 'TDF Closed Won Opp',
+            AccountId = accountId,
+            StageName = 'Closed Won',
+            CloseDate = Date.today().addDays(-1),
+            CurrencyIsoCode = 'GBP',
+            Pricebook2Id = Test.getStandardPricebookId());
+        insert o;
+        return o;
+    }
+
+    /** Draft order linked to an opportunity, ready to be activated by the test. */
+    public static Order order(Id accountId, Id opportunityId) {
+        Order o = new Order(
+            AccountId = accountId,
+            OpportunityId = opportunityId,
+            Status = 'Draft',
+            EffectiveDate = Date.today(),
+            CurrencyIsoCode = 'GBP',
+            Pricebook2Id = Test.getStandardPricebookId());
+        insert o;
+        return o;
+    }
+
+    public static OrderItem orderItem(Id orderId, Id pbeId, Decimal price) {
+        OrderItem oi = new OrderItem(
+            OrderId = orderId,
+            PricebookEntryId = pbeId,
+            Quantity = 1,
+            UnitPrice = price);
+        insert oi;
+        return oi;
     }
 }

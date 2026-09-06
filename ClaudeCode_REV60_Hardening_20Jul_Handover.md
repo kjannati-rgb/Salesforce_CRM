@@ -3,6 +3,23 @@
 Both items deferred from the Friday-night cutover are **done and live in PROD**. This note covers
 what changed, the one thing still needing a human, and the two follow-ups.
 
+> ### ⚠️ Update — 21 Jul 2026: backstop now fires on quote UPDATE only, not CREATE
+>
+> The re-armed backstop was **blocking quote creation** on any opportunity that already carried a
+> LAWM/LWKM/NYOM product. CPQ materialises the quote line in the same transaction as the quote
+> insert, so that line is genuinely new and the §1 grandfathering could not exempt it — the rep got
+> an error demanding a dispatch code they had no way to enter, because they never reached the Quote
+> Line Editor. **1,900 open opportunities** were affected, failing silently (a rolled-back
+> transaction leaves no trace).
+>
+> **Fixed:** `D_PromoDispatch_Gap` in `Quote_AfterSave_MasterFlow` now requires
+> `check_ifNew = false` as well as `hasGap = true`. Stamping still runs on create; enforcement
+> happens at line-editor save. Deploy `0AfPx000001HdArKAK` (37/37), activated as flow **v4**.
+> Verified: create succeeds, gate-tripping update still blocks, filled dispatch saves cleanly.
+>
+> This changes step 7 of the click-test below — a new LAWM line only blocks on **save from the
+> line editor**, not at quote creation.
+
 ---
 
 ## 1. Dispatch backstop re-armed (LAWM / LWKM / NYOM) — with line-level grandfathering

@@ -82,8 +82,8 @@ private class FirmSalesSummaryControllerTest {
         Ctx c = build();
         Test.startTest();
         FirmSalesSummaryController.OppPageDTO allOpps = FirmSalesSummaryController.getOpportunities(c.firm.Id, null, null, 'alltime', 'all', 10, 0);
-        FirmSalesSummaryController.OppPageDTO byOffice = FirmSalesSummaryController.getOpportunities(c.firm.Id, c.o1.Id, null, 'alltime', 'all', 10, 0);
-        FirmSalesSummaryController.OppPageDTO byGroup = FirmSalesSummaryController.getOpportunities(c.firm.Id, null, 'Law.com / ALM', 'alltime', 'all', 10, 0);
+        FirmSalesSummaryController.OppPageDTO byOffice = FirmSalesSummaryController.getOpportunities(c.firm.Id, new List<Id>{ c.o1.Id }, null, 'alltime', 'all', 10, 0);
+        FirmSalesSummaryController.OppPageDTO byGroup = FirmSalesSummaryController.getOpportunities(c.firm.Id, null, new List<String>{ 'Law.com / ALM' }, 'alltime', 'all', 10, 0);
         FirmSalesSummaryController.OppPageDTO newBiz = FirmSalesSummaryController.getOpportunities(c.firm.Id, null, null, 'alltime', 'new', 10, 0);
         FirmSalesSummaryController.OppPageDTO renewal = FirmSalesSummaryController.getOpportunities(c.firm.Id, null, null, 'alltime', 'renewal', 10, 0);
         Test.stopTest();
@@ -108,8 +108,9 @@ private class FirmSalesSummaryControllerTest {
         Test.startTest();
         FirmSalesSummaryController.ViewDTO newV = FirmSalesSummaryController.getView(c.firm.Id, 'alltime', 'new', null, null);
         FirmSalesSummaryController.ViewDTO renV = FirmSalesSummaryController.getView(c.firm.Id, 'alltime', 'renewal', null, null);
-        FirmSalesSummaryController.ViewDTO offV = FirmSalesSummaryController.getView(c.firm.Id, 'alltime', 'all', c.o1.Id, null);
-        FirmSalesSummaryController.ViewDTO grpV = FirmSalesSummaryController.getView(c.firm.Id, 'alltime', 'all', null, 'Law.com / ALM');
+        FirmSalesSummaryController.ViewDTO offV = FirmSalesSummaryController.getView(c.firm.Id, 'alltime', 'all', new List<Id>{ c.o1.Id }, null);
+        FirmSalesSummaryController.ViewDTO grpV = FirmSalesSummaryController.getView(c.firm.Id, 'alltime', 'all', null, new List<String>{ 'Law.com / ALM' });
+        FirmSalesSummaryController.ViewDTO multiV = FirmSalesSummaryController.getView(c.firm.Id, 'alltime', 'all', new List<Id>{ c.o1.Id, c.o2.Id }, new List<String>{ 'Law.com / ALM', 'Events - Sponsorship' });
         Test.stopTest();
 
         // business lens
@@ -135,6 +136,34 @@ private class FirmSalesSummaryControllerTest {
         System.assert(allTime(grpV).acv == lawAcv.setScale(2), 'group-filter headline ACV = that group ACV');
         System.assertEquals(1, grpV.offices.size(), 'group filter office panel shows only CO1');
         System.assertEquals(c.o1.Id, grpV.offices[0].officeId, 'that office is CO1');
+
+        // multi-select: both offices + both groups (OR within each dimension) => both opps qualify
+        System.assert(allTime(multiV).netValue == 600, 'multi net = opp1+opp2 = 600 =' + allTime(multiV).netValue);
+        System.assertEquals(2, allTime(multiV).wonCount, 'multi won count = 2');
+        System.assertEquals(2, multiV.offices.size(), 'multi office panel shows both offices');
+    }
+
+    @isTest(SeeAllData=true)
+    static void openPipelineAndWinRate() {
+        assignPermSet();
+        Ctx c = build();   // 2 Closed Won opps, CloseDate = today (CFY)
+        // one open opp — resolve a live open stage from the org rather than hardcoding a label
+        String openStage = [SELECT MasterLabel FROM OpportunityStage
+                            WHERE IsActive = true AND IsClosed = false LIMIT 1].MasterLabel;
+        insert FirmRollupTestData.newOpp(c.firm.Id, c.o1.Id, openStage, 'New Business', 50, 'GBP', Date.today().addDays(30));
+
+        Test.startTest();
+        FirmSalesSummaryController.PipelineDTO p = FirmSalesSummaryController.getOpenPipeline(c.firm.Id);
+        Test.stopTest();
+
+        System.assertEquals(1, p.openCount, 'one open opp at the firm');
+        System.assert(p.openValueUSD > 0, 'open pipeline converted to USD: ' + p.openValueUSD);
+        System.assertEquals(1, p.byStage.size(), 'one open stage in the breakdown');
+        System.assertEquals(1, p.byStage[0].count, 'that stage holds the single open opp');
+        System.assertEquals(2, p.cfyClosedCount, 'two closed opps in CFY');
+        System.assertEquals(100, p.cfyWinRate, 'both CFY closed opps won -> 100%');
+        System.assertEquals(0, p.pfyClosedCount, 'nothing closed in PFY');
+        System.assertEquals(null, p.pfyWinRate, 'no PFY closed opps -> null rate, not 0');
     }
 
     @isTest(SeeAllData=true)

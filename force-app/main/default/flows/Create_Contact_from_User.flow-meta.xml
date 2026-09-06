@@ -24,11 +24,160 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <actionCalls>
+        <description>C1: fired from Create_Contact&apos;s faultConnector when the Contact record create throws (e.g. a validation rule). Handling the fault here means the transaction that created the User does not roll back.</description>
+        <name>Notify_Admins_Fault</name>
+        <label>Notify Admins - Contact Create Failed</label>
+        <locationX>708</locationX>
+        <locationY>674</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>AdminEmailAddresses</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>tpl_FaultBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Salesforce: Contact creation failed for new user</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+    </actionCalls>
+    <actionCalls>
+        <description>C2: fired when $Record.FirstName is blank. The Contact create is skipped rather than pushing malformed data past FIist_Name_Cannot_be_Blank, and an admin is told so the source directory object can be fixed.</description>
+        <name>Notify_Admins_Skipped_Blank_Name</name>
+        <label>Notify Admins - Contact Not Created, Blank First Name</label>
+        <locationX>972</locationX>
+        <locationY>350</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>AdminEmailAddresses</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>tpl_SkippedBlankNameBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Salesforce: Contact NOT created - blank first name, action needed</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+    </actionCalls>
+    <actionCalls>
+        <description>C3: fired when a Contact already exists with this User&apos;s email. The create is skipped so re-provisioning does not produce a second Contact on the LBR account.</description>
+        <name>Notify_Admins_Skipped_Duplicate</name>
+        <label>Notify Admins - Contact Not Created, Duplicate Found</label>
+        <locationX>1236</locationX>
+        <locationY>350</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>AdminEmailAddresses</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>tpl_SkippedDuplicateBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Salesforce: Contact creation skipped - duplicate email found</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+    </actionCalls>
+    <decisions>
+        <description>C2/C3 guard. Split into two distinct outcomes (rather than one combined rule) so a blank-name skip and a duplicate skip produce distinguishable notifications - one needs IT to fix the directory, the other is benign.</description>
+        <name>Check_Contact_Prerequisites</name>
+        <label>Check Contact Prerequisites</label>
+        <locationX>440</locationX>
+        <locationY>350</locationY>
+        <defaultConnector>
+            <targetReference>Create_Contact</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Safe to Create</defaultConnectorLabel>
+        <rules>
+            <name>Blank_First_Name</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.FirstName</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Notify_Admins_Skipped_Blank_Name</targetReference>
+            </connector>
+            <label>Blank First Name</label>
+        </rules>
+        <rules>
+            <name>Duplicate_Contact_Exists</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Existing_Contact</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Notify_Admins_Skipped_Duplicate</targetReference>
+            </connector>
+            <label>Duplicate Contact Exists</label>
+        </rules>
+    </decisions>
     <recordCreates>
         <name>Create_Contact</name>
         <label>Create Contact</label>
-        <locationX>176</locationX>
-        <locationY>323</locationY>
+        <locationX>440</locationX>
+        <locationY>458</locationY>
+        <faultConnector>
+            <targetReference>Notify_Admins_Fault</targetReference>
+        </faultConnector>
         <inputAssignments>
             <field>AccountId</field>
             <value>
@@ -74,17 +223,115 @@
         <object>Contact</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
+    <recordLookups>
+        <description>Sources the admin recipient list from the existing Flow_Error_Email__mdt CMDT record (the same custom metadata the org&apos;s Debug_Flow_Error_Handling template pattern uses) rather than hardcoding an address or a Group Id in this flow&apos;s metadata.</description>
+        <name>Get_Admin_Email_Recipients</name>
+        <label>Get Admin Email Recipients</label>
+        <locationX>440</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Existing_Contact</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Error_Email_List</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Flow_Error_Email__mdt</object>
+        <outputAssignments>
+            <assignToReference>AdminEmailAddresses</assignToReference>
+            <field>Comma_Separated_Email_List__c</field>
+        </outputAssignments>
+    </recordLookups>
+    <recordLookups>
+        <description>C3: duplicate guard. Looks up an existing Contact by the User&apos;s email before create so re-provisioning does not risk a second Contact on the LBR account.</description>
+        <name>Get_Existing_Contact</name>
+        <label>Get Existing Contact by Email</label>
+        <locationX>440</locationX>
+        <locationY>242</locationY>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_Contact_Prerequisites</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Email</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Email</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Contact</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <start>
         <locationX>50</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Create_Contact</targetReference>
+            <targetReference>Get_Admin_Email_Recipients</targetReference>
         </connector>
         <object>User</object>
         <recordTriggerType>Create</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
+    <textTemplates>
+        <description>C1: fault notification body. Includes $Flow.FaultMessage - without it the notification is useless per the runbook.</description>
+        <name>tpl_FaultBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Contact creation failed for a newly provisioned User. The User record was created successfully; the Contact was not.
+
+User Id: {!$Record.Id}
+Username: {!$Record.Username}
+Email: {!$Record.Email}
+First Name: {!$Record.FirstName}
+Last Name: {!$Record.LastName}
+
+Fault message:
+{!$Flow.FaultMessage}</text>
+    </textTemplates>
+    <textTemplates>
+        <description>C2: blank first name skip notification body.</description>
+        <name>tpl_SkippedBlankNameBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>A new User was provisioned with a blank first name, so no matching Contact was created (this is expected behaviour - see Create_Contact_from_User v4).
+
+User Id: {!$Record.Id}
+Username: {!$Record.Username}
+Email: {!$Record.Email}
+First Name: {!$Record.FirstName}
+Last Name: {!$Record.LastName}
+
+Action needed: populate the first name on the source directory object and re-sync so the Contact can be created.</text>
+    </textTemplates>
+    <textTemplates>
+        <description>C3: duplicate email skip notification body.</description>
+        <name>tpl_SkippedDuplicateBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>A new User was provisioned, but a Contact already exists with a matching email address, so no new Contact was created (this is expected behaviour - see Create_Contact_from_User v4).
+
+User Id: {!$Record.Id}
+Username: {!$Record.Username}
+Email: {!$Record.Email}
+First Name: {!$Record.FirstName}
+Last Name: {!$Record.LastName}
+Existing Contact Id: {!Get_Existing_Contact.Id}
+
+No action needed unless the existing Contact is incorrect.</text>
+    </textTemplates>
+    <variables>
+        <name>AdminEmailAddresses</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
     <variables>
         <name>var_flowname</name>
         <dataType>String</dataType>

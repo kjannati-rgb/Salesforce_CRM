@@ -69,6 +69,9 @@
         <connector>
             <targetReference>Loop_through_Contact_Roles</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Loop_through_Contact_Roles</targetReference>
+        </faultConnector>
         <inputAssignments>
             <field>ContactId</field>
             <value>

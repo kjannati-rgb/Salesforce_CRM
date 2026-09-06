@@ -12,6 +12,8 @@ public with sharing class FirmSalesSummaryController {
     static final List<String> RENEWAL_TYPES = new List<String>{
         'Renewal', 'Auto-Renewal', 'Repeat Business', 'Auto-Repeat Business'
     };
+    // Catch-all group unmapped families fall into (mirrors FirmRollupService.resolveGroup fallthrough).
+    static final String DEFAULT_GROUP = 'Other / POS / Reports';
     static Integer fyStartMonth;
 
     /** SOQL fragment for the business lens. Expects a local `renewalTypes` bind var in scope. */
@@ -20,6 +22,9 @@ public with sharing class FirmSalesSummaryController {
         String bt = (businessType == null) ? 'all' : businessType.toLowerCase();
         if (bt == 'new') return ' AND ' + prefix + 'Type = \'New Business\'';
         if (bt == 'renewal') return ' AND ' + prefix + 'Type IN :renewalTypes';
+        // 'other' = the complement of New ∪ Renewal (e.g. Upsell, and any blank/other Type). SOQL
+        // != includes null-Type rows, so New + Renewal + Other partitions All exactly with no gaps.
+        if (bt == 'other') return ' AND ' + prefix + 'Type != \'New Business\' AND ' + prefix + 'Type NOT IN :renewalTypes';
         return '';
     }
 
@@ -103,16 +108,19 @@ public with sharing class FirmSalesSummaryController {
     // Group filter is opp-grain (won opps that include a line in the group). The default no-filter,
     // all-business view still uses the instant persisted reads in the LWC.
     @AuraEnabled
-    public static ViewDTO getView(Id firmId, String period, String businessType, Id officeId, String commercialGroup) {
+    public static ViewDTO getView(Id firmId, String period, String businessType, List<Id> officeIds, List<String> commercialGroups) {
         List<String> renewalTypes = RENEWAL_TYPES;
+        Boolean officeFiltered = officeIds != null && !officeIds.isEmpty();
+        Boolean groupFiltered = commercialGroups != null && !commercialGroups.isEmpty();
         Date today = Date.today();
         Integer currentFY = fiscalYearOf(today.year(), today.month());
         Integer priorFY = currentFY - 1;
         Date t12mStart = today.addMonths(-12);
         String bc = businessClause(businessType);
-        String officeClause = (officeId != null) ? ' AND AccountId = :officeId' : '';
+        String officeClause = officeFiltered ? ' AND AccountId IN :officeIds' : '';
         List<String> nef = new List<String>(); List<String> ept = new List<String>(); Boolean[] inclOther = new Boolean[]{ false };
-        String groupClause = oppGroupFilter(commercialGroup, nef, ept, inclOther);
+        List<String> mappedFams = new List<String>();
+        String groupClause = oppGroupFilter(commercialGroups, nef, ept, inclOther, mappedFams);
 
         Map<String, Decimal> v = new Map<String, Decimal>{ 'alltime' => 0, 'cfy' => 0, 'pfy' => 0, 't12m' => 0 };
         Map<String, Integer> w = new Map<String, Integer>{ 'alltime' => 0, 'cfy' => 0, 'pfy' => 0, 't12m' => 0 };
@@ -163,35 +171,36 @@ public with sharing class FirmSalesSummaryController {
                 'SELECT SUM(SBQQ__NetPrice__c) sv, COUNT(Id) sc, CurrencyIsoCode iso FROM SBQQ__Subscription__c ' +
                 'WHERE Ultimate_Parent__c = :firmId AND SBQQ__StartDate__c <= :today AND SBQQ__EndDate__c >= :today' +
                 ' AND SBQQ__TerminatedDate__c = null AND SBQQ__Bundled__c = false' +
-                ((officeId != null) ? ' AND SBQQ__Account__c = :officeId' : '') +
-                subGroupClause(String.isNotBlank(commercialGroup), nef, ept, inclOther[0]) +
+                (officeFiltered ? ' AND SBQQ__Account__c IN :officeIds' : '') +
+                subGroupClause(groupFiltered, nef, ept, inclOther[0]) +
                 ' GROUP BY CurrencyIsoCode')) {
             subCnt += (Integer) ar.get('sc');
             subVal += CurrencyConvUSD.toUSD((Decimal) ar.get('sv'), (String) ar.get('iso'), today);
         }
         out.activeSubs = subCnt;
         out.activeSubValue = subVal.setScale(2);
-        out.groups = groupsLive(firmId, period, businessType, officeId);            // group panel: office filter
-        out.offices = getOfficeBreakdown(firmId, period, businessType, commercialGroup); // office panel: group filter
+        out.groups = groupsLive(firmId, period, businessType, officeIds);            // group panel: office filter
+        out.offices = getOfficeBreakdown(firmId, period, businessType, commercialGroups); // office panel: group filter
 
         // headline ACV (line-grain) for the selected period: the chosen group's ACV when a group is
         // filtered, else Σ of all groups' ACV (for the active office/business). Other periods' acv
         // stay null — the LWC re-queries per period and only renders the selected period.
         Decimal acvSel = 0;
+        Set<String> selGroupSet = groupFiltered ? new Set<String>(commercialGroups) : new Set<String>();
         for (GroupDTO g : out.groups) {
-            if (String.isBlank(commercialGroup) || g.name == commercialGroup) acvSel += (g.acv == null ? 0 : g.acv);
+            if (selGroupSet.isEmpty() || selGroupSet.contains(g.name)) acvSel += (g.acv == null ? 0 : g.acv);
         }
         for (PeriodDTO p : out.periods) if (p.key == period) p.acv = acvSel.setScale(2);
         return out;
     }
 
     /** Live group breakdown for one period, optionally filtered to one office. */
-    static List<GroupDTO> groupsLive(Id firmId, String period, String businessType, Id officeId) {
+    static List<GroupDTO> groupsLive(Id firmId, String period, String businessType, List<Id> officeIds) {
         PeriodBounds b = boundsFor(period);
         Date startD = b.startDate, endD = b.endDate;
         List<String> renewalTypes = RENEWAL_TYPES;
         String dateClause = b.unbounded ? '' : ' AND Opportunity.CloseDate >= :startD AND Opportunity.CloseDate <= :endD';
-        String officeClause = (officeId != null) ? ' AND Opportunity.AccountId = :officeId' : '';
+        String officeClause = (officeIds != null && !officeIds.isEmpty()) ? ' AND Opportunity.AccountId IN :officeIds' : '';
         String soql =
             'SELECT Product2.Family fam, Product2.Product_Type__c pt, CurrencyIsoCode iso, Opportunity.StageName st, ' +
             'CALENDAR_YEAR(Opportunity.CloseDate) yr, SUM(TotalPrice) v, SUM(Annual_Contract_Value__c) acv, COUNT(Id) items FROM OpportunityLineItem ' +
@@ -229,10 +238,13 @@ public with sharing class FirmSalesSummaryController {
     }
 
     /** Opportunity-level commercial-group semi-join clause; populates the bind lists (nef/ept). */
-    static String oppGroupFilter(String commercialGroup, List<String> nef, List<String> ept, Boolean[] inclOther) {
-        if (String.isBlank(commercialGroup)) return '';
+    static String oppGroupFilter(List<String> commercialGroups, List<String> nef, List<String> ept, Boolean[] inclOther, List<String> mappedFams) {
+        if (commercialGroups == null || commercialGroups.isEmpty()) return '';
+        Set<String> sel = new Set<String>(commercialGroups);   // multi-group => union of families (OR)
+        Set<String> mapped = new Set<String>();                // every non-Events family with any CMDT row
         for (Product_Family_Group__mdt m : Product_Family_Group__mdt.getAll().values()) {
-            if (m.Commercial_Group__c != commercialGroup) continue;
+            if (!'Events'.equals(m.Family__c)) mapped.add(m.Family__c);
+            if (!sel.contains(m.Commercial_Group__c)) continue;
             if ('Events'.equals(m.Family__c)) {
                 if (String.isBlank(m.Product_Type_1__c)) inclOther[0] = true; else ept.add(m.Product_Type_1__c);
             } else {
@@ -243,6 +255,12 @@ public with sharing class FirmSalesSummaryController {
         if (!nef.isEmpty()) ors.add('Product2.Family IN :nef');
         if (!ept.isEmpty()) ors.add('(Product2.Family = \'Events\' AND Product2.Product_Type__c IN :ept)');
         if (inclOther[0]) ors.add('(Product2.Family = \'Events\' AND (Product2.Product_Type__c = null OR (Product2.Product_Type__c != \'Sponsorship\' AND Product2.Product_Type__c != \'Ticket\')))');
+        // The DEFAULT group also catches every UNMAPPED family (resolveGroup fallthrough) so the group
+        // filter/drill agrees with the group breakdown. Needs the :mappedFams bind in caller scope.
+        if (sel.contains(DEFAULT_GROUP)) {
+            mappedFams.addAll(mapped);
+            ors.add('(Product2.Family != null AND Product2.Family NOT IN :mappedFams)');
+        }
         String sub = ors.isEmpty() ? 'SELECT OpportunityId FROM OpportunityLineItem WHERE Id = null'
                                    : 'SELECT OpportunityId FROM OpportunityLineItem WHERE ' + String.join(ors, ' OR ');
         return ' AND Id IN (' + sub + ')';
@@ -251,16 +269,17 @@ public with sharing class FirmSalesSummaryController {
     // ---------- office breakdown (live) ----------
     @AuraEnabled
     public static List<OfficeDTO> getOfficeBreakdown(Id firmId, String period, String businessType) {
-        return getOfficeBreakdown(firmId, period, businessType, null);
+        return getOfficeBreakdown(firmId, period, businessType, (List<String>) null);
     }
-    /** Office breakdown, optionally filtered to one commercial group (opp-grain semi-join). */
-    public static List<OfficeDTO> getOfficeBreakdown(Id firmId, String period, String businessType, String commercialGroup) {
+    /** Office breakdown, optionally filtered to one or more commercial groups (opp-grain semi-join). */
+    public static List<OfficeDTO> getOfficeBreakdown(Id firmId, String period, String businessType, List<String> commercialGroups) {
         PeriodBounds b = boundsFor(period);
         Date startD = b.startDate, endD = b.endDate, today = Date.today();
         List<String> renewalTypes = RENEWAL_TYPES;
         List<String> nef = new List<String>(); List<String> ept = new List<String>(); Boolean[] inclOther = new Boolean[]{ false };
-        String groupClause = oppGroupFilter(commercialGroup, nef, ept, inclOther);
-        Boolean groupFiltered = String.isNotBlank(commercialGroup);
+        List<String> mappedFams = new List<String>();
+        String groupClause = oppGroupFilter(commercialGroups, nef, ept, inclOther, mappedFams);
+        Boolean groupFiltered = commercialGroups != null && !commercialGroups.isEmpty();
         Map<Id, OfficeDTO> byOffice = new Map<Id, OfficeDTO>();
 
         String dateClause = b.unbounded ? '' : ' AND CloseDate >= :startD AND CloseDate <= :endD';
@@ -301,6 +320,7 @@ public with sharing class FirmSalesSummaryController {
             o.officeName = a.Name;
             o.city = a.BillingCity;
             o.country = a.BillingCountry;
+            o.region = RegionMappingService.regionFor(a.BillingCountry);
         }
         List<OfficeDTO> out = byOffice.values();
         out.sort();
@@ -309,7 +329,7 @@ public with sharing class FirmSalesSummaryController {
 
     // ---------- opportunity drill (live, paginated) ----------
     @AuraEnabled
-    public static OppPageDTO getOpportunities(Id firmId, Id officeId, String commercialGroup,
+    public static OppPageDTO getOpportunities(Id firmId, List<Id> officeIds, List<String> commercialGroups,
                                               String period, String businessType,
                                               Integer pageSize, Integer offset) {
         Integer lim = (pageSize == null || pageSize <= 0) ? 10 : Math.min(pageSize, 200);
@@ -319,32 +339,14 @@ public with sharing class FirmSalesSummaryController {
         List<String> renewalTypes = RENEWAL_TYPES;
 
         String whereClause = 'Ultimate_Account__c = :firmId AND StageName IN (:WON, :CANC)';
-        if (officeId != null) whereClause += ' AND AccountId = :officeId';
+        if (officeIds != null && !officeIds.isEmpty()) whereClause += ' AND AccountId IN :officeIds';
         if (!b.unbounded) whereClause += ' AND CloseDate >= :startD AND CloseDate <= :endD';
         whereClause += businessClause(businessType);
 
-        // group filter via CMDT-resolved family/Product-Type-1 semi-join on line items
-        List<String> nonEventFamilies = new List<String>();
-        List<String> eventPtypes = new List<String>();
-        Boolean inclEventsOther = false;
-        if (String.isNotBlank(commercialGroup)) {
-            for (Product_Family_Group__mdt m : Product_Family_Group__mdt.getAll().values()) {
-                if (m.Commercial_Group__c != commercialGroup) continue;
-                if ('Events'.equals(m.Family__c)) {
-                    if (String.isBlank(m.Product_Type_1__c)) inclEventsOther = true;
-                    else eventPtypes.add(m.Product_Type_1__c);
-                } else {
-                    nonEventFamilies.add(m.Family__c);
-                }
-            }
-            List<String> ors = new List<String>();
-            if (!nonEventFamilies.isEmpty()) ors.add('Product2.Family IN :nonEventFamilies');
-            if (!eventPtypes.isEmpty()) ors.add('(Product2.Family = \'Events\' AND Product2.Product_Type__c IN :eventPtypes)');
-            if (inclEventsOther) ors.add('(Product2.Family = \'Events\' AND (Product2.Product_Type__c = null OR (Product2.Product_Type__c != \'Sponsorship\' AND Product2.Product_Type__c != \'Ticket\')))');
-            String sub = ors.isEmpty() ? 'SELECT OpportunityId FROM OpportunityLineItem WHERE Id = null'
-                                       : 'SELECT OpportunityId FROM OpportunityLineItem WHERE ' + String.join(ors, ' OR ');
-            whereClause += ' AND Id IN (' + sub + ')';
-        }
+        // group filter — reuse the shared CMDT semi-join (multi-group OR union + unmapped→DEFAULT catch)
+        List<String> nef = new List<String>(); List<String> ept = new List<String>(); Boolean[] inclOther = new Boolean[]{ false };
+        List<String> mappedFams = new List<String>();
+        whereClause += oppGroupFilter(commercialGroups, nef, ept, inclOther, mappedFams);
 
         OppPageDTO page = new OppPageDTO();
         page.total = Database.countQuery('SELECT COUNT() FROM Opportunity WHERE ' + whereClause);
@@ -367,6 +369,68 @@ public with sharing class FirmSalesSummaryController {
             page.rows.add(d);
         }
         return page;
+    }
+
+    // ---------- firm-grain plan metrics (live) ----------
+    // Backs the firmPlanMetrics LWC, which replaces the standard Account Plan "Account Metrics"
+    // strip (that strip only counts opportunities directly on the plan's account, so it reads £0
+    // for firms whose revenue lives on office opps). Open pipeline + win rate computed live at
+    // firm grain; revenue/ACV/subs come from the persisted rollups via getSummary.
+    // RESTORED 2026-07-27: still a live dependency of firmPlanMetrics on the user's active
+    // Account_Plan_Record_Page1 (native AccountPlan). Do not remove again until that page is
+    // deactivated and firmPlanMetrics is deleted in the same change — see project memory.
+    @AuraEnabled(cacheable=true)
+    public static PipelineDTO getOpenPipeline(Id firmId) {
+        PipelineDTO d = new PipelineDTO();
+        d.openCount = 0; d.openValueUSD = 0;
+        Date today = Date.today();
+        for (AggregateResult ar : [
+                SELECT CurrencyIsoCode iso, COUNT(Id) c, SUM(Amount) amt
+                FROM Opportunity
+                WHERE Ultimate_Account__c = :firmId AND IsClosed = false
+                GROUP BY CurrencyIsoCode]) {
+            d.openCount += (Integer) ar.get('c');
+            d.openValueUSD += CurrencyConvUSD.toUSD((Decimal) ar.get('amt'), (String) ar.get('iso'), today);
+        }
+        d.openValueUSD = d.openValueUSD.setScale(2);
+        d.byStage = new List<StagePoint>();
+        for (AggregateResult ar : [
+                SELECT StageName st, COUNT(Id) c FROM Opportunity
+                WHERE Ultimate_Account__c = :firmId AND IsClosed = false
+                GROUP BY StageName ORDER BY COUNT(Id) DESC]) {
+            StagePoint sp = new StagePoint();
+            sp.stage = (String) ar.get('st');
+            sp.count = (Integer) ar.get('c');
+            d.byStage.add(sp);
+        }
+
+        PeriodBounds cfy = boundsFor('cfy');
+        PeriodBounds pfy = boundsFor('pfy');
+        Date cfyS = cfy.startDate, cfyE = cfy.endDate, pfyS = pfy.startDate, pfyE = pfy.endDate;
+        Integer cfyWon = 0, cfyAll = 0, pfyWon = 0, pfyAll = 0;
+        for (AggregateResult ar : [
+                SELECT IsWon w, COUNT(Id) c FROM Opportunity
+                WHERE Ultimate_Account__c = :firmId AND IsClosed = true
+                  AND CloseDate >= :cfyS AND CloseDate <= :cfyE
+                GROUP BY IsWon]) {
+            Integer c = (Integer) ar.get('c');
+            cfyAll += c;
+            if ((Boolean) ar.get('w')) cfyWon += c;
+        }
+        for (AggregateResult ar : [
+                SELECT IsWon w, COUNT(Id) c FROM Opportunity
+                WHERE Ultimate_Account__c = :firmId AND IsClosed = true
+                  AND CloseDate >= :pfyS AND CloseDate <= :pfyE
+                GROUP BY IsWon]) {
+            Integer c = (Integer) ar.get('c');
+            pfyAll += c;
+            if ((Boolean) ar.get('w')) pfyWon += c;
+        }
+        d.cfyClosedCount = cfyAll;
+        d.pfyClosedCount = pfyAll;
+        d.cfyWinRate = (cfyAll == 0) ? null : (Decimal.valueOf(cfyWon) / cfyAll * 100).setScale(1);
+        d.pfyWinRate = (pfyAll == 0) ? null : (Decimal.valueOf(pfyWon) / pfyAll * 100).setScale(1);
+        return d;
     }
 
     // ---------- refresh ----------
@@ -460,6 +524,7 @@ public with sharing class FirmSalesSummaryController {
         @AuraEnabled public String officeName;
         @AuraEnabled public String city;
         @AuraEnabled public String country;
+        @AuraEnabled public String region;
         @AuraEnabled public Decimal value = 0;
         @AuraEnabled public Integer wonCount = 0;
         @AuraEnabled public Integer subs = 0;
@@ -483,5 +548,18 @@ public with sharing class FirmSalesSummaryController {
         @AuraEnabled public String type;
         @AuraEnabled public String stage;
         @AuraEnabled public Decimal amountUSD;
+    }
+    public class PipelineDTO {
+        @AuraEnabled public Integer openCount;
+        @AuraEnabled public Decimal openValueUSD;
+        @AuraEnabled public Decimal cfyWinRate;      // % 0-100, null when no closed opps in window
+        @AuraEnabled public Decimal pfyWinRate;
+        @AuraEnabled public Integer cfyClosedCount;
+        @AuraEnabled public Integer pfyClosedCount;
+        @AuraEnabled public List<StagePoint> byStage;
+    }
+    public class StagePoint {
+        @AuraEnabled public String stage;
+        @AuraEnabled public Integer count;
     }
 }

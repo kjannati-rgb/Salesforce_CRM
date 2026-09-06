@@ -33,6 +33,16 @@
             <targetReference>Update_Opportunity_with_product_stamp</targetReference>
         </connector>
     </assignments>
+    <customErrors>
+        <name>Err_ALM_Codes_Required</name>
+        <label>ALM Codes Required</label>
+        <locationX>182</locationX>
+        <locationY>1032</locationY>
+        <customErrorMessages>
+            <errorMessage>{!SF_PromoDispatch_Stamp.out_gapMessage}</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
     <decisions>
         <name>D_ALM_Code_Relevant</name>
         <label>ALM Code: Relevant Change?</label>
@@ -53,6 +63,35 @@
                 <targetReference>SF_ALM_Code_Stamp</targetReference>
             </connector>
             <label>Relevant</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>D_PromoDispatch_Gap</name>
+        <label>REV-60: ALM code gap?</label>
+        <locationX>182</locationX>
+        <locationY>924</locationY>
+        <defaultConnectorLabel>No gap</defaultConnectorLabel>
+        <rules>
+            <name>r_PromoDispatch_Gap</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>SF_PromoDispatch_Stamp.out_hasGap</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>check_ifNew</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Err_ALM_Codes_Required</targetReference>
+            </connector>
+            <label>Has gap</label>
         </rules>
     </decisions>
     <decisions>
@@ -113,7 +152,7 @@
     <formulas>
         <name>frm_ALM_CodeRelevant</name>
         <dataType>Boolean</dataType>
-        <expression>OR(ISNEW(), ISCHANGED({!$Record.SBQQ__LastCalculatedOn__c}), ISCHANGED({!$Record.SBQQ__NetAmount__c}), ISCHANGED({!$Record.SBQQ__LineItemCount__c}))</expression>
+        <expression>OR(ISNEW(), ISCHANGED({!$Record.SBQQ__LastCalculatedOn__c}), ISCHANGED({!$Record.SBQQ__NetAmount__c}), ISCHANGED({!$Record.SBQQ__LineItemCount__c}), ISCHANGED({!$Record.SBQQ__SubscriptionTerm__c}), ISCHANGED({!$Record.SBQQ__BillingFrequency__c}))</expression>
     </formulas>
     <formulas>
         <name>checkif_flowIsDisabled</name>
@@ -216,7 +255,28 @@
         <label>ALM Code Stamp (REV-71)</label>
         <locationX>182</locationX>
         <locationY>708</locationY>
+        <connector>
+            <targetReference>SF_PromoDispatch_Stamp</targetReference>
+        </connector>
         <flowName>Quote_ALM_Code_Stamp</flowName>
+        <inputAssignments>
+            <name>in_Quote</name>
+            <value>
+                <elementReference>$Record</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <subflows>
+        <description>REV-60 Layer 1: stamps Promo_Code__c / Dispatch_Method_Code__c on the quote's ALM lines. Chained after REV-71 under the same D_ALM_Code_Relevant gate. Inert until ALM_Code_Engine_Settings.Control switches are on.</description>
+        <name>SF_PromoDispatch_Stamp</name>
+        <label>ALM Promo/Dispatch Stamp (REV-60)</label>
+        <locationX>182</locationX>
+        <locationY>816</locationY>
+        <connector>
+            <targetReference>D_PromoDispatch_Gap</targetReference>
+        </connector>
+        <flowName>Quote_ALM_PromoDispatch_Stamp</flowName>
         <inputAssignments>
             <name>in_Quote</name>
             <value>

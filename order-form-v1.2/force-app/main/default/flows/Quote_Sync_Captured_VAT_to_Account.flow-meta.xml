@@ -1,7 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>62.0</apiVersion>
+    <decisions>
+        <name>Decision_Account_VAT_Blank</name>
+        <label>Account has no Sales Tax Number yet?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Account already holds a number - never overwrite</defaultConnectorLabel>
+        <rules>
+            <name>Account_Blank</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>AccountVat</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Account_VAT</targetReference>
+            </connector>
+            <label>Account blank - write with provenance</label>
+        </rules>
+    </decisions>
     <environments>Default</environments>
+    <formulas>
+        <name>AccountVat</name>
+        <dataType>String</dataType>
+        <expression>{!$Record.SBQQ__Account__r.Sales_Tax_Number__c}</expression>
+    </formulas>
+    <formulas>
+        <name>SourceNote</name>
+        <dataType>String</dataType>
+        <expression>&quot;Customer-signed Order Form &quot; &amp; {!$Record.Name} &amp; &quot;, &quot; &amp; TEXT(TODAY())</expression>
+    </formulas>
     <interviewLabel>Quote - Sync Captured VAT to Account {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Quote - Sync Captured VAT to Account</label>
     <processMetadataValues>
@@ -19,7 +51,7 @@
     <processType>AutoLaunchedFlow</processType>
     <recordUpdates>
         <name>Update_Account_VAT</name>
-        <label>Update account VAT ID</label>
+        <label>Write account Sales Tax Number + provenance note</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <filterLogic>and</filterLogic>
@@ -36,13 +68,19 @@
                 <elementReference>$Record.Customer_VAT_Number_Captured__c</elementReference>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <field>Sales_Tax_Number_Source__c</field>
+            <value>
+                <elementReference>SourceNote</elementReference>
+            </value>
+        </inputAssignments>
         <object>Account</object>
     </recordUpdates>
     <start>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Update_Account_VAT</targetReference>
+            <targetReference>Decision_Account_VAT_Blank</targetReference>
         </connector>
         <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
         <filterLogic>and</filterLogic>

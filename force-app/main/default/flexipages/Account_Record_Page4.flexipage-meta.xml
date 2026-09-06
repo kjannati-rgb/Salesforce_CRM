@@ -208,36 +208,6 @@
                 <identifier>RecordAmLaw_200_Account__cField</identifier>
             </fieldInstance>
         </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Falcon_ID__c</fieldItem>
-                <identifier>RecordFalcon_ID__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Law_com_Account_Owner__c</fieldItem>
-                <identifier>RecordLaw_com_Account_Owner__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Duplicate_Identified__c</fieldItem>
-                <identifier>RecordDuplicate_Identified__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Data_Hygiene_Comments__c</fieldItem>
-                <identifier>RecordData_Hygiene_Comments__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Lexology_PRO_disqualified__c</fieldItem>
-                <identifier>RecordLexology_PRO_disqualified__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
         <name>Facet-c73602b7-4289-4f75-9024-3e0e2210b7e2</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -1175,6 +1145,16 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
+                <componentName>activityTimelineMasterDetail</componentName>
+                <identifier>c_activityTimelineMasterDetail</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-cd8e5264-6c5d-4359-970f-767ec96698e7</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
                 <componentInstanceProperties>
                     <name>attachmentChecked</name>
                     <value>true</value>
@@ -1205,6 +1185,42 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
+                <componentName>firmSalesSummary</componentName>
+                <identifier>c_firmSalesSummary_tab</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-fss-sales-summary</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>parentFieldApiName</name>
+                    <value>Account.Id</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListApiName</name>
+                    <value>Account_Plans__r</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>rowsToDisplay</name>
+                    <value>10</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showActionBar</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentName>force:relatedListSingleContainer</componentName>
+                <identifier>force_relatedListSingle_customAccountPlans</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-fss-account-plans-v2</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
                 <componentInstanceProperties>
                     <name>active</name>
                     <value>true</value>
@@ -1219,6 +1235,48 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:tab</componentName>
                 <identifier>customTab</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-fss-account-plans-v2</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>title</name>
+                    <value>Account Plan</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:tab</componentName>
+                <identifier>flexipage_tab_accountplans_v2</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-fss-sales-summary</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>title</name>
+                    <value>Sales Summary</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:tab</componentName>
+                <identifier>flexipage_tab_salessummary</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-cd8e5264-6c5d-4359-970f-767ec96698e7</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>title</name>
+                    <value>Office Activities</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:tab</componentName>
+                <identifier>flexipage_tab2</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>

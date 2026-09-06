@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-30
 **Org (target):** **SANDBOX** — `kamyar.jannati@lbresearch.com.kjdev`, Org Id `00DAe00000D35gVMAR`, `https://lawbusinessresearch--kjdev.sandbox.my.salesforce.com`. Confirmed via `sf org display -o KJDEV` before any action. **Not production** (prod is `00D6g0000081IOgEAM`).
-**Status:** Read-only investigation + backup complete. **No metadata deployed yet** — Step 2 deployment is paused pending your decisions (see end).
+**Status:** COMPLETE in KJDEV. Field surfaced + read-only deployed; auto-stamp flow activated and end-to-end verified against Opportunity `006Ae00000obPM1IAM`. See "Verification results" below. Nothing deployed to production.
 
 ---
 
@@ -109,14 +109,27 @@ The widget blocks a 2nd SDR, but the related list, Data Loader, API, and the ren
 
 ---
 
-## Step 4/5 — Deploy & verify (PENDING decision)
+## Step 4/5 — Deploy & verify (DONE in KJDEV)
 
-Will run only against KJDEV, after your go-ahead, and re-confirm the org in the deploy output:
-```
-sf project deploy start -o KJDEV --dry-run -d <paths>     # validate
-sf project deploy start -o KJDEV -d <paths>               # deploy
-```
-Verify: open an Opportunity as a standard sales user → field shows in highlights panel and (if read-only chosen) is non-editable; add/change an SDR team member → confirm behaviour; diff each layout against `backup/.../source-original/` to confirm no fields were lost.
+Deployed to KJDEV in three steps (all `Succeeded`, 0 errors; org confirmed as the sandbox each time):
+1. **Surface (editable)** — 5 layouts + 2 compact layouts (deploy `0AfAe00000R5KPxKAN`, 7/7).
+2. **Activate auto-stamp flow** — `OpportuintyTeam_AfterSave` deployed with `<status>Active</status>`; org now shows **v2 Active** (v1 Obsolete).
+3. **Read-only flip** — 5 layouts changed `Edit → Readonly` for the SDR field (5/5).
+
+### Verification results (Opportunity `006Ae00000obPM1IAM` — "Test", New Business)
+
+| Check | Method | Result |
+|---|---|---|
+| Field surfaced in highlights panel | confirmed object default compact layout = `New_Awesome_Companct_Layout` (edited) + `Renewals_Compact_Layout`; re-retrieved `Opportunity.object` from org shows the field present | ✅ all record types |
+| Field on main layout, no fields lost | diff each layout vs `backup/.../source-original/` | ✅ single addition per file |
+| **Auto-stamp works** | set field = null → field blank; touched the SDR OTM (`00qAe000007R9EUIA0`) → field repopulated to `005Tm0000005qh7IAA` | ✅ |
+| **Read-only doesn't block the system** | with the field read-only on the layout: null field → touch SDR OTM → field repopulated to `005Tm0000005qh7IAA` | ✅ system writes through layout read-only |
+| Field read-only for users | layout `<behavior>Readonly</behavior>` deployed on all 5 | ✅ (UI; FLS intentionally not set) |
+
+Notes:
+- Tested the **Update** path (re-triggering the existing SDR member). The Create path uses the same `Update_SDR` element. The opp was left in its original state (field populated, OTM access restored to `Edit`).
+- The sandbox has **0 other Opportunity records**, so this single opp was the only live test target.
+- FLS was **not** set read-only (per recommendation) — so the flow writing in `SystemModeWithoutSharing` is not the only reason it works here; layout read-only alone never blocks automation.
 
 ---
 

@@ -88,7 +88,7 @@ async function upsert(type, extId, fields) {
     SBQQ__PageNumberAlignment__c: "Right",
   };
   const templateId = await upsert("SBQQ__QuoteTemplate__c", "OF-V12-TEMPLATE", {
-    ...shell, Name: "Order Form v1.2 - Subscriptions", SBQQ__WatermarkId__c: watermarkId });
+    ...shell, Name: "Subscription Order Form", SBQQ__WatermarkId__c: watermarkId });
   const templates = [["", templateId]];
 
   console.log("2/4 Template content");
@@ -103,6 +103,7 @@ async function upsert(type, extId, fields) {
     ["OF-V12-C06", "OF v1.2 - 05 Governing law", "HTML", "05-governing-law.html"],
     ["OF-V12-C06B", "OF v1.2 - 06 Special instructions", "HTML", "06-special-instructions.html"],
     ["OF-V12-C07", "OF v1.2 - 07 Special terms", "HTML", "07-special-terms.html"],
+    ["OF-V12-C07B", "OF v1.2 - 08 Other terms", "HTML", "07b-other-terms.html"],
     ["OF-V12-C08", "OF v1.2 - 08 Execution", "HTML", "08-execution.html"],
     ["OF-V12-CLINES", "OF v1.2 - Line items", "Line Items", null],
   ];
@@ -119,6 +120,9 @@ async function upsert(type, extId, fields) {
     await fetch(`${API}/sobjects/SBQQ__QuoteTemplate__c/${tid}`, { method: "PATCH", headers: HEADERS, body: JSON.stringify({
       SBQQ__HeaderContent__c: contentIds["OF-V12-CHEAD"],
       SBQQ__FooterContent__c: contentIds["OF-V12-CFOOT"],
+      // The Generate Document picker only lists Deployed templates - "In Development"
+      // makes the template invisible to reps (caught on camera 28 Aug).
+      SBQQ__DeploymentStatus__c: "Deployed",
     }) });
     // The CPQ package auto-creates default line columns (QTY, PART #, ...) on template insert.
     const strays = await soql(`SELECT Id, Name FROM SBQQ__LineColumn__c WHERE SBQQ__Template__c = '${tid}' AND External_Id__c = null`);
@@ -139,7 +143,8 @@ async function upsert(type, extId, fields) {
     ["OF-V12-S70", "5 Governing law", 70, "OF-V12-C06"],
     ["OF-V12-S75", "6 Special instructions", 75, "OF-V12-C06B"],
     ["OF-V12-S80", "7 Special terms", 80, "OF-V12-C07"],
-    ["OF-V12-S90", "8 Execution", 90, "OF-V12-C08"],
+    ["OF-V12-S85", "8 Other terms", 85, "OF-V12-C07B"],
+    ["OF-V12-S90", "9 Execution", 90, "OF-V12-C08"],
   ];
   for (const [suffix, tid] of templates) {
     for (const [ext, name, order, contentExt] of sections) {
@@ -150,23 +155,31 @@ async function upsert(type, extId, fields) {
         SBQQ__DisplayOrder__c: order,
       };
       if (ext === "OF-V12-S40") fields.SBQQ__QuoteTotalsPrinted__c = true;
+      // Execution starts on its own page: the doc engine ignores page-break-inside CSS,
+      // so signatures were straddling page breaks (Antheros review 28 Aug).
+      if (ext === "OF-V12-S90") fields.SBQQ__PageBreak__c = "Before";
       await upsert("SBQQ__TemplateSection__c", ext + suffix, fields);
     }
   }
 
   console.log("4/4 Line columns");
   const columns = [
-    ["OF-V12-L10", "Product Description", 10, "SBQQ__ProductName__c", 26, "Left"],
-    ["OF-V12-L20", "License Model", 20, "License_Model_Display__c", 25, "Left"],
-    ["OF-V12-L25", "Qty", 25, "SBQQ__Quantity__c", 5, "Center"],
+    ["OF-V12-L10", "Product Description", 10, "SBQQ__ProductName__c", 28, "Left"],
+    ["OF-V12-L20", "License Model", 20, "License_Model_Display__c", 28, "Left"],
     ["OF-V12-L30", "Annual fee (excl. tax)", 30, "SBQQ__NetTotal__c", 16, "Right"],
-    ["OF-V12-L50", "Start date", 50, "SBQQ__StartDate__c", 14, "Center"],
-    ["OF-V12-L60", "End date", 60, "SBQQ__EndDate__c", 14, "Center"],
+    // Date source switched 2026-08-19 (Kam): real QLE lines leave SBQQ__Start/EndDate__c null
+    // and carry term dates in the finance-canonical SUN Report formulas (0.4% null on 180d
+    // PROD subs lines vs 100% null raw dates on QLE-built quotes).
+    ["OF-V12-L50", "Start date", 50, "Start_Date_SUN_Report__c", 14, "Center"],
+    ["OF-V12-L60", "End date", 60, "End_Date_SUN_Report__c", 14, "Center"],
   ];
   // Retired columns (removed from the design) - deleted from the org if present.
   // OF-V12-L40 Currency: dropped 2026-08-18 (Kam) - the fee's automatic ISO prefix already
   // shows the currency, making a separate column redundant.
-  const RETIRED_COLUMNS = ["OF-V12-L40"];
+  // OF-V12-L25 Qty: dropped 2026-09-01 (Kam) - seat counts already print in contract language
+  // in the License Model column, the fee is a line total with no unit price to multiply, and
+  // most forms showed a column of "1.00"s. Width redistributed to Product/License Model.
+  const RETIRED_COLUMNS = ["OF-V12-L40", "OF-V12-L25"];
   for (const [suffix, tid] of templates) {
     for (const ext of RETIRED_COLUMNS) {
       const gone = await soql(`SELECT Id FROM SBQQ__LineColumn__c WHERE External_Id__c = '${ext}${suffix}'`);

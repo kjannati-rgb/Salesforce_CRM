@@ -94,22 +94,6 @@
                 <behavior>Readonly</behavior>
                 <field>Client_Status__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Falcon_ID__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Law_com_Account_Owner__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Duplicate_Identified__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Lexology_PRO_disqualified__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -266,69 +250,6 @@
         <customLabel>true</customLabel>
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
-        <label>Firm Sales Summary (USD)</label>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Firm_Won_Value_AllTime_USD__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Firm_Cancellation_Value_AllTime_USD__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Firm_Won_Value_CFY_USD__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Firm_Won_Value_PFY_USD__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Firm_Won_Value_T12M_USD__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Firm_Active_Sub_Value_USD__c</field>
-            </layoutItems>
-        </layoutColumns>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Firm_Won_Count_AllTime__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Firm_Cancellation_Count_AllTime__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Firm_Won_Count_CFY__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Firm_Won_Count_PFY__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Firm_Won_Count_T12M__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Firm_Active_Subscriptions__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Firm_Rollup_Last_Refreshed__c</field>
-            </layoutItems>
-        </layoutColumns>
-        <style>TwoColumnsLeftToRight</style>
-    </layoutSections>
-    <layoutSections>
-        <customLabel>true</customLabel>
-        <detailHeading>true</detailHeading>
-        <editHeading>true</editHeading>
         <label>Social Media</label>
         <layoutColumns>
             <layoutItems>
@@ -358,10 +279,6 @@
         <editHeading>true</editHeading>
         <label>Description Information</label>
         <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Data_Hygiene_Comments__c</field>
-            </layoutItems>
         </layoutColumns>
         <style>OneColumn</style>
     </layoutSections>
@@ -442,10 +359,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Industry_Category_txt__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Number_of_Attorneys__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -633,21 +546,6 @@
         <sortOrder>Asc</sortOrder>
     </relatedLists>
     <relatedLists>
-        <customButtons>takeownership__Take_Ownership_Multi</customButtons>
-        <customButtons>Change_Owner</customButtons>
-        <fields>CASES.CASE_NUMBER</fields>
-        <fields>CASES.SUBJECT</fields>
-        <fields>CASES.CREATED_DATE</fields>
-        <fields>CASES.CLOSED_DATE</fields>
-        <fields>OWNER_NAME</fields>
-        <fields>ACCOUNT.NAME</fields>
-        <fields>CASES.PRIORITY</fields>
-        <fields>CASES.STATUS</fields>
-        <relatedList>Case.Firm_Account__c</relatedList>
-        <sortField>CASES.CASE_NUMBER</sortField>
-        <sortOrder>Desc</sortOrder>
-    </relatedLists>
-    <relatedLists>
         <excludeButtons>MassChangeOwner</excludeButtons>
         <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
@@ -683,13 +581,17 @@
         <fields>Segment__c</fields>
         <fields>Plan_Status__c</fields>
         <fields>Total_ARR__c</fields>
-        <fields>Headroom__c</fields>
         <relatedList>Account_Plan__c.Account__c</relatedList>
         <sortField>NAME</sortField>
         <sortOrder>Asc</sortOrder>
     </relatedLists>
     <relatedLists>
         <relatedList>RelatedEntityHistoryList</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>MEMBER_NAME</fields>
+        <fields>TEAM_MEMBER_ROLE</fields>
+        <relatedList>RelatedAccountSalesTeam</relatedList>
     </relatedLists>
     <relatedObjects>ParentId</relatedObjects>
     <showEmailCheckbox>false</showEmailCheckbox>

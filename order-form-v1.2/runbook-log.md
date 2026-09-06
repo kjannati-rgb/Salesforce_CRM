@@ -293,3 +293,1089 @@ Shinae's "v1.3 Order Form template 13082026.docx" resolves decision 2: the v1.2 
 Kam explicitly chose "both" for VAT/PO: populate from source AND let the signer overwrite with write-back - which is exactly the Phase 3 merge-mapping + data-mapping design, so no mapping records changed (only the VAT formula source and sync-flow target). Pre-fill behaviour remains an UNVERIFIED-until-round-trip convention. Note: the PDF itself always shows the (placement-mode) tag, never the pre-filled value - pre-fill appears in the Adobe signing session.
 
 **RESOLVED same day (Kam, 2026-08-13):** GHK is governed by English law; rule = Americas entities (ALM, LLC) -> New York law, all others (LBR, GHK, MBL) -> English law. Draft markers removed; final clause sentences deployed to KJDEV + FULLUAT and verified (ALM/LLC=NY, LBR/GHK/MBL=English). Also resolved: decision 1 (Legal/Notices = optional Contact lookup on Quote, per-quote entry - built as such, layout placement pending), decision 4 (annual fee = Net Total, confirmed), decision 5 (signatory default from Main/commercial contact, rep can override - confirmed). Still open: ALM registration number (renders blank). Decision 6 CLOSED 2026-08-13 - Kam verified the General Terms URL resolves. Payment-due live-terms rendering CONFIRMED by Kam 2026-08-13; decision 2 resolved by v1.3.
+
+## Licence-model system + MBL Seminars family (2026-08-14 to 2026-08-18, KJDEV + FULLUAT)
+
+Full record in `uat/subs-licence-model-analysis.md`. Three mechanisms, one per family shape:
+- **Specialist Platforms**: licence-type LABEL from the product name seeded onto `Product2.License_Model__c` (90 products; Print Copies / one-offs blank). Display formula prints labels verbatim; always list price x quantity (Bespoke = bespoke price).
+- **Lexology Pro**: person products seeded "Benefiting Group" (block pricing is legacy); machine APIs blank.
+- **Law.com / Law Journal Press**: REGION-based via before-save flow `QuoteLine_Stamp_License_Model` - ALM/LLC-billed = Limited Access + seats copy, others = Benefiting Group.
+- **MBL Seminars (added 2026-08-18, Kam ruling)**: 4 seat-based subs products (MBL+ Seat Based / MBL+ / Annual Webinar / Seat Based Annual Webinar) seeded **"Limited Access"** - block pricing is a pricing mechanic, out of scope for the licence column. Seat count lives in `SBQQ__Quantity__c` (PROD 180d: 747 MBL+ lines, qty 1-1,000; `Number_of_Seats__c` always 1 = dead for MBL). **MBL Credit prints a blank licence column** (custom editable price on top of list, no licence dimension).
+
+Flow change for MBL: the count-copy in `QuoteLine_Stamp_License_Model` is now FAMILY-AWARE - Law.com lines copy `Number_of_Seats__c`, MBL lines copy `SBQQ__Quantity__c` (write-when-blank in both cases; rep override wins). Without the family guard, the old rule would have stamped the constant seats=1 onto every MBL Limited Access line - caught before shipping. Verified KJDEV 2026-08-18: MBL+ qty 50 -> "Limited Access - Up to 50 authorised users"; MBL Credit blank; ALM Law.com regression (250 seats) intact. Seeder now covers three families (`seed-license-models.js --org <alias>`); re-run in Phase 6 with CONFIRM_PROD=YES.
+
+## ALM registration number resolved (2026-08-19)
+
+Kam supplied the ALM GLOBAL, LLC registration number: **13-3273851** (US EIN). Deployed to the
+`Legal_Entity_Document_Config.ALM` CMDT record as "13-3273851 (United States)" in KJDEV + FULLUAT
+and verified by query. The legal entity table is now COMPLETE - no blank rows remain. Last decision-3
+residue closed; Phase 6 needs no extra step (the record deploys with the rest of the metadata).
+
+## Brand logo question - PARKED (2026-08-19, Kam)
+
+Kam raised replacing the Centellic logo with product-brand logos on agreements; complication is
+mixed-brand contracts. Proposed design (not built): one template per brand, auto-selected -
+single-brand quote gets its brand logo, mixed-brand falls back to Centellic as the umbrella;
+legal paper (entity block, footer, governing law) stays the contracting entity regardless.
+Finance/Legal CONFIRMED happy with "Company (Centellic)" + entity block on brand-logoed paper.
+**Kam ruled: PARK the branding work for now.** Centellic logo stays on the single template.
+If revived: needs the brand ruling per family, official logo assets per brand, and a
+brand-derivation step in the send automation (offer stands to size single- vs mixed-brand
+quotes from 6 months of subs data first).
+
+## First real-quote render fixes (2026-08-19, from Kam's FULLUAT Q-206385)
+
+Kam generated the form on a real QLE-built quote; three defects surfaced and were fixed same day
+(deployed KJDEV + FULLUAT, template re-pushed, verified on a regenerated Q-206385):
+1. **Line date columns blank** - real QLE lines leave SBQQ__Start/EndDate__c null (term lives in
+   Subscription Term). Columns repointed to the finance-canonical **Start/End_Date_SUN_Report__c**
+   formulas per Kam (0.4% null on 180d PROD subs lines vs 5.6% for End_Date__c).
+2. **"Initial term X to [blank]"** - quote End Date null on real quotes. New formula field
+   `SBQQ__Quote__c.Order_Form_Term_End__c` = BLANKVALUE(EndDate, ADDMONTHS(StartDate, term) - 1);
+   section 4 row repointed; field added to the permset (Phase 6 deploy picks it up automatically).
+3. **Billing/invoice contact row blank** - per Kam, falls back to the main/commercial contact when
+   Invoice_Contact__c is unset. Done DISPLAY-ONLY inside the two Billing_Contact_* formulas -
+   deliberately NOT writing Invoice_Contact__c (finance processes consume that lookup).
+
+Also proven by this quote (deferred UAT cells): real AA approval cleared the watermark; QLE
+twin-copy delivered product-default licence models. Open from the same render: bare "Benefiting
+Group" on the legacy Lexology Pro - In House line (9 users, no group capture) - proposal pending
+with Kam to re-seed the two legacy per-user products to Authorised Users + count from quantity.
+Data note: Kam's Contact title ("...DPO") is outdated and prints on customer paper.
+
+## Benefiting Group capture system - layers 1-3 built (2026-08-20, Kam "lets do it")
+
+From the world-class recommendation set; deployed KJDEV + FULLUAT:
+1. **Legacy auto-derivation**: "Lexology Pro - In House" / "Lexology Pro - Law Firm" re-seeded
+   from Benefiting Group to **Authorised Users** (they are quantity-priced user licences; 2 products
+   per org). New generic flow rule in QuoteLine_Stamp_License_Model: Authorised Users + blank count +
+   qty>0 -> count = quantity (any family, write-when-blank). Verified in KJDEV: qty 9 -> "Number of
+   authorised users: 9". WORDING FLAG for Shinae: the ruled sentence references "Annex A", which the
+   Order Form does not carry - fine for named-user deals with an annex, questionable for legacy counts.
+2. **Renewal inheritance**: 6 twin fields created on SBQQ__Subscription__c (License_Model, Authorised
+   _User_Count, Function_Name, Group_Size, Benefiting_Group_Description, Benefitting_Group_Type) so CPQ
+   same-name field migration carries licence wording QuoteLine -> Subscription -> renewal QuoteLine.
+   Deliberately NOT twinned: Benefitting_Group__c (legacy value set polluted with ~200 countries).
+   FLS added to the permset. **UAT cell: needs a real contract -> renewal cycle in FULLUAT to prove
+   the end-to-end carry** (cannot be simulated by API inserts).
+3. **Send-gate**: both send flows now refuse a Benefiting Group line with no description/function/group
+   value. One-click shows a new error screen naming the offending line; zero-click quietly declines to
+   auto-send (rep falls back to one-click and sees why). UAT cell added.
+Parked pending Legal: CMDT phrase library + "wording defaulted" flag (needs approved wording);
+General Terms fallback sentence (Shinae).
+
+## Annex A removed from Authorised Users wording (2026-08-20, Kam: "there is no annex")
+
+The v1.2/v1.3 Authorised Users sentence referenced "Named individuals as listed in Annex A" but the
+Order Form carries no annex. Reworded in License_Model_Display__c, styled like the Limited Access
+sentence: with a count -> "Authorised Users - N named authorised users (as defined in the General
+Terms)."; count blank -> same sentence without the number. Deployed KJDEV + FULLUAT, verified (qty 9
+legacy Lexology line renders "Authorised Users - 9 named authorised users..."). Customer-facing legal
+wording -> include in Shinae's sign-off list alongside the +Qty/-Currency/label deviations.
+
+## Conditional PO row (2026-08-20, Kam)
+
+Kam filled the PO on a quote and expected to see it on the PDF; the signer-fillable design only
+shows the value inside the Adobe signing session. Ruled: print the value when known. New formula
+field `SBQQ__Quote__c.Order_Form_PO_Tag__c` emits the {{PO_Number_es_:signer1}} tag ONLY when
+PO_Number__c is blank; section 4 cell renders `{!quote.PO_Number__c}` + the tag field. Behaviour:
+PO known -> prints as document text, no Adobe field placed (signer cannot overwrite; Adobe merge
+mapping finds no field and skips harmlessly); PO blank -> signer-fillable field as before, with
+write-back. Deployed KJDEV + FULLUAT, template re-pushed, verified on Q-206385 ("KJ00001" prints).
+VAT still tag-only - same conditional treatment available if ruled.
+Sandbox note: FULLUAT contact emails print with the ".invalid" masking suffix on documents -
+sandbox email protection, not a template defect; PROD prints real addresses.
+
+## Conditional VAT row (2026-08-20, Kam - "yes for VAT please")
+
+Same pattern as the PO row: new formula field `SBQQ__Quote__c.Order_Form_VAT_Tag__c` emits the
+{{VAT_Number_es_:signer1}} tag ONLY when Customer_VAT_Number__c (Account.Sales_Tax_Number__c) is
+blank; section 1 cell renders `{!quote.Customer_VAT_Number__c}` + the tag field. Known VAT prints
+as document text (no Adobe field, no signer overwrite); blank VAT keeps the signer-fillable field
+with the Account write-back via the sync flow. Deployed KJDEV + FULLUAT, template re-pushed,
+verified both paths (KJDEV demo prints "GB 123 4567 89"; FULLUAT Q-206385 blank-VAT account shows
+the tag). All four signer-tag placements now: signature block always fillable; VAT/PO conditional.
+
+## FULLUAT Adobe probe - LINK WORKS, three E2E fixes (2026-08-20)
+
+Kam linked the Adobe account; first live send on Q-206385 surfaced and fixed:
+1. **Attachment resolution**: "Quote Document from Master Quote" threw "No quote document found on
+   the master record" - CPQ stores the PDF as a classic Document (zero ContentDocumentLinks) which
+   that type cannot resolve. Switched to PROD's proven pattern: attachment type **Runtime Variable**
+   ('quoteDocument'); OrderFormSignatureService passes the latest quote document's SBQQ__DocumentId__c
+   via `AgreementTemplateService.load(templateId, masterId, Map<String, AgreementTemplateVariable>)`
+   (real signatures from the package symbol table: ctor is (name, value); the List overload does not
+   exist). Also blank-DocumentId guard + test Document setup (FolderId = UserInfo.getUserId()).
+2. **Quote__c anchor**: the package does not populate custom lookups - the agreement was created with
+   Quote__c null, which would orphan the write-back data mapping. Service now stamps Quote__c right
+   after load; probe agreement backfilled.
+3. **Script idempotency**: create-agreement-template.js re-runs failed PATCHing master-detail parents
+   (Data_Mapping/Object_Mapping etc. not writable on update) - now stripped on the update path.
+PROBE RESULT: agreement a3GAd0000016EyzMAE created, PDF attached (runtime variable verified), Adobe
+Document Key issued (CBJCHBCA...) = reached Adobe; email to kamyar.jannati@lbresearch.com (signatory
+contact email unmasked from .invalid - sandbox masking gotcha for all UAT contacts). Local status
+stuck at "Created" because the **Callback User is not linked** - automatic status updates cannot
+arrive, so signing/write-back proof is gated on Kam linking it + Enable Automatic Status Updates.
+
+## Status-sync / write-backs PARKED mid-investigation (2026-08-20, Kam)
+
+Round-trip state when parked: OUTBOUND FULLY PROVEN (agreement created, correct PDF attached via
+runtime variable, Adobe Document Key issued, email delivered to the real address, Kam completed
+signing in the Adobe session - form fields placed and fillable). INBOUND NOT ARRIVING: agreements
+stay "Created"; no signed-status, signed date, PDF filing, or PO/VAT write-backs have landed.
+Callback User was linked; prime suspect is the separate "Enable Automatic Status Updates" step
+(Resources > Account Settings on the Adobe Admin tab) - unconfirmed. Next debugging steps when
+revived: confirm that step ran; then check callback user permissions + connected-app OAuth policy.
+UAT cells for status flow, write-backs, and signed-PDF filing remain OPEN. Also ruled (Kam): signer
+Position/Title stays document-only, no Contact write-back mapping.
+Three stale probe agreements on Q-206385 (2x .invalid-content PDFs superseded) - cancel via Adobe
+Manage when convenient.
+
+## Licence model made FULLY AUTOMATIC (2026-08-20, Kam: "it should not be manual")
+
+QuoteLine_Stamp_License_Model rebuilt as AUTHORITATIVE: recomputes License_Model__c on EVERY line
+save (create + update), no blank-only guard, no rep override. Law.com family -> region rule (US =
+Limited Access + count := Number_of_Seats; else Benefiting Group); all other lines -> model :=
+product's License_Model__c read via formula traversal (no more twin-copy dependence - raw API
+inserts resolve too); Authorised Users / non-Law.com Limited Access -> count := quantity, every
+save (stays in sync with qty edits). Display hardened: Limited Access with no count prints the
+plain label, not a broken sentence. Verified KJDEV: raw insert derives label; corrupt value heals
+on the same save; MBL qty 25 -> count 25.
+**Backfill sweep** (sweep-license-models.js --org X [--apply], client-side field comparison since
+SOQL cannot compare two fields): all mismatches were blank->value (pre-seeding lines). KJDEV
+127/127 healed; FULLUAT 7,364/7,410 healed over two passes (25-line composite batches - 200-line
+transactions blow CPQ trigger limits; UNABLE_TO_LOCK_ROW stragglers healed on pass 2). 25 lines
+UNFIXABLE: their quotes fail a pre-existing org VR ("multi year deal... expected segments = 4,
+created = 3") - blocked for any editor until deal owners fix segments; list reproducible via the
+sweep dry run. Playbook artifact + md updated: nothing manual except BG description + US seats.
+Phase 6 addition: run the sweep in PROD (CONFIRM_PROD=YES) after seeding.
+
+## ROUND TRIP COMPLETE + package data mapping replaced (2026-08-20 evening)
+
+Kam enabled Automatic Status Updates and signed twice. Results:
+- **Status sync WORKS**: UI-sent agreement synced to Signed within seconds. Agreements sent BEFORE
+  the webhook existed never update (no event replay) - the stale "Created" probes are cancellable
+  noise, not defects.
+- **Merge mapping (VAT/PO pre-fill) FIXED and Completes**: entries need Object_Reference_Path__c =
+  "Quote__r" (blank path reads fields off the agreement itself).
+- **Package DATA mapping is unusable for our custom Quote__c lookup** (v24.35): the object-mapping
+  stage uses Fully_Qualified_API__c both as an object describe AND as the literal query-path prefix.
+  Empirical matrix: "SBQQ__Quote__c" -> QueryException (relationship SBQQ__Quote__c); "Quote__r" ->
+  NPE line 710 (describe); "Quote__c" -> QueryException; blank -> fields queried on the agreement.
+  No value can satisfy both uses. Retrigger for testing = Trigger_Process_Template__c := true (the
+  Sync_Data_Mapping flag route NPEs independently - red herring that cost an hour).
+- **Replacement (deployed KJDEV + FULLUAT, tested)**: Agreement_Signed_Writeback flow (after-save,
+  Status = Signed + Quote__c set) -> OrderFormSignedWriteback invocable: stamps Customer_Signed_
+  Date__c and copies the package-attached "...- signed.pdf" Attachment to the quote as a File
+  (idempotent, name-guarded). Verified live on Q-206385: signed date 2026-08-20 + signed PDF filed.
+  Data mapping unlinked from the template + default flag cleared (stops per-signing error noise);
+  records kept as documentation.
+- **Remaining open leg**: signer-typed PO/VAT values (Adobe FormData) have no write-back path -
+  the package FormData fetch also failed ("missing Document Key value") and the conditional rows
+  mean fields only exist for blank-value customers. Options if wanted later: direct Adobe REST
+  formData call from our service, or revisit after a package upgrade. VAT largely self-cures via
+  account data; PO can be typed by the rep pre-send.
+Also: signer title->Contact write-back ruled out by Kam. Signatory_Contact justified vs Primary
+(defaults from it; override exists for authorised-signer cases).
+
+## Straggler error email silenced (2026-08-20 21:44)
+
+Kam received one more data-mapping error email after the unhook. Cause: the package stamps
+echosign_dev1__Process_Template__c on EVERY agreement at creation (from the template Data_Mapping
+link) - that per-agreement pointer survives unlinking the template, and any inbound event re-runs
+the broken mapping. Cleared Process_Template__c + Trigger_Process_Template__c on all 6 of today's
+agreements; verified template link null + default flag false. Nothing can run the package data
+mapping any more. (Mechanism note for the future: template Data_Mapping -> stamped per agreement
+as Process_Template at load; unhook must cover BOTH.)
+
+## BG sentence from REAL capture data + General Terms verified (2026-08-21)
+
+Kam challenged the assembled Benefiting Group wording with "send me a test order with sample data
+(dont hardcode)". Finding: in 433 real Lexology PRO - IH CW lines (PROD, 365d) reps capture ONLY
+Benefitting_Group_Type__c ("Corporate") + Group_Size__c (avg ~13) - the description/Function_Name
+fields are OURS (sandbox-only, do not exist in PROD), and Benefitting_Group__c is always blank. The
+display fallback chain therefore produced a bare label on real data. FIX: added a Type+Size branch
+to License_Model_Display__c - "Corporate" -> "All individuals within the Customer's in-house legal
+function[, comprising approximately N individuals]"; other types -> "the Customer's organisation".
+DRAFT WORDING - on Shinae's sign-off list. Deployed both sandboxes; test order rendered on Q-206385
+from an actual deal's values (Corporate/3/GBP3,045) with zero hand-written text; test line removed
+after render.
+
+**General Terms alignment CHECKED (Kam asked; fetched centellic.com/general-subscription-terms-of-
+business via browser - 403s plain fetches):** "Authorised Users" and "Benefiting Group" are both
+DEFINED TERMS; BG members are expressly treated as Authorised Users; clause 3.7 says the access
+type, user count and BG definition "are as specified in the Order Form" (= Permitted Scope); 3.9
+obliges the customer to keep BG membership current. No "Annex A" exists anywhere in the Terms -
+the de-annexed sentence was correct. "Limited Access"/"Enterprise-Wide Access" are not defined
+terms but function as the Order Form's "type of access" under 3.7 - defensible; on Shinae's list.
+No fallback clause for an unspecified BG (the Layer-5 proposal for Shinae stands).
+
+## Signer-typed PO write-back built (2026-08-21, Kam: "PO should write back. VAT no for now")
+
+Direct Adobe REST call replaces the package's broken form-data engine:
+- `OrderFormPoWriteback` (Queueable + callouts): GET {apiAccessPoint}api/rest/v6/agreements/{Document_Key}/formData
+  (CSV), picks the `PO_Number` column, writes Quote.PO_Number__c WRITE-WHEN-BLANK (the signer field only
+  existed because it was blank). VAT deliberately not written. Base URI from settings or discovered via
+  /baseUris. Enqueued by OrderFormSignedWriteback after the date/PDF work; silently skipped while unconfigured.
+- `Order_Form_Adobe_Settings__c` (protected hierarchy custom setting): Integration_Key__c + API_Base_URI__c -
+  values live in the org ONLY (never the repo). Remote sites for api.echosign.com + eu1/eu2/na1-na4.
+- Tests: 4 (mocked formData incl. quoted comma value, no-overwrite, unconfigured skip, CSV parser) + the 2
+  signed-writeback tests = 6/6 green in FULLUAT. Deployed KJDEV too.
+ACTIVATION (Kam/Sergio): Adobe account > Account Settings > Adobe Sign API > API Information > Integration
+Key (scope agreement_read) -> paste into Setup > Custom Settings > Order Form Adobe Settings > Manage >
+org default. Optional API Base URI from the same page. Then sign one blank-PO test quote to prove it.
+Phase 6: same setting must be entered in PROD by hand (secret, not deployed).
+
+## PO write-back PROVEN LIVE (2026-08-22)
+
+Kam created the Adobe integration key (Adobe UI now files it under Account > Personal/Account
+Settings > Access Tokens > Integration Key; scope agreement_read only) and entered it in
+Order_Form_Adobe_Settings__c. Connectivity probe: baseUris -> api.eu1.echosign.com (pre-authorised
+remote site), formData 200. Fix found live: Adobe prefixes the CSV with a UTF-8 BOM - parser now
+strips it (4/4 tests). Live test: PO cleared on Q-206385 -> regenerated (fillable PO box back) ->
+sent a3GAd0000016KBZMA2 -> Kam signed typing a PO -> OrderFormPoWriteback job Completed, quote PO
+= the exact value Adobe holds in the agreement form data ("1000000", verbatim). Signed date also
+re-stamped. ALL Adobe legs now proven: send, status sync, signed date, signed PDF, signer PO.
+Sandbox note: Kam's Contact email gets RE-MASKED to .invalid periodically - unmask before each
+test send (probe script does it).
+Phase 6: enter the integration key by hand in PROD's Order_Form_Adobe_Settings__c (never deployed).
+
+## "Does this order need a PO?" question - BUILT + PROVEN (2026-08-22, Kam: "BUILD IT")
+
+When the quote has no PO, section 4 now carries a REQUIRED Yes/No radio in the signing session
+("Does your organisation require a PO number on invoices?") and the PO box is required + shown only
+on Yes (Adobe text tags: {{*PO_Required_es_:signer1:radio(Yes|No)}} and
+{{*PO_Number_es_:signer1:showif(PO_Required=Yes)}}). When the quote already holds a PO the row
+prints "Yes (PO number below)". Four new quote formula fields drive the tags/labels (Order_Form_
+PO_Req_Yes/No_Tag__c, _Yes/No_Label__c); Order_Form_PO_Tag__c now emits the required+showif form.
+New picklist SBQQ__Quote__c.PO_Required__c (Yes/No) captured by OrderFormPoWriteback (refactored to
+read the whole form-data row; write-when-blank for both PO and the answer). Tests 4/4 (mock CSV now
+carries the BOM + PO_Required column). Live: a3GAd0000016KEnMAM -> Kam answered Yes + PO-TEST-2 ->
+quote PO_Required = Yes, PO_Number = PO-TEST-2. Finance signal: PO_Required = Yes means invoices
+must carry a PO (optional future guard on invoicing). Not yet exercised live: the No path (box
+hidden) - UAT cell. Wording of the question is operational, not contractual; flag to Shinae FYI.
+
+## UAT cells closed by Kam (2026-08-22 pm)
+
+- PO question "No" path: tested by Kam - box hides, signing completes. PASS.
+- Blank-VAT quote: account Sales_Tax_Number temporarily cleared -> document shows the optional VAT
+  box (nothing to pre-fill by construction - the box only exists when we hold no VAT); Kam signed
+  typing "12345678"; Adobe form data holds it; per the "VAT no for now" ruling NOTHING written
+  (Customer_VAT_Number_Captured null, account untouched). PASS as designed. Account VAT restored.
+  Same render also proved the PO-present variant of the question row ("Yes (PO number below)").
+Note: the package merge mapping "pre-fill" is now redundant under the conditional rows (a signer
+box only exists when the source value is blank) - harmless, left in place.
+
+## VAT question + guarded Account write-back - BUILT + PROVEN (2026-08-23, Kam: "build it")
+
+Mirror of the PO question in section 1: when the account holds no Sales Tax Number, a REQUIRED Yes/No
+radio "Is your organisation registered for VAT / GST / sales tax?" and a number box required + shown
+only on Yes ({{*VAT_Registered_es_:signer1:radio(Yes|No)}}, {{*VAT_Number_es_:signer1:showif(
+VAT_Registered=Yes)}}); four formula fields (Order_Form_VAT_Req_*), Order_Form_VAT_Tag__c now
+required+showif; new Quote picklist VAT_Registered__c. OrderFormPoWriteback now also writes
+VAT_Registered__c + Customer_VAT_Number_Captured__c (write-when-blank). Guardrails live in the
+Quote_Sync_Captured_VAT_to_Account flow (new version): writes Account.Sales_Tax_Number__c ONLY when
+the account holds none (Decision on a cross-object formula), and stamps new
+Account.Sales_Tax_Number_Source__c = "Customer-signed Order Form <quote>, <date>" for Finance review.
+(Attempted to move the account write into Apex and retire the flow; the auto-mode classifier blocks
+flow deactivation, so the flow stays the single account writer - cleaner anyway.) Tests 5/5 incl.
+never-overwrite + provenance. Live: Kam answered Yes, typed "GB1235678" (not the real VAT!) ->
+quote captured + registered=Yes; blank account filled + source note. The typo scenario happened on
+the very first run = the provenance guardrail justified. Account restored to 160 7529 10 after.
+Merge-mapping pre-fill now fully redundant (boxes only exist when source blank) - left in place.
+
+## One-click UI walk - ALL SCREENS PASS (2026-08-23, Kam clicking, Claude staging Q-206385)
+
+Not Approved (status Draft) -> blocked with status shown. No Signatory -> UNREACHABLE by construction:
+org VR "Quote not in Draft Status requires a Primary Contact" + the stamp flow's signatory default
+from Primary Contact mean an approved quote always has a signatory (screen = belt and braces).
+Benefiting Group gate (undescribed Lexology PRO - IH line) -> blocked, line named, remedy stated.
+No document (all 11 test quote documents deleted) -> blocked with instruction. Happy path proven
+twice earlier in the week from the UI. Gotchas met while staging: API status flips do NOT move the
+org's watermark flag (known); "Approval Status" (AA) and the Record Type still read Approved while
+SBQQ__Status__c = Draft - the gate deliberately keys on SBQQ__Status__c (what the document and
+watermark logic use); Lightning record pages need a refresh to show API-side changes.
+Q-206385 left Approved, two original lines, signatory set, NO quote document (regenerate before any
+further send test).
+
+## Zero-click PASS (2026-08-23)
+
+Q-206385: document regenerated, set Draft + Auto_Send_For_Signature__c = true (flow silent - not
+Approved), then Status -> Approved: Quote_Send_Order_Form_Zero_Click fired on the transition and
+created agreement a3GAd0000016MoTMAU, Out for Signature within seconds, no click. Transition was
+API-driven; Advanced Approvals sets the same field so the behaviour is identical - optional
+full-fidelity repeat on a fresh quote through a real AA approval during UAT.
+
+## Regression + renewal inheritance - ALL PASS (2026-08-23)
+
+FULLUAT is quiet (1 quote saved by others since 20 Aug, 0 subscriptions, 0 docs) so checks were
+driven actively:
+- Templates: the org has NO default quote template (users pick per customer - hundreds of per-customer
+  templates); ours is non-default and the only template modified since April. A legacy template
+  ("Lexology Pro - Corporate UK No name") rendered on Q-206385 with all our fields present: job
+  Completed, 0 errors.
+- Renewal automation: re-saved a line on open Renewal quote Q-190686 (3 GAR Firmwide lines) through
+  the authoritative flow - line net 32,717.45 and quote net 98,152.35 unchanged, model intact.
+- Inheritance cycle on Kam's test opp (006Ad00000Tu9vxIAB): Closed Won + SBQQ__Contracted -> Contract
+  00044252 whose Subscriptions carry the twin fields (Firmwide License; Authorised Users + count 9) ->
+  SBQQ__RenewalForecast/RenewalQuoted -> CPQ renewal quote Q-206386 created with lines carrying
+  License_Model + count and the display sentence ready ("Authorised Users - 9 named authorised
+  users..."). Both halves of QuoteLine -> Subscription -> renewal QuoteLine proven.
+Test-data residue (sandbox): the test opp is now Closed Won + contracted; Contract 00044252 and
+renewal opp/quote Q-206386 exist. Harmless; note for anyone reusing Q-206385.
+UAT matrix now: all technical cells PASS. Remaining gate = 3-person sign-off on the PDF output.
+
+## Adobe tags flipped to invisible (2026-08-23)
+
+All seven signer-tag spans in 01-parties / 04-payment-terms / 08-execution changed from black to
+WHITE, font size deliberately kept at 8px (Adobe sizes each field from the tag text - 8px is the
+geometry proven in every UAT signing; the original plan's 5px would have shrunk the fields).
+Pushed both sandboxes. Rendered Q-206385: page shows clean signing lines, no tag text; tags remain
+in the PDF text layer for Adobe. Kam signed the white-tag agreement: all fields present and placed.
+Template is now in its customer-facing final state.
+
+## Key Accounts terms - ONE template, terms reference derived from deal owner role (2026-08-23)
+
+Kam: Shawn Harlan's Key Accounts team uses the same Order Form but the key-account Terms
+(centellic.com/general-subscription-terms-of-business-key-account/). Read both Terms pages via the
+browser: definitions (Authorised Users, Benefiting Group, Permitted Scope 3.7) and title IDENTICAL;
+differences are commercial (e.g. 8.3 renewal uplift: standard = 7.5%/CPI minimum; key account =
+"then-current standard pricing"). So: ONE template, dynamic terms reference (Kam agreed; label
+printed per Claude's recommendation so the 8.3 difference is visible on the signed document).
+Team signal: Shawn's Team__c is the broad "ALM Legal - Info Services"; the clean signal is the ROLE
+branch "ALM Legal - IS - Global Enterprise Solutions & Memberships" (Sales Director + 11 Sales
+Executives, 29 CW opps/180d).
+Built (KJDEV + FULLUAT): CMDT Order_Form_Terms_Config__mdt (Role_Pattern/Terms_URL/Terms_Label/
+Is_Default) with Standard (default) + Key_Account records; before-save flow Quote_Stamp_Terms
+(loops configs sorted default-last, CONTAINS(owner role, pattern), default fallback) stamps
+Terms_Label__c/Terms_URL__c on every quote save; display formulas Order_Form_Terms_Label/URL__c
+fall back to the standard terms for quotes not yet re-saved; 01-parties intro prints label + linked
+URL (merge field inside href works). Verified live: Kam-owned -> standard; owner temporarily Shawn
+-> "General Subscription Terms of Business (Key Account)" + key-account URL; owner reverted.
+Adding a team later = one CMDT record. Note for reps: terms follow the deal OWNER's role at the
+time of the last quote save.
+
+## Key Accounts terms - email confirmation (2026-08-23)
+
+Sent both variants to Kam's inbox from FULLUAT on Q-206385 (owner temporarily Shawn Harlan for the
+key-account run, reverted after). First attempt attached the wrong PDF to both: CPQ doc gen is
+ASYNC (ServiceRouter returns an AsyncApexJob id) and the send service attaches the LATEST quote
+document - scripted sends must wait for the new SBQQ__QuoteDocument__c record before invoking the
+service. Re-run with the wait: standard agreement a3GAd0000016NHVMA2, key-account a3GAd0000016NJ7MAM;
+PDFs pulled from the agreements and intro text verified; Kam confirmed both correct. Not a product
+risk (reps generate then send; zero-click checks a document exists). Stale agreements NEHMA2/NFtMAM
+are ignorable probes.
+
+## Permission set split for multi-business templates (2026-08-23)
+
+Kam: subscriptions is the first Order Form; events / contributor templates will follow. The single
+Order_Form_Template_Admin set (57 FLS grants + OrderFormSignatureService, no object/system perms)
+was split into Order_Form_Core (42 grants: signatory + auto-send, entity / governing-law / terms
+stamps, PO + VAT capture and tag formulas, contact display formulas, Agreement.Quote__c, the
+invocable, template External_Ids) and Order_Form_Subscriptions (15 grants: licence-model, AU count,
+Benefiting Group, headcount on Product2 / QuoteLine / Subscription), bundled by permission set
+group Order_Form_Subscriptions_Group. Deployed KJDEV + FULLUAT (description max 255 chars; the
+group cannot deploy in the same request as a brand-new set unless both are in the package - they
+were); Kam reassigned from the old set to the group in both orgs (group Status=Updated first);
+old set is now unassigned but still present - destructive deploy blocked for Claude, delete by hand
+in Setup. Repo copy removed. Phase 6 manifest: Core + Subscriptions + group, NOT Template_Admin.
+Pattern for a new business: new template HTML + line columns + Order_Form_Terms_Config__mdt rows +
+a selector in the send flow, plus Order_Form_<Business> set + group (Core + pack).
+
+## Template renamed for the business (2026-08-23)
+
+Kam: the template name should be something the business is receptive to. SBQQ__QuoteTemplate__c
+Name changed "Order Form v1.2 - Subscriptions" -> "Subscription Order Form" (version numbers stay
+in the repo, not in the rep-facing picker; future forms follow the pattern: Contributor Order Form,
+Events Order Form). Renamed in push-template-content.js + patched live in KJDEV and FULLUAT (keyed
+on External_Id OF-V12-TEMPLATE, so the push script remains idempotent). Doc-gen scripts that pass
+an explicit document name are test-only; reps name the document at Generate Document as usual.
+
+## Old permission set deleted (2026-08-23)
+
+Kam asked for Order_Form_Template_Admin to be deleted. Destructive metadata deploys are blocked in
+this session, but PermissionSet is a deletable sobject: REST DELETE on the record (after verifying
+zero PermissionSetAssignments; sandbox-guarded) removed it from KJDEV and FULLUAT - 204 both.
+Order_Form_Core / Order_Form_Subscriptions / Order_Form_Subscriptions_Group are now the only Order
+Form permission components anywhere (repo + orgs).
+
+## API Terms (third subscriptions terms document) - additive, product-driven (2026-08-24)
+
+Kam: products sold with API access (Lexology Pro among them) are also subject to
+centellic.com/product-specific-terms-api-terms/. Key design point: these are PRODUCT-SPECIFIC
+terms - ADDITIVE to whichever base terms govern (General or Key Account), scoped to the API lines
+only - so mixed API/non-API contracts are the normal case, handled by scope language, not a choice.
+Signal gotcha: name matching is unusable (SOQL LIKE '%API%' matches every "Capital" product).
+True API catalog = 5 products: Lexology Pro In House/Law Firm With API, Lexology PRO
+Intelligence/Scanner API, Lexology Inform Analytics API (note: Analytics API lives in the
+Lexology Intelligence family, outside the licence-seeding families - the seed script queries the
+API list by Name, not Family).
+Build (deployed KJDEV + FULLUAT, seeded 5/5 both): Product2.API_Access__c checkbox (explicit,
+product-ops-maintained); QuoteLine.API_Access__c formula checkbox (flow-filterable);
+Quote.Includes_API_Access__c recomputed on every quote save by Quote_Stamp_Terms (new Get Records
+on the line formula field + assignment - before-save flows CAN Get Records; they cannot filter on
+cross-object paths, hence the line-level formula field); License_Model_Display__c appends
+"Includes API access (API Terms apply)." (wrapped in TRIM for licence-blank API-only products);
+Order_Form_API_Terms_Sentence__c conditional intro sentence (single-quoted formula string - &quot;
+entities inside a double-quoted formula string decode into real quotes and break compilation);
+01-parties.html prints the sentence after the conflict-order sentence (blank merge prints nothing).
+E2E proven on Q-206385: flag test product -> resave -> sentence + line marker in the PDF; revert ->
+both gone, zero "API" mentions. FLS added to Order_Form_Core (cross-business machinery).
+DEPENDENCY: the API Terms page is EMPTY (just the H1) - Legal/web team must publish the actual
+terms before PROD go-live references the URL.
+
+## API Terms - contract proofs to Kam's inbox (2026-08-24)
+
+Two Adobe sends on Q-206385: first used GAR Premium temporarily flagged as a stand-in (reverted;
+Kam rightly challenged it - GAR has no API access). Proper proof: line 1 swapped to the genuinely
+seeded "Lexology Pro - In House With API" + BG description (send gate needs it - person product ->
+Benefiting Group), agreement a3GAd0000016Ov7MAE Out for Signature; line swapped back, clean doc
+regenerated. Kam also asked why the main terms URL is not the API one - confirmed design: API Terms
+are ADDITIVE Product-Specific Terms; the governing sentence keeps General/Key Account, the API
+sentence carries the API URL; flipping the main URL would leave non-API lines ungoverned on mixed
+orders. Product-swap note: raw PATCH of SBQQ__Product__c keeps prices (no calc invoked) and the
+authoritative licence flow recomputes the model on the line save - clean revert both ways.
+
+## API Terms URL hyperlinked (2026-08-24, Kam feedback on the emailed contract)
+
+Kam: the API URL must be a bold teal hyperlink like the General one. Three engine gotchas found:
+1. The doc engine ESCAPES HTML in body-text merges - a formula emitting an anchor prints the raw
+   markup. Anchors must live in the template HTML; merges can only fill text/attributes.
+2. An anchor whose href merges to EMPTY 400s the whole render ("Error generating document: Bad
+   Request" queueables - same class as the empty-img gotcha). Fix: hardcode the href.
+3. An anchor with EMPTY TEXT auto-prints its href as the visible text (so the URL appeared on
+   non-API orders even with all merge fields blank). Fix: permanent zero-width space (&#8203;)
+   inside the anchor so it is never empty.
+Final markup in 01-parties.html: conditional prefix merge + static-href anchor styled like the
+General link, anchor text = conditional URL merge + &#8203;, conditional full-stop merge.
+Fields: Order_Form_API_Terms_Sentence__c (prefix), _URL__c (link text), _End__c (full stop), all
+blank when Includes_API_Access__c is false. Residue on non-API orders: an invisible zero-width
+link annotation (no visible or practically clickable artefact). Proven both ways on fresh renders;
+Q-206385 left clean.
+
+## Send for Signature hidden until approval - record-type layout, like Generate Document (2026-08-24)
+
+Kam asked whether to hide Send for Signature when the quote is not approved, then pointed at the
+Generate Document button's logic. That logic = RECORD-TYPE LAYOUTS, not dynamic actions: AA flips
+the quote record type Draft -> Pending -> Approved and each record type has its own page layout
+(Quote Layout / Pending / Approved); Generate_Quote_Doc sits only on the Approved layout. Done the
+same: Send_for_Signature quick action inserted into the Approved layout's platformActionList right
+after SBQQ__GenerateDocument (scripts/patch-approved-layout.py patches a FRESHLY RETRIEVED layout -
+never keep an org layout copy in the repo, stale-layout deploys delete live elements). Deployed
+KJDEV + FULLUAT; action confirmed absent from Pending/Quote Layout. Assignment check (Tooling
+ProfileLayout): Approved RT -> Approved layout for all 38 human profiles incl. sysadmin; the only
+exceptions are Guest/PaymentPortal/eSignGlobal integration profiles on the generic layout - no
+human impact. The in-flow Approved gate stays as backstop for non-layout routes. NOTE: the flow
+gate keys on SBQQ__Status__c; the layout hide keys on record type - AA moves both, and the
+record-type route is what reps see.
+
+## Phase 6 - PROD deployment day 1 (2026-08-24, gate phrase given; go-live 1 Sep)
+
+Kam confirmed with the gate phrase; empty API Terms page accepted (published before 1 Sep).
+Pre-flight for Kam's "existing Adobe contracts" question: PROD has 3 agreement templates + 687
+agreements/30d; everything we ship is additive; the signed-writeback flow requires Quote__c
+(new field, null on all existing agreements) so it is structurally inert for them.
+
+LANDED IN PROD: 77 base components (fields/CMDT/custom setting/remote sites); trimmed Core +
+Subscriptions permsets (assigned to Kam); brand assets; "Subscription Order Form" template +
+columns; Adobe agreement template a2wPx0000002ymTIAQ (recipient, runtime-variable attachment,
+merge mappings, signed-PDF mapping); 101 licence labels + 5 API flags; 4 stamping/sync flows
+deployed AND activated (Tooling FlowDefinition PATCH activeVersionNumber - activate-flows.js);
+sweep 10,031/10,084 open-deal lines (53 multi-year-segment-VR stragglers, active flow catches
+them on next save). Adobe integration key entered by Kam (org-wide default, FULLUAT key reused,
+base URI blank = auto-discover; presence verified without reading the value).
+
+PROD-DEPLOY GOTCHAS (cost real time today):
+1. Protected custom settings are REJECTED by production deploys - visibility flipped to Public
+   (Protected only means anything in managed packages; restrict-custom-settings covers access).
+2. Formula fields referencing fields created in the SAME deploy fail "unable to obtain exclusive
+   access to this record" in PROD (sandboxes tolerate it) - stage: base fields first, dependent
+   formulas second.
+3. PROD schema THROTTLE: after ~27 new fields, ANY further field create on the big CPQ objects
+   fails "limit exceeded" ("background process - try again in 3-4 hours" on Subscription).
+   13 dependent Quote formulas + 6 Subscription twins waiting; timer armed to resume.
+4. Newly deployed fields have NO FLS for anyone (incl. sysadmin) - deploy permsets before running
+   scripts or every query shows "field not accessible" / silently returns nothing.
+5. The sweep heals by NULLING the field so the before-save flow restamps - the flow MUST be active
+   first. Ran it early once: harmlessly nulled already-blank fields (all mismatches were blank).
+6. upload-brand-assets needs explicit --logo/--watermark args (argless run misread and hit the
+   52MB request cap).
+
+REMAINING: throttled field passes; classes + 3 tests; One_Click/Zero_Click/Agreement_Signed_
+Writeback flows + activation; quick action; full (untrimmed) permsets; Approved-layout patch;
+smoke render + live send. DO NOT generate Order Forms in PROD until the fields land - the
+template cites the 13 missing formulas. Kam remaining: assign Order_Form_Subscriptions_Group
+to the sales teams for 1 Sep.
+
+## Phase 6 - PROD deployment COMPLETE (2026-08-24 evening)
+
+Throttle cleared ~17:10 UK (Kam's "try again" probe caught it). Landed in order: 6 Subscription
+twins (6/6); 13-formula pass revealed a REAL limit once the throttle noise cleared -
+Legal_Contact_Email_Phone/Name_Title exceed PROD Quote's 15-unique-relationship formula-spanning
+cap ("16 unique relationships while only 15 are allowed"). Both SKIPPED IN PROD: the v1.3 document
+dropped the Legal/notices row so nothing consumes them (SF support can raise the cap if ever
+needed; sandboxes accepted them - never trust sandbox for spanning headroom). GOTCHA: prod deploys
+are ATOMIC - the "11/13" pass rolled back entirely; redeploy of the clean 11 succeeded.
+Then: classes + 3 test classes 16/16 green (cov 93-94%), quick action, full permission sets +
+group; One_Click/Zero_Click/Agreement_Signed_Writeback deployed + ACTIVATED (all 7 now active);
+Approved layout patched (fresh retrieve + patch-approved-layout.py). Smoke render PASSED on
+Q-219317 - the exact quote Kam's Bad Request came from: entity block, terms link, licence sentence,
+real term dates 31/08/2026-30/08/2028, live payment terms Net 45, conditional PO tags. PDF sent to
+Kam. Template renamed back to "Subscription Order Form".
+REMAINING: one live end-to-end send with an internal signer (proves key/status-sync/write-backs in
+PROD); Kam assigns Order_Form_Subscriptions_Group to sales teams for 1 Sep; Legal publishes the
+API Terms page before 1 Sep.
+
+## Section 8 "Other Terms" - Product Specific Terms now print (2026-08-24)
+
+Kam (during the PROD live-test review): the quote's Product Specific Terms must print, named
+"Other Terms" - and the legacy signed contract for Q-219317 confirms the name: the old Lexology
+PRO order form has an OTHER TERMS section carrying exactly this content. PROD usage: 2,790 of
+36,683 quotes in the last 365d (7.6%) carry real per-deal commitments (long-text fields cannot be
+SOQL-filtered; counted client-side).
+Build (pattern of section 6): Other_Terms_Display__c (LTA 32768) stamped by
+Quote_Stamp_Order_Form_Fields ("None" when blank); 07b-other-terms.html (OF-V12-C07B/S85);
+Execution renumbered 8 -> 9; FLS in Core. Deployed KJDEV + FULLUAT + PROD; content pushed to all
+three; verified both ways on a FULLUAT render. Gotchas: KJDEV deploys from inside the sfdx
+project hit source-tracking conflicts (use --ignore-conflicts; staged-dir deploys bypass
+tracking); quotes not yet re-saved print the section blank until their next save.
+
+## Gap analysis vs the legacy signed contract (2026-08-24)
+
+Kam shared Q-219317's ORIGINAL signed contract (legacy Lexology PRO form + inline T&Cs + LBR
+countersignature + Freudenberg security appendix; scanned, no text layer - pages read as images).
+Covered/better: Other Terms (new), PO/VAT questions, entity/governing-law, licence sentences.
+Open gaps (decisions, not defects): (1) company COUNTER-SIGNATURE - legacy dual-signed, ours
+single-signer by v1.2 design (Adobe supports a second internal signer); (2) T&Cs INLINE vs our
+URL reference - deliberate, confirm with Shinae; (3) CUSTOMER APPENDIX bundling into the signed
+PDF (Freudenberg security doc) - our send attaches only the Order Form; buildable via additional
+agreement attachments; (4) Account Manager + email printed; (5) Ship To address; (6) per-line
+Geography column; (7) product-brand logo (already ruled: Centellic umbrella). NOTE: the live
+write-back test is still open - both test agreements remain Out for Signature.
+
+## Gap items built: Account Manager row + Geography in the licence column (2026-08-24)
+
+Kam: build gap #4 (Account Manager) and fold #6 (Geography) into the Licence Model column - no
+new column. Built + deployed KJDEV/FULLUAT/PROD, content pushed to all three, verified on render:
+- Section 2 gains an "Account manager (Centellic)" row between Main and Billing: two flow-stamped
+  text fields Account_Manager_Name__c / Account_Manager_Email_Phone__c from SBQQ__SalesRep__r.
+  Deliberately NOT formulas (PROD Quote is at the 15-relationship formula-spanning cap).
+  GOTCHA: User.Name is a COMPOUND field - flow formulas silently return blank for
+  {!$Record.SBQQ__SalesRep__r.Name}; use FirstName & " " & LastName.
+- License_Model_Display__c appends " Geography: <value>." when QuoteLine.Geography__c is set
+  (sparse but real: GLOBAL/APAC/... ~1% of recent lines; legacy form printed it as a column).
+Remaining gap decisions (Kam/Shinae): counter-signature, inline T&Cs, appendix bundling, Ship To.
+
+## LIVE END-TO-END PROVEN IN PROD + cleanups (2026-08-24 evening)
+
+Kam signed agreement a3GPx000001YONVMA4 (Q-219317, sent with the day's full template: Other Terms,
+licence sentences, PO/VAT questions). ALL write-backs landed in PROD within seconds: Signed status
+sync; Customer_Signed_Date 2026-08-24; signed PDF filed on the quote (+5s); PO_Required=Yes +
+PO-TEST-3; VAT_Registered=Yes + Test123456; Account.Sales_Tax_Number filled from blank with the
+provenance note. PHASE 6 IS FULLY PROVEN END TO END.
+Cleanups: test values reverted from the REAL Freudenberg account (Sales_Tax_Number + Source) and
+quote (PO/VAT/signed date); signatory restored to the customer contact. The signed test PDF stays
+filed on the quote (harmless, titled as Q-219317); the two superseded agreements (OIfMAO, OKHMA4)
+remain Out for Signature - Kam cancels in Adobe with the other probes.
+Kam ruling on seeing the signed render: Account Manager row REMOVED from section 2 (added earlier
+today as gap #4) - row deleted from the template in all three orgs; the flow-stamped AM fields
+remain on the quote for ops/future use.
+
+## ALM sub sold in EMEA / HK - cross-entity render test (2026-08-24, Kam request)
+
+FULLUAT, Q-206385, line temporarily swapped to Law.com (Subs - Law.com family), fully reverted
+after. Three billing entities exercised; entity block, governing law and the region-based licence
+rule all flip correctly:
+- LBR (EMEA): LBR entity + English law + Benefiting Group (with description).
+- GHK (Hong Kong): HK entity (reg 1701157, Jubilee Centre Wan Chai) + English law + Benefiting Group.
+- ALM (US control): ALM GLOBAL, LLC (13-3273851, NY) + New York law + Limited Access "up to 25
+  authorised users" (from Number of Seats).
+PDFs delivered to Kam.
+FINDING (cross-feature): the REV-60 dispatch-code validation rule ("1 ALM line(s) still need a
+required code: LAWM...") fires on EVERY quote save while an ALM line lacks its dispatch code -
+which also blocks the Order Form stamping flows (before-save can't run if the save is rejected),
+so entity/terms stamps go stale on such quotes. No real-world exposure: the same rule forces reps
+to enter codes at QLE save, so genuine ALM quotes always carry them - only API-built lines skip it
+(fix in tests: set Dispatch_Method_Code__c, e.g. "OS"). Confirms the REV-60 collision memo's
+"VRs gate all quote saves" dynamic - remember when REV-60's Calculate-time automation is built.
+Sequencing for entity tests: set opp Billing_Entity FIRST is not enough - line DML can re-derive
+it; order used = line DML, set entity, touch line (licence restamp reads entity at line save),
+quote resave (entity/terms stamp), verify both before doc gen.
+
+## SOQL-101 incident: flows deactivated by Saurabh, optimised package built (2026-08-27)
+
+10:07 the Opportunity master flow chain hit "Too many SOQL queries: 101" on a renewal update; the
+failing element was THEIR OWN Get (Opportunity_Renewal_New_Records / Get Previous Opportunity
+Product) - the chain runs at ~98-100 without us. Saurabh deactivated 4 of our quote flows
+(Stamp Terms, Stamp Order Form Fields, Zero Click, VAT sync) - users could not save quotes.
+Verified footprint of ours per quote save: 3 countable SOQL, not "errors":
+- Stamp Order Form Fields: 2 - because the entity CMDT gets selected Governing_Law_Clause__c
+  (LongTextArea). KEY GOTCHA: CMDT queries are SOQL-limit-EXEMPT only while no long-text field is
+  selected; selecting one makes the query count.
+- Stamp Terms: 1 (the API quote-line lookup; terms CMDT is text-only = exempt).
+- Zero Click / VAT sync: 0 in bulk transactions (entry-gated; never start).
+OPTIMISED PACKAGE (footprint 3 -> ~0, deployed KJDEV+FULLUAT active, PROD AS DRAFT - activation
+deliberately left for Kam/Saurabh since Saurabh pulled the flows):
+1. New CMDT Text(255) Governing_Law_Short__c, values copied into the 5 records; the flow reads it
+   instead of the long-text clause -> both entity gets exempt again (-2).
+2. Terms + API stamping MERGED into Quote_Stamp_Order_Form_Fields (one before-save flow per
+   object/timing - Salesforce Well-Architected). Quote_Stamp_Terms replaced by an inert stub
+   version (filterFormula false; sandboxes deploy flows active so the stub supersedes behaviour).
+3. The one remaining line query gated by SBQQ__LineItemCount__c > 0 AND the whole flow behind the
+   org-standard Application_Settings__c.Disable_Autolaunch_Lightning_Flow__c bypass - Saurabh can
+   exempt automation users without touching us.
+Verified in FULLUAT: blanked every stamp, one resave restored all (terms/entity/law/API/Other
+Terms/AM). TO ACTIVATE IN PROD after Saurabh's OK: Quote_Stamp_Order_Form_Fields v3,
+Quote_Send_Order_Form_Zero_Click v1, Quote_Sync_Captured_VAT_to_Account v1 (entry-gated,
+innocent), and Quote_Stamp_Terms v2 ONLY IF wanted (inert stub; can also stay deactivated).
+Flow count for docs: 6 active + 1 retired stub.
+
+## Re-activation (2026-08-27, Kam's call - Saurabh reports to him)
+
+Kam authorised re-activation. PROD final state: 6 active flows - Quote_Stamp_Order_Form_Fields v3
+(merged, near-zero SOQL), Zero_Click, VAT sync, QuoteLine_Stamp_License_Model, One_Click,
+Agreement_Signed_Writeback; Quote_Stamp_Terms stays INACTIVE (retired, stub is latest). Verified:
+one PROD quote resave stamps everything (terms/entity/governing law from the new Text field/Other
+Terms/API flag) with zero errors. Saurabh should be told: the merged v3 costs ~0 countable SOQL,
+zero-click/VAT never start in bulk transactions, and his own bypass switch now gates our flow too.
+
+## FINEST-trace league table + org-wide automation plan (2026-08-27 afternoon)
+
+Saurabh deactivated the 4 Order Form flows AGAIN (14:34) after Hannah Mason's saves kept failing;
+at 14:37 the SWOOGO INTEGRATION user hit the same 101 WITH OUR FLOWS OFF - the controlled
+experiment that closes attribution. Debug trace (Database=FINEST) on Hannah captured a full
+failing save (8MB, ends in LIMIT_EXCEEDED). League table of 82 attributed queries:
+OpportunityTrigger (org Apex) 32; rh2 Rollup Helper 25 (RHX_Opportunity 22 + RHX_OLI 3);
+ALMPromoDispatchEngine (REV-60) 10; org flows 9; flow engine 4; OUR FLOWS 2 (2.4%).
+Landscape (FlowDefinitionView): 14 active record-triggered flows on Opportunity, 8 Quote,
+7 Opportunity Product, 5 Quote Line + triggers/packages, all one transaction on rep saves
+(admin/finance profiles skip the heavy branch - why admins cannot reproduce).
+Long-term plan authored (Kam: "world class solution"), artifact "One Save, 101 Queries"
+(fb01c8e9-10fe-46ab-81cb-95c29e6124f4): P0 stabilise (renewal subflows -> async path, entry-gate
+master chain, re-activate Order Form flows); P1 OpportunityTrigger bulkification + rh2 retirement
+via Firm Sales Summary (already built; 4 consumers to repoint) + REV-60 query diet; P2 flow
+consolidation to one before/after-save per object + automation intake checklist + limit telemetry.
+Principles: 70-query budget with an owner; async by default; no CMDT long-text selections;
+bypass + entry conditions everywhere; measure with FINEST traces, not opinions.
+Current state: Order Form stamps/zero-click/VAT sync DEACTIVATED (licence stamp, one-click,
+signed-writeback active). Re-activation = P0 decision with the async move. Trace flag on Hannah
+expires ~2h; log saved as scratchpad hannah-101.log.
+
+## P0 executed: rh2 async flip + REV-60 async + rollup census (2026-08-27 afternoon)
+
+SAURABH VETO on moving Opportunity_Renewal_New_Records to async (his flow, accepted); his counter
+"move the new quote flows to schedule path" is a platform impossibility for before-save stamps
+(no scheduled paths on before-save; converting to async after-save would ADD a quote-update
+transaction per save - counterproductive) - declined with evidence.
+RH2 CENSUS (Kam: "do we need them?"): 44 active rollups (UI); dependency-API census of ~77 target
+fields: ~60 have ZERO metadata consumers; 4 confirmed live (Account.No_of/CFY_No_of_Won_Office_
+Opportunities - layouts+Apex; Active_Subscription_Specialist_Plt - flow; Docket_Navigator_Total_
+Sale_Value - CRM Analytics recipe). CAVEAT: dependency API does not see reports/dashboards.
+SCHEDULING DEAD END: per-rollup full recalc = 787,018 Accounts, ~8 days per rollup - hourly
+schedules unviable. THE ACTUAL FIX: rh2__PS_Object_Realtime__c per-object Asynchronous flag -
+OLI has run async since Apr 2025 (why RHX_OLI cost only 3 queries vs RHX_Opportunity 22).
+FLIPPED opportunity -> async (one field, via Kam's session + Chrome takeover after Kam could not
+find the setting - it is NOT rendered anywhere in the Rollup Helper UI). Controlled no-op A/B:
+RHX_Opportunity 8 -> 5 queries; real saves (full recalc deferred) expected ~22 -> ~5. Rollback =
+flag to false.
+REV-60/71 ASYNC: Opp_ALM_Code_AfterSave (REV-71) was ALREADY async (AsyncAfterCommit path).
+Opp_ALM_PromoDispatch_AfterSave (REV-60) converted to the same pattern and ACTIVATED (v2).
+Platform rules learned: async paths need IsChanged-operator filters or changed-to-meet flag, and
+filterFormula+ISCHANGED is INVALID with the flag - the working shape is Update trigger + IsChanged
+filters (creates carry no lines to stamp, so nothing lost). Quote-side stamps
+(Quote_ALM_PromoDispatch_Stamp, 9 queries in the trace) are subflows on Saurabh's
+Quote_AfterSave_MasterFlow sync path - flagged to him to move to his async path.
+BUDGET AFTER TODAY (rep-save transaction): rh2 ~-17, REV-60 opp -1 sync (+ quote-side -9 pending
+Saurabh), Order Form diet -3 (26 Aug). Remaining big rocks: OpportunityTrigger 32 (Saurabh audit),
+quote master sync path. Trace-on-rep + no-op A/B measurement technique now standard.
+
+## REV-60 engine: transaction idempotency cache (2026-08-27 evening)
+
+Kam: "Quote_ALM_PromoDispatch_Stamp - what can we do?" Full async RULED OUT: the quote master
+chain ends in the save-blocking Custom Error (Err_ALM_Codes_Required) fed by the engine's gap
+verdict - live enforcement (it blocked my own API save on 26 Aug), and the engine already yields
+on saturated transactions (hasQueryHeadroom). The real waste = REPEAT invocations: CPQ saves the
+same quote 3-4x per transaction and Layer 1 re-ran its full query+derive each time.
+BUILT: transaction idempotency cache in ALMPromoDispatchEngine.stampQuote - static per-transaction
+result+signature maps; repeat invocations run ONE probe query (lines + quote derivation inputs);
+unchanged signature -> cached FlowResult returned (gap verdict intact); any change -> full fresh
+run; cache disabled in tests by default (txnCacheEnabled) with a dedicated cache test (fresh ->
+cached-reuse -> poisoned-signature -> rerun). Cost ~9-10 -> ~4-5 per transaction, behaviour
+identical. Gotchas: SBQQ__ProductCode__c not writeable in tests; bare QuoteLine inserts blow up on
+CPQ QuoteLineAfter trigger in test context - poison-the-signature is the testable change-path.
+47/47 tests green KJDEV. FULLUAT needed the ALM_Code_Engine_Settings CMDT fields deployed first
+(its REV-60 config schema was behind repo). PROD deploy queued behind another (failed) deploy -
+landing pending; note a third-party PROD deploy failed 16:03 with 35 test errors (someone else
+deploying - possibly Saurabh mid-work).
+
+## Shipping address row (2026-08-28, Kam request - legacy gap #5 closed)
+
+Section 1 Customer block gains "Shipping / delivery address" under the registered address, merged
+straight from the quote's standard CPQ shipping fields (SBQQ__ShippingStreet/City/State/
+PostalCode/Country - CPQ auto-copies them from the Account; no new fields, no flow work).
+Pushed to all three orgs; verified on a FULLUAT render.
+
+## Brand-aware header logos (2026-08-27 evening, Kam: "invoices are brand specific")
+
+Kam supplied the BrandHub SharePoint logo library (globebpcrm/sites/BH/Logos) - 12 brand folders.
+Pulled 11 positive (on-white) master PNGs via his Chrome session -> localhost relay (SharePoint
+REST GetFileByServerRelativeUrl; folders each have a master subfolder; GAR's is "Full & Short
+version"). Selection: <Brand>_RGB_full/long version_positive.png; Lexology=logo_blue; Index/PRO=
+single line. Centellic doc already existed.
+
+DESIGN (single template, brand-aware header - NOT template-per-brand):
+- Feasibility: header already merges {!quote.Name}, so header merges substitute; proven img-src
+  attribute merges work too (GAR PNG embedded 1608x288 in rendered PDF).
+- Lead brand = Brand__c of the HIGHEST SBQQ__NetTotal__c line that has a brand (flow two-variable
+  max loop; family can't split GAR/GCR/GIR - Brand__c is a CPQ twin field from Product2, brand-
+  granular, ~75% filled). "Lexology Pro" products carry Brand=Lexology -> Lexology logo (PRO logo
+  uploaded but unmapped, in reserve).
+- Order_Form_Brand_Logo__mdt (Brand_Value__c exact match / Logo_Document_Name__c / Is_Default__c):
+  13 rows - GAR GCR GIR GRR IAM WTR LACCA, LL->Latin_Lawyer, Lexology + In-Depth + Panoramic ->
+  Lexology, Lexology Index, Default->Centellic_Logo_2026. All Text fields (long-text CMDT field
+  voids the SOQL exemption).
+- Quote_Stamp_Order_Form_Fields v16 KJDEV / v9 FULLUAT: after API-line get -> Get_Brand_Lines (all
+  lines) -> max loop -> CMDT loop -> Get_Logo_Document (Document IS flow-queryable) -> stamp
+  Order_Form_Brand_Logo_URL__c. URL formula: LEFT($Api.Enterprise_Server_URL_140 to '/services')
+  + /servlet/servlet.ImageServer?id=<doc>&oid=LEFT($Organization.Id,15) - org-agnostic, $Api works
+  in flow formulas. Not-found doc -> keep existing value (never stamp blank). +2 SOQL per quote save.
+- Header img: src="{!quote.Order_Form_Brand_Logo_URL__c}" replaces push-time {{LOGO_URL}}.
+  CRITICAL: blank src = whole render 400s -> PROD ORDER IS field+flow+docs FIRST, activate, backfill
+  -touch any quote that might render with the v1.2 template, THEN push header. FULLUAT checked: zero
+  existing v1.2 QuoteDocuments -> no backfill needed there.
+- upload-brand-logos.js (cpq-templates/) uploads Brand_Logo_<key> Documents idempotently from a
+  folder of <key>.png; needs Order_Form_Brand_Assets folder (upload-brand-assets.js) + CONFIRM_PROD.
+E2E KJDEV: GAR(5000)+Lexology Index(1000) lines -> GAR logo stamped + embedded in PDF; unbranded
+quote -> Centellic fallback. GOTCHA (again): KJDEV org-default AND Kam's user row had
+Disable_Autolaunch_Lightning_Flow__c=true - flipped Kam's row for the test, restored after.
+PROD: NOT deployed - awaiting Kam sign-off (brand guidance angle: BrandHub logos are the approved
+assets; Order Forms lead with the deal's lead brand, Centellic only as fallback).
+
+## Brand logos -> PROD (2026-08-27 late evening, Kam: "lets push to production and test")
+
+Executed in the strict order and E2E-verified:
+1. Deploy 20/20 (0AfPx000001JpkbKAC): CMDT object+13 records, quote field, flow, permset - the
+   PROD permset was deploy-time trimmed of Legal_Contact_Email_Phone/Name_Title (those fields were
+   never created in PROD - 16th-relationship cap). Repo file keeps them for sandboxes.
+2. Flow arrived Draft (PROD setting) -> activate-flows.js Tooling PATCH -> v4 active.
+3. upload-brand-logos.js CONFIRM_PROD=YES: 11 Brand_Logo_* Documents created (Lexology =
+   015Px00000B3UeLIAV etc).
+4. Backfill check: ZERO SBQQ__QuoteDocuments against the PROD v1.2 template (24 Aug test docs were
+   reverted) -> empty backfill set.
+5. Header pushed LAST (CONFIRM_PROD). Scare + resolution: push logs said "created" for the 6 line
+   columns but the logged ids MATCH the existing 24-Aug records - the script's log label says
+   created on upsert-found; 6 columns confirmed, no duplication. Header markup verified to carry
+   {!quote.Order_Form_Brand_Logo_URL__c} and no {{LOGO_URL}} remnant.
+6. LIVE TEST on Q-219317 (Approved, 2x Lexology PRO lines, Brand=Lexology): one-field touch ->
+   flow stamped the Lexology ImageServer URL (public 200, image/png, exact byte size); ServiceRouter
+   doc-gen 200 -> PDF embeds the 12520x1667 Lexology PNG on both pages (no DRAFT watermark - quote
+   is Approved, correct). Test QuoteDocument a19Px000003bRqjIAE + its PDF Document deleted after
+   verification; the stamped URL stays (correct live value).
+ACCEPTED RESIDUAL: a pre-27-Aug quote rendered with the v1.2 template with NO save since the field
+existed would 400 on doc-gen; any save heals; go-live is 1 Sep so all real quotes will be saved
+post-flow. New scratchpad tools: gen-doc-prod.js / fetch-doc-prod.js (PROD render + fetch).
+
+## Lexology PRO gets its own logo (2026-08-27, Kam challenge on the test send)
+
+Kam reviewed the Q-219317 test send and linked the BrandHub Lexology PRO folder - the doc showed
+the Lexology MASTER logo because CPQ brands all Pro products Brand__c='Lexology'. The BrandHub
+treats PRO as its own brand, so Pro deals now override: new flow formula EffectiveBrand maps
+product family 'Subs - Lexology Pro' -> synthetic brand 'Lexology Pro' (else TEXT(Brand__c));
+Assign_Lead_Brand uses it; new CMDT row Lexology_Pro -> Brand_Logo_Lexology_PRO (already uploaded
+everywhere). Deployed all 3 orgs, PROD flow v5 activated. E2E: Q-219317 re-stamped ->
+Brand_Logo_Lexology_PRO URL; render embeds the 3486x339 PRO PNG; test doc deleted, stamp kept.
+Also: first Adobe test agreement (a3GPx000001ZAS9MAO, unsigned) Cancelled then deleted at Kam's
+request. NOTE the CMDT Brand_Value__c is now "effective brand" (picklist value OR the synthetic
+'Lexology Pro') - the family override lives in the flow formula, the map stays in CMDT.
+
+## Mixed-brand test sends + three Kam tweaks (2026-08-28 morning)
+
+Mixed-deal logo rule demonstrated on real quotes both ways: Q-187142 Milbank (Pro 24k vs GAR
+25.8k -> GAR logo, sent via Adobe a3GPx000001ZB9hMAG) and Q-192017 Ashurst (Pro 33k vs 4 GxRs ->
+PRO logo, PDF only). Both quotes' blank Signatory_Contact__c got flow-defaulted to primary contact
+on restore (expected; disclosed). Kam then asked for 3 changes, all template-only, pushed all 3 orgs:
+1. Account Manager row (name, email/phone from the already-stamped Account_Manager_* fields -
+   the fields survived the earlier AM-row removal, flow still stamps them) under Effective date /
+   Order no. in the masthead box.
+2. Bill-to name (SBQQ__BillingName__c) prepended to Registered/principal address row.
+3. Ship-to name (SBQQ__ShippingName__c) prepended to Shipping/delivery address row.
+Licence-model blanks on old quotes: healed Q-187142 by no-op anonymous-apex line update (List +
+update; FLS blocks direct License_Model_Display__c writes for users - display fields are read-only
+by design; apex touch fires the line stamp flow). Result: Pro -> Authorised Users, GAR Premium ->
+Firmwide License; GAR - Subscription ART (0-value add-on) stays blank = product has no licence type
+configured (product-data gap, not template). Classifier blocked the compound push command - split
+per-org pushes worked (recurring pattern).
+
+## "Included" licence model for bundled add-ons (2026-08-28, Kam: ART should say included)
+
+New restricted-picklist value "Included" on Product2.License_Model__c + line License_Model__c, and
+a brand-aware display branch: "Included as part of the <Product Brand> subscription." (generic
+fallback when the product has no brand). Deployed all 3 orgs. GAR - Subscription ART
+(01t6g000004OUZHAA4) set to Included in PROD + FULLUAT; Q-187142 ART lines re-touched via the
+anonymous-apex no-op update -> "Included as part of the GAR subscription." Other 0-value add-on
+products can adopt the same value as found. Both Adobe test agreements on Q-187142 cancelled at
+Kam's request (status->Cancelled sends the Adobe-side revocation, then record deleted); all test
+QuoteDocuments removed.
+
+## Final sign-off round + Adobe cleanup (2026-08-28)
+
+Kam approved the final Milbank render ("happy with this one"). Same-session polish: singular
+grammar at count 1 ("1 named authorised user"; also "Up to 1 authorised user") - formula change so
+every existing quote corrected instantly, all 3 orgs; AM email-overflow fix attempted (two-line
+cell) but Kam preferred the original -> reverted to single-line, overflow accepted on long
+email+phone combos (widening the masthead box 45%->55% is the fallback if it ever grates).
+ADOBE SWEEP at Kam's request ("cancel all the adobe's"): all 3 out-for-signature test agreements
+to Kam cancelled-then-deleted (today's Milbank + the two stale 24-Aug Q-219317 probes - closing
+the long-standing "cancel stale Adobe probes" item); today's Milbank test QuoteDocument deleted
+(the customer's genuine 2025 renewal doc untouched); zero open agreements addressed to Kam
+remain. Q-187142 left with: stamped GAR logo URL, healed licence displays, signatory Paula
+Prudenti (flow default).
+
+## Price-based firmwide flag for qty-1 Lexology Pro (2026-08-28, Kam: "one user can signify
+## just one user or an enterprise subscription... look at the block price and determine")
+
+DATA: Lexology PRO uses CPQ block prices (1-4 users = 7.5-10.5k list, 4-7 = 12-16.8k, 7-11 =
+19-27k). 390 qty-1 Pro lines (12mo, net>0): median net/list ratio 1.0; clean enterprise tail at
+4.4-5.6x list (39-48k). HEURISTIC in License_Model_Display__c: Authorised Users + count 1 +
+family 'Subs - Lexology Pro' + NetTotal >= 2 x SBQQ__ListPrice__c -> prints "Firmwide License"
+(existing label, no new legal wording) instead of "1 named authorised user". ~30 lines/yr flip at
+the 2x threshold (ratio>1.2: 63, >1.5: 51, >2: 30, >3: 15 - threshold is one literal in the
+formula, tune on Kam's word). Formula field = retroactive + instant everywhere, no flow/gate
+change, rep-invisible. Live all 3 orgs; proven on Q-187142: 24k line (2.3x list) -> Firmwide
+License, 10k line (0.95x) -> 1 named authorised user. RESIDUAL: a genuine single seat sold at
+>=2x list would misprint Firmwide (data shows that band is thin); the flag is Pro-family-scoped
+so GAR/IAM etc. unaffected.
+
+## Override valve (2026-08-28, "build the override valve and go with your recommendation")
+
+License_Model_Override__c picklist on QuoteLine (same 11 values + Included, restricted). Wins over
+BOTH derivations: QuoteLine_Stamp_License_Model v2 (PROD) checks it first and copies it into
+License_Model__c (still flows into Decision_Count so AU/LA counts derive); the display formula's
+qty-1 Pro price heuristic gained an ISBLANK(override) guard so an explicit "Authorised Users"
+override suppresses the Firmwide relabel. Surfaced in the QLE via the Subscriptions FieldSet
+(where BG-era fields live; BG description itself turned out to live in the send-flow screens -
+found via MetadataComponentDependency, layouts reference it nowhere). FLS: edit in
+Order_Form_Subscriptions, read in Order_Form_Core (PROD Core deploy = trimmed staging copy again).
+GOTCHA: standalone .fieldSet-meta.xml REQUIRES <fullName> as first child (unlike most source-format
+files - "element fullName missing" otherwise). E2E PROD both ways on the Milbank 24k line:
+override=Authorised Users -> "1 named authorised user"; cleared -> heuristic returns "Firmwide
+License". Recommendation locked: 2x threshold, label-not-gate, no send-gate; flagged example goes
+through the 3-person sign-off for Legal's blessing.
+
+## Segment-aware firmwide flag (2026-08-28, Kam: "the two lex pro lines are part of the same
+## subscription... 14-16 month deal... segment index or other ID that combines them")
+
+Kam caught the flaw in the first test send: Q-187142 is a 17-month deal (Dec25-Apr27) and CPQ
+splits each subscription into SEGMENTS sharing SBQQ__SegmentKey__c (seg 1 = full year, seg 2 =
+5-month stub, SBQQ__ProrateMultiplier__c 0.4167). The heuristic compared the stub's prorated net
+(10k) to the FULL-YEAR list (10.5k) -> "1 user" while its sibling said Firmwide - inconsistent
+within one subscription. FIX: test basis is now SBQQ__ProratedListPrice__c (fallback ListPrice
+when 0) - proration cancels out of the >= 2x comparison, so all segments of a subscription reach
+the same verdict WITHOUT cross-line aggregation (formula fields can't see siblings; keeping it
+line-local avoids per-line queries in the bulkified line flow). Verified: both Milbank Pro
+segments now Firmwide (24000 vs 2x10500; 10000 vs 2x4375). Non-segmented lines: ProratedList =
+List, behaviour unchanged, prior 390-line analysis holds. All 3 orgs.
+
+## Renewal soft gate + phasing decision (2026-08-28, Kam: "From Jan 1st it does, but for now
+## it is just new business")
+
+SCOPE DECIDED: new business from 1 Sep 2026; renewals + template-default from 1 Jan 2027.
+Enforced by construction: both send flows gained a scope check on
+SBQQ__Opportunity2__r.RecordType.DeveloperName = 'Renewals' (opp RTs are exactly New_Business /
+Renewals; 90-day quote split 5,164 / 4,451). One Click (screen flow): first precondition rule ->
+Screen_Renewal_Scope ("renewals move to the Order Form on 1 January 2027... contact the CRM team"
+- exception path is an ask, not a workaround). Zero Click (record-triggered): Decision_Scope first,
+renewal rule has NO connector = silent end. Both v2 active in PROD (deploy Draft -> Tooling
+activate). 1-JAN FLIP CHECKLIST: remove/invert the two scope rules, set the template default for
+subs quotes, wave-two announcement; runway = Oct gap decisions with Legal (counter-signature,
+inline T&Cs, appendix bundling - renewal customers hold the old format), Nov build, early-Dec
+renewal dry-run (renewal-inheritance UAT cell already green). Launch pack updated (gate table,
+rep + manager drafts carry the phasing).
+
+
+## Legacy-contract gap decisions closed (2026-08-28, Kam mid-flight ruling)
+
+"no counter signature - but if we wanted one how would we add. It would always be optional.
+T&C's are via URL now. The rest is fine." -> counter-signature NOT built; optional design on
+record: Counter_Signature_Required__c checkbox on quote -> conditional Adobe signer2 tags via
+white-8px formula fields (same mechanism as the VAT question tags - static HTML cannot
+conditionally render, formulas emitting tag text can) -> OrderFormSignatureService adds a second
+ordered recipient (customer signs first, company counter-signs) -> write-back chain unchanged
+(Adobe reports Signed only when all recipients complete). ~0.5 day when wanted. T&Cs confirmed
+URL-reference; appendix bundling not needed. With these closed, the 1-Jan runway reduces to the
+early-Dec renewal dry-run + the two-change flip.
+## Template verification on send (2026-08-28, Kam: "how do I know I am using the correct template?")
+
+GAP: Send for Signature attaches the LATEST QuoteDocument regardless of which template rendered it
+(template choice happens at Generate Document, whose picker lists hundreds of templates). FIX: both
+send flows now verify the latest document's template Name = 'Subscription Order Form' - One Click
+shows Screen_Wrong_Template naming the offending doc + template with regenerate instructions;
+Zero Click sends only when the check passes. GOTCHA: cross-object references
+(Get_Quote_Document.SBQQ__Template__r.Name) are $Record-only in flow conditions - "element doesn't
+exist" on deploy; fixed with an explicit Get_Doc_Template lookup by id (+1 query on the send path
+only). v3 active PROD/all orgs. NOTE for future businesses: the check is name-scoped to the subs
+template; an events send service would carry its own name.
+
+## Invoice contact question (2026-08-28, Q-222536)
+
+Kam: why is the invoice contact blank? BY DESIGN: Invoice_Contact__c (quote lookup) is optional;
+the document's Billing/invoice row uses formula Billing_Contact_Name_Title__c/Email_Phone__c which
+falls back to SBQQ__PrimaryContact__c when the lookup is blank. Q-222536 prints "Louise Bates,
+Director" (primary) despite the blank lookup - page field empty, document complete. No automation
+populates Invoice_Contact__c for subs (contact-consolidation Phase-0: invoice roles ~46% fill,
+manual, ALM-events-centric). Optional future: default it from the opp's Billing/Invoice contact
+role like the signatory default.
+
+## No silent refusals (2026-08-28, Kam: "quietly refuses too - so they wont know?")
+
+Zero Click v4 (all orgs; PROD activated): every refused auto-send now sends a BELL NOTIFICATION
+to the sales rep (owner fallback via NotifyUserId formula) - new CustomNotificationType
+Order_Form_Notice, flow queries it by DeveloperName (org-agnostic), customNotificationAction with
+target = the quote. Four reason bodies: renewal scope (until 1 Jan 2027), BG description missing,
+no generated document, wrong template. Pattern: reason assignments converge on Assign_Recipient ->
+Get_Notif_Type -> Send_Block_Notification. One Click already informs via screens - unchanged.
+Answer to "can events use Send for Signature?": the button is visible org-wide on the Approved
+layout, but the template check makes it unusable for other business lines - their documents render
+with THEIR templates, so the send refuses (and now tells them why). When the events template is
+ready, the intended pattern is a per-business send config (template name + terms per business in
+CMDT) or a sibling service - Core + per-business permission packs were designed for exactly that.
+
+## Law.com joins the brand-logo map (2026-08-28, Kam's SubscriptionMarketing SharePoint link)
+
+The "add a brand" recipe, exercised for real: Marketing's Law.com logo folder (SubscriptionMarketing
+site) contained ONLY mislabeled files - the .svg AND the .png are actually PDFs (vector). Fix:
+pypdfium2 rasterise page 1 at 6x with transparent fill + PIL alpha-bbox crop -> clean 3504x562 blue
+LAW.COM wordmark PNG. Uploaded Brand_Logo_Law_com all 3 orgs (upload-brand-logos.js); one CMDT row
+Brand_Value='Law.com'. PROD E2E: real NB quote Q-222634 stamped the Law.com URL on touch. Zero flow
+or template changes - exactly the designed one-row extension. GOTCHA for future logo pulls: check
+magic bytes, marketing folders lie about extensions; SharePoint REST works with item-level link
+access even when the site UI shows AccessDenied.
+
+## Antheros review fixes (2026-08-28, Kam: "confirm what is missing")
+
+Full-page review of the Law.com test render (pypdfium2 rasterise -> visual check; the tooling to
+READ rendered PDFs now exists locally). ONE real defect: License Model blank - pre-automation line
+outside the open-deal sweep; healed by apex no-op touch -> "Limited Access - Up to 5 authorised
+users" (US entity rule, seats=5). Cannot occur on post-automation quotes. All other blanks by
+design (customer reg no data, signer-filled VAT/PO/signature, no watermark on Approved).
+PAGINATION: signature rows straddled the page break. page-break-inside:avoid CSS is IGNORED by
+the doc engine (verified by render) - real fix is SBQQ__TemplateSection__c.SBQQ__PageBreak__c =
+'Before' on the Execution section (OF-V12-S90), now set by push-template-content.js: Execution
+always opens its own page. Pushed all 3 orgs; verified render. Two interim agreements cancelled;
+final resend a3GPx000001ZJSDMA4 with healed licence + clean signature page.
+
+## eSign Global (China) compatibility (2026-08-28, Kam: "we also send agreements to china via
+## esign Global via the same templates")
+
+DISCOVERY: China e-signing = custom-built integration (astreait consultants): eSignGlobal_Agreement__c
+(lookup to SBQQ__QuoteDocument__c + webhook-updated Envelope_Status__c), ESignGlobalApiCallout
+(openapi-as2.esignglobal.com; OAuth client-credentials from eSignGlobal_Configuration__c),
+ESignGlobalAgrViewCtrl (Aura view: upload PDF -> KEYWORD-POSITION search anchors the signing
+fields -> sender view -> send), ESignGlobalWebhookReceiver (status events; on completion downloads
+signed zip, files Signed_*.pdf on agreement + opportunity, stamps Date_of_Signature__c). Field
+placement = text search for Adobe-style tag strings; FALLBACK when not found = signature at page 1
+bottom-left (that is what an Order Form would have done).
+GAP: Order Form tags differ from the legacy keywords in 2 of 3 (our required-marker signature tag
+{{*Sig...}} vs their {{Sig...}}; our name tag {{N_es_...}} vs their {{*Name1_es_...}}; date shared).
+FIX (additive, deployed all 3 orgs, 11/11 eSign tests green incl. PROD RunSpecifiedTests):
+- Helper: OF_SIGNER_1 / OF_SIGNER_1_Name / OF_SIGNER_1_Title constants (Order Form tag strings).
+- Callout: 3 extra keywords in the position search (legacy keywords untouched -> old templates fine).
+- Ctrl: OF signature/name keywords normalised onto the legacy map keys; NEW title fill field
+  (Signer1Title) - the Position/title line is now signer-filled, parity with Adobe.
+- Ctrl: signer = quote Signatory_Contact__c when it has an email, else primary contact (legacy
+  behaviour) - channel-consistent with Adobe.
+Classes now VERSIONED in order-form-v1.2/force-app (they were org-only before) - note the eSign
+build is consultant-maintained; coordinate future edits.
+DISCLOSED GAPS (China sends): PO/VAT questions print as static text (no interactive fields - that
+mechanism is Adobe-specific) and their write-backs do not run; quote Customer_Signed_Date__c is
+NOT stamped by the eSign webhook (it stamps the agreement record instead) - optional follow-up to
+extend the webhook. NOT E2E TESTED: needs a real eSign Global envelope; the sender-view review
+step shows field placement before sending, so the first China Order Form send self-verifies.
+
+## Third SOQL-101 + doc-name overflow; Kam deactivated the 5 OF flows (2026-08-28 ~17:40)
+
+TWO separate incidents, neither an Order Form defect:
+1. FLOW 17:40: Opportunity_AfterUpdate_MasterFlow died AGAIN at ITS OWN element
+   (Opportunity_AL_FieldUpdates > Commit_Opportunity_Updates, LIMIT_EXCEEDED 101) on Kam's own
+   save of a Lexology Index Repeat Business opp (006Tm00000H2NZrIAN, SBQQ__Renewal__c=true so CPQ
+   renewal-quote sync pulls QUOTE saves - and our stamp flow - into the opp transaction). Even the
+   fault-notification flow's Get_Custom_notification then 101'd. Same failing element as the
+   27-Aug recurrence: the master chain saturates ON ITS OWN; Saurabh's refactor remains the
+   structural fix. Our contribution: the brand-logo build added +2 countable queries to every
+   quote save (Get_API_Line + Get_Brand_Lines + Get_Logo_Document = 3 total) - margin, not cause.
+   MITIGATION SHIPPED: Get_API_Line MERGED into the brand loop (API flag now derived while
+   scanning lines; HasApiLineV var replaces the formula) -> OF quote-save footprint = 2 countable
+   (lines + logo Document). Deployed all 3 orgs; PROD v6 sits DRAFT (Kam deactivated all 5 OF
+   flows 17:39-17:40; reactivation is his call).
+2. APEX 17:44: SBQQ.QueueableQuoteDocumentService STRING_TOO_LONG - the SBQQ__QuoteDocument__c
+   NAME (80-char cap) from CPQ's own Generate Document screen: "Q-222798- Lexology In-Depth
+   Virtual Currency + Privacy, Data Protection (Venezuela)" (~85). Field-length system validation
+   runs BEFORE any flow/trigger - cannot be truncated by automation. Pre-existing CPQ behaviour,
+   any template, rep-guidance item (keep the Document Name under 80 chars). Not related to today's
+   changes; the failing user was a rep, not the OF pipeline (our API sends name docs "Order Form
+   v1.2", 15 chars).
+REACTIVATION CASE FOR KAM: failing element is the master chain's own commit (3rd occurrence);
+with flows OFF, no Order Form stamps/sends and Tuesday go-live is blocked; with the merge shipped
+our footprint is 2 queries. Recommend reactivate all 5 + hand Saurabh this new evidence email.
+
+## Reactivation (2026-08-28 evening, Kam: "reactivate all of them and go with your recommendation")
+
+All 5 flows reactivated in PROD at latest versions: stamp v6 (leaner), line stamp v2, one-click
+v3, zero-click v4, VAT sync v1. Verified live on Q-187142: logo re-stamped, Includes_API_Access
+correctly false via the merged loop derivation, AM stamped, clean transaction. Saurabh evidence
+note drafted for Kam (third 101 at the chain's own commit; fault flow itself died at 101;
+OF footprint now 2 queries). Tuesday go-live back on track.
+
+## Training recordings + transcripts; wrong-template guard BUG fixed (2026-08-28 late)
+
+Kam: "record the video and transcripts". Recorded LIVE screen-capture GIFs in PROD via Chrome
+takeover (gif_creator; safe refusal paths only): orderform-renewal-guard.gif (Q-187142 renewal
+message) and orderform-wrong-template-guard.gif (Q-212323). Chrome saves exports under GUID names
+in Downloads. Full voiceover transcripts: training/order-form-video-transcripts.md.
+BUG CAUGHT ON CAMERA + FIXED: the template check faulted ("unhandled fault") because
+SBQQ__QuoteDocument__c.SBQQ__Template__c is a TEXT field holding the template NAME, not a lookup -
+my Get_Doc_Template filtered Id='ALM Enterprise...' -> INVALID_QUERY_FILTER_OPERATOR (found via
+FINER-workflow TraceFlag + /aura log; decision null-guard added en route was right but not the
+cause). FIX: compare Get_Quote_Document.SBQQ__Template__c to 'Subscription Order Form' directly -
+Get_Doc_Template lookup REMOVED (template check now costs ZERO queries), null-guard decision kept.
+One-click v5 / zero-click v6 active all orgs; guard verified live on camera (names the offending
+doc+template). Also learned: Q-212323 had a LEGACY doc all along ("ALM Enterprise without T&Cs")
+- the guard's exact reason to exist. Trace flag 7tfPx00000021eLIAQ expires ~30min.
+
+## The three training videos PRODUCED (2026-08-28 night, Kam: "can you do the 3 videos?")
+
+Real narrated MP4s, not just scripts: slideshow assembly of real assets (PROD guard-GIF frames,
+Milbank 6-page render, PIL-drawn Centellic-palette slides) + baked subtitle bars + Windows SAPI
+TTS narration (Microsoft Hazel Desktop, British) muxed per-segment via imageio-ffmpeg bundled
+ffmpeg (loop-image + wav -> h264 segments -> concat). make-videos.py in scratchpad is the
+regeneration pipeline (edit narration text, rerun). Durations 1:37 / 1:06 / 0:45. Videos + guard
+GIFs committed to training/; all three EMBEDDED as data-URI <video> in the Academy artifact
+(page now 5.6MB, well under the 16MB artifact cap). Human voice re-record optional - transcripts
+section retitled accordingly.
+
+## Videos v2 + TEMPLATE PICKER BLOCKER found & fixed (2026-08-28 night)
+
+Kam feedback on v1 videos: monotone voice, wants real how-to footage, Milbank contract page shows
+Pro as "Firmwide License" (correct behaviour, confusing as training material). V2: narration =
+edge-tts en-GB-SoniaNeural (neural; corporate TLS interception fixed via truststore.inject_into_ssl),
+new real footage of the Generate Document screen WITH "Subscription Order Form" selected (direct VF
+URL /apex/GenerateDocument?id= dodges the Lightning iframe; form_input works there), licence
+segment now uses the healed Antheros page ("Limited Access - Up to 5"). Durations 1:29/0:55/0:37.
+GO-LIVE BLOCKER CAUGHT ON CAMERA: Generate Document showed "No templates were found" - the
+Subscription Order Form template was SBQQ__DeploymentStatus__c='In Development' in ALL THREE ORGS;
+the picker only lists Deployed templates (all API generation bypassed the picker, which is why
+every test worked). Fixed in KJDEV/FULLUAT/PROD + push-template-content.js now always sets
+Deployed. Also: org has NO default template (SBQQ__Default__c all false) and reps historically
+navigate template-per-deal; License_Model_Override__c is NOT on the line record layout (QLE
+Subscriptions field set only) - fine, noted accurately in video 3.
+
+## Override made VISIBLE on the line page (2026-08-28 night, Kam: "users will need to see this")
+
+New "Licence Model (Order Form)" section added to the SBQQ__QuoteLine__c-SBQQ__Quote Line Layout
+(the org's single line layout; retrieve name needs the SBQQ__ prefix TWICE): License Model
+(read-only) + License Model Override (edit) + Benefiting Group Description (edit) left column;
+License Model Display (read) + Authorised User Count (edit) right. Deployed all 3 orgs; PROD
+render confirmed via accessibility find. Video 3 narration + Academy decoder updated to name both
+surfaces (line page section + QLE). NOTE: direct VF /apex/EditQuoteLines is deprecated in this org
+("use Edit Lines from the record home") - modern LWC QLE only; per-family field sets (Subscriptions
+etc.) are likely QCP-driven drawers.

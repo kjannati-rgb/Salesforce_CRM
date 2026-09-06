@@ -362,9 +362,34 @@ isNew variable value is passed from master flow</description>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Create_Opportunity_Contact_Role</targetReference>
+                <targetReference>Get_Existing_Primary_OCR</targetReference>
             </connector>
             <label>Create</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Primary_OCR_Exists</name>
+        <label>Primary OCR Already Exists?</label>
+        <locationX>530</locationX>
+        <locationY>1220</locationY>
+        <defaultConnector>
+            <targetReference>Create_Opportunity_Contact_Role</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Not Found - Create</defaultConnectorLabel>
+        <rules>
+            <name>Exists</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Existing_Primary_OCR</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_for_lexology_pro_campaign</targetReference>
+            </connector>
+            <label>Exists - Skip</label>
         </rules>
     </decisions>
     <description>This flow updates the fields of triggering record, record can be new or existing. Most generic fields are updated in this flow</description>
@@ -462,6 +487,9 @@ null)</expression>
         <connector>
             <targetReference>Check_for_lexology_pro_campaign</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Check_for_lexology_pro_campaign</targetReference>
+        </faultConnector>
         <inputAssignments>
             <field>ContactId</field>
             <value>
@@ -495,6 +523,45 @@ null)</expression>
         <object>OpportunityContactRole</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
+    <recordLookups>
+        <description>Guard (duplicate-contact-role fix): find an existing primary Decision Maker role for this contact so the create can be skipped, preventing duplicate-contact-role save failures on renewal.</description>
+        <name>Get_Existing_Primary_OCR</name>
+        <label>Get Existing Primary OCR</label>
+        <locationX>530</locationX>
+        <locationY>1106</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Primary_OCR_Exists</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Create_Opportunity_Contact_Role</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>OpportunityId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>ContactId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Primary_Contact__c</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Role</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Decision Maker</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>OpportunityContactRole</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <recordLookups>
         <description>Get Line items from current opportunity and store quantity</description>
         <name>Get_Opportunity_Product</name>
@@ -789,6 +856,12 @@ null)</expression>
             <field>Next_Contact_Date__c</field>
             <value>
                 <elementReference>Next_contact_date</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Previous_Annual_Contract_Value_Local__c</field>
+            <value>
+                <elementReference>recordId.SBQQ__RenewedContract__r.SBQQ__Opportunity__r.Amount</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>

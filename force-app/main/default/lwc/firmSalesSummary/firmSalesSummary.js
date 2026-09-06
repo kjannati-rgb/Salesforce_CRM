@@ -20,9 +20,8 @@ export default class FirmSalesSummary extends LightningElement {
     groups = [];          // persisted groups (default, no filters)
     offices = [];         // default office panel (no filters)
     view;                 // unified cross-filter result (getView) — present when any filter is active
-    selOfficeId;
-    selOfficeName;
-    selGroup;
+    selGroups = [];       // selected commercial-group names (multi-select, OR within dimension)
+    selOffices = [];      // selected offices [{ id, name }] (multi-select, OR within dimension)
     drill;                // { rows, total, offset } — opps matching the active cross-filter
     refreshing = false;
     error;
@@ -45,9 +44,10 @@ export default class FirmSalesSummary extends LightningElement {
 
     connectedCallback() { this.loadOffices(); }
 
-    get filtersActive() { return !!(this.selOfficeId || this.selGroup || this.business !== 'all'); }
-    get anySelection() { return !!(this.selOfficeId || this.selGroup); }
-    get hasFilters() { return this.anySelection || this.business !== 'all'; }
+    get anySelection() { return this.selGroups.length > 0 || this.selOffices.length > 0; }
+    get filtersActive() { return this.anySelection || this.business !== 'all'; }
+    get hasFilters() { return this.filtersActive; }
+    get selOfficeIds() { return this.selOffices.map((o) => o.id); }
 
     // ---------- data loads ----------
     loadOffices() {
@@ -63,7 +63,7 @@ export default class FirmSalesSummary extends LightningElement {
         if (!this.filtersActive) { this.view = undefined; this.loadOffices(); return; }
         getView({
             firmId: this.recordId, period: this.period, businessType: this.business,
-            officeId: this.selOfficeId || null, commercialGroup: this.selGroup || null
+            officeIds: this.selOfficeIds, commercialGroups: this.selGroups
         }).then((vw) => { this.view = vw; }).catch((e) => { this.error = this.msg(e); });
     }
 
@@ -85,9 +85,9 @@ export default class FirmSalesSummary extends LightningElement {
 
     get lensNote() {
         const bits = [];
-        if (this.business !== 'all') bits.push(this.business === 'new' ? 'new business' : 'renewals');
-        if (this.selOfficeName) bits.push(this.selOfficeName);
-        if (this.selGroup) bits.push(this.selGroup);
+        if (this.business !== 'all') bits.push({ new: 'new business', renewal: 'renewals', other: 'other (e.g. upsell)' }[this.business] || this.business);
+        this.selOffices.forEach((o) => bits.push(o.name));
+        this.selGroups.forEach((g) => bits.push(g));
         return bits.length ? ' · ' + bits.join(' · ') : '';
     }
 
@@ -104,7 +104,7 @@ export default class FirmSalesSummary extends LightningElement {
             card('acv', 'Won ACV (USD)', this.fmtUSD(p.acv), 'annual run-rate' + this.lensNote, (p.acv || 0) < 0),
             card('won', 'Won Opportunities', this.fmtInt(p.wonCount), 'stage Closed Won' + this.lensNote, false),
             card('canc', 'Cancellations', this.fmtUSD(cancelVal), this.fmtInt(cancelCnt) + ' deals · all-time · already netted', cancelVal < 0),
-            card('subs', 'Active Subscriptions', this.fmtInt(subs), this.fmtUSD(subVal) + ' active', false)
+            card('subs', 'Active CPQ Subscriptions', this.fmtInt(subs), this.fmtUSD(subVal) + ' active · CPQ only', false)
         ];
     }
 
@@ -139,7 +139,8 @@ export default class FirmSalesSummary extends LightningElement {
         rows.forEach((r) => {
             r.pct = (Math.abs(r.rawVal) / total * 100).toFixed(1);
             r.barStyle = 'width:' + r.pct + '%';
-            r.selected = this.selGroup === r.key;
+            r.selected = this.selGroups.includes(r.key);
+            r.rowClass = r.selected ? 'row sel' : 'row';
         });
         rows.sort((a, b) => b.rawVal - a.rawVal);
         return rows;
@@ -151,11 +152,42 @@ export default class FirmSalesSummary extends LightningElement {
         const rows = src.map((o) => ({
             key: o.officeId, id: o.officeId, name: o.officeName || '(no office)',
             location: [o.city, o.country].filter(Boolean).join(', ') || '—',
+            region: o.region || 'Unclassified',
             rawVal: o.value, value: this.fmtUSD(o.value), won: this.fmtInt(o.wonCount), subs: o.subs,
-            selected: this.selOfficeId === o.officeId
+            selected: this.selOfficeIds.includes(o.officeId),
+            rowClass: this.selOfficeIds.includes(o.officeId) ? 'row sel' : 'row'
         }));
         rows.sort((a, b) => b.rawVal - a.rawVal);
         return rows;
+    }
+
+    // Region quick-select chips — one per distinct region present in the currently-loaded office
+    // list, each showing how many offices it covers. Clicking one selects every office in that
+    // region via the SAME selOffices/officeIds mechanism individual office rows already use;
+    // clicking an already-fully-selected region deselects it (toggle).
+    get regionQuickFilters() {
+        const live = this.view && this.view.offices;
+        const src = live ? this.view.offices : (this.offices || []);
+        const byRegion = new Map();
+        src.forEach((o) => {
+            const r = o.region || 'Unclassified';
+            if (!byRegion.has(r)) byRegion.set(r, []);
+            byRegion.get(r).push(o);
+        });
+        const order = ['EMEA', 'Middle East & Africa', 'North America', 'APAC', 'LATAM'];
+        const regions = [...byRegion.keys()].sort((a, b) => {
+            const ia = order.indexOf(a); const ib = order.indexOf(b);
+            if (ia === -1 && ib === -1) return a.localeCompare(b);
+            if (ia === -1) return 1;
+            if (ib === -1) return -1;
+            return ia - ib;
+        });
+        const selIds = this.selOfficeIds;
+        return regions.map((r) => {
+            const offs = byRegion.get(r);
+            const active = offs.every((o) => selIds.includes(o.officeId));
+            return { key: r, region: r, label: r + ' (' + offs.length + ')', active, cls: active ? 'chip-region on' : 'chip-region' };
+        });
     }
 
     valFor(g, kind) {
@@ -166,7 +198,7 @@ export default class FirmSalesSummary extends LightningElement {
 
     // ---------- toggles ----------
     get periodButtons() { return this.btns(['alltime|All-time', 'cfy|This FY', 'pfy|Last FY', 't12m|Last 12 mo'], this.period); }
-    get businessButtons() { return this.btns(['all|All', 'new|New', 'renewal|Renewal'], this.business); }
+    get businessButtons() { return this.btns(['all|All', 'new|New', 'renewal|Renewal', 'other|Other'], this.business); }
     btns(defs, active) {
         return defs.map((d) => { const [key, label] = d.split('|'); return { key, label, pressed: key === active ? 'true' : 'false', cls: key === active ? 'tog on' : 'tog' }; });
     }
@@ -174,17 +206,37 @@ export default class FirmSalesSummary extends LightningElement {
     handleBusiness(e) { this.business = e.currentTarget.dataset.key; this.reloadAll(); }
     reloadAll() { this.loadView(); if (this.anySelection) this.loadDrill(); }
 
-    // ---------- cross-filter selection (linked widgets) ----------
+    // ---------- cross-filter selection (linked widgets, multi-select) ----------
     handleGroupSelect(e) {
         const name = e.currentTarget.dataset.name;
-        this.selGroup = (this.selGroup === name) ? undefined : name;
+        this.selGroups = this.selGroups.includes(name)
+            ? this.selGroups.filter((n) => n !== name)
+            : [...this.selGroups, name];
         this.afterSelect();
     }
     handleOfficeSelect(e) {
         const id = e.currentTarget.dataset.id;
         const name = e.currentTarget.dataset.name;
-        if (this.selOfficeId === id) { this.selOfficeId = undefined; this.selOfficeName = undefined; }
-        else { this.selOfficeId = id; this.selOfficeName = name; }
+        this.selOffices = this.selOffices.some((o) => o.id === id)
+            ? this.selOffices.filter((o) => o.id !== id)
+            : [...this.selOffices, { id, name }];
+        this.afterSelect();
+    }
+    handleRegionSelect(e) {
+        const region = e.currentTarget.dataset.region;
+        const live = this.view && this.view.offices;
+        const src = live ? this.view.offices : (this.offices || []);
+        const regionOffices = src.filter((o) => (o.region || 'Unclassified') === region);
+        const allSelected = regionOffices.every((o) => this.selOfficeIds.includes(o.officeId));
+        if (allSelected) {
+            const regionIds = regionOffices.map((o) => o.officeId);
+            this.selOffices = this.selOffices.filter((o) => !regionIds.includes(o.id));
+        } else {
+            const toAdd = regionOffices
+                .filter((o) => !this.selOfficeIds.includes(o.officeId))
+                .map((o) => ({ id: o.officeId, name: o.officeName || '(no office)' }));
+            this.selOffices = [...this.selOffices, ...toAdd];
+        }
         this.afterSelect();
     }
     handleRowKey(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.currentTarget.click(); } }
@@ -194,8 +246,32 @@ export default class FirmSalesSummary extends LightningElement {
         else { this.drill = undefined; }
     }
     clearFilters() {
-        this.selOfficeId = undefined; this.selOfficeName = undefined; this.selGroup = undefined;
+        this.selGroups = []; this.selOffices = [];
         this.business = 'all'; this.drill = undefined; this.loadView();
+    }
+
+    // ---------- active-filter chips + empty state ----------
+    get filterChips() {
+        const chips = [];
+        if (this.business !== 'all') {
+            chips.push({ key: 'biz', kind: 'business', val: this.business,
+                label: ({ new: 'New business', renewal: 'Renewals', other: 'Other' }[this.business] || this.business) });
+        }
+        this.selGroups.forEach((g) => chips.push({ key: 'g:' + g, kind: 'group', val: g, label: 'Group: ' + g }));
+        this.selOffices.forEach((o) => chips.push({ key: 'o:' + o.id, kind: 'office', val: o.id, label: 'Office: ' + o.name }));
+        return chips;
+    }
+    removeChip(e) {
+        const { kind, val } = e.currentTarget.dataset;
+        if (kind === 'business') this.business = 'all';
+        else if (kind === 'group') this.selGroups = this.selGroups.filter((g) => g !== val);
+        else if (kind === 'office') this.selOffices = this.selOffices.filter((o) => o.id !== val);
+        this.afterSelect();
+    }
+    get noMatches() {
+        if (!this.filtersActive) return false;
+        const p = this.currentPeriod;
+        return !!(p && !p.wonCount && !p.netValue && !(this.view && this.view.cancelCount));
     }
 
     // ---------- drill: opps matching the active cross-filter ----------
@@ -203,7 +279,7 @@ export default class FirmSalesSummary extends LightningElement {
         if (!this.anySelection) { this.drill = undefined; return; }
         const offset = (this.drill && this.drill.offset) || 0;
         getOpportunities({
-            firmId: this.recordId, officeId: this.selOfficeId || null, commercialGroup: this.selGroup || null,
+            firmId: this.recordId, officeIds: this.selOfficeIds, commercialGroups: this.selGroups,
             period: this.period, businessType: this.business, pageSize: PAGE, offset
         }).then((page) => {
             const rows = (page.rows || []).map((o) => ({
@@ -224,8 +300,8 @@ export default class FirmSalesSummary extends LightningElement {
     }
     get drillCtx() {
         const bits = [];
-        if (this.selOfficeName) bits.push(this.selOfficeName + ' office');
-        if (this.selGroup) bits.push(this.selGroup);
+        this.selOffices.forEach((o) => bits.push(o.name + ' office'));
+        this.selGroups.forEach((g) => bits.push(g));
         if (this.business !== 'all') bits.push(this.business);
         return bits.length ? '— ' + bits.join(' · ') : '';
     }

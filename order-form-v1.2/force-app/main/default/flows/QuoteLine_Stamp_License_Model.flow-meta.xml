@@ -3,7 +3,7 @@
     <apiVersion>62.0</apiVersion>
     <assignments>
         <name>Assign_Limited_Access</name>
-        <label>US-sold: Limited Access</label>
+        <label>US-sold: Limited Access, count = seats</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>
@@ -13,9 +13,13 @@
                 <stringValue>Limited Access</stringValue>
             </value>
         </assignmentItems>
-        <connector>
-            <targetReference>Decision_Copy_Seats</targetReference>
-        </connector>
+        <assignmentItems>
+            <assignToReference>$Record.Authorised_User_Count__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Number_of_Seats__c</elementReference>
+            </value>
+        </assignmentItems>
     </assignments>
     <assignments>
         <name>Assign_Benefiting_Group</name>
@@ -29,42 +33,89 @@
                 <stringValue>Benefiting Group</stringValue>
             </value>
         </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Assign_Product_Default</name>
+        <label>Model from the product rules</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.License_Model__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>ProductDefaultModel</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
-            <targetReference>Decision_Copy_Seats</targetReference>
+            <targetReference>Decision_Count</targetReference>
         </connector>
     </assignments>
     <assignments>
-        <name>Assign_Copy_Seats</name>
-        <label>Copy seats into authorised user count</label>
+        <name>Assign_Count_From_Quantity</name>
+        <label>Count = quantity</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>
             <assignToReference>$Record.Authorised_User_Count__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>$Record.Number_of_Seats__c</elementReference>
+                <elementReference>$Record.SBQQ__Quantity__c</elementReference>
             </value>
         </assignmentItems>
     </assignments>
+    <assignments>
+        <name>Assign_From_Override</name>
+        <label>Model from the manual override</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.License_Model__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.License_Model_Override__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Decision_Count</targetReference>
+        </connector>
+    </assignments>
     <decisions>
-        <name>Decision_Model_Needed</name>
-        <label>Law.com family line without a licence model?</label>
+        <name>Decision_Override</name>
+        <label>Manual override set?</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Decision_Copy_Seats</targetReference>
+            <targetReference>Decision_Family</targetReference>
         </defaultConnector>
-        <defaultConnectorLabel>Model set or other family</defaultConnectorLabel>
+        <defaultConnectorLabel>No override - derive</defaultConnectorLabel>
         <rules>
-            <name>Needs_Model</name>
+            <name>Override_Set</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>$Record.License_Model__c</leftValueReference>
-                <operator>IsNull</operator>
+                <leftValueReference>$Record.License_Model_Override__c</leftValueReference>
+                <operator>IsBlank</operator>
                 <rightValue>
-                    <booleanValue>true</booleanValue>
+                    <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
+            <connector>
+                <targetReference>Assign_From_Override</targetReference>
+            </connector>
+            <label>Override set</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Decision_Family</name>
+        <label>Which rule set?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Product_Default</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Product rules</defaultConnectorLabel>
+        <rules>
+            <name>Lawcom_Family</name>
+            <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>IsLawcomFamily</leftValueReference>
                 <operator>EqualTo</operator>
@@ -75,7 +126,7 @@
             <connector>
                 <targetReference>Decision_Region</targetReference>
             </connector>
-            <label>Needs model</label>
+            <label>Law.com family (region rule)</label>
         </rules>
     </decisions>
     <decisions>
@@ -111,14 +162,21 @@
         </rules>
     </decisions>
     <decisions>
-        <name>Decision_Copy_Seats</name>
-        <label>Limited Access line missing its count?</label>
+        <name>Decision_Count</name>
+        <label>Count derivable from quantity?</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <defaultConnectorLabel>No copy needed</defaultConnectorLabel>
+        <defaultConnectorLabel>No derived count</defaultConnectorLabel>
         <rules>
-            <name>Copy_Seats</name>
-            <conditionLogic>and</conditionLogic>
+            <name>Quantity_Count</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.License_Model__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Authorised Users</stringValue>
+                </rightValue>
+            </conditions>
             <conditions>
                 <leftValueReference>$Record.License_Model__c</leftValueReference>
                 <operator>EqualTo</operator>
@@ -126,36 +184,27 @@
                     <stringValue>Limited Access</stringValue>
                 </rightValue>
             </conditions>
-            <conditions>
-                <leftValueReference>$Record.Authorised_User_Count__c</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.Number_of_Seats__c</leftValueReference>
-                <operator>GreaterThan</operator>
-                <rightValue>
-                    <numberValue>0.0</numberValue>
-                </rightValue>
-            </conditions>
             <connector>
-                <targetReference>Assign_Copy_Seats</targetReference>
+                <targetReference>Assign_Count_From_Quantity</targetReference>
             </connector>
-            <label>Copy seats</label>
+            <label>Authorised Users / Limited Access (non-Law.com)</label>
         </rules>
     </decisions>
     <environments>Default</environments>
     <formulas>
         <name>IsLawcomFamily</name>
         <dataType>Boolean</dataType>
-        <expression>OR(TEXT({!$Record.SBQQ__Product__r.Family}) = &quot;Subs - Law.com&quot;, TEXT({!$Record.SBQQ__Product__r.Family}) = &quot;Subs - Law Journal Press&quot;)</expression>
+        <expression>OR(TEXT({!$Record.SBQQ__Product__r.Family}) = &quot;Subs - Law.com&quot;, TEXT({!$Record.SBQQ__Product__r.Family}) = &quot;Subs - Law Journal Press&quot;, TEXT({!$Record.SBQQ__Product__r.Family}) = &quot;Subs - Regional&quot;)</expression>
     </formulas>
     <formulas>
         <name>LineBillingEntity</name>
         <dataType>String</dataType>
         <expression>TEXT({!$Record.SBQQ__Quote__r.SBQQ__Opportunity2__r.Billing_Entity__c})</expression>
+    </formulas>
+    <formulas>
+        <name>ProductDefaultModel</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!$Record.SBQQ__Product__r.License_Model__c})</expression>
     </formulas>
     <interviewLabel>Quote Line - Stamp License Model {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Quote Line - Stamp License Model</label>
@@ -176,7 +225,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Decision_Model_Needed</targetReference>
+            <targetReference>Decision_Override</targetReference>
         </connector>
         <object>SBQQ__QuoteLine__c</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>

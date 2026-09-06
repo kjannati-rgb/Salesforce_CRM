@@ -30,9 +30,24 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Get_Quote_Document</targetReference>
+            <targetReference>Get_Incomplete_BG_Line</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Status and signatory OK</defaultConnectorLabel>
+        <rules>
+            <name>Is_Renewal</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Quote.SBQQ__Opportunity2__r.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Renewals</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Screen_Renewal_Scope</targetReference>
+            </connector>
+            <label>Renewal opportunity - out of scope until 1 Jan</label>
+        </rules>
         <rules>
             <name>Not_Approved</name>
             <conditionLogic>and</conditionLogic>
@@ -65,6 +80,56 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Decision_BG_Complete</name>
+        <label>Benefiting Group wording complete?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Get_Quote_Document</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>All BG lines defined</defaultConnectorLabel>
+        <rules>
+            <name>BG_Incomplete</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Incomplete_BG_Line</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Screen_BG_Incomplete</targetReference>
+            </connector>
+            <label>BG line without a group definition</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Decision_Have_Doc</name>
+        <label>Any document at all? (null-guard before template lookup)</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Screen_No_Document</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No document</defaultConnectorLabel>
+        <rules>
+            <name>Have_Doc</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Quote_Document</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Decision_Document_Exists</targetReference>
+            </connector>
+            <label>Document exists</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Decision_Document_Exists</name>
         <label>Quote document exists?</label>
         <locationX>0</locationX>
@@ -73,6 +138,28 @@
             <targetReference>Screen_No_Document</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>No document</defaultConnectorLabel>
+        <rules>
+            <name>Wrong_Template</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Quote_Document</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Quote_Document.SBQQ__Template__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Subscription Order Form</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Screen_Wrong_Template</targetReference>
+            </connector>
+            <label>Latest document is not the Subscription Order Form</label>
+        </rules>
         <rules>
             <name>Document_Found</name>
             <conditionLogic>and</conditionLogic>
@@ -105,6 +192,7 @@
         </value>
     </processMetadataValues>
     <processType>Flow</processType>
+    <runInMode>SystemModeWithoutSharing</runInMode>
     <recordLookups>
         <name>Get_Quote</name>
         <label>Get quote</label>
@@ -127,13 +215,62 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
+        <name>Get_Incomplete_BG_Line</name>
+        <label>Get a Benefiting Group line without wording</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Decision_BG_Complete</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SBQQ__Quote__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>License_Model__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Benefiting Group</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Benefiting_Group_Description__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Function_Name__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Benefitting_Group__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>SBQQ__QuoteLine__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>Get_Quote_Document</name>
         <label>Get latest quote document</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Decision_Document_Exists</targetReference>
+            <targetReference>Decision_Have_Doc</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -149,6 +286,22 @@
         <sortOrder>Desc</sortOrder>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <screens>
+        <name>Screen_Renewal_Scope</name>
+        <label>Renewals join on 1 January</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>RenewalScopeText</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;The Order Form covers new business for now.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;This quote belongs to a renewal opportunity. Renewals continue on the current process and move to the Order Form on &lt;b&gt;1 January 2027&lt;/b&gt;. Nothing has been sent.&lt;/p&gt;&lt;p&gt;If this deal genuinely needs the Order Form sooner, contact the CRM team.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
     <screens>
         <name>Screen_Not_Approved</name>
         <label>Quote not approved</label>
@@ -175,7 +328,39 @@
         <allowPause>false</allowPause>
         <fields>
             <name>NoSignatoryText</name>
-            <fieldText>&lt;p&gt;&lt;b&gt;No Signatory Contact is set on this quote.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Set the Signatory Contact field (the person who will sign the Order Form) and try again.&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;b&gt;We don't know who signs this Order Form.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;The signer is the quote's Signatory Contact, which fills itself from the Primary Contact on save. Check the Primary Contact is set, save the quote, and try again — or set the Signatory Contact directly if someone else signs (a director, GC, procurement).&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Screen_BG_Incomplete</name>
+        <label>Benefiting Group wording missing</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>BGIncompleteText</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;A Benefiting Group licence has no group definition.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Line: {!Get_Incomplete_BG_Line.SBQQ__ProductName__c}&lt;/p&gt;&lt;p&gt;The Order Form would print a bare "Benefiting Group" with no description of who is covered. On the quote line, fill in the Benefiting Group Description (preferred) or the Function Name and Group Size, regenerate the document, and try again.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Screen_Wrong_Template</name>
+        <label>Latest document is not the Order Form</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>WrongTemplateText</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;The most recent document on this quote was not generated with the Subscription Order Form template.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Latest document: {!Get_Quote_Document.Name} (template: {!Get_Quote_Document.SBQQ__Template__c}). Nothing has been sent.&lt;/p&gt;&lt;p&gt;Open &lt;b&gt;Generate Document&lt;/b&gt;, pick the &lt;b&gt;Subscription Order Form&lt;/b&gt; template, generate, and try again.&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>

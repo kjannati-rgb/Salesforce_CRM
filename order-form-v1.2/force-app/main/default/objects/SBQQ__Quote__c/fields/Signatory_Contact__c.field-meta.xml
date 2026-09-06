@@ -3,6 +3,7 @@
     <fullName>Signatory_Contact__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <externalId>false</externalId>
+    <inlineHelpText>Who signs the Order Form. Leave blank — it fills from the Primary Contact on save. Set it only when someone else signs (a director, GC, procurement).</inlineHelpText>
     <label>Signatory Contact</label>
     <referenceTo>Contact</referenceTo>
     <relationshipLabel>Quotes (Signatory)</relationshipLabel>

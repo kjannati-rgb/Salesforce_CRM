@@ -2,7 +2,11 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Billing_Contact_Email_Phone__c</fullName>
     <externalId>false</externalId>
-    <formula>IF(ISBLANK(Invoice_Contact__c), "", Invoice_Contact__r.Email &amp; IF(ISBLANK(Invoice_Contact__r.Phone), "", " / " &amp; Invoice_Contact__r.Phone))</formula>
+    <formula>IF(NOT(ISBLANK(Invoice_Contact__c)),
+  Invoice_Contact__r.Email &amp; IF(ISBLANK(Invoice_Contact__r.Phone), "", " / " &amp; Invoice_Contact__r.Phone),
+IF(NOT(ISBLANK(SBQQ__PrimaryContact__c)),
+  SBQQ__PrimaryContact__r.Email &amp; IF(ISBLANK(SBQQ__PrimaryContact__r.Phone), "", " / " &amp; SBQQ__PrimaryContact__r.Phone),
+""))</formula>
     <formulaTreatBlanksAs>BlankAsBlank</formulaTreatBlanksAs>
     <label>Billing/Invoice Contact Email and Phone</label>
     <required>false</required>

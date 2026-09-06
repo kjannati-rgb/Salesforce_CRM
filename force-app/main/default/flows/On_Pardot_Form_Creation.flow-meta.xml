@@ -1,20 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>54.0</apiVersion>
-    <formulas>
-        <name>Campaign</name>
-        <dataType>String</dataType>
-        <expression>CASE({!$Record.Form_Name__c},
-&quot;Lexology - LeadGen - Lexology PRO - Content Download&quot;, &quot;7016g000001zkiuAAA&quot;,
-&quot;Lexology - LeadGen - Lexology PRO - Subscribe&quot;, &quot;7016g000001zkiuAAA&quot;,
-&quot;Lexology - LeadGen - Lexology PRO Landing Page - Subscribe&quot;, &quot;7016g000001zkiuAAA&quot;,
-&quot;Lexology - LeadGen - Lexology PRO - Scanner&quot;, &quot;7016g000001zkiuAAA&quot;,
-&quot;Lexology - LeadGen - Lexology PRO In-house - Subscribe&quot;, &quot;7016g000001zkiuAAA&quot;,
-&quot;Lexology - LeadGen - Lexology Lexy - Subscribe&quot;, &quot;7016g000001zkiuAAA&quot;,
-NULL
-
-)</expression>
-    </formulas>
+    <assignments>
+        <name>Assign_Campaign</name>
+        <label>Set Resolved Campaign Id</label>
+        <locationX>176</locationX>
+        <locationY>695</locationY>
+        <assignmentItems>
+            <assignToReference>resolvedCampaignId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Campaign.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Campaign</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Decision_MappingFound</name>
+        <label>Form Name Mapped?</label>
+        <locationX>176</locationX>
+        <locationY>455</locationY>
+        <defaultConnectorLabel>No mapping - leave Campaign unchanged</defaultConnectorLabel>
+        <rules>
+            <name>Mapped</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Campaign_Mapping.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Campaign</targetReference>
+            </connector>
+            <label>Mapped</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Decision_CampaignFound</name>
+        <label>Campaign Exists?</label>
+        <locationX>176</locationX>
+        <locationY>575</locationY>
+        <defaultConnectorLabel>Not in this org - leave Campaign unchanged</defaultConnectorLabel>
+        <rules>
+            <name>CampaignFound</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Campaign.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Campaign</targetReference>
+            </connector>
+            <label>Found</label>
+        </rules>
+    </decisions>
+    <description>Stamps Name/Account/Campaign on a PFC when Lead/Contact is set. REV-57 follow-up: Campaign is now resolved via PFC_Campaign_Mapping__mdt (Form Name -> Campaign Name) + a by-name Get Records, replacing hardcoded Campaign Ids (sandbox-safe, config-driven).</description>
+    <environments>Default</environments>
     <formulas>
         <name>ContactAccount</name>
         <dataType>String</dataType>
@@ -29,7 +77,7 @@ NULL
         <name>FormName2</name>
         <dataType>String</dataType>
         <expression>LEFT(
-({!$Record.Prospect_Name__c} &amp; &quot; | &quot; &amp; TEXT({!$Record.Form_Name__c})), 
+({!$Record.Prospect_Name__c} &amp; &quot; | &quot; &amp; TEXT({!$Record.Form_Name__c})),
 80)</expression>
     </formulas>
     <interviewLabel>On Pardot Form Creation {!$Flow.CurrentDateTime}</interviewLabel>
@@ -53,15 +101,64 @@ NULL
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Campaign_Mapping</name>
+        <label>Get Campaign Mapping</label>
+        <locationX>176</locationX>
+        <locationY>335</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Decision_MappingFound</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Form_Name__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Form_Name__c</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Active__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>PFC_Campaign_Mapping__mdt</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Campaign</name>
+        <label>Get Campaign By Name</label>
+        <locationX>176</locationX>
+        <locationY>515</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Decision_CampaignFound</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Campaign_Mapping.Campaign_Name__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Campaign</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <recordUpdates>
         <name>Update_Campaign</name>
         <label>Update Campaign</label>
         <locationX>176</locationX>
-        <locationY>455</locationY>
+        <locationY>815</locationY>
         <inputAssignments>
             <field>Campaign__c</field>
             <value>
-                <elementReference>Campaign</elementReference>
+                <elementReference>resolvedCampaignId</elementReference>
             </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>
@@ -70,9 +167,9 @@ NULL
         <name>Update_Form_Name</name>
         <label>Update Form Name</label>
         <locationX>176</locationX>
-        <locationY>335</locationY>
+        <locationY>215</locationY>
         <connector>
-            <targetReference>Update_Campaign</targetReference>
+            <targetReference>Get_Campaign_Mapping</targetReference>
         </connector>
         <inputAssignments>
             <field>Account_Contact__c</field>
@@ -120,4 +217,11 @@ NULL
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
+    <variables>
+        <name>resolvedCampaignId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
 </Flow>

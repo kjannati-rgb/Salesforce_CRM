@@ -11,6 +11,10 @@
         <apexClass>FirmRollupService</apexClass>
         <enabled>true</enabled>
     </classAccesses>
+    <classAccesses>
+        <apexClass>RegionMappingService</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     <fieldPermissions>
         <editable>false</editable>
         <field>Account.Firm_Active_Sub_Value_USD__c</field>

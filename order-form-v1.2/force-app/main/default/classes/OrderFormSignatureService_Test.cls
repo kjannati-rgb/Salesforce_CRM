@@ -24,7 +24,11 @@ private class OrderFormSignatureService_Test {
         // The CPQ package forces new quotes to Draft on insert - set Approved afterwards.
         quote.SBQQ__Status__c = 'Approved';
         update quote;
-        insert new SBQQ__QuoteDocument__c(Name = 'Order Form v1.2 Test Doc', SBQQ__Quote__c = quote.Id);
+        Document pdf = new Document(Name = 'Order Form v1.2 Test PDF',
+            FolderId = UserInfo.getUserId(), Body = Blob.valueOf('PDF'));
+        insert pdf;
+        insert new SBQQ__QuoteDocument__c(Name = 'Order Form v1.2 Test Doc',
+            SBQQ__Quote__c = quote.Id, SBQQ__DocumentId__c = pdf.Id);
         insert new echosign_dev1__Agreement_Template__c(
             Name = 'Order Form v1.2 - Subscription',
             echosign_dev1__Active__c = true

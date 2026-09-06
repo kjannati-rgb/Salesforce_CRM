@@ -82,6 +82,28 @@ Catalog hygiene for Kam (family-based logic misses these until fixed):
 - "Law.com Site License" (01tPx00000DWNR0IAP): Family is 'Law.com' (non-standard) -> set 'Subs - Law.com' if in scope
 - "GCR – Standard – Individual License" (01tTm000000ZYN1IAO): en-dash name fix (flagged earlier)
 
+## MBL Seminars family ruling (Kam 2026-08-18) - IMPLEMENTED
+
+Family 'Subs - MBL Seminars', 5 active products. PROD data (180d CW): the seat count lives
+in `SBQQ__Quantity__c` (MBL+ Seat Based: 747 lines, qty 1-1,000 avg ~50; Annual Webinar 74;
+Seat Based Annual Webinar 14; MBL+ Subscription 199 all-time). `Number_of_Seats__c` is
+ALWAYS 1 on MBL lines - dead field for this family.
+
+- **MBL+ Seat Based Subscription / MBL+ Subscription / Annual Webinar Subscription /
+  Seat Based Annual Webinar Subscription -> "Limited Access"** (product-level default via
+  seed-license-models.js; block pricing is a pricing mechanic, out of scope for the licence
+  column - same ruling as Law.com price rules). Count = quantity, copied write-when-blank
+  into `Authorised_User_Count__c` by the flow.
+- **MBL Credit -> licence column prints BLANK** (custom price added to editable list price;
+  no licence dimension - same treatment as Specialist Platforms price-x-qty products).
+
+Flow change (`QuoteLine_Stamp_License_Model`): the count-copy is now FAMILY-AWARE -
+Law.com copies `Number_of_Seats__c`, MBL copies `SBQQ__Quantity__c`. Without the family
+guard the old rule would have copied the constant seats=1 onto MBL lines (bug caught
+before it shipped). Verified in KJDEV: MBL+ qty 50 -> "Up to 50 authorised users";
+MBL Credit blank; ALM Law.com regression -> "Up to 250" intact. Seeded KJDEV + FULLUAT
+(4 products each; MBL Credit skipped).
+
 ## Implementation implications (proposals, not yet built)
 
 1. **Product-level defaults (twin-field pattern):** set `License_Model__c` on each subscription

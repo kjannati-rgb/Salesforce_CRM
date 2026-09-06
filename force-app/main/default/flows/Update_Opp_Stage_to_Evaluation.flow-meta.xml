@@ -59,7 +59,7 @@
             <label>Today</label>
         </rules>
     </decisions>
-    <description>This flow updates all the renewals to evaluation (not for events). This cones from revOps that renewal should start with Evaluation and not with identify</description>
+    <description>Scheduled flow: moves renewal/repeat-business opportunities created today from the Identify stage to the Evaluate stage (excludes Events, MBL Seminars and Docket Navigator). Per RevOps, renewals should start at Evaluate, not Identify. (Target stage corrected from the inactive "Evaluation" value to the active "Evaluate" stage, 2026-06.)</description>
     <environments>Default</environments>
     <formulas>
         <name>Today</name>
@@ -95,7 +95,7 @@
         <inputAssignments>
             <field>StageName</field>
             <value>
-                <stringValue>Evaluation</stringValue>
+                <stringValue>Evaluate</stringValue>
             </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>
@@ -150,5 +150,5 @@
         </schedule>
         <triggerType>Scheduled</triggerType>
     </start>
-    <status>Obsolete</status>
+    <status>Draft</status>
 </Flow>

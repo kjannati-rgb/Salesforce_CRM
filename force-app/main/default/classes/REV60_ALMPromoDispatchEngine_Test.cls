@@ -623,6 +623,191 @@ private class REV60_ALMPromoDispatchEngine_Test {
         Assert.areEqual('PCE03', r5.promoToWrite, 'currency change corrects the tier');
     }
 
+    /** Non-AmLaw request: no ranked-segment match, so resolveBase falls through to the cascade where
+        !SJSI / !SREN live (req() defaults determinantKey to the product, which matches the seeded row). */
+    static ALMPromoDispatchEngine.Request nonAmLawReq(Decimal year, String promo, Integer attorneys, Boolean grp) {
+        ALMPromoDispatchEngine.Request r = req('LAWM', year, promo, null);
+        r.determinantKey = null;
+        if (attorneys != null) r.attorneyCount = attorneys;
+        r.hasGroupId = (grp == true);
+        return r;
+    }
+
+    @isTest
+    static void soqlHeadroomGuard_yieldsGracefullyOnSaturatedTransaction() {
+        // A "Too many SOQL queries" LimitException is UNCATCHABLE, so both layers must refuse to run their
+        // own query when the transaction is already near the limit (live 17 Aug: Layer 2 crashed at query
+        // 101 on a crowded Opp save and emailed admins). The guard yields without querying or throwing.
+        Assert.isTrue(ALMPromoDispatchEngine.hasQueryHeadroom(1), 'a fresh test transaction has headroom');
+        Assert.isFalse(ALMPromoDispatchEngine.hasQueryHeadroom(Limits.getLimitQueries() + 50),
+            'an impossible headroom requirement is never satisfied');
+
+        // Force the skip branch by demanding impossible headroom; the runners must return cleanly, run=false,
+        // and (critically) NOT throw. Any Id is fine because the guard returns before the query.
+        ALMPromoDispatchEngine.EngineConfig c = baseCfg();
+        c.soqlMinHeadroom = Limits.getLimitQueries() + 50;
+        Id oppId = '006000000000001AAA';
+        Id qId = 'a1I000000000001AAA';
+        Integer before = Limits.getQueries();
+        List<ALMPromoDispatchEngine.FlowResult> l2 = ALMPromoDispatchEngine.runLayer2(new List<Id>{ oppId }, c);
+        List<ALMPromoDispatchEngine.FlowResult> l1 = ALMPromoDispatchEngine.runLayer1(new List<Id>{ qId }, c);
+        Assert.areEqual(before, Limits.getQueries(), 'the guard ran NO SOQL');
+        Assert.areEqual(1, l2.size(), 'Layer 2 returns a result per id');
+        Assert.isFalse(l2[0].ran, 'Layer 2 did not run its body');
+        Assert.areEqual(1, l1.size(), 'Layer 1 returns a result per id');
+        Assert.isFalse(l1[0].ran, 'Layer 1 did not run its body');
+    }
+
+    @isTest
+    static void smallFirmRule_fillsSrenOnBlankButNeverOverwrites() {
+        // Business 22 Jul: solo / single-user / <=4 attorneys -> !SREN, NOT with a Group ID.
+        ALMPromoDispatchEngine.EngineConfig c = baseCfg();
+        c.defaultBase = '!SJSI';
+        c.smallFirmAttorneyMax = 4;
+        c.smallFirmBase = '!SREN';
+
+        // small firm, blank promo, no group id -> !SREN
+        Assert.areEqual('!SREN', ALMPromoDispatchEngine.derive(c, nonAmLawReq(1, null, 3, false)).promoToWrite,
+            'small firm gets !SREN');
+        // boundary: exactly 4 is small, 5 is not
+        Assert.areEqual('!SREN', ALMPromoDispatchEngine.derive(c, nonAmLawReq(1, null, 4, false)).promoToWrite,
+            '4 attorneys is small');
+        Assert.areEqual('!SJSI', ALMPromoDispatchEngine.derive(c, nonAmLawReq(1, null, 5, false)).promoToWrite,
+            '5 attorneys is not small');
+        // Group ID present -> rule must NOT apply
+        Assert.areEqual('!SJSI', ALMPromoDispatchEngine.derive(c, nonAmLawReq(1, null, 2, true)).promoToWrite,
+            'Group ID deals never get !SREN');
+        // unknown attorney count -> falls through to the default
+        Assert.areEqual('!SJSI', ALMPromoDispatchEngine.derive(c, nonAmLawReq(1, null, null, false)).promoToWrite,
+            'unknown count -> default');
+        // WRITE-ON-BLANK-ONLY: a rep's code on a small firm is never touched
+        Assert.isFalse(ALMPromoDispatchEngine.derive(c, nonAmLawReq(1, '!SJSI', 2, false)).writePromo,
+            'rep-typed !SJSI on a small firm is preserved');
+        // CLOBBER REGRESSION: !SREN must NOT be engine-owned, so a big-firm line keeps a rep's !SREN
+        Assert.isFalse(c.allKnownBases().contains('!SREN'), '!SREN is not registered as an engine base');
+        Assert.isFalse(ALMPromoDispatchEngine.derive(c, nonAmLawReq(1, '!SREN', 500, false)).writePromo,
+            'big-firm !SREN is never overwritten');
+        // ranked firms are unaffected: the segment base still wins over the small-firm rule
+        ALMPromoDispatchEngine.Request ranked = req('LAWM', 1, null, null);
+        ranked.attorneyCount = 2;
+        Assert.areEqual('!TEST', ALMPromoDispatchEngine.derive(c, ranked).promoToWrite,
+            'a ranked firm keeps its segment base even if small');
+        // composition still applies to the small-firm base (3-year deal)
+        Assert.areEqual('!SRENY3', ALMPromoDispatchEngine.derive(c, nonAmLawReq(3, null, 1, false)).promoToWrite,
+            'small firm composes with Yn');
+        // disabling either setting turns the rule off
+        ALMPromoDispatchEngine.EngineConfig off = baseCfg();
+        off.defaultBase = '!SJSI'; off.smallFirmBase = null; off.smallFirmAttorneyMax = 4;
+        Assert.areEqual('!SJSI', ALMPromoDispatchEngine.derive(off, nonAmLawReq(1, null, 1, false)).promoToWrite,
+            'blank base disables the rule');
+    }
+
+    @isTest
+    static void firmAttorneyCount_prefersFirmThenBuyingAccount() {
+        Assert.isNull(ALMPromoDispatchEngine.firmAttorneyCount(null), 'null opp -> null');
+        Assert.isFalse(ALMPromoDispatchEngine.hasGroupId(null), 'null opp has no group id');
+        Opportunity noGrp = new Opportunity();
+        Assert.isFalse(ALMPromoDispatchEngine.hasGroupId(noGrp), 'blank GroupID -> false');
+        noGrp.GroupID__c = 'G-123';
+        Assert.isTrue(ALMPromoDispatchEngine.hasGroupId(noGrp), 'populated GroupID -> true');
+    }
+
+    @isTest
+    static void bareSuffixPromo_isRepairedButLegacyCodesStayProtected() {
+        // 30 live lines carry just 'Y3' (no base) and were both unrepairable and invisible.
+        Assert.isTrue(ALMPromoDispatchEngine.isBareSuffix('Y3'), 'bare year suffix');
+        Assert.isTrue(ALMPromoDispatchEngine.isBareSuffix('Q'), 'bare frequency');
+        Assert.isTrue(ALMPromoDispatchEngine.isBareSuffix('QY3Z'), 'bare freq+year+modifier');
+        Assert.isTrue(ALMPromoDispatchEngine.isBareSuffix('Z'), 'bare modifier');
+        // real codes and legacy families must NOT be treated as fragments
+        for (String keep : new List<String>{ '!AMLW', '!AMLWY3', 'MSHP', 'PCE01', 'A611', 'A621', 'ISIJ', 'S906', 'SA03', 'ME', 'OE' }) {
+            Assert.isFalse(ALMPromoDispatchEngine.isBareSuffix(keep), keep + ' is not a bare suffix');
+        }
+        Assert.isFalse(ALMPromoDispatchEngine.isBareSuffix(null), 'null is not a bare suffix');
+        Assert.isFalse(ALMPromoDispatchEngine.isBareSuffix('  '), 'blank is not a bare suffix');
+
+        // end to end: a 'Y3' line is now composed over, while a legacy code is still preserved
+        ALMPromoDispatchEngine.EngineConfig c = baseCfg();
+        Assert.areEqual('!TESTY3', ALMPromoDispatchEngine.derive(c, req('LAWM', 3, 'Y3', null)).promoToWrite,
+            'bare Y3 is repaired to base + suffix');
+        Assert.isFalse(ALMPromoDispatchEngine.derive(c, req('LAWM', 3, 'A611', null)).writePromo,
+            'legacy A611 is never overwritten');
+    }
+
+    @isTest
+    static void yearIndex_subSixMonthTermIsYearOne() {
+        // CPQ stores the term in MONTHS. A 2-month stub used to be returned verbatim as year index 2 and
+        // shipped as !SJSIY2 (live 22 Jul: Q-218007, and Q-218107 on a PRIMARY quote so it reached the OLI).
+        ALMPromoDispatchEngine.EngineConfig c = baseCfg();
+        c.yearFieldApi = null;                      // force the quote-term path (no SObject field read)
+        for (Integer m : new List<Integer>{ 1, 2, 3, 4, 5 }) {
+            ALMPromoDispatchEngine.DerivContext ctx = new ALMPromoDispatchEngine.DerivContext();
+            ctx.quoteTerm = m;
+            Assert.areEqual(1, ALMPromoDispatchEngine.resolveYearIndex(null, c, ctx).intValue(),
+                m + '-month term must be year 1 (no suffix)');
+        }
+        // normal month -> year conversion is unchanged
+        ALMPromoDispatchEngine.DerivContext y1 = new ALMPromoDispatchEngine.DerivContext();
+        y1.quoteTerm = 12;
+        Assert.areEqual(1, ALMPromoDispatchEngine.resolveYearIndex(null, c, y1).intValue(), '12 months = year 1');
+        ALMPromoDispatchEngine.DerivContext y3 = new ALMPromoDispatchEngine.DerivContext();
+        y3.quoteTerm = 36;
+        Assert.areEqual(3, ALMPromoDispatchEngine.resolveYearIndex(null, c, y3).intValue(), '36 months = year 3');
+        // and year 1 composes with no year suffix at all (baseCfg's test base is !TEST)
+        ALMPromoDispatchEngine.EngineConfig c2 = baseCfg();
+        String composed = ALMPromoDispatchEngine.derive(c2, req('LAWM', 1, null, null)).promoToWrite;
+        Assert.areEqual('!TEST', composed, 'year 1 composes with no suffix');
+        Assert.isFalse(composed.contains('Y'), 'no Yn suffix on a year-1 deal');
+    }
+
+    @isTest
+    static void saveAllowingPartial_commitsGoodRowsAndCountsThem() {
+        // One bad row must not roll back the others' codes (Q-211011: an unrelated MDQ validation wiped
+        // every code on the quote and the backstop still reported no gap).
+        List<Account> accts = new List<Account>{ new Account(Name = 'REV60 partial A'), new Account(Name = 'REV60 partial B') };
+        insert accts;
+        Integer committed = ALMPromoDispatchEngine.saveAllowingPartial(
+            new List<SObject>{ new Account(Id = accts[0].Id, Name = 'REV60 partial A2'),
+                               new Account(Id = accts[1].Id, Name = 'REV60 partial B2') },
+            'REV-60 test - partial save', 'unit-test');
+        Assert.areEqual(2, committed, 'both good rows commit');
+        Assert.areEqual(0, ALMPromoDispatchEngine.saveAllowingPartial(new List<SObject>(), 'x', 'y'), 'empty list is a no-op');
+        Assert.areEqual(0, ALMPromoDispatchEngine.saveAllowingPartial(null, 'x', 'y'), 'null list is a no-op');
+    }
+
+    @isTest
+    static void backstopMessage_namesTheOffendingLine() {
+        // Andrew Barsody 22 Jul: blocked on a multi-line quote by an untouched NYOM line while looking at a
+        // line that already showed a dispatch code. The gap entry must LOCATE the line, not just name the product.
+        ALMPromoDispatchEngine.FieldSet fs = new ALMPromoDispatchEngine.FieldSet();
+        fs.lineNo = 'NumberOfEmployees'; fs.productName = 'Name';   // Account stands in for a quote line
+        Account line = new Account(Name = 'New York Law Journal online', NumberOfEmployees = 4);
+        Assert.areEqual('Line 4: New York Law Journal online [NYOM]',
+            ALMPromoDispatchEngine.describeLine(line, fs, 'NYOM'), 'line number + product name + code');
+
+        Account noNum = new Account(Name = 'New York Law Journal online');
+        Assert.areEqual('New York Law Journal online [NYOM]',
+            ALMPromoDispatchEngine.describeLine(noNum, fs, 'NYOM'), 'no line number -> name + code');
+
+        // OLI-style field set (no lineNo/productName configured) -> product code only, no exception
+        ALMPromoDispatchEngine.FieldSet bare = new ALMPromoDispatchEngine.FieldSet();
+        Assert.areEqual('NYOM', ALMPromoDispatchEngine.describeLine(noNum, bare, 'NYOM'), 'falls back to product code');
+    }
+
+    @isTest
+    static void gapSummary_capsListAndCountsRemainder() {
+        // long gap lists must not hard-truncate mid-entry and leave a half-named line
+        ALMPromoDispatchEngine.EngineConfig c = baseCfg();
+        ALMPromoDispatchEngine.ApplyOutcome o = new ALMPromoDispatchEngine.ApplyOutcome();
+        o.missingCount = 8;
+        for (Integer i = 1; i <= 8; i++) o.gaps.add('Line ' + i + ': Product [P' + i + '] (dispatch)');
+        String msg = ALMPromoDispatchEngine.gapSummary(o, c);
+        Assert.isTrue(msg.contains('Line 1:'), 'first gap listed');
+        Assert.isTrue(msg.contains('Line 5:'), 'fifth gap listed');
+        Assert.isFalse(msg.contains('Line 6:'), 'sixth gap not listed individually');
+        Assert.isTrue(msg.contains('+3 more'), 'remainder is counted');
+    }
+
     @isTest
     static void gapSummary_appendsDispatchHint() {
         ALMPromoDispatchEngine.EngineConfig c = baseCfg();
@@ -845,5 +1030,27 @@ private class REV60_ALMPromoDispatchEngine_Test {
         Test.stopTest();
         Assert.isTrue(r[0].ran, 'Layer 1 ran for the primary quote');
         Assert.isNull(r[0].faultMessage, 'no fault on the reconciliation path: ' + r[0].faultMessage);
+    }
+
+    @IsTest
+    static void txnCache_repeatInvocationReusesResult_changedLinesRerun() {
+        Opportunity o = makeOpp();
+        SBQQ__Quote__c q = makeQuote(o, false);
+        ALMPromoDispatchEngine.txnCacheEnabled = true;   // cache is off by default under test
+        Test.startTest();
+        List<ALMPromoDispatchEngine.FlowResult> first = ALMPromoDispatchEngine.stampQuote(new List<Id>{ q.Id });
+        Assert.isTrue(ALMPromoDispatchEngine.txnResultByQuote.containsKey(q.Id), 'fresh run cached its result');
+        String sig1 = ALMPromoDispatchEngine.txnSignatureByQuote.get(q.Id);
+        // repeat with unchanged lines: probe matches -> the CACHED FlowResult object comes back
+        List<ALMPromoDispatchEngine.FlowResult> second = ALMPromoDispatchEngine.stampQuote(new List<Id>{ q.Id });
+        Assert.isTrue(second[0] === ALMPromoDispatchEngine.txnResultByQuote.get(q.Id), 'repeat reused the cached result');
+        Assert.areEqual(first[0].hasGap, second[0].hasGap, 'gap verdict identical on cached repeat');
+        // simulate a changed line set (CPQ triggers block bare line inserts in test context):
+        // poison the cached signature -> the probe mismatches -> full rerun refreshes the cache
+        ALMPromoDispatchEngine.txnSignatureByQuote.put(q.Id, 'stale-signature');
+        List<ALMPromoDispatchEngine.FlowResult> third = ALMPromoDispatchEngine.stampQuote(new List<Id>{ q.Id });
+        Assert.isTrue(third[0] !== second[0], 'signature mismatch forced a fresh run (new result object)');
+        Assert.areNotEqual('stale-signature', ALMPromoDispatchEngine.txnSignatureByQuote.get(q.Id), 'signature refreshed after rerun');
+        Test.stopTest();
     }
 }

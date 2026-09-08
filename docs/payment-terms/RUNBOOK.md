@@ -178,3 +178,12 @@ Still open with Lina: (a) Net <=30 self-service (the ~700 requests/yr data point
 ## Carve-out 2 - Net <=30 self-service - APPROVED + deployed to KJDEV, 31 Aug 2026
 
 Lina/Kamyar decision: anything at Net 30 or below is AUTO-APPROVED. Both payment-terms branches removed ENTIRELY from `Quote_Finance_Terms_Approval_Check__c` - the old Finance rule no longer looks at payment terms at all (>30 days = new chain; <=30 = self-service). Its other duties (billing frequency, low-value invoice thresholds, special instructions) untouched - verified in KJDEV: Net 15/Net 30 + Annual billing -> checkbox FALSE; Net 30 + non-annual billing -> TRUE (surviving branch intact). Removes ~700 Finance approval requests/yr (543 quotes, 98% payment-terms-only). The repo field file is the prod artefact - prod sequence step 1 unchanged, this rides the same deploy. Side effect: Prepayment-terms quotes also stop triggering via the payment-terms branch (days 0 <= 30 was catching them) - they keep triggering via the low-value/billing branches where applicable.
+
+## PROD STEP 1 - DONE 8 Sep 2026 (Kamyar: "go step 1 - hold VRs for the window")
+
+UAT: Leslie Perry PASS 31 Aug + "release to prod" 8 Sep. Pre-flight green (prod formula unchanged since 29 Aug; no collisions; Credit Control approver present; 5 users active - Leslie/Candice now @centellic.com).
+- Check-only validation 0AfPx000001KYRZKA4: 8/8 components OK, 0 errors - then CANCELLED because `deploy validate` runs the FULL prod test suite by default (902 tests, 8 pre-existing red) and was blocking the real deploy queue. Lesson: use `--test-level NoTestRun` on metadata-only prod validations.
+- Stage A 0AfPx000001KYTBKA4 SUCCEEDED: ACV_GBP__c, Payment_Terms_Days__c (Net 15-120), Payment_Terms_Justification__c, Quote_Finance_Terms_Approval_Check__c (both carve-outs - no payment-terms references left).
+- Stage B 0AfPx000001KYUnKAO SUCCEEDED: Extended_Terms_Blocked_Under_10k_ACV + Extended_Terms_Justification_Required deployed **INACTIVE** (repo files carry active=false until the window), Credit_Control_Payment_Terms permset.
+- NOTE: carve-out 2 is LIVE from this moment in prod - the old Finance Terms rule no longer flags on payment terms (>30 days isn't policed by the new chain until step 6 activates it). Interim exposure: Net 45+ quotes submitted between now and the window get NO payment-terms approval. Keep the window SHORT.
+- Step 2 package pre-staged from FRESH prod layouts: scratchpad prod_layouts_patched (mdapi).

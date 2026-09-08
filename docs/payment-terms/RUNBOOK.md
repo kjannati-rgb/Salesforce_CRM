@@ -205,3 +205,17 @@ Behaviour still unchanged. NEXT = step 6 WINDOW: activate the 2 new rules + flip
 - Rules: Centellic - Quote: Payment Terms > 30 Days - Credit Control (a5PPx0000004NvhMAE) ACTIVE; - Financial Control Director (a5PPx0000004NviMAE) ACTIVE; ALM - Quote: Payment Terms > Net 30 (a5PPx0000000xphMAA) DEACTIVATED (retired, not deleted); LBR - Quote: Finance Terms untouched (active, terms-blind via carve-outs).
 - VRs: Extended_Terms_Blocked_Under_10k_ACV + Extended_Terms_Justification_Required ACTIVE (job 0AfPx000001KZ13KAG; repo files active=true).
 ROLLBACK: deactivate the 2 new rules + reactivate ALM rule (one apex update), redeploy VRs with active=false, redeploy pre-carve-out formula from git (commit 8c08c26 has carve-out 1; original prod text in the 29-Aug retrieve).
+
+## PROD STEP 7 - SMOKE TESTS 8 Sep 2026 (two throwaway NON-PRIMARY quotes on Kamyar's Dominion Harbor DN renewal opp: Q-223992 big / Q-223993 small - deleted after)
+
+| Scenario | Result |
+|---|---|
+| S1 <=30 days self-service (Net 15 -> Net 30 saves) | PASS |
+| S2 small quote (ACV GBP 788) Net 45 | PASS - blocked, EUR-inclusive message |
+| S3 big quote Net 45, no justification | PASS - blocked |
+| S4 Net 45 + justification -> submit | PASS - step 1 Requested to Credit Control, step 2 Assigned to Director; legacy LBR Finance Terms rule did NOT fire (carve-out proven live); Big Deal >= 50K fired separately (smoke quote was USD 479k) |
+| Credit Control sets PO Required mid-review | see below |
+| S11 Net 30 -> submit | PASS - 0 payment-terms approvals (only Big Deal), quote In Review |
+| Recalls | PASS - both recalls returned the quote to Draft, 0 open approvals |
+
+INCIDENT NOTE (pre-existing, not ours): two intermittent `CANNOT_EXECUTE_FLOW_TRIGGER ... Limit Exceeded ... maximum limit for this feature` faults during the run - once in QuoteAndOpportunityApprovalCustomNotification (sbaa approval after-save, Saurabh v2 Jul-2026) on submit, once in Quote - Stamp Order Form Fields on a plain quote update. Retries succeeded minutes later; other users saved quotes normally throughout. Only exhausted org limit at the time: HourlyAsyncReportRuns 108%. Flow error emails not visible via COM. RAISE WITH SAURABH - intermittent quote-save faults hit every rep.

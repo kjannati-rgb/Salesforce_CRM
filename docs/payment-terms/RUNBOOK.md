@@ -233,3 +233,5 @@ Design = pure AA rule split (no quote field / flow / backfill). Scripts (idempot
 3. `scripts/finance_split_3_activate.apex` - THE SWITCH: activates clones + repoints every rule on "Finance Approvers - Quote" (incl. the 2 inactive High Risk Countries / Wrong Currency) to Credit Control. Rollback: deactivate clones, repoint back.
 KJDEV proof (seeded prod-like Big Deal >= 50K rule): Q-211572 [Quote] -> Big Deal -> Credit Control; Q-211573 [Amendment] -> Big Deal - Amendments -> Finance - Amendments. Both recalled.
 Post-switch admin: remove Rahul/India team from "Finance Approvers - Quote" (or retire the group); membership changes are admin-only from here.
+
+**HOLD (Lina 8 Sep 19:19):** finance approver split PAUSED pending a new proposal - Lina's direction is the opposite of Leslie's ("push routine approvals DOWN to the teams so the core can focus on strategy"). Prod untouched; KJDEV build stays (mechanism is membership + per-rule routing, so it fits either direction). Live prod routing unchanged: step 1 -> Credit Control group (Samantha/Leslie/Candice/Rahul), legacy LBR checks -> Finance Approvers - Quote (12).

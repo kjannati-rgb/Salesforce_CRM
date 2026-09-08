@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Extended_Terms_Justification_Required</fullName>
-    <active>false</active>
+    <active>true</active>
     <description>Global payment terms process: justification required when payment terms above 30 days are requested, for Credit Control / Director of Financial Control review. Fires only when Payment Terms is changed so CPQ renewal automation is not broken on insert.</description>
     <errorConditionFormula>AND(
   ISCHANGED(SBQQ__PaymentTerms__c),

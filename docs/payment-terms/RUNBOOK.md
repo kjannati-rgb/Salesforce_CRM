@@ -199,3 +199,9 @@ Behaviour unchanged by either step. Next: step 4 (aa_setup_1_groups.apex then aa
 - Step 4: aa_setup_1_groups.apex -> Financial Control Director group 00GPx00000RX781MAD (Lina Patel); sandbox-only Credit Control branch correctly skipped. aa_setup_2_approvals.apex -> chain "Quote: Payment Terms" a5NPx0000016KGPMA2, Director approver, 2 rules created INACTIVE + Payment_Terms_Days__c > 30 conditions; prod Credit Control approver a5UPx0000001E49MAE reused untouched.
 - Step 5: Credit_Control_Payment_Terms assigned to Samantha Law, Leslie Perry, Candice Goodpaster, Rahul Vadgama (4/4).
 Behaviour still unchanged. NEXT = step 6 WINDOW: activate the 2 new rules + flip both VRs active (repo files -> true, redeploy) + deactivate ALM rule a5PPx0000000xphMAA; then step 7 smoke tests (sbaa UI approvals only).
+
+## PROD STEP 6 - WINDOW EXECUTED 8 Sep 2026 (Kamyar: "go steps 6 and 7") - PROCESS LIVE
+
+- Rules: Centellic - Quote: Payment Terms > 30 Days - Credit Control (a5PPx0000004NvhMAE) ACTIVE; - Financial Control Director (a5PPx0000004NviMAE) ACTIVE; ALM - Quote: Payment Terms > Net 30 (a5PPx0000000xphMAA) DEACTIVATED (retired, not deleted); LBR - Quote: Finance Terms untouched (active, terms-blind via carve-outs).
+- VRs: Extended_Terms_Blocked_Under_10k_ACV + Extended_Terms_Justification_Required ACTIVE (job 0AfPx000001KZ13KAG; repo files active=true).
+ROLLBACK: deactivate the 2 new rules + reactivate ALM rule (one apex update), redeploy VRs with active=false, redeploy pre-carve-out formula from git (commit 8c08c26 has carve-out 1; original prod text in the 29-Aug retrieve).

@@ -214,8 +214,12 @@ ROLLBACK: deactivate the 2 new rules + reactivate ALM rule (one apex update), re
 | S2 small quote (ACV GBP 788) Net 45 | PASS - blocked, EUR-inclusive message |
 | S3 big quote Net 45, no justification | PASS - blocked |
 | S4 Net 45 + justification -> submit | PASS - step 1 Requested to Credit Control, step 2 Assigned to Director; legacy LBR Finance Terms rule did NOT fire (carve-out proven live); Big Deal >= 50K fired separately (smoke quote was USD 479k) |
-| Credit Control sets PO Required mid-review | see below |
+| Credit Control sets PO Required mid-review | PASS - saved on the In-Review quote, read back Yes |
 | S11 Net 30 -> submit | PASS - 0 payment-terms approvals (only Big Deal), quote In Review |
 | Recalls | PASS - both recalls returned the quote to Draft, 0 open approvals |
 
 INCIDENT NOTE (pre-existing, not ours): two intermittent `CANNOT_EXECUTE_FLOW_TRIGGER ... Limit Exceeded ... maximum limit for this feature` faults during the run - once in QuoteAndOpportunityApprovalCustomNotification (sbaa approval after-save, Saurabh v2 Jul-2026) on submit, once in Quote - Stamp Order Form Fields on a plain quote update. Retries succeeded minutes later; other users saved quotes normally throughout. Only exhausted org limit at the time: HourlyAsyncReportRuns 108%. Flow error emails not visible via COM. RAISE WITH SAURABH - intermittent quote-save faults hit every rep.
+
+## GO-LIVE COMPLETE - 8 Sep 2026 ~17:00 UTC
+
+Payment Term Extension Process is LIVE in production: VRs active, two-step chain active (Credit Control -> Director of Financial Control), legacy Finance Terms rule terms-blind, ALM rule retired, Credit Control PO condition enabled. Smoke quotes + approval history deleted. Follow-ups: (1) Saurabh - intermittent flow "Limit Exceeded" faults on quote saves (see step 7 note); (2) Lina - process-doc 60-day wording before cascade; (3) Order Form workstream - account-flag PO enforcement (queued on its checklist); (4) announce to Sales + Finance.

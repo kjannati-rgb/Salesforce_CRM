@@ -187,3 +187,9 @@ UAT: Leslie Perry PASS 31 Aug + "release to prod" 8 Sep. Pre-flight green (prod 
 - Stage B 0AfPx000001KYUnKAO SUCCEEDED: Extended_Terms_Blocked_Under_10k_ACV + Extended_Terms_Justification_Required deployed **INACTIVE** (repo files carry active=false until the window), Credit_Control_Payment_Terms permset.
 - NOTE: carve-out 2 is LIVE from this moment in prod - the old Finance Terms rule no longer flags on payment terms (>30 days isn't policed by the new chain until step 6 activates it). Interim exposure: Net 45+ quotes submitted between now and the window get NO payment-terms approval. Keep the window SHORT.
 - Step 2 package pre-staged from FRESH prod layouts: scratchpad prod_layouts_patched (mdapi).
+
+## PROD STEPS 2 + 3 - DONE 8 Sep 2026 (Kamyar: "go steps 2 and 3")
+
+- Step 2 job 0AfPx000001KYxpKAG SUCCEEDED 3/3: Approved / Pending / Quote Layout patched from FRESH prod retrieves (justification Edit on Quote Layout, Readonly on Pending+Approved; days + ACV Readonly; PO_Required__c Edit beside PO_Number__c on all three).
+- Step 3 FLS script: 86 grants inserted, 39 skipped (27 licence-restricted profiles, 7 permission-set-group shadows, 5 managed permsets - all un-grantable by design, same categories as KJDEV's 30).
+Behaviour unchanged by either step. Next: step 4 (aa_setup_1_groups.apex then aa_setup_2_approvals.apex - rules land inactive), step 5 (permset to the 4 Credit Control members), step 6 window.

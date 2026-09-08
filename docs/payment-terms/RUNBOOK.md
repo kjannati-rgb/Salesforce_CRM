@@ -223,3 +223,13 @@ INCIDENT NOTE (pre-existing, not ours): two intermittent `CANNOT_EXECUTE_FLOW_TR
 ## GO-LIVE COMPLETE - 8 Sep 2026 ~17:00 UTC
 
 Payment Term Extension Process is LIVE in production: VRs active, two-step chain active (Credit Control -> Director of Financial Control), legacy Finance Terms rule terms-blind, ALM rule retired, Credit Control PO condition enabled. Smoke quotes + approval history deleted. Follow-ups: (1) Saurabh - intermittent flow "Limit Exceeded" faults on quote saves (see step 7 note); (2) Lina - process-doc 60-day wording before cascade; (3) Order Form workstream - account-flag PO enforcement (queued on its checklist); (4) announce to Sales + Finance.
+
+## FINANCE APPROVER SPLIT (by quote type) - built + proven in KJDEV 8 Sep 2026; PROD gated (Lina nod + Kamyar go)
+
+Decision (Leslie 8 Sep, Justin no longer in role): core "Credit Control" = Samantha Law, Leslie Perry, Candice Goodpaster + Rahul Vadgama (UK backup) approve ALL finance quote checks; "Finance - Amendments" = Kevin Daud, Chloe Orrin, Willie Guerrero, Grace Walther, Sherry Costello approve AMENDMENT-type quotes only (cancel/reissue == SBQQ__Type__c = 'Amendment'). India AR team + Justin out. Extended-payment-terms chain stays core-only (credit decision).
+Design = pure AA rule split (no quote field / flow / backfill). Scripts (idempotent, prod-agnostic):
+1. `scripts/finance_split_1_groups.apex` - renames ALM - Credit Control 00GPx00000Jh8NZ -> "Credit Control" (Id kept, approver a5UPx0000001E49MAE unaffected), creates Finance_Amendments group, adds members (never removes).
+2. `scripts/finance_split_2_rules.apex` - for the 6 legacy finance rules: adds SBQQ__Type__c != Amendment (extends Custom logic), creates INACTIVE "<rule> - Amendments" clones (all conditions, type flipped to =, approver Finance - Amendments). GOTCHA: AA rejects inserting a rule with Custom conditions-met before conditions exist -> clones insert as All then restored to Custom; originals' logic extended only after the new condition is inserted. sbaa__TestedObject__c does not exist.
+3. `scripts/finance_split_3_activate.apex` - THE SWITCH: activates clones + repoints every rule on "Finance Approvers - Quote" (incl. the 2 inactive High Risk Countries / Wrong Currency) to Credit Control. Rollback: deactivate clones, repoint back.
+KJDEV proof (seeded prod-like Big Deal >= 50K rule): Q-211572 [Quote] -> Big Deal -> Credit Control; Q-211573 [Amendment] -> Big Deal - Amendments -> Finance - Amendments. Both recalled.
+Post-switch admin: remove Rahul/India team from "Finance Approvers - Quote" (or retire the group); membership changes are admin-only from here.

@@ -193,3 +193,9 @@ UAT: Leslie Perry PASS 31 Aug + "release to prod" 8 Sep. Pre-flight green (prod 
 - Step 2 job 0AfPx000001KYxpKAG SUCCEEDED 3/3: Approved / Pending / Quote Layout patched from FRESH prod retrieves (justification Edit on Quote Layout, Readonly on Pending+Approved; days + ACV Readonly; PO_Required__c Edit beside PO_Number__c on all three).
 - Step 3 FLS script: 86 grants inserted, 39 skipped (27 licence-restricted profiles, 7 permission-set-group shadows, 5 managed permsets - all un-grantable by design, same categories as KJDEV's 30).
 Behaviour unchanged by either step. Next: step 4 (aa_setup_1_groups.apex then aa_setup_2_approvals.apex - rules land inactive), step 5 (permset to the 4 Credit Control members), step 6 window.
+
+## PROD STEPS 4 + 5 - DONE 8 Sep 2026 (Kamyar: "go steps 4 and 5")
+
+- Step 4: aa_setup_1_groups.apex -> Financial Control Director group 00GPx00000RX781MAD (Lina Patel); sandbox-only Credit Control branch correctly skipped. aa_setup_2_approvals.apex -> chain "Quote: Payment Terms" a5NPx0000016KGPMA2, Director approver, 2 rules created INACTIVE + Payment_Terms_Days__c > 30 conditions; prod Credit Control approver a5UPx0000001E49MAE reused untouched.
+- Step 5: Credit_Control_Payment_Terms assigned to Samantha Law, Leslie Perry, Candice Goodpaster, Rahul Vadgama (4/4).
+Behaviour still unchanged. NEXT = step 6 WINDOW: activate the 2 new rules + flip both VRs active (repo files -> true, redeploy) + deactivate ALM rule a5PPx0000000xphMAA; then step 7 smoke tests (sbaa UI approvals only).

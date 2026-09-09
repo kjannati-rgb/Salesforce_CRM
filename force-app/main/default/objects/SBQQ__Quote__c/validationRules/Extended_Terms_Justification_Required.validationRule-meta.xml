@@ -6,6 +6,7 @@
     <errorConditionFormula>AND(
   ISCHANGED(SBQQ__PaymentTerms__c),
   Payment_Terms_Days__c &gt; 30,
+  ACV_GBP__c &gt;= 7500,
   ISBLANK(Payment_Terms_Justification__c)
 )</errorConditionFormula>
     <errorDisplayField>SBQQ__PaymentTerms__c</errorDisplayField>

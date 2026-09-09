@@ -246,3 +246,25 @@ Push-down to collectors: parked on Candice's tracker (Lina 9 Sep) - when agreed,
 ## GAP FOUND 9 Sep 2026 - new fields NOT on the Lightning record pages (Dynamic Forms)
 
 The quote record pages (Quote_Record_Page_Draft / _Pending / _Approved_Status) are Dynamic Forms: field sections come from the FlexiPage, not the page layout, and the Edit modal follows the same sections. Step 2's layout patch therefore made the fields visible NOWHERE a rep looks - a rep picking Net 45 is told to write a justification they cannot see. Fix = add the 4 fields to the Payment Information section of all three pages (`scratchpad/patch_flexipages.py` on FRESH per-org retrieves): Payment_Terms_Justification__c after Payment Terms (editable on Draft, readonly on Pending/Approved), Payment_Terms_Days__c + ACV_GBP__c readonly, PO_Required__c after PO Number (editable everywhere). KJDEV deployed 0AfAe00000SIf7qKAD 3/3. PROD validated check-only 0AfPx000001KbpFKAS 3/3 (RunSpecifiedTests OrderFormPoWriteback_Test 5/5; `deploy validate` refuses NoTestRun) -> quick-deploy on Kamyar's go: `sf project deploy quick --job-id 0AfPx000001KbpFKAS -o PROD`. Lesson: on Dynamic-Forms objects, layout edits are not enough - always check the FlexiPage.
+
+
+## Training materials (9 Sep 2026)
+
+- **Payment Terms Academy** (artifact https://claude.ai/code/artifact/7c5c3591-3b09-4000-9045-447b0eb243cb): role switcher
+  (Sales / Approvers / Finance), three narrated videos recorded in KJDEV on the production page layouts
+  (Sales 2 min, Credit Control & Director 90 s, Finance "who approves what" 1 min), step-by-step guides with
+  stills, threshold and routing tables, FAQ from Lina's confirmed answers, printable quick reference card.
+  Companion to the Payment Terms Playbook simulator (a8360197).
+- Source: `training/payment-terms-academy.template.html` + `build_academy.py` (inlines `training/videos/*.mp4`
+  and stills as data URIs); `build_videos.py` + `payment-terms-video-transcripts.md` document the video pipeline.
+- Demo quotes used: Q-211556 (GBP 5k block) and Q-211562 (24-mo GBP 20k; left In Review with step 1 approved,
+  step 2 Requested, PO Required = Yes) and Q-211558 (rejected history). Addresses populated on all three so the
+  record page banner stays clear.
+
+## Still gated for production (awaiting Kamyar's go)
+
+1. **Record-page (Dynamic Forms) fix** - prod validation job `0AfPx000001KbpFKAS` (quick-deploy) adds Payment Terms
+   Justification / Days / ACV (GBP) after Payment Terms and PO Required after PO Number on the three quote
+   record pages. Script: `scripts/payment_terms_patch_flexipages.py` (run against a fresh retrieve, never a repo copy).
+2. **Justification VR scoped to ACV >= 7,500** (`Extended_Terms_Justification_Required`) so a blocked small deal shows
+   one message instead of two. Deployed and verified in KJDEV; committed; deploy to prod with item 1.

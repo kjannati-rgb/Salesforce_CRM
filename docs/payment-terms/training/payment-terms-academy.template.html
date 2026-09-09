@@ -1,0 +1,469 @@
+<title>Payment Terms Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+  :root {
+    --ink: #243239; --ink-soft: #52646d; --paper: #f6f8f9; --card: #ffffff; --line: #d8e0e4;
+    --brand: #1f4e5f; --brand-soft: #e7eff2; --brand-ink: #ffffff;
+    --ok: #2e7d5b; --ok-soft: #e4f1ea; --warn: #a8712b; --warn-soft: #f6eddd; --stop: #ae4a38; --stop-soft: #f7e6e2;
+    --mono-bg: #eef3f5; --gold: #c9a227;
+    --shadow: 0 1px 3px rgba(31,78,95,.08), 0 4px 16px rgba(31,78,95,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #dbe5e9; --ink-soft: #93a6ae; --paper: #131b1f; --card: #1b262c; --line: #2e3d44;
+      --brand: #6fb1c4; --brand-soft: #21343c; --brand-ink: #0f1a1f;
+      --ok: #63b78f; --ok-soft: #1d3229; --warn: #d0a05c; --warn-soft: #382c18; --stop: #d47f6d; --stop-soft: #3a231e;
+      --mono-bg: #22313a; --gold: #d9b552;
+      --shadow: 0 1px 3px rgba(0,0,0,.4), 0 4px 16px rgba(0,0,0,.3);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #dbe5e9; --ink-soft: #93a6ae; --paper: #131b1f; --card: #1b262c; --line: #2e3d44;
+    --brand: #6fb1c4; --brand-soft: #21343c; --brand-ink: #0f1a1f;
+    --ok: #63b78f; --ok-soft: #1d3229; --warn: #d0a05c; --warn-soft: #382c18; --stop: #d47f6d; --stop-soft: #3a231e;
+    --mono-bg: #22313a; --gold: #d9b552;
+    --shadow: 0 1px 3px rgba(0,0,0,.4), 0 4px 16px rgba(0,0,0,.3);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.55 "Source Sans 3", "Segoe UI", system-ui, sans-serif; }
+  h1, h2, h3 { font-family: "Bricolage Grotesque", "Source Sans 3", system-ui, sans-serif; line-height: 1.15; text-wrap: balance; margin: 0; }
+  h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 700; letter-spacing: -.01em; }
+  h2 { font-size: 1.7rem; font-weight: 700; }
+  h3 { font-size: 1.15rem; font-weight: 600; }
+  p { margin: 0; max-width: 68ch; }
+  a { color: var(--brand); }
+  code, .mono { font-family: "IBM Plex Mono", monospace; font-size: .9em; background: var(--mono-bg); padding: .05em .35em; border-radius: 4px; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  .eyebrow { font-family: "IBM Plex Mono", monospace; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); }
+
+  header { padding: 44px 0 28px; border-bottom: 1px solid var(--line); background: var(--card); }
+  header .lede { font-size: 1.2rem; color: var(--ink-soft); margin-top: 14px; max-width: 62ch; }
+  .roles { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+  .role { border: 1px solid var(--line); background: var(--paper); color: var(--ink); border-radius: 999px; padding: 9px 18px; font: 600 .95rem "Source Sans 3", sans-serif; cursor: pointer; }
+  .role[aria-pressed="true"] { background: var(--brand); color: var(--brand-ink); border-color: var(--brand); }
+  .role:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+  .status { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; font-size: .95rem; color: var(--ink-soft); }
+  .status i { width: 10px; height: 10px; border-radius: 50%; background: var(--ok); display: inline-block; }
+
+  section { padding: 44px 0 8px; }
+  section > .wrap > h2 { margin-bottom: 6px; }
+  section > .wrap > .intro { color: var(--ink-soft); margin-bottom: 22px; }
+
+  .rule3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .tile { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 20px 22px; box-shadow: var(--shadow); border-top: 5px solid var(--line); }
+  .tile.ok { border-top-color: var(--ok); } .tile.stop { border-top-color: var(--stop); } .tile.warn { border-top-color: var(--warn); }
+  .tile .big { font-family: "Bricolage Grotesque", sans-serif; font-size: 1.5rem; font-weight: 700; margin: 6px 0 8px; }
+  .tile .tag { display: inline-block; font: 600 .8rem/1 "IBM Plex Mono", monospace; letter-spacing: .06em; text-transform: uppercase; padding: 5px 9px; border-radius: 5px; }
+  .ok .tag { background: var(--ok-soft); color: var(--ok); } .stop .tag { background: var(--stop-soft); color: var(--stop); } .warn .tag { background: var(--warn-soft); color: var(--warn); }
+
+  .videos { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+  .video { background: var(--card); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); display: flex; flex-direction: column; }
+  .video video { width: 100%; aspect-ratio: 16/9; background: #0b2545; display: block; }
+  .video .meta { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 8px; }
+  .video .meta .eyebrow { color: var(--brand); }
+  .video details { margin-top: 4px; }
+  .video summary { cursor: pointer; font-weight: 600; color: var(--brand); }
+  .video details p { margin-top: 10px; font-size: .95rem; color: var(--ink-soft); max-width: none; }
+  .video details p + p { margin-top: 8px; }
+
+  .guide { display: none; }
+  .guide.show { display: block; }
+  .steps { counter-reset: step; display: grid; gap: 14px; margin-top: 8px; }
+  .step { display: grid; grid-template-columns: 56px 1fr; gap: 16px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; }
+  .step::before { counter-increment: step; content: counter(step); font: 700 1.6rem/1 "Bricolage Grotesque", sans-serif; color: var(--brand); border-right: 1px solid var(--line); padding-right: 12px; align-self: start; padding-top: 2px; }
+  .step h3 { margin-bottom: 6px; }
+  .step p { max-width: 74ch; }
+  .step .note { margin-top: 8px; padding: 10px 14px; border-left: 3px solid var(--warn); background: var(--warn-soft); border-radius: 0 6px 6px 0; font-size: .95rem; }
+  .step .note.ok { border-color: var(--ok); background: var(--ok-soft); }
+  .step .note.stop { border-color: var(--stop); background: var(--stop-soft); }
+  .shot { margin-top: 12px; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #f3f3f3; }
+  .shot img { display: block; width: 100%; height: auto; }
+  .shot figcaption { font-size: .85rem; color: var(--ink-soft); padding: 8px 12px; background: var(--card); border-top: 1px solid var(--line); }
+
+  table { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; font-size: .97rem; }
+  th, td { padding: 11px 14px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+  th { background: var(--brand-soft); font-weight: 600; font-size: .85rem; letter-spacing: .04em; text-transform: uppercase; }
+  tr:last-child td { border-bottom: 0; }
+  td.num { font-variant-numeric: tabular-nums; font-family: "IBM Plex Mono", monospace; font-size: .9rem; white-space: nowrap; }
+  .tablewrap { overflow-x: auto; margin-top: 14px; }
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 22px; }
+  .pill { display: inline-block; padding: 2px 9px; border-radius: 999px; font: 600 .8rem/1.5 "Source Sans 3", sans-serif; }
+  .pill.ok { background: var(--ok-soft); color: var(--ok); } .pill.stop { background: var(--stop-soft); color: var(--stop); } .pill.warn { background: var(--warn-soft); color: var(--warn); } .pill.brand { background: var(--brand-soft); color: var(--brand); }
+
+  .faq { display: grid; gap: 10px; margin-top: 8px; }
+  .faq details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 0 18px; }
+  .faq summary { cursor: pointer; padding: 14px 0; font-weight: 600; font-size: 1.05rem; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+  .faq summary::after { content: "+"; color: var(--brand); font-family: "IBM Plex Mono", monospace; }
+  .faq details[open] summary::after { content: "\2013"; }
+  .faq details p { padding: 0 0 16px; max-width: 78ch; }
+  .faq details p + p { margin-top: -6px; }
+
+  .card-ref { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 24px 28px; box-shadow: var(--shadow); }
+  .card-ref .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-top: 14px; }
+  .card-ref h3 { color: var(--brand); margin-bottom: 8px; font-size: 1rem; text-transform: uppercase; letter-spacing: .06em; font-family: "IBM Plex Mono", monospace; font-weight: 600; }
+  .card-ref ul { margin: 0; padding-left: 18px; }
+  .card-ref li { margin-bottom: 5px; }
+  .printbtn { margin-top: 16px; border: 1px solid var(--brand); background: transparent; color: var(--brand); border-radius: 8px; padding: 9px 16px; font: 600 .95rem "Source Sans 3", sans-serif; cursor: pointer; }
+  .printbtn:focus-visible { outline: 3px solid var(--gold); }
+
+  footer { margin-top: 40px; padding: 26px 0 40px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: .95rem; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 28px; }
+  @media print {
+    body { background: #fff; color: #000; font-size: 12px; }
+    header, .videos, .guide, .faq, footer, .roles, .printbtn, section.hide-print { display: none !important; }
+    .card-ref { box-shadow: none; border: 1px solid #999; }
+    section { padding: 8px 0; }
+  }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Centellic global payment terms process &middot; CPQ quotes</div>
+    <h1 style="margin-top:8px">Payment Terms Academy</h1>
+    <div class="status"><i></i> Live in Salesforce production since 8 September 2026 &middot; approver split live 9 September</div>
+    <p class="lede">Everything Sales, Credit Control and Finance need to work the new payment terms process: three short videos filmed on the real quote pages, step-by-step guides, the thresholds, who approves what, and the questions people have already asked.</p>
+    <div class="roles" role="group" aria-label="Choose your role">
+      <button class="role" data-role="sales" aria-pressed="true">I sell (Sales)</button>
+      <button class="role" data-role="approver" aria-pressed="false">I approve (Credit Control / Director)</button>
+      <button class="role" data-role="finance" aria-pressed="false">I run Finance / admin</button>
+    </div>
+  </div>
+</header>
+
+<section id="rule">
+  <div class="wrap">
+    <h2>The rule in twenty seconds</h2>
+    <p class="intro">Payment terms are chosen on the quote. The quote applies the policy the moment you save.</p>
+    <div class="rule3">
+      <div class="tile ok">
+        <span class="tag">Self-service</span>
+        <div class="big">Up to Net 30</div>
+        <p>Due Upon Receipt of Invoice, Net 15 or Net 30. Pick it, save, done. Nothing goes to Finance.</p>
+      </div>
+      <div class="tile stop">
+        <span class="tag">Blocked</span>
+        <div class="big">Net 45+ under USD 10,000 a year</div>
+        <p>Below GBP 7,500 / EUR 8,600 annualised value, extended terms are not available. The quote will not save. There is no approval route, with or without a PO.</p>
+      </div>
+      <div class="tile warn">
+        <span class="tag">Justify, then two approvals</span>
+        <div class="big">Net 45+ at USD 10,000+ a year</div>
+        <p>Write a justification, submit as normal. Credit Control reviews first, then the Director of Financial Control. Credit Control can make a PO a condition.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="videos">
+  <div class="wrap">
+    <h2>Watch: three short lessons</h2>
+    <p class="intro">Recorded on the real Lightning quote pages. Each one is under two minutes. Transcripts are under each video.</p>
+    <div class="videos">
+      <div class="video" data-for="sales">
+        <video controls preload="metadata" src="{{VIDEO_V1}}"></video>
+        <div class="meta">
+          <span class="eyebrow">Sales &middot; 2 min</span>
+          <h3>Choosing payment terms</h3>
+          <p>What happens when you pick Net 45 or longer: the block, the justification, the two-step approval and what a rejection looks like.</p>
+          <details><summary>Transcript</summary>
+            <p>Payment terms now live in one place on the quote, and the system does the policy work for you. Here's what happens.</p>
+            <p>Immediate payment is the default, and anything up to Net 30 is yours to choose. Pick it, save, done. Nothing goes to Finance.</p>
+            <p>Above 30 days is where the process starts. Net 45 and Net 60 are the normal extended terms. Net 75, 90 and 120 exist only for the genuinely exceptional case.</p>
+            <p>First rule: the deal has to be big enough. Under ten thousand dollars a year, that's seven and a half thousand pounds, or eight thousand six hundred euros, extended terms simply aren't available. The quote won't save, the message tells you why, and there is no approval route. Pick Net 30 or shorter and move on.</p>
+            <p>On a larger deal, extended terms can be considered, but Finance needs your case. Save without a justification and it stops you.</p>
+            <p>Write a short justification: deal size, contract length, the company, and anything you know about their credit. Save, and it's accepted. Notice the two read-only fields underneath: the days, and the annualised contract value in pounds. That's exactly what Finance will see.</p>
+            <p>Submit for approval as normal. The request goes to Credit Control first, then to the Director of Financial Control. You can watch it move through the steps right here on the quote.</p>
+            <p>If Finance says no, the reason comes back with it. Read the comment, adjust the terms or the deal, and resubmit. No Teams messages, no chasing.</p>
+          </details>
+        </div>
+      </div>
+      <div class="video" data-for="approver">
+        <video controls preload="metadata" src="{{VIDEO_V2}}"></video>
+        <div class="meta">
+          <span class="eyebrow">Credit Control &amp; Director &middot; 90 sec</span>
+          <h3>Approving extended terms</h3>
+          <p>The request, what to check on the quote, making a PO a condition, approving, rejecting with a reason, and the Director's step.</p>
+          <details><summary>Transcript</summary>
+            <p>When a rep asks for extended terms, the request lands with Credit Control. Here's the whole job.</p>
+            <p>Everything you need is on the request: the quote, the terms asked for, and the rep's justification. Open the quote for the value and the account.</p>
+            <p>On the quote, the annualised value in pounds and the number of days are right beside the terms, so you're comparing like with like, whatever the currency of the deal.</p>
+            <p>If your answer is yes, but only with a purchase order, you can make that a condition. Set PO Required to Yes on the quote before you approve. The signing flow will then refuse to complete until the customer enters their PO number. Nothing to chase after signature.</p>
+            <p>Approve, and the request moves automatically to the Director of Financial Control for the final decision. You're done.</p>
+            <p>Reject, and always say why. Your comment goes straight back to the rep on the quote. "Credit exposure too high for 60 days, offer Net 45" is a complete answer.</p>
+            <p>The Director sees only what Credit Control has already approved. Two steps, no bypass, and the whole trail stays on the quote.</p>
+          </details>
+        </div>
+      </div>
+      <div class="video" data-for="finance">
+        <video controls preload="metadata" src="{{VIDEO_V3}}"></video>
+        <div class="meta">
+          <span class="eyebrow">Finance &middot; 1 min</span>
+          <h3>Who approves what</h3>
+          <p>The two finance approver groups, the split by quote type, and what changed for Net 30 and shorter.</p>
+          <details><summary>Transcript</summary>
+            <p>Two groups now handle every finance approval on a quote, and the split is by the kind of quote, not by brand.</p>
+            <p>Credit Control, Samantha, Leslie and Candice, with Rahul as UK backup, takes every check on new and renewal quotes: extended payment terms, bad-debtor and finance-problem accounts, big deals, special terms and card thresholds. All brands, including ALM.</p>
+            <p>Kevin, Chloe, Willie, Grace and Sherry take the same checks on amendment and reissue quotes only. They never see a new quote.</p>
+            <p>Net 30 and shorter no longer come to Finance at all: roughly seven hundred requests a year that had no reason to be there. Extended terms go to Credit Control and then the Director. And membership is a simple admin change: holiday cover is a group edit, not a rebuild.</p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="guides">
+  <div class="wrap">
+    <h2>Step by step</h2>
+    <p class="intro">Showing the guide for your role. Switch roles at the top of the page to see the others.</p>
+
+    <div class="guide" data-role="sales">
+      <div class="steps">
+        <div class="step">
+          <div>
+            <h3>Pick the terms in Payment Information</h3>
+            <p>Edit the quote and choose Payment Terms. Anything up to Net 30 saves straight away and never goes to Finance. Net 45 and Net 60 are the normal extended terms. Net 75, 90 and 120 are for genuinely exceptional cases and follow exactly the same route.</p>
+            <figure class="shot"><img src="{{IMG_PICKLIST}}" alt="The Payment Terms picklist open on a quote, showing Due Upon Receipt of Invoice, Net 15 to Net 120 and Prepayment"><figcaption>The full list, as it appears on the quote in production.</figcaption></figure>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <h3>Check the deal is big enough</h3>
+            <p>Extended terms need at least USD 10,000 a year of contract value. The quote works this out for you as Annual Contract Value (GBP), which is the net amount divided by the number of years in the term. Below GBP 7,500 (about USD 10,000 or EUR 8,600) the save is refused and the message says why.</p>
+            <div class="note stop">This is a hard stop, not an approval. A PO does not change it. Pick Net 30 or shorter and move on.</div>
+            <figure class="shot"><img src="{{IMG_BLOCK}}" alt="A quote failing to save with the message that payment terms above 30 days are not permitted under USD 10,000 annual contract value"><figcaption>A GBP 5,000-a-year quote asking for Net 45.</figcaption></figure>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <h3>Write the justification</h3>
+            <p>On a qualifying deal the quote asks for a Payment Terms Justification before it will save. Two or three lines are enough: total contract value and length, who the customer is, and anything you know about their credit or their accounts-payable policy. This is the case Finance reads first.</p>
+            <div class="note ok">After saving, look under the field: Payment Terms (Days) and Annual Contract Value (GBP) are what Credit Control sees.</div>
+            <figure class="shot"><img src="{{IMG_JUSTIFIED}}" alt="A saved quote showing Net 45, the justification text, 45 days and GBP 10,000 annual contract value"><figcaption>A 24-month GBP 20,000 quote, so GBP 10,000 a year.</figcaption></figure>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <h3>Submit for approval and watch it move</h3>
+            <p>Submit for approval exactly as you do today. The Approvals list on the quote shows two steps: Credit Control first, then the Director of Financial Control. Step 2 only opens once step 1 is approved. Other approvals your quote needs (discounts, legal terms) run alongside as before.</p>
+            <figure class="shot"><img src="{{IMG_APPROVALS}}" alt="The Approvals list on a quote showing Credit Control approved and the Director of Financial Control requested"><figcaption>Step 1 approved, step 2 with the Director.</figcaption></figure>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <h3>If it is rejected, read the reason and resubmit</h3>
+            <p>A rejection brings the approver's comment back onto the quote. Change the terms (Net 45 instead of Net 60 is a common answer), or adjust the deal, then submit again. If Credit Control has set PO Required to Yes, the customer will have to enter a PO number when they sign.</p>
+            <figure class="shot"><img src="{{IMG_REJECTED}}" alt="An approval record marked Rejected with the Credit Control comment explaining why"><figcaption>The comment is the instruction.</figcaption></figure>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="guide" data-role="approver">
+      <div class="steps">
+        <div class="step">
+          <div>
+            <h3>Open the request</h3>
+            <p>You get the usual approval notification. The approval record carries the rule (Payment Terms &gt; 30 Days), the step, and a link to the quote. The rep's justification is on the quote in Payment Information.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <h3>Check the value, the days and the account</h3>
+            <p>Beside Payment Terms you have Payment Terms (Days) and Annual Contract Value (GBP), already converted from USD or EUR, so every request is compared on the same basis. The account's Bad Debtor status and Account Status are in the highlights at the top of the quote.</p>
+            <div class="note">You will never see a request under GBP 7,500 a year. The quote refuses those before they can be submitted.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <h3>Optional: make a PO a condition</h3>
+            <p>If your answer is "yes, but only with a purchase order", edit the quote and set PO Required to Yes before you approve. The order form will not complete signature until the customer has entered a PO number. You have edit access to PO Required and PO Number on every quote for this purpose.</p>
+            <figure class="shot"><img src="{{IMG_PO}}" alt="Editing a quote under review with PO Required set to Yes next to the payment terms"><figcaption>PO Required sits next to PO Number in Payment Information.</figcaption></figure>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <h3>Approve or reject, with a comment</h3>
+            <p>Approve from the approval record or the Approve link on the quote. Approval moves the request to the Director of Financial Control automatically. If you reject, say why in the comment: it is shown to the rep on the quote and is the only message they get.</p>
+            <div class="note ok">A good rejection is one line: "Credit exposure too high for 60 days on a new client; offer Net 45, or Net 60 with a PO."</div>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <h3>Director's step</h3>
+            <p>The Director of Financial Control only sees requests Credit Control has already approved, with the same information plus Credit Control's comment. Approve or reject in the same way. The whole trail (both steps, both comments) stays on the quote.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="guide" data-role="finance">
+      <div class="steps">
+        <div class="step">
+          <div>
+            <h3>Know the two approver groups</h3>
+            <p>Every finance approval on a quote now routes to one of two public groups, split by quote type. <strong>Credit Control</strong> (Samantha Law, Leslie Perry, Candice Goodpaster, Rahul Vadgama as UK backup) takes all checks on new and renewal quotes, all brands including ALM. <strong>Finance - Amendments</strong> (Kevin, Chloe, Willie, Grace, Sherry) takes the same checks on amendment and reissue quotes only.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <h3>Change membership without a rebuild</h3>
+            <p>Holiday cover, joiners and leavers are edits to the public group. No approval rule needs touching. Ask the CRM team (Kamyar Jannati) and it is a same-day change.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <h3>What no longer reaches Finance</h3>
+            <p>Net 30 and shorter never create a finance approval, and quotes under GBP 7,500 a year cannot ask for extended terms at all. Around 700 requests a year that had no policy reason have gone. The other finance checks (bad debtor, finance-problem accounts, deals of USD 50,000 or more, special terms, card thresholds) are unchanged in substance and now route to the two groups above.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <h3>Thresholds and rates</h3>
+            <p>The check runs on GBP 7,500 annualised. USD and EUR quotes convert at the CRM's fixed rates (USD 1.2688 and EUR 1.1497 to the pound), so USD 10,000 and EUR 8,600 are the equivalents reps see in the message. Changing the threshold or a rate is a CRM change, not a rule rewrite; raise it with Kamyar.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="reference">
+  <div class="wrap">
+    <h2>Reference</h2>
+    <p class="intro">The numbers and the routing, in one place.</p>
+    <div class="grid2">
+      <div>
+        <h3>What each choice does</h3>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Payment terms</th><th>Days</th><th>Under GBP 7,500 a year</th><th>GBP 7,500 a year and above</th></tr></thead>
+          <tbody>
+            <tr><td>Due Upon Receipt of Invoice</td><td class="num">0</td><td><span class="pill ok">Saves</span></td><td><span class="pill ok">Saves</span></td></tr>
+            <tr><td>Net 15</td><td class="num">15</td><td><span class="pill ok">Saves</span></td><td><span class="pill ok">Saves</span></td></tr>
+            <tr><td>Net 30</td><td class="num">30</td><td><span class="pill ok">Saves</span></td><td><span class="pill ok">Saves</span></td></tr>
+            <tr><td>Net 45</td><td class="num">45</td><td><span class="pill stop">Blocked</span></td><td><span class="pill warn">Justify + 2 approvals</span></td></tr>
+            <tr><td>Net 60</td><td class="num">60</td><td><span class="pill stop">Blocked</span></td><td><span class="pill warn">Justify + 2 approvals</span></td></tr>
+            <tr><td>Net 75 / 90 / 120</td><td class="num">75-120</td><td><span class="pill stop">Blocked</span></td><td><span class="pill warn">Justify + 2 approvals (exceptional)</span></td></tr>
+            <tr><td>Prepayment</td><td class="num">0</td><td><span class="pill ok">Saves</span></td><td><span class="pill ok">Saves</span></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div>
+        <h3>The threshold in each currency</h3>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Quote currency</th><th>Minimum annual value for extended terms</th></tr></thead>
+          <tbody>
+            <tr><td>GBP</td><td class="num">7,500</td></tr>
+            <tr><td>USD</td><td class="num">10,000 (fixed rate 1.2688)</td></tr>
+            <tr><td>EUR</td><td class="num">8,600 (fixed rate 1.1497)</td></tr>
+          </tbody>
+        </table></div>
+        <p style="margin-top:10px;font-size:.95rem;color:var(--ink-soft)">Annual value = quote net amount &divide; (subscription term in months &divide; 12). A 24-month GBP 20,000 quote is GBP 10,000 a year.</p>
+        <h3 style="margin-top:26px">Who approves what</h3>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Quote type</th><th>Step 1</th><th>Step 2 (extended terms only)</th></tr></thead>
+          <tbody>
+            <tr><td>Quote (new business, renewal)</td><td><span class="pill brand">Credit Control</span></td><td><span class="pill brand">Director of Financial Control</span></td></tr>
+            <tr><td>Amendment, reissue</td><td><span class="pill brand">Finance - Amendments</span></td><td><span class="pill brand">Director of Financial Control</span></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:30px">Fields on the quote</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Field</th><th>Who fills it</th><th>What it is for</th></tr></thead>
+      <tbody>
+        <tr><td>Payment Terms</td><td>Sales</td><td>The terms being asked for. Changing it is what triggers the checks; a renewal that inherits extended terms is not re-checked until someone changes the value.</td></tr>
+        <tr><td>Payment Terms Justification</td><td>Sales</td><td>Required for Net 45 and longer on qualifying deals. Read by Credit Control and the Director.</td></tr>
+        <tr><td>Payment Terms (Days)</td><td>Automatic</td><td>The numeric version of the terms, so Finance and reports can compare quotes.</td></tr>
+        <tr><td>Annual Contract Value (GBP)</td><td>Automatic</td><td>Net amount annualised and converted to pounds. Drives the GBP 7,500 threshold.</td></tr>
+        <tr><td>PO Required</td><td>Credit Control (also set by the signer's answer on the order form)</td><td>Yes makes the PO number mandatory at signature. Separate from the account-level PO flag, which the order form also honours.</td></tr>
+        <tr><td>PO Number</td><td>Sales or the customer at signature</td><td>The customer's purchase order reference, written back from the signed order form when blank.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <h2>Questions people have asked</h2>
+    <p class="intro">Answers agreed with Lina Patel, Director of Financial Control, unless stated.</p>
+    <div class="faq">
+      <details><summary>The customer is small but will give us a PO. Can we do Net 45?</summary><p>No. Under USD 10,000 a year (GBP 7,500 / EUR 8,600), extended terms are a hard no regardless of a PO. The quote will not save with Net 45 or longer, and there is no approval route.</p></details>
+      <details><summary>Does Net 30 need approval now?</summary><p>No. Net 30 and shorter are self-service on every quote and never create a finance approval. Before September, Net 15 and Net 30 quotes were generating around 700 needless finance approvals a year.</p></details>
+      <details><summary>Over the threshold, is a PO always required for extended terms?</summary><p>Normally but not exclusively. Credit Control decides case by case and can make a PO a condition by setting PO Required to Yes on the quote before approving. The order form then insists on a PO number at signature.</p></details>
+      <details><summary>Is PO Required on the quote the same as the PO flag on the account?</summary><p>No, they are two fields. The account flag is curated by invoicing on Firm and Office accounts and the order form honours it directly: if the account says PO required, the PO box is mandatory at signature whatever the quote says. The quote field is set by Credit Control as an approval condition, or by the signer's own Yes/No answer on the order form. Nothing copies one into the other.</p></details>
+      <details><summary>Our quotes are in EUR or USD. Does the threshold change?</summary><p>The policy threshold is the same value in every currency. The quote converts to pounds at the CRM's fixed rate and checks against GBP 7,500, which is USD 10,000 or EUR 8,600.</p></details>
+      <details><summary>What about a renewal that already has Net 60 from last year?</summary><p>Inherited terms are not re-checked. The checks fire when someone changes Payment Terms on the quote. If you change the renewal's terms, the normal rules apply to the new value.</p></details>
+      <details><summary>When would I use Net 75, 90 or 120?</summary><p>Only for a genuinely exceptional case, and expect Credit Control to push back. They follow the same route as Net 45 and Net 60: justification, then Credit Control, then the Director.</p></details>
+      <details><summary>Where has the ALM Credit Control approval gone?</summary><p>It has been replaced. The old ALM-only rule is retired and ALM quotes now use the same global chain as every other brand. Credit Control still sees them, just through the new rule.</p></details>
+      <details><summary>My quote was rejected. Do I need to start again?</summary><p>No. Read the comment on the approval, change the terms or the deal, and submit for approval again. The previous request is kept on the quote as history.</p></details>
+      <details><summary>Something else needs approval on the same quote. Does this change that?</summary><p>No. Discount, legal-terms and other quote approvals run as before. The payment terms chain is one more line in the same Approvals list.</p></details>
+      <details><summary>I want to try it before using it on a real deal.</summary><p>Use the <a href="https://claude.ai/code/artifact/a8360197-b327-4769-ad5f-6a9f2e7ad445">Payment Terms Playbook</a>: an interactive simulator where you set a value, a term and a currency and see exactly what the quote will do.</p></details>
+    </div>
+  </div>
+</section>
+
+<section id="card">
+  <div class="wrap">
+    <h2>Quick reference card</h2>
+    <p class="intro">One screen to keep. Print it or pin it.</p>
+    <div class="card-ref">
+      <div class="eyebrow">Payment terms on CPQ quotes &middot; from 8 September 2026</div>
+      <div class="cols">
+        <div><h3>Sales</h3><ul>
+          <li>Up to Net 30: pick and save. No approval.</li>
+          <li>Net 45+ needs USD 10k / GBP 7.5k / EUR 8.6k a year. Below that: blocked, no exceptions, PO or not.</li>
+          <li>At or above: fill Payment Terms Justification, then submit as normal.</li>
+          <li>Two steps: Credit Control, then Director of Financial Control.</li>
+          <li>Rejected? The reason is in the comment. Fix and resubmit.</li>
+        </ul></div>
+        <div><h3>Credit Control</h3><ul>
+          <li>Check Annual Contract Value (GBP), days, justification and the account.</li>
+          <li>PO as a condition: set PO Required = Yes on the quote before approving.</li>
+          <li>Always comment on a rejection; it is the rep's only message.</li>
+          <li>Approving sends it to the Director automatically.</li>
+        </ul></div>
+        <div><h3>Finance</h3><ul>
+          <li>Credit Control: all new and renewal quotes, all brands.</li>
+          <li>Finance - Amendments: amendment and reissue quotes only.</li>
+          <li>Membership changes are a group edit via the CRM team.</li>
+          <li>Simulator: Payment Terms Playbook. Questions: Kamyar Jannati.</li>
+        </ul></div>
+      </div>
+      <button class="printbtn" onclick="window.print()">Print the card</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Process owner: Lina Patel, Director of Financial Control</span>
+    <span>CRM build and support: Kamyar Jannati, Head of Data and CRM</span>
+    <span>Simulator: <a href="https://claude.ai/code/artifact/a8360197-b327-4769-ad5f-6a9f2e7ad445">Payment Terms Playbook</a></span>
+    <span>Videos recorded in the KJDEV sandbox on the production page layouts, September 2026</span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var buttons = document.querySelectorAll('.role');
+    var guides = document.querySelectorAll('.guide');
+    var videos = document.querySelectorAll('.video');
+    function show(role) {
+      buttons.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.role === role ? 'true' : 'false'); });
+      guides.forEach(function (g) { g.classList.toggle('show', g.dataset.role === role); });
+      // bring this role's video to the front of the row
+      var row = document.querySelector('.videos');
+      videos.forEach(function (v) { v.style.order = v.dataset.for === role ? '0' : '1'; });
+      try { localStorage.setItem('pta-role', role); } catch (e) {}
+    }
+    buttons.forEach(function (b) { b.addEventListener('click', function () { show(b.dataset.role); }); });
+    var start = 'sales';
+    try { start = localStorage.getItem('pta-role') || 'sales'; } catch (e) {}
+    show(start);
+  })();
+</script>

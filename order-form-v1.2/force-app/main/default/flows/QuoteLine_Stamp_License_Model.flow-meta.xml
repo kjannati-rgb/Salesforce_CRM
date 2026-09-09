@@ -2,6 +2,22 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>62.0</apiVersion>
     <assignments>
+        <name>Assign_Warranted_Headcount</name>
+        <label>Fill headcount from the account attorney count</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Warranted_Headcount__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.SBQQ__Quote__r.SBQQ__Account__r.Number_of_Attorneys__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Decision_Override</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assign_Limited_Access</name>
         <label>US-sold: Limited Access, count = seats</label>
         <locationX>0</locationX>
@@ -79,6 +95,45 @@
             <targetReference>Decision_Count</targetReference>
         </connector>
     </assignments>
+    <decisions>
+        <name>Decision_Headcount_Fill</name>
+        <label>Law.com line missing a headcount we hold?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Decision_Override</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No fill needed</defaultConnectorLabel>
+        <rules>
+            <name>Fill_Headcount</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>IsLawcomFamily</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Warranted_Headcount__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__Quote__r.SBQQ__Account__r.Number_of_Attorneys__c</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Warranted_Headcount</targetReference>
+            </connector>
+            <label>Fill from account</label>
+        </rules>
+    </decisions>
     <decisions>
         <name>Decision_Override</name>
         <label>Manual override set?</label>
@@ -225,7 +280,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Decision_Override</targetReference>
+            <targetReference>Decision_Headcount_Fill</targetReference>
         </connector>
         <object>SBQQ__QuoteLine__c</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>

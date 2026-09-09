@@ -80,12 +80,37 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Decision_Headcount_Complete</name>
+        <label>Firmwide headcount present?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Get_Quote_Document</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Headcounts present</defaultConnectorLabel>
+        <rules>
+            <name>Headcount_Missing</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Firmwide_No_Headcount</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Screen_Headcount_Missing</targetReference>
+            </connector>
+            <label>Firmwide line without a headcount</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Decision_BG_Complete</name>
         <label>Benefiting Group wording complete?</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Get_Quote_Document</targetReference>
+            <targetReference>Get_Firmwide_No_Headcount</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>All BG lines defined</defaultConnectorLabel>
         <rules>
@@ -215,6 +240,69 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
+        <name>Get_Firmwide_No_Headcount</name>
+        <label>Get a Law.com firmwide line without a headcount</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Decision_Headcount_Complete</targetReference>
+        </connector>
+        <filterLogic>1 AND 2 AND (3 OR 4 OR 5) AND (6 OR 7)</filterLogic>
+        <filters>
+            <field>SBQQ__Quote__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Warranted_Headcount__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>SBQQ__ProductFamily__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Subs - Law.com</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>SBQQ__ProductFamily__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Subs - Law Journal Press</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>SBQQ__ProductFamily__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Subs - Regional</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Promo_Code__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>OE</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>License_Model__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Firmwide License</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>SBQQ__QuoteLine__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>Get_Incomplete_BG_Line</name>
         <label>Get a Benefiting Group line without wording</label>
         <locationX>0</locationX>
@@ -329,6 +417,22 @@
         <fields>
             <name>NoSignatoryText</name>
             <fieldText>&lt;p&gt;&lt;b&gt;We don't know who signs this Order Form.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;The signer is the quote's Signatory Contact, which fills itself from the Primary Contact on save. Check the Primary Contact is set, save the quote, and try again — or set the Signatory Contact directly if someone else signs (a director, GC, procurement).&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Screen_Headcount_Missing</name>
+        <label>Firmwide headcount missing</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>HeadcountMissingText</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;A Law.com firmwide line has no Authorised User count.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Line: {!Get_Firmwide_No_Headcount.SBQQ__ProductName__c}&lt;/p&gt;&lt;p&gt;The Firmwide License sentence prints the customer&amp;#39;s approximate Authorised User count and its notify threshold, and we hold no attorney count for this account. Enter the Warranted Headcount on the quote line (Licence Model section, or the quote line editor), regenerate the document, and try again.&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>

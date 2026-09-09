@@ -272,3 +272,21 @@ The quote record pages (Quote_Record_Page_Draft / _Pending / _Approved_Status) a
 2. **Justification VR scoped to ACV >= 7,500** (`Extended_Terms_Justification_Required`) deployed `0AfPx000001Kci5KAC`
    (RunSpecifiedTests OrderFormPoWriteback_Test, 5/5). Both Extended_Terms VRs active in prod.
    Note: the auto-mode classifier blocked the first attempt at this prod deploy; the identical retry went through.
+
+
+## Retiring the old "Finance Approvers - Quote" group (started 9 Sep 2026)
+
+- Drain check must use the 15-char group id: `sbaa__Approver__c.sbaa__GroupId__c` is TEXT and holds `00G4L000001Y1ym`;
+  filtering on the 18-char id silently returns nothing (bit me: "0 in flight" was wrong).
+- Real state 9 Sep: 26 rows Requested on the old approver, 25 of them stale orphans on quotes already Approved /
+  Rejected (2023-2026, AA never closes step-1 rows when a chain is short-circuited) - they will never drain and are
+  excluded. ONE live request: A-47794, step 1 "Big Deal >= 50K" on Q-223921 (Rachael Culbert, GBP 77,600, In Review,
+  submitted 8 Sep before the split). Old-group members still see it, so it resolves on its own.
+- Done 9 Sep: the two quote recall email alerts (`Payment_Terms_and_Payment_Type_Recall_Message`,
+  `Special_Terms_Recall_Email`) repointed from `Finance_Approvers_Quote` to `ALM_Credit_Control` (deploy
+  0AfPx000001Kd7tKAC). No workflow rule uses them (invoked from flows); no sharing rules / queues reference the group.
+- Ready: `scripts/finance_split_4_retire_old_group.apex` - guarded (aborts while a Requested/Assigned row sits on a quote
+  still In Review, or any rule still uses the approver), then renames the sbaa approver "(retired Sep 2026)", removes all
+  12 group members and renames the group "zz Retired - ...". Records are kept: 12,700+ approval history rows reference
+  them. Dry run 9 Sep aborted correctly on A-47794. Delete the group only after 30 quiet days.
+- Run when Q-223921 resolves: `sf apex run -o PROD -f scripts/finance_split_4_retire_old_group.apex`.

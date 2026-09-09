@@ -235,3 +235,10 @@ KJDEV proof (seeded prod-like Big Deal >= 50K rule): Q-211572 [Quote] -> Big Dea
 Post-switch admin: remove Rahul/India team from "Finance Approvers - Quote" (or retire the group); membership changes are admin-only from here.
 
 **HOLD (Lina 8 Sep 19:19):** finance approver split PAUSED pending a new proposal - Lina's direction is the opposite of Leslie's ("push routine approvals DOWN to the teams so the core can focus on strategy"). Prod untouched; KJDEV build stays (mechanism is membership + per-rule routing, so it fits either direction). Live prod routing unchanged: step 1 -> Credit Control group (Samantha/Leslie/Candice/Rahul), legacy LBR checks -> Finance Approvers - Quote (12).
+
+## FINANCE APPROVER SPLIT - LIVE IN PROD 9 Sep 2026 (Lina 09:22 "okay to proceed as noted by Leslie"; Kamyar "split")
+
+Parts 1-3 ran clean (~10 min, no downtime). Result: "Credit Control" 00GPx00000Jh8NZ (renamed from ALM - Credit Control; Samantha Law, Leslie Perry, Candice Goodpaster, Rahul Vadgama backup) is the approver for ALL 7 active finance rules incl. payment-terms step 1; "Finance - Amendments" 00GPx00000RYVJZMA5 (Kevin Daud, Chloe Orrin, Willie Guerrero, Grace Walther, Sherry Costello; approver a5UPx0000004sJZMAY) receives the 6 " - Amendments" clones (Amendment-type quotes only). Part 2: 6 type conditions, 4 custom logics extended, 6 clones, 37 conditions. Part 3 also repointed the 2 INACTIVE legacy rules (High Risk Countries, Wrong Currency) to Credit Control - harmless.
+"Finance Approvers - Quote" group 00G4L000001Y1ym + approver a5U4L000000L2X9UAK now UNUSED by active rules (kept so in-flight approvals raised before the switch stay actionable by the old membership). Admin follow-up: retire/prune when in-flight queue drains.
+Rollback: deactivate the 6 clones + repoint the 3 LBR originals back to Finance Approvers - Quote (one apex update); group rename is cosmetic.
+Push-down to collectors: parked on Candice's tracker (Lina 9 Sep) - when agreed, it's membership + possibly a further rule split; scripts reusable.

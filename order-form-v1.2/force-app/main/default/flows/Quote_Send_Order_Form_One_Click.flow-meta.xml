@@ -35,7 +35,7 @@
         <defaultConnectorLabel>Status and signatory OK</defaultConnectorLabel>
         <rules>
             <name>Is_Renewal</name>
-            <conditionLogic>and</conditionLogic>
+            <conditionLogic>1 AND (2 OR 3)</conditionLogic>
             <conditions>
                 <leftValueReference>Get_Quote.SBQQ__Opportunity2__r.RecordType.DeveloperName</leftValueReference>
                 <operator>EqualTo</operator>
@@ -43,10 +43,24 @@
                     <stringValue>Renewals</stringValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>Get_Quote.SBQQ__StartDate__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Quote.SBQQ__StartDate__c</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <dateValue>2027-01-01</dateValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Screen_Renewal_Scope</targetReference>
             </connector>
-            <label>Renewal opportunity - out of scope until 1 Jan</label>
+            <label>Renewal starting before 1 Jan 2027 - out of scope</label>
         </rules>
         <rules>
             <name>Not_Approved</name>
@@ -384,7 +398,7 @@
         <allowPause>false</allowPause>
         <fields>
             <name>RenewalScopeText</name>
-            <fieldText>&lt;p&gt;&lt;b&gt;The Order Form covers new business for now.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;This quote belongs to a renewal opportunity. Renewals continue on the current process and move to the Order Form on &lt;b&gt;1 January 2027&lt;/b&gt;. Nothing has been sent.&lt;/p&gt;&lt;p&gt;If this deal genuinely needs the Order Form sooner, contact the CRM team.&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;b&gt;This renewal is not on the Order Form yet.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Renewals use the Order Form only when the new term starts on or after &lt;b&gt;1 January 2027&lt;/b&gt;. This quote&amp;#39;s start date is before then (or not set), so it continues on the current process. Nothing has been sent.&lt;/p&gt;&lt;p&gt;If the start date is wrong, correct it on the quote and try again. If this deal genuinely needs the Order Form sooner, contact the CRM team.&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>

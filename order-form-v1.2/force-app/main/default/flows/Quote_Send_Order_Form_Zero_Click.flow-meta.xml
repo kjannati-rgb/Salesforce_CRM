@@ -66,7 +66,7 @@
             <assignToReference>NotifBody</assignToReference>
             <operator>Assign</operator>
             <value>
-                <stringValue>Auto-send is on, but this quote belongs to a renewal opportunity. The Order Form covers new business until 1 January 2027 - renewals continue on the current process.</stringValue>
+                <stringValue>Auto-send is on, but this renewal starts before 1 January 2027 (or has no start date), so it stays on the current process. Renewals with a term starting on or after 1 Jan 2027 send automatically.</stringValue>
             </value>
         </assignmentItems>
         <connector>
@@ -164,7 +164,7 @@
         <defaultConnectorLabel>New business - proceed</defaultConnectorLabel>
         <rules>
             <name>Scope_Renewal</name>
-            <conditionLogic>and</conditionLogic>
+            <conditionLogic>1 AND (2 OR 3)</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.SBQQ__Opportunity2__r.RecordType.DeveloperName</leftValueReference>
                 <operator>EqualTo</operator>
@@ -172,10 +172,24 @@
                     <stringValue>Renewals</stringValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__StartDate__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__StartDate__c</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <dateValue>2027-01-01</dateValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Assign_Reason_Renewal</targetReference>
             </connector>
-            <label>Renewal - no auto send until 1 Jan</label>
+            <label>Renewal starting before 1 Jan 2027 - no auto send</label>
         </rules>
     </decisions>
     <decisions>

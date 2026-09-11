@@ -349,6 +349,38 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Assign_Track_Subs</name>
+        <label>Track whether any line is subs-family</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>HasSubsLine</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>CumulativeSubs</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Decision_Line_API</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Default_Template</name>
+        <label>Default the Subscription Order Form template</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.SBQQ__DefaultTemplate__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Setup.Order_Form_Adobe_Settings__c.Default_Template_Id__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Brand_Rows</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assign_Lead_Brand</name>
         <label>Track lead brand (highest net total line)</label>
         <locationX>0</locationX>
@@ -734,6 +766,52 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Decision_Default_Template</name>
+        <label>Default the subs template? (config-gated)</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Loop_Brand_Rows</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Leave template as is</defaultConnectorLabel>
+        <rules>
+            <name>Stamp_Default_Template</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>HasSubsLine</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>InOrderFormScope</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Setup.Order_Form_Adobe_Settings__c.Default_Template_Id__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__DefaultTemplate__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>$Setup.Order_Form_Adobe_Settings__c.Default_Template_Id__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Default_Template</targetReference>
+            </connector>
+            <label>Subs quote in scope - set the default</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Decision_Brand_Row</name>
         <label>Does this brand row apply?</label>
         <locationX>0</locationX>
@@ -849,6 +927,31 @@
         <expression>'|' &amp; {!Loop_Build_Mapped.Brand_Value__c} &amp; '|'</expression>
     </formulas>
     <formulas>
+        <name>IsSubsLine</name>
+        <dataType>Boolean</dataType>
+        <expression>OR({!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Subs - Law.com',
+{!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Subs - Law Journal Press',
+{!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Subs - Regional',
+{!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Subs - Specialist Platforms',
+{!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Subs - Lexology Pro',
+{!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Subs - Lexology',
+{!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Subs - Memberships',
+{!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Subs - MBL Seminars',
+{!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Subs - Performance Data',
+{!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Subs - Expert Insight')</expression>
+    </formulas>
+    <formulas>
+        <name>CumulativeSubs</name>
+        <dataType>Boolean</dataType>
+        <expression>OR({!HasSubsLine}, {!IsSubsLine})</expression>
+    </formulas>
+    <formulas>
+        <name>InOrderFormScope</name>
+        <dataType>Boolean</dataType>
+        <expression>OR({!$Record.SBQQ__Opportunity2__r.RecordType.DeveloperName} &lt;&gt; 'Renewals',
+AND(NOT(ISBLANK({!$Record.SBQQ__StartDate__c})), {!$Record.SBQQ__StartDate__c} &gt;= DATE(2027, 1, 1)))</expression>
+    </formulas>
+    <formulas>
         <name>EffectiveBrand</name>
         <dataType>String</dataType>
         <expression>IF({!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Subs - Lexology Pro', 'Lexology Pro', TEXT({!Loop_Brand_Lines.Brand__c}))</expression>
@@ -893,10 +996,10 @@
         <collectionReference>Get_Brand_Lines</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Decision_Line_API</targetReference>
+            <targetReference>Assign_Track_Subs</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
-            <targetReference>Loop_Brand_Rows</targetReference>
+            <targetReference>Decision_Default_Template</targetReference>
         </noMoreValuesConnector>
     </loops>
     <loops>
@@ -1075,6 +1178,16 @@
         <isOutput>false</isOutput>
         <value>
             <stringValue>|</stringValue>
+        </value>
+    </variables>
+    <variables>
+        <name>HasSubsLine</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
         </value>
     </variables>
     <variables>

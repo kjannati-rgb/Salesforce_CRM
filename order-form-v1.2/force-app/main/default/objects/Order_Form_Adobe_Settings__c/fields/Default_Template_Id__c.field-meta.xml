@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Default_Template_Id__c</fullName>
+    <externalId>false</externalId>
+    <inlineHelpText>18-character Id of the Subscription Order Form quote template in THIS org. When set, the stamp flow makes it the default document template on in-scope subs quotes (Generate pre-selects it). Blank = feature off.</inlineHelpText>
+    <label>Default Template Id</label>
+    <length>18</length>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

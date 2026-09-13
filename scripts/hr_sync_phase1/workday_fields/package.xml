@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>User.Workday_Employee_ID__c</members>
+        <members>User.Hire_Date__c</members>
+        <members>User.Sub_Division__c</members>
+        <members>User.Location__c</members>
+        <members>User.Employee_Type__c</members>
+        <members>User.ELT_Lead__c</members>
+        <members>User.Workday_Last_Sync__c</members>
+        <members>User.Workday_Division__c</members>
+        <name>CustomField</name>
+    </types>
+    <types>
+        <members>User.Division_Workday_Values</members>
+        <name>ValidationRule</name>
+    </types>
+    <types>
+        <members>User-User Layout</members>
+        <name>Layout</name>
+    </types>
+    <types>
+        <members>Workday_User_Fields_Sync</members>
+        <members>Workday_User_Fields_Read</members>
+        <name>PermissionSet</name>
+    </types>
+    <version>62.0</version>
+</Package>

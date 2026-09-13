@@ -1,0 +1,206 @@
+ManagerId / Manager	dashboards/Lex_Pro_Dashboards/hbmDdJjwMvutitgnUtDYAqzTNwgSOr.dashboard-meta.xml
+ManagerId / Manager	dashboards/PipelineDashboards/yWHVcPECpRMMeTzDsVfFyqxfvznseb2.dashboard-meta.xml
+ManagerId / Manager	dashboards/SalesRepDashboards/keoZLSemFcmpBRtuLMZLSOxfFoanTM21.dashboard-meta.xml
+ManagerId / Manager	dashboards/SalesRepDashboards/keoZLSemFcmpBRtuLMZLSOxfFoanTM3.dashboard-meta.xml
+ManagerId / Manager	dashboards/SalesRepDashboards/keoZLSemFcmpBRtuLMZLSOxfFoanTM31.dashboard-meta.xml
+ManagerId / Manager	dashboards/SalesRepDashboards/keoZLSemFcmpBRtuLMZLSOxfFoanTM311.dashboard-meta.xml
+ManagerId / Manager	dashboards/SalesRepDashboards/keoZLSemFcmpBRtuLMZLSOxfFoanTM312.dashboard-meta.xml
+ManagerId / Manager	dashboards/SalesRepDashboards/keoZLSemFcmpBRtuLMZLSOxfFoanTM313.dashboard-meta.xml
+ManagerId / Manager	dashboards/SalesRepDashboards/keoZLSemFcmpBRtuLMZLSOxfFoanTM3131.dashboard-meta.xml
+ManagerId / Manager	dashboards/Sales_and_Marketing_Dashboards/Best_Practices_Dashboard6.dashboard-meta.xml
+ManagerId / Manager	dashboards/Sales_and_Marketing_Dashboards/DgrwRqDzSxMltImbhtWnSATtWvfPqB.dashboard-meta.xml
+ManagerId / Manager	objects/User/listViews/ActiveUsersThisWeek.listView-meta.xml
+ManagerId / Manager	objects/User/listViews/Active_Users_with_no_Managers.listView-meta.xml
+ManagerId / Manager	objects/User/listViews/Active_Users_with_no_Roles.listView-meta.xml
+ManagerId / Manager	objects/User/listViews/Customer_Success_Team.listView-meta.xml
+ManagerId / Manager	objects/User/listViews/Non_ALM_Active_Users.listView-meta.xml
+ManagerId / Manager	objects/User/listViews/Non_verified_Users.listView-meta.xml
+ManagerId / Manager	objects/User/listViews/Non_verified_Users_ORG.listView-meta.xml
+ManagerId / Manager	reports/ALMCommissions/ALM_Commission_Report_8Km.report-meta.xml
+ManagerId / Manager	reports/ALMFulfilmentreport/ALM_Large_Law_Order_Rep_9wp.report-meta.xml
+ManagerId / Manager	reports/CustomerSuccessReports/SPG_CS_all_Tasks_Overview.report-meta.xml
+ManagerId / Manager	reports/Customer_Experience_reports/PI_PRO_Task_report_CS.report-meta.xml
+ManagerId / Manager	reports/Data_Team_Reports/Legal_Contacts_Maria_nFE.report-meta.xml
+ManagerId / Manager	reports/FinanceReports/Debtors/Current_Month_Cancellations_for_Finance_29v.report-meta.xml
+ManagerId / Manager	reports/GeckoboardReports/HK/EI_Product_Manager_View_HK_dAM.report-meta.xml
+ManagerId / Manager	reports/GeckoboardReports/HK/EI_Product_Manager_View_HK_Dx9.report-meta.xml
+ManagerId / Manager	reports/GeckoboardReports/HK/EI_Product_Manager_View_HK_RN_zhS.report-meta.xml
+ManagerId / Manager	reports/GeckoboardReports/HK/PD_Product_Manager_View_HK_OT5.report-meta.xml
+ManagerId / Manager	reports/GeckoboardReports/HK/WWL_Product_Manager_View_nWp.report-meta.xml
+ManagerId / Manager	reports/Lex_PRO_Reports/CEP_Tasks_Lexology_Pro.report-meta.xml
+ManagerId / Manager	reports/Lex_PRO_Reports/PRO_CS_all_Tasks_Overview.report-meta.xml
+ManagerId / Manager	reports/ManagerDashboards/ExpertInsightGXRs/Copy_of_GXRs_FY23_by_Product_vs_Budget_XVR.report-meta.xml
+ManagerId / Manager	reports/PipelineTracker/Opportunities_Created_This_Week_64A.report-meta.xml
+ManagerId / Manager	reports/PipelineTracker/Opps_with_Close_Date_in_the_Past_zKt.report-meta.xml
+ManagerId / Manager	reports/PipelineTracker/Total_Opps_Created_MTD_Sales_Manager_Uff.report-meta.xml
+ManagerId / Manager	reports/PipelineTracker/Total_Opps_Created_WTD_Sales_Manager_7cC.report-meta.xml
+ManagerId / Manager	reports/PipelineTracker/PipelineTrackerDashboad/Open_Pipeline_Lex_Inform_USA_g1k.report-meta.xml
+ManagerId / Manager	reports/PipelineTracker/PipelineTrackerDashboad/Open_Pipeline_PD_USA_NsH.report-meta.xml
+ManagerId / Manager	reports/PipelineTracker/PipelineTrackerDashboad/Open_Pipeline_USA_t2i.report-meta.xml
+ManagerId / Manager	reports/PipelineTracker/PipelineTrackerDashboad/Pipeline_Volume_and_Value_Lex_Pro_USA_rHR.report-meta.xml
+ManagerId / Manager	reports/PipelineTracker/PipelineTrackerDashboad/Pipeline_Volume_and_Value_RYr.report-meta.xml
+ManagerId / Manager	reports/PipelineTracker/PipelineTrackerDashboad/Pipeline_Volume_and_Value_This_Month_9ax.report-meta.xml
+ManagerId / Manager	reports/PipelineTracker/PipelineTrackerDashboad/Total_Pipeline_by_Person_5Y5.report-meta.xml
+ManagerId / Manager	reports/PipelineTracker/PipelineTrackerDashboad/Won_Opps_by_Sales_Rep_5Bd.report-meta.xml
+ManagerId / Manager	reports/Revenue_Operations/Outbound_Source_Generation.report-meta.xml
+ManagerId / Manager	reports/Revenue_Operations/Cayla_Reports/Holdovers_closed_lost_opps.report-meta.xml
+ManagerId / Manager	reports/Revenue_Operations/Cayla_Reports/SFDC_Commercial_Analysis_Data1.report-meta.xml
+ManagerId / Manager	reports/SalesforceAdmin/New_Users_with_Targets_Report_o4N.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/by_Product_Renewals_Manager_View_xPv.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Copy_of_by_Product_Renewals_Manager_View_QKg.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Current_Month_Pipeline_Manager_sRe.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Current_Month_Pipeline_Manager_TLR_aHf.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Current_Month_Pipeline_Manager_TLR_eiD.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Current_Month_Pipeline_Manager_WWL2_Vg2.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Current_Month_Pipeline_Manager_WWL_stP.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Current_Month_Pipeline_NB_Manager_l1I.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Current_Month_Pipeline_RN_Manager_mvU.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Current_Month_Sales_Manager_TLR_9eJ.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Current_Month_Sales_vs_Target_ManagerNB_YA6.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Current_Month_Sales_vs_Target_ManagerRN_ZDP.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Current_Month_Sales_vs_Target_Manager_Oav.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Current_Year_Sales_Manager_TLR_LVu.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Current_Year_Sales_vs_Targets_ManagerNB_Ipr.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Current_Year_Sales_vs_Targets_ManagerRN_Qkg.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Current_Year_Sales_vs_Targets_Manager_EVw.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Last_Month_Pipeline_RN_Manager_kQ8.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/New_Business_Accounts_breakup_Manager_1RI.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Next_Month_Pipeline_Manager_4ZV.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Next_Month_Pipeline_Manager_TLR_PCC.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Next_Month_Pipeline_Manager_TLR_TpY.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Next_Month_Pipeline_Manager_WWL2_8zz.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Next_Month_Pipeline_NB_Manager_kE7.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Next_Month_Pipeline_RN_Manager_XOR.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Next_Month_Sales_vs_Target_ManagerNB_oeW.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Next_Month_Sales_vs_Target_ManagerRN_QKP.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Next_Month_Sales_vs_Target_Manager_9ko.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Next_Month_Sales_vs_Target_Manager_TLR_RA0.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Open_Opportunities_in_the_Past_Manager_Q61.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Open_Opps_in_the_Past_Manager_TLR_WKc.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Opps_Created_Last_12_Months_NB_Manager_pSW.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Renewals_Pot_by_Month_This_Year_Manager_tJl.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Stages_Moved_This_Week_Manager_GVa.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Stages_Moved_This_Week_Manager_TLR_tWH.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/Stages_Moved_This_Week_Manager_WWL_nKL.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/X12_Week_Pipeline_Manager_sxS.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/X12_Week_Pipeline_Manager_TLR_dDs.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/X12_Week_Pipeline_Manager_WWL_fa9.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/X2_Months_Ahead_Pipeline_RN_Manager_EW6.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/YTD_Sales_vs_Target_ManagerNB_IiX.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/YTD_Sales_vs_Target_ManagerRN_kQg.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/YTD_Sales_vs_Target_Manager_TLR_Aek.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/YTD_Sales_vs_Target_Manager_Vu9.report-meta.xml
+ManagerId / Manager	reports/SalesRepDashboardNewBusiness/YTD_Sales_vs_Target_Manager_WWL_xaX.report-meta.xml
+ManagerId / Manager	reports/Test_Commercial_Finance_reports/Pipeline_Activity.report-meta.xml
+ManagerId / Manager	reports/unfiled$public/ALL_ALM_Opps.report-meta.xml
+ManagerId / Manager	reports/unfiled$public/ALM_Open_Opps.report-meta.xml
+ManagerId / Manager	reports/unfiled$public/Copy_of_Active_Subs_Anderson_Young.report-meta.xml
+ManagerId / Manager	reports/unfiled$public/Index_New_Biz_Opps.report-meta.xml
+ManagerId / Manager	reports/unfiled$public/Main_CY_Renewals_Report_Cayla.report-meta.xml
+ManagerId / Manager	reports/unfiled$public/Pipeline_Activity_2023.report-meta.xml
+ManagerId / Manager	reports/unfiled$public/YTD_Closed_WonTeam_Jessica_OY0.report-meta.xml
+Contact.Title	objects/Contact/listViews/AllContacts.listView-meta.xml
+Contact.Title	objects/Contact/listViews/Andy_Virtual_Currency.listView-meta.xml
+Contact.Title	objects/Contact/listViews/Aviation_ed13_Nick_list.listView-meta.xml
+Contact.Title	objects/Contact/listViews/Charlie_Murray_Target_Account_Leads.listView-meta.xml
+Contact.Title	objects/Contact/listViews/Charlie_Murray_University_List.listView-meta.xml
+Contact.Title	objects/Contact/listViews/Copy_of_IAM_Sub_Licensing.listView-meta.xml
+Contact.Title	objects/Contact/listViews/CVENT_Attendees.listView-meta.xml
+Contact.Title	objects/Contact/listViews/GCR_Subs_In_House_Campaign.listView-meta.xml
+Contact.Title	objects/Contact/listViews/GIR_Investigations_Specialists_NB_Sub.listView-meta.xml
+Contact.Title	objects/Contact/listViews/IAM_Contacts_for_Campaign.listView-meta.xml
+Contact.Title	objects/Contact/listViews/IAM_Sub_Life_Sciences_Contacts.listView-meta.xml
+Contact.Title	objects/Contact/listViews/INDEX_CBU_NEW_BIZ.listView-meta.xml
+Contact.Title	objects/Contact/listViews/INDEX_DM_NEW_BIZ.listView-meta.xml
+Contact.Title	objects/Contact/listViews/INDEX_JB_NEW_BIZ.listView-meta.xml
+Contact.Title	objects/Contact/listViews/INDEX_NT_NEW_BIZ.listView-meta.xml
+Contact.Title	objects/Contact/listViews/INDEX_PM_NEW_BIZ.listView-meta.xml
+Contact.Title	objects/Contact/listViews/INDEX_TS_NEW_BIZ.listView-meta.xml
+Contact.Title	objects/Contact/listViews/INDEX_VB_NEW_BIZ.listView-meta.xml
+Contact.Title	objects/Contact/listViews/Laura_Test_list_view.listView-meta.xml
+Contact.Title	objects/Contact/listViews/Lead_Forensics_Contacts.listView-meta.xml
+Contact.Title	objects/Contact/listViews/Lexology_In_Depth_Demo_List_View_29_A.listView-meta.xml
+Contact.Title	objects/Contact/listViews/Move_Event_Delegates.listView-meta.xml
+Contact.Title	objects/Contact/listViews/MyContacts.listView-meta.xml
+Contact.Title	objects/Contact/listViews/Nick_B_Privacy_ed12_non_Africa.listView-meta.xml
+Contact.Title	objects/Contact/listViews/Oli_Morris_Leads_WWL_Competition.listView-meta.xml
+Contact.Title	objects/Contact/listViews/Ronnie_In_House_Fashion_Contacts_WTR.listView-meta.xml
+Contact.Title	reports/ALM_IS_New_Sales/Rep_Reports/Sarah_Stauber/Luke_Fulton_2025_Leads.report-meta.xml
+Contact.Title	reports/ALM_IS_New_Sales/Rep_Reports/Sarah_Stauber/Stuck_on_Groove_step_1_Luke_2025_Leads.report-meta.xml
+Contact.Title	reports/ClariGrooveLexologyPRO/ClariGrooveLexologyPROBD/KR_PRO_JAN_2025OUTBOUND_LEADS.report-meta.xml
+Contact.Title	reports/ClariGrooveLexologyPRO/ClariGrooveLexologyPROBD/Lexology_PRO_ATL_SF_Contact_GC_JJ1.report-meta.xml
+Contact.Title	reports/ClariGrooveLexologyPRO/ClariGrooveLexologyPROBD/Lexology_PRO_AutoATL_JJ.report-meta.xml
+Contact.Title	reports/ClariGrooveLexologyPRO/ClariGrooveLexologyPROBD/Lexology_PRO_Aviation_ATL_JJ.report-meta.xml
+Contact.Title	reports/ClariGrooveLexologyPRO/ClariGrooveLexologyPROBD/Lexology_PRO_A_D_ESG_Sept_25.report-meta.xml
+Contact.Title	reports/ClariGrooveLexologyPRO/ClariGrooveLexologyPROBD/Lexology_PRO_BD_HR_Personas_JJ.report-meta.xml
+Contact.Title	reports/ClariGrooveLexologyPRO/ClariGrooveLexologyPROBD/Lexology_PRO_General_Counsel_Mob_JJ.report-meta.xml
+Contact.Title	reports/ClariGrooveLexologyPRO/ClariGrooveLexologyPROBD/Lexology_PRO_Newsfeed_Monthly_JJ.report-meta.xml
+Contact.Title	reports/ClariGrooveLexologyPRO/ClariGrooveLexologyPROBD/Lexology_PRO_Newsfeed_Monthly_jj25.report-meta.xml
+Contact.Title	reports/ClariGrooveLexologyPRO/ClariGrooveLexologyPROBD/Lexology_PRO_Newsfeed_Monthly_JJ_Jan.report-meta.xml
+Contact.Title	reports/ClariGrooveLexologyPRO/ClariGrooveLexologyPROBD/Lexology_PRO_Newsfeed_Monthly_JJ_Sep.report-meta.xml
+Contact.Title	reports/ClariGrooveLexologyPRO/ClariGrooveLexologyPROBD/Lexology_PRO_Newsfeed_Rolling_JJ.report-meta.xml
+Contact.Title	reports/ClariGrooveLexologyPRO/ClariGrooveLexologyPROBD/Lexology_PRO_Saas_Software_existing.report-meta.xml
+Contact.Title	reports/ClariGrooveLexologyPRO/ClariGrooveLexologyPROBD/Lexology_PRO_ShipATL_JJ.report-meta.xml
+Contact.Title	reports/ClariGrooveLexologyPRO/ClariGrooveLexologyPROBD/Lexology_PRO_TransportATL_JJ.report-meta.xml
+Contact.Title	reports/ClariGrooveLexologyPRO/Test/Lexology_PRO_Newsfeed_subs_campaign_cvI.report-meta.xml
+Contact.Title	reports/Data_Team_Reports/Legal_Contacts_Maria_nFE.report-meta.xml
+Contact.Title	reports/Data_Team_Reports/Lex_Pro_Insights_Contacts_by_Job_Title.report-meta.xml
+Contact.Title	reports/Data_Team_Reports/Recruiting_HR_Contacts_Law_Firms.report-meta.xml
+Contact.Title	reports/GTM/GTM_Contact_Enrichment.report-meta.xml
+Contact.Title	reports/GTM/Renewal_Contacts_Needs_Enrichment.report-meta.xml
+Contact.Title	reports/LegalCareersGroupSalesReports/Lex_Pro_Insights_Contacts_by_J_VXs.report-meta.xml
+Contact.Title	reports/ManagerDashboards/LexPro/Opportunity_Age_Lexology_Pro_yj2.report-meta.xml
+Contact.Title	reports/ManagerDashboards/LexPro/Opp_Conversion_rates_Lexology_Pro_dt8.report-meta.xml
+Contact.Title	reports/MK_Reports/New_Contacts_Accounts_Report1.report-meta.xml
+Contact.Title	reports/unfiled$public/BD_and_Marketing_Contacts_Italy_A3G.report-meta.xml
+Contact.Title	reports/unfiled$public/CLosed_lost_marketing_primary_contact.report-meta.xml
+Contact.Title	reports/unfiled$public/Cognism_data_2025_HR_Job_Titles.report-meta.xml
+Contact.Title	reports/unfiled$public/Contacts_Accounts_Report_LGK.report-meta.xml
+Contact.Title	reports/unfiled$public/Contact_Whitespace.report-meta.xml
+Contact.Title	reports/unfiled$public/Copy_of_Active_Subs_Anderson_Young.report-meta.xml
+Contact.Title	reports/unfiled$public/Copy_of_GAR_2026_Awards.report-meta.xml
+Contact.Title	reports/unfiled$public/ESG_Sustainability.report-meta.xml
+Contact.Title	reports/unfiled$public/Lexology_Index_Artificial_Intelligence_P6r.report-meta.xml
+Contact.Title	reports/unfiled$public/new_report_zsK.report-meta.xml
+Contact.Title	reports/unfiled$public/US_Law_school_librarians_contacts_report_JoK.report-meta.xml
+User.Title (USERS.TITLE / Owner Title)	objects/User/listViews/ActiveUsers.listView-meta.xml
+User.Title (USERS.TITLE / Owner Title)	objects/User/listViews/ActiveUsersThisWeek.listView-meta.xml
+User.Title (USERS.TITLE / Owner Title)	objects/User/listViews/Active_Users_with_no_Managers.listView-meta.xml
+User.Title (USERS.TITLE / Owner Title)	objects/User/listViews/Active_Users_with_no_Roles.listView-meta.xml
+User.Title (USERS.TITLE / Owner Title)	objects/User/listViews/Active_Users_with_Sales_Navigator_Licenc.listView-meta.xml
+User.Title (USERS.TITLE / Owner Title)	objects/User/listViews/Customer_Success_Team.listView-meta.xml
+User.Title (USERS.TITLE / Owner Title)	objects/User/listViews/Saurabh.listView-meta.xml
+User.Title (USERS.TITLE / Owner Title)	objects/User/listViews/Users_Created_This_Year.listView-meta.xml
+User.Title (USERS.TITLE / Owner Title)	reports/LegalInformationSalesReports/Pilot_Opportunities_2024_Q2_i9f.report-meta.xml
+User.Title (USERS.TITLE / Owner Title)	reports/LegalInformationSalesReports/Pilot_Opportunities_2024_Q3_Renewals_Vnk.report-meta.xml
+User.Title (USERS.TITLE / Owner Title)	reports/LegalInformationSalesReports/Pilot_Opportunities_Jan_Renewals_uGD.report-meta.xml
+User.Title (USERS.TITLE / Owner Title)	reports/LegalInformationSalesReports/Pilot_Opportunities_n3O.report-meta.xml
+User.Title (USERS.TITLE / Owner Title)	reports/LegalInformationSalesReports/Pilot_Opportunities_v2_TC6.report-meta.xml
+User.Title (USERS.TITLE / Owner Title)	reports/ManagerDashboards/LexPro/Opportunity_Age_Lexology_Pro_yj2.report-meta.xml
+User.Title (USERS.TITLE / Owner Title)	reports/ManagerDashboards/LexPro/Opp_Conversion_rates_Lexology_Pro_dt8.report-meta.xml
+User.Title (USERS.TITLE / Owner Title)	reports/unfiled$public/Copy_of_Active_Subs_Anderson_Young.report-meta.xml
+User.Employee_Code__c	reports/ALMFulfilmentreport/ALM_Large_Law_Order_Rep_9wp.report-meta.xml
+User.Employee_Code__c	reports/ALMFulfilmentreport/Bridge_Analysis_Report_ZVY.report-meta.xml
+User.Employee_Code__c	reports/LBRReports/X3GeneralReportsGeneralReports/SUN_Report_Final_uuN.report-meta.xml
+User.Employee_Code__c	reports/Revenue_Operations/Lex_Pro_Converted_lead_data.report-meta.xml
+User.Employee_Code__c	reports/unfiled$public/Employee_Report_561.report-meta.xml
+Manager_Email__c	reports/ALM_IS_New_Sales/Team_Dashboard_Reports/Open_Pipeline_This_Month_Tabular.report-meta.xml
+Manager_Email__c	reports/unfiled$public/Employee_Report_561.report-meta.xml
+Contact.Employee_Number__c	reports/Customer_Care_Dashboard_reports/Escalated_Cases.report-meta.xml
+Contact.Employee_Number__c	reports/Customer_Care_Dashboard_reports/Escalated_Cases1.report-meta.xml
+Contact.Employee_Number__c	reports/Customer_Care_Dashboard_reports/WNS_Only_Closed_Cases.report-meta.xml
+Contact.Employee_Number__c	reports/Customer_Care_Dashboard_reports/WNS_Only_Open_cases.report-meta.xml
+Contact.Employee_Number__c	reports/unfiled$public/CRM_Support_Case_jsA.report-meta.xml
+User.EmployeeNumber	reports/FinanceReports/BERNIE_Copy_of_SUN_Report.report-meta.xml
+User.EmployeeNumber	reports/FinanceReports/Copy_of_SUN_Report_Credit_Notes_Only_WMq.report-meta.xml
+User.EmployeeNumber	reports/FinanceReports/GTDT_Prior_Period_Cancellations_tf4.report-meta.xml
+User.EmployeeNumber	reports/FinanceReports/SUN_Report_for_Auditors.report-meta.xml
+User.EmployeeNumber	reports/FinanceReports/SUN_Report_Last_Month_ONLY_KXF.report-meta.xml
+User.EmployeeNumber	reports/FinanceReports/SUN_Report_Legal_Information_Only_qSb.report-meta.xml
+User.EmployeeNumber	reports/FinanceReports/SUN_Report_MBL_only_hfy.report-meta.xml
+User.EmployeeNumber	reports/FinanceReports/SUN_Report_Sajjad_qwr.report-meta.xml
+User.EmployeeNumber	reports/FinanceReports/SUN_Report_ZM_HoN.report-meta.xml
+User.EmployeeNumber	reports/unfiled$public/Copy_of_SUN_Report_Commissions.report-meta.xml
+User.EmployeeNumber	reports/unfiled$public/SUN_Report_Swoogo_Registrations_YQV.report-meta.xml
+Not_at_Company_Checkbox__c	reports/unfiled$public/BD_and_Marketing_Contacts_Italy_A3G.report-meta.xml
+Not_at_Company_Checkbox__c	reports/unfiled$public/CRM_Support_Case_jsA.report-meta.xml

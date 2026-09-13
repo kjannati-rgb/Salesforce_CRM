@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Workday_Division__c</fullName>
+    <externalId>false</externalId>
+    <inlineHelpText>Division as recorded in Workday (nine values). Not the same as the standard Division field, which the CRM team maintains. Maintained by the Workday HR sync. Change it in Workday; manual edits are overwritten on the next run.</inlineHelpText>
+    <label>Workday Division</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Commercial</fullName>
+                <default>false</default>
+                <label>Commercial</label>
+            </value>
+            <value>
+                <fullName>Content and Editorial</fullName>
+                <default>false</default>
+                <label>Content and Editorial</label>
+            </value>
+            <value>
+                <fullName>Product &amp; Technology</fullName>
+                <default>false</default>
+                <label>Product &amp; Technology</label>
+            </value>
+            <value>
+                <fullName>Operations Finance</fullName>
+                <default>false</default>
+                <label>Operations Finance</label>
+            </value>
+            <value>
+                <fullName>Corporate Strategy</fullName>
+                <default>false</default>
+                <label>Corporate Strategy</label>
+            </value>
+            <value>
+                <fullName>Operations</fullName>
+                <default>false</default>
+                <label>Operations</label>
+            </value>
+            <value>
+                <fullName>Operations People &amp; Culture</fullName>
+                <default>false</default>
+                <label>Operations People &amp; Culture</label>
+            </value>
+            <value>
+                <fullName>Corporate Executive</fullName>
+                <default>false</default>
+                <label>Corporate Executive</label>
+            </value>
+            <value>
+                <fullName>Executive Office</fullName>
+                <default>false</default>
+                <label>Executive Office</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

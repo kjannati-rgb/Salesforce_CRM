@@ -24,3 +24,19 @@ scratch-astrea-retrieve/
 # Test output
 coverage/
 legal-entity-discovery/reports/
+
+# HR sync preflight dumps (org metadata/describe copies, 55MB+)
+scripts/hr_sync_phase1/preflight/reports_FULLUAT/
+scripts/hr_sync_phase1/preflight/reports_PROD/
+scripts/hr_sync_phase1/preflight/flows_*/
+scripts/hr_sync_phase1/preflight/*.json
+scripts/hr_sync_phase1/preflight/*.log
+scripts/hr_sync_phase1/out_*/
+scripts/hr_sync_phase1/**/__pycache__/
+scripts/hr_sync_phase1/preflight/package_reports*.xml
+scripts/hr_sync_phase1/preflight/userlayout_*/
+
+# HR sync approval lists: Kam-approved record Ids with employee names (incl. name changes).
+# Tool inputs that stay on the local machine only - never commit (origin is public).
+scripts/hr_sync_phase1/exclusions.csv
+scripts/hr_sync_phase1/name_check_exceptions.csv

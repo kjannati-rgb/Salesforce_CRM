@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Workday_Employee_ID__c</fullName>
+    <externalId>true</externalId>
+    <inlineHelpText>Workday Employee ID, verbatim (numeric or prefixed, e.g. HK578). Maintained by the Workday HR sync. Change it in Workday; manual edits are overwritten on the next run.</inlineHelpText>
+    <label>Workday Employee ID</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <caseSensitive>false</caseSensitive>
+    <length>20</length>
+    <type>Text</type>
+    <unique>true</unique>
+</CustomField>

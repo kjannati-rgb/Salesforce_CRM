@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sub_Division__c</fullName>
+    <externalId>false</externalId>
+    <inlineHelpText>Maintained by the Workday HR sync. Change it in Workday; manual edits are overwritten on the next run.</inlineHelpText>
+    <label>Sub Division</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Editorial</fullName>
+                <default>false</default>
+                <label>Editorial</label>
+            </value>
+            <value>
+                <fullName>Intelligence</fullName>
+                <default>false</default>
+                <label>Intelligence</label>
+            </value>
+            <value>
+                <fullName>Events</fullName>
+                <default>false</default>
+                <label>Events</label>
+            </value>
+            <value>
+                <fullName>Professional Development</fullName>
+                <default>false</default>
+                <label>Professional Development</label>
+            </value>
+            <value>
+                <fullName>DIU</fullName>
+                <default>false</default>
+                <label>DIU</label>
+            </value>
+            <value>
+                <fullName>Software Development</fullName>
+                <default>false</default>
+                <label>Software Development</label>
+            </value>
+            <value>
+                <fullName>Customer Excellence</fullName>
+                <default>false</default>
+                <label>Customer Excellence</label>
+            </value>
+            <value>
+                <fullName>Finance</fullName>
+                <default>false</default>
+                <label>Finance</label>
+            </value>
+            <value>
+                <fullName>Contributed Content</fullName>
+                <default>false</default>
+                <label>Contributed Content</label>
+            </value>
+            <value>
+                <fullName>Financial Control</fullName>
+                <default>false</default>
+                <label>Financial Control</label>
+            </value>
+            <value>
+                <fullName>Marketing</fullName>
+                <default>false</default>
+                <label>Marketing</label>
+            </value>
+            <value>
+                <fullName>Program-Project</fullName>
+                <default>false</default>
+                <label>Program-Project</label>
+            </value>
+            <value>
+                <fullName>Product Management</fullName>
+                <default>false</default>
+                <label>Product Management</label>
+            </value>
+            <value>
+                <fullName>Operations People &amp; Culture</fullName>
+                <default>false</default>
+                <label>Operations People &amp; Culture</label>
+            </value>
+            <value>
+                <fullName>Marketing Services</fullName>
+                <default>false</default>
+                <label>Marketing Services</label>
+            </value>
+            <value>
+                <fullName>IT Operations</fullName>
+                <default>false</default>
+                <label>IT Operations</label>
+            </value>
+            <value>
+                <fullName>Labs-Innovation</fullName>
+                <default>false</default>
+                <label>Labs-Innovation</label>
+            </value>
+            <value>
+                <fullName>Data and CRM</fullName>
+                <default>false</default>
+                <label>Data and CRM</label>
+            </value>
+            <value>
+                <fullName>Production Ops</fullName>
+                <default>false</default>
+                <label>Production Ops</label>
+            </value>
+            <value>
+                <fullName>Revenue Operations</fullName>
+                <default>false</default>
+                <label>Revenue Operations</label>
+            </value>
+            <value>
+                <fullName>Corporate Executive</fullName>
+                <default>false</default>
+                <label>Corporate Executive</label>
+            </value>
+            <value>
+                <fullName>Executive Office</fullName>
+                <default>false</default>
+                <label>Executive Office</label>
+            </value>
+            <value>
+                <fullName>Content Operations</fullName>
+                <default>false</default>
+                <label>Content Operations</label>
+            </value>
+            <value>
+                <fullName>Facilities</fullName>
+                <default>false</default>
+                <label>Facilities</label>
+            </value>
+            <value>
+                <fullName>Legal</fullName>
+                <default>false</default>
+                <label>Legal</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

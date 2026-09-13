@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Division_Workday_Values</fullName>
+    <active>false</active>
+    <description>INACTIVE (8 Sep 2026): standard Division keeps the CRM business-unit taxonomy (57 report filters, ChurnZero formula); Workday division is written to Workday_Division__c. Kept for a possible future merge.</description>
+    <errorConditionFormula>AND(
+  NOT( ISBLANK( Division ) ),
+  NOT( $Setup.Application_Settings__c.Disable_Validation_Rules__c ),
+  CASE( Division,
+    "Commercial", 1,
+    "Content and Editorial", 1,
+    "Product &amp; Technology", 1,
+    "Operations Finance", 1,
+    "Corporate Strategy", 1,
+    "Operations", 1,
+    "Operations People &amp; Culture", 1,
+    "Corporate Executive", 1,
+    "Executive Office", 1,
+    0 ) = 0
+)</errorConditionFormula>
+    <errorDisplayField>Division</errorDisplayField>
+    <errorMessage>Division must be one of the nine Workday divisions (see the field help). It is maintained by the Workday sync: correct the value in Workday.</errorMessage>
+</ValidationRule>

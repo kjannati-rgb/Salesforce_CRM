@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Location__c</fullName>
+    <externalId>false</externalId>
+    <inlineHelpText>Maintained by the Workday HR sync. Change it in Workday; manual edits are overwritten on the next run.</inlineHelpText>
+    <label>Location</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>London</fullName>
+                <default>false</default>
+                <label>London</label>
+            </value>
+            <value>
+                <fullName>Remote US</fullName>
+                <default>false</default>
+                <label>Remote US</label>
+            </value>
+            <value>
+                <fullName>Remote UK (35)</fullName>
+                <default>false</default>
+                <label>Remote UK (35)</label>
+            </value>
+            <value>
+                <fullName>New York</fullName>
+                <default>false</default>
+                <label>New York</label>
+            </value>
+            <value>
+                <fullName>Hong Kong</fullName>
+                <default>false</default>
+                <label>Hong Kong</label>
+            </value>
+            <value>
+                <fullName>Remote UK (37)</fullName>
+                <default>false</default>
+                <label>Remote UK (37)</label>
+            </value>
+            <value>
+                <fullName>London (35)</fullName>
+                <default>false</default>
+                <label>London (35)</label>
+            </value>
+            <value>
+                <fullName>Philadelphia, PA</fullName>
+                <default>false</default>
+                <label>Philadelphia, PA</label>
+            </value>
+            <value>
+                <fullName>New York (Union Only)</fullName>
+                <default>false</default>
+                <label>New York (Union Only)</label>
+            </value>
+            <value>
+                <fullName>Erlanger, KY</fullName>
+                <default>false</default>
+                <label>Erlanger, KY</label>
+            </value>
+            <value>
+                <fullName>Texas Office Cedar Park</fullName>
+                <default>false</default>
+                <label>Texas Office Cedar Park</label>
+            </value>
+            <value>
+                <fullName>Spain</fullName>
+                <default>false</default>
+                <label>Spain</label>
+            </value>
+            <value>
+                <fullName>Manchester</fullName>
+                <default>false</default>
+                <label>Manchester</label>
+            </value>
+            <value>
+                <fullName>Washington D.C.</fullName>
+                <default>false</default>
+                <label>Washington D.C.</label>
+            </value>
+            <value>
+                <fullName>Texas Office Abilene</fullName>
+                <default>false</default>
+                <label>Texas Office Abilene</label>
+            </value>
+            <value>
+                <fullName>Australia</fullName>
+                <default>false</default>
+                <label>Australia</label>
+            </value>
+            <value>
+                <fullName>Belgium</fullName>
+                <default>false</default>
+                <label>Belgium</label>
+            </value>
+            <value>
+                <fullName>Sweden</fullName>
+                <default>false</default>
+                <label>Sweden</label>
+            </value>
+            <value>
+                <fullName>Italy</fullName>
+                <default>false</default>
+                <label>Italy</label>
+            </value>
+            <value>
+                <fullName>Romania</fullName>
+                <default>false</default>
+                <label>Romania</label>
+            </value>
+            <value>
+                <fullName>Singapore</fullName>
+                <default>false</default>
+                <label>Singapore</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

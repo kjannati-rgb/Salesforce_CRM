@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>License_Model_Short__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(OR(
+AND(UPPER(TRIM(Promo_Code__c)) = "OE", ISBLANK(TEXT(License_Model_Override__c))),
+TEXT(License_Model__c) = "Firmwide License",
+AND(TEXT(License_Model__c) = "Authorised Users", ISBLANK(TEXT(License_Model_Override__c)), Authorised_User_Count__c = 1, TEXT(SBQQ__Product__r.Family) = "Subs - Lexology Pro", IF(SBQQ__ProratedListPrice__c &gt; 0, SBQQ__ProratedListPrice__c, SBQQ__ListPrice__c) &gt; 0, SBQQ__NetTotal__c &gt;= 2 * IF(SBQQ__ProratedListPrice__c &gt; 0, SBQQ__ProratedListPrice__c, SBQQ__ListPrice__c))
+), "Firmwide License",
+CASE(TEXT(License_Model__c),
+"Limited Access", IF(Authorised_User_Count__c &gt; 0, "Limited Access - up to " &amp; TEXT(Authorised_User_Count__c) &amp; IF(Authorised_User_Count__c = 1, " user", " users"), "Limited Access"),
+"Authorised Users", IF(Authorised_User_Count__c &gt; 0, TEXT(Authorised_User_Count__c) &amp; IF(Authorised_User_Count__c = 1, " named user", " named users"), "Authorised Users"),
+"Benefiting Group", "Benefiting Group",
+"Included", "Included",
+"Enterprise-Wide Access", "Enterprise-Wide Access",
+TEXT(License_Model__c)))</formula>
+    <formulaTreatBlanksAs>BlankAsBlank</formulaTreatBlanksAs>
+    <inlineHelpText>Short licence label for the Order Form products table; the full contractual sentence prints once per product in the Licence terms section.</inlineHelpText>
+    <label>License Model (Short)</label>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

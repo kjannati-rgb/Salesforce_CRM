@@ -106,6 +106,10 @@ async function upsert(type, extId, fields) {
     ["OF-V12-C07B", "OF v1.2 - 08 Other terms", "HTML", "07b-other-terms.html"],
     ["OF-V12-C08", "OF v1.2 - 08 Execution", "HTML", "08-execution.html"],
     ["OF-V12-CLINES", "OF v1.2 - Line items", "Line Items", null],
+    // Licence terms block (13 Sep 2026, Richard Green): the licence wording prints once per
+    // product beneath the table instead of on every line/year - see sections S44/S45.
+    ["OF-V12-C03L", "OF v1.2 - 03b Licence terms intro", "HTML", "03c-licence-terms-intro.html"],
+    ["OF-V12-CLICENCE", "OF v1.2 - 03b Licence terms lines", "Line Items", null],
   ];
   const contentIds = {};
   for (const [ext, name, type, file] of contents) {
@@ -133,11 +137,14 @@ async function upsert(type, extId, fields) {
   }
 
   console.log("3/4 Template sections");
+  const sectionIds = {};
   const sections = [
     ["OF-V12-S10", "1 Parties", 10, "OF-V12-C01"],
     ["OF-V12-S20", "2 Customer contacts", 20, "OF-V12-C02"],
     ["OF-V12-S30", "3 Products intro", 30, "OF-V12-C03"],
     ["OF-V12-S40", "3 Products table", 40, "OF-V12-CLINES"],
+    ["OF-V12-S44", "3b Licence terms intro", 44, "OF-V12-C03L"],
+    ["OF-V12-S45", "3b Licence terms table", 45, "OF-V12-CLICENCE"],
     ["OF-V12-S50", "3 Tax statement", 50, "OF-V12-C03B"],
     ["OF-V12-S60", "4 Payment", 60, "OF-V12-C04"],
     ["OF-V12-S70", "5 Governing law", 70, "OF-V12-C06"],
@@ -155,23 +162,34 @@ async function upsert(type, extId, fields) {
         SBQQ__DisplayOrder__c: order,
       };
       if (ext === "OF-V12-S40") fields.SBQQ__QuoteTotalsPrinted__c = true;
+      // Licence terms table: one row per product (first MDQ segment only), no totals row.
+      if (ext === "OF-V12-S45") {
+        fields.SBQQ__FilterField__c = "Is_First_Segment__c";
+        fields.SBQQ__FilterOperator__c = "equals";
+        fields.SBQQ__FilterValue__c = "true";
+        fields.SBQQ__SummaryDisplay__c = "Never";
+      }
       // Execution starts on its own page: the doc engine ignores page-break-inside CSS,
       // so signatures were straddling page breaks (Antheros review 28 Aug).
       if (ext === "OF-V12-S90") fields.SBQQ__PageBreak__c = "Before";
-      await upsert("SBQQ__TemplateSection__c", ext + suffix, fields);
+      sectionIds[ext + suffix] = await upsert("SBQQ__TemplateSection__c", ext + suffix, fields);
     }
   }
 
   console.log("4/4 Line columns");
+  // Every column is pinned to its section: columns without a Section print in EVERY
+  // Line Items section, which would drag the fee/date columns into the licence block.
   const columns = [
-    ["OF-V12-L10", "Product Description", 10, "SBQQ__ProductName__c", 28, "Left"],
-    ["OF-V12-L20", "License Model", 20, "License_Model_Display__c", 28, "Left"],
-    ["OF-V12-L30", "Annual fee (excl. tax)", 30, "SBQQ__NetTotal__c", 16, "Right"],
+    ["OF-V12-L10", "Product Description", 10, "SBQQ__ProductName__c", 46, "Left", "OF-V12-S40"],
+    ["OF-V12-L30", "Annual fee (excl. tax)", 30, "SBQQ__NetTotal__c", 20, "Right", "OF-V12-S40"],
     // Date source switched 2026-08-19 (Kam): real QLE lines leave SBQQ__Start/EndDate__c null
     // and carry term dates in the finance-canonical SUN Report formulas (0.4% null on 180d
     // PROD subs lines vs 100% null raw dates on QLE-built quotes).
-    ["OF-V12-L50", "Start date", 50, "Start_Date_SUN_Report__c", 14, "Center"],
-    ["OF-V12-L60", "End date", 60, "End_Date_SUN_Report__c", 14, "Center"],
+    ["OF-V12-L50", "Start date", 50, "Start_Date_SUN_Report__c", 17, "Center", "OF-V12-S40"],
+    ["OF-V12-L60", "End date", 60, "End_Date_SUN_Report__c", 17, "Center", "OF-V12-S40"],
+    // Licence terms block (section S45): product + the full licence sentence, once per product.
+    ["OF-V12-LT10", "Product", 10, "SBQQ__ProductName__c", 30, "Left", "OF-V12-S45"],
+    ["OF-V12-LT20", "Terms", 20, "License_Model_Display__c", 70, "Left", "OF-V12-S45"],
   ];
   // Retired columns (removed from the design) - deleted from the org if present.
   // OF-V12-L40 Currency: dropped 2026-08-18 (Kam) - the fee's automatic ISO prefix already
@@ -179,7 +197,9 @@ async function upsert(type, extId, fields) {
   // OF-V12-L25 Qty: dropped 2026-09-01 (Kam) - seat counts already print in contract language
   // in the License Model column, the fee is a line total with no unit price to multiply, and
   // most forms showed a column of "1.00"s. Width redistributed to Product/License Model.
-  const RETIRED_COLUMNS = ["OF-V12-L40", "OF-V12-L25"];
+  // OF-V12-L20 License Model: dropped 2026-09-13 (Kam, on Richard Green's feedback) - the wording
+  // now prints once per product in the Licence terms block; width went to Product/fee/dates.
+  const RETIRED_COLUMNS = ["OF-V12-L40", "OF-V12-L25", "OF-V12-L20"];
   for (const [suffix, tid] of templates) {
     for (const ext of RETIRED_COLUMNS) {
       const gone = await soql(`SELECT Id FROM SBQQ__LineColumn__c WHERE External_Id__c = '${ext}${suffix}'`);
@@ -188,10 +208,11 @@ async function upsert(type, extId, fields) {
         console.log(`  deleted retired column ${ext}${suffix} -> ${del.status}`);
       }
     }
-    for (const [ext, name, order, fieldName, width, align] of columns) {
+    for (const [ext, name, order, fieldName, width, align, sectionExt] of columns) {
       await upsert("SBQQ__LineColumn__c", ext + suffix, {
         Name: name,
         SBQQ__Template__c: tid,
+        SBQQ__Section__c: sectionIds[sectionExt + suffix],
         SBQQ__DisplayOrder__c: order,
         SBQQ__FieldName__c: fieldName,
         SBQQ__Width__c: width,

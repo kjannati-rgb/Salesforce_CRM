@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Is_First_Segment__c</fullName>
+    <externalId>false</externalId>
+    <formula>OR(ISBLANK(SBQQ__SegmentIndex__c), SBQQ__SegmentIndex__c = 1)</formula>
+    <inlineHelpText>TRUE for non-MDQ lines and the first year of an MDQ product; FALSE for year-2+ segments. Used by the Order Form to print licence wording once per product.</inlineHelpText>
+    <label>Is First Segment</label>
+    <type>Checkbox</type>
+</CustomField>

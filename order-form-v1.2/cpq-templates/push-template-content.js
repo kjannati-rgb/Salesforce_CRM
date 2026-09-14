@@ -95,12 +95,7 @@ async function upsert(type, extId, fields) {
   const contents = [
     ["OF-V12-CHEAD", "OF v1.2 - Page header", "HTML", "00-page-header.html"],
     ["OF-V12-CFOOT", "OF v1.2 - Page footer", "HTML", "00-page-footer.html"],
-    // 01 split 14 Sep 2026 (Kam): masthead / terms sentence (standard or Legal Monitor) / parties table.
-    ["OF-V12-C01", "OF v1.2 - 01a Masthead", "HTML", "01a-masthead.html"],
-    ["OF-V12-C01T", "OF v1.2 - 01b Terms sentence (standard)", "HTML", "01b-terms-standard.html"],
-    ["OF-V12-C01TL", "OF v1.2 - 01c Terms sentence (Legal Monitor)", "HTML", "01c-terms-legal-monitor.html"],
-    ["OF-V12-C01P", "OF v1.2 - 01d Parties", "HTML", "01d-parties.html"],
-    ["OF-V12-C09S", "OF v1.2 - Schedule 1 Legal Monitor heading", "HTML", "09-schedule-legal-monitor.html"],
+    ["OF-V12-C01", "OF v1.2 - 01 Parties", "HTML", "01-parties.html"],
     ["OF-V12-C02", "OF v1.2 - 02 Customer contacts", "HTML", "02-customer-contacts.html"],
     ["OF-V12-C03", "OF v1.2 - 03 Products intro", "HTML", "03-products-intro.html"],
     ["OF-V12-C03B", "OF v1.2 - 03b Tax statement", "HTML", "03b-tax-statement.html"],
@@ -144,10 +139,7 @@ async function upsert(type, extId, fields) {
   console.log("3/4 Template sections");
   const sectionIds = {};
   const sections = [
-    ["OF-V12-S10", "1 Masthead", 10, "OF-V12-C01"],
-    ["OF-V12-S12", "1 Terms sentence", 12, "OF-V12-C01T", { printIf: "Order_Form_Not_Legal_Monitor__c" }],
-    ["OF-V12-S13", "1 Terms sentence (Legal Monitor)", 13, "OF-V12-C01TL", { printIf: "Order_Form_Legal_Monitor__c" }],
-    ["OF-V12-S15", "1 Parties", 15, "OF-V12-C01P"],
+    ["OF-V12-S10", "1 Parties", 10, "OF-V12-C01"],
     ["OF-V12-S20", "2 Customer contacts", 20, "OF-V12-C02"],
     ["OF-V12-S30", "3 Products intro", 30, "OF-V12-C03"],
     ["OF-V12-S40", "3 Products table", 40, "OF-V12-CLINES"],
@@ -160,18 +152,27 @@ async function upsert(type, extId, fields) {
     ["OF-V12-S80", "7 Special terms", 80, "OF-V12-C07"],
     ["OF-V12-S85", "8 Other terms", 85, "OF-V12-C07B"],
     ["OF-V12-S90", "9 Execution", 90, "OF-V12-C08"],
-    // Legal Monitor software deals (14 Sep 2026, Kam): Schedule 1 = the existing CPQ quote-terms content the
-    // customer signs today, printed after the signature page, only when the stamp flow flagged the quote.
-    ["OF-V12-S94", "Schedule 1 heading (Legal Monitor)", 94, "OF-V12-C09S", { printIf: "Order_Form_Legal_Monitor__c", pageBreak: "Before" }],
-    ["OF-V12-S95", "Schedule 1 terms (Legal Monitor)", 95, "NAME:Legal Monitor Terms & Conditions v1", { printIf: "Order_Form_Legal_Monitor__c" }],
   ];
-  // Contents owned by other templates are referenced by Name, not upserted (e.g. the Legal Monitor quote terms).
-  for (const sec of sections) {
-    const ref = sec[3];
-    if (ref.startsWith("NAME:")) {
-      const found = await soql(`SELECT Id FROM SBQQ__TemplateContent__c WHERE Name = '${ref.slice(5).replace(/'/g, "\\'")}' LIMIT 1`);
-      contentIds[ref] = found.records && found.records.length ? found.records[0].Id : null;
-      console.log(`  content by name "${ref.slice(5)}" -> ${contentIds[ref] || "NOT FOUND (section skipped)"}`);
+  // Retired sections/contents (removed from the design) - deleted from the org if present. Sections first
+  // (they reference contents). 14 Sep 2026: a Legal Monitor variant of the terms sentence + a Schedule 1
+  // printing the legacy Legal Monitor T&Cs was built and then withdrawn the same day - the GC ruled Legal
+  // Monitor sits under the General Subscription Terms like every other subs product.
+  const RETIRED_SECTIONS = ["OF-V12-S12", "OF-V12-S13", "OF-V12-S15", "OF-V12-S94", "OF-V12-S95"];
+  const RETIRED_CONTENTS = ["OF-V12-C01T", "OF-V12-C01TL", "OF-V12-C01P", "OF-V12-C09S"];
+  for (const [suffix] of templates) {
+    for (const ext of RETIRED_SECTIONS) {
+      const gone = await soql(`SELECT Id FROM SBQQ__TemplateSection__c WHERE External_Id__c = '${ext}${suffix}'`);
+      for (const g of gone.records || []) {
+        const del = await fetch(`${API}/sobjects/SBQQ__TemplateSection__c/${g.Id}`, { method: "DELETE", headers: HEADERS });
+        console.log(`  deleted retired section ${ext}${suffix} -> ${del.status}`);
+      }
+    }
+  }
+  for (const ext of RETIRED_CONTENTS) {
+    const gone = await soql(`SELECT Id FROM SBQQ__TemplateContent__c WHERE External_Id__c = '${ext}'`);
+    for (const g of gone.records || []) {
+      const del = await fetch(`${API}/sobjects/SBQQ__TemplateContent__c/${g.Id}`, { method: "DELETE", headers: HEADERS });
+      console.log(`  deleted retired content ${ext} -> ${del.status}`);
     }
   }
   for (const [suffix, tid] of templates) {

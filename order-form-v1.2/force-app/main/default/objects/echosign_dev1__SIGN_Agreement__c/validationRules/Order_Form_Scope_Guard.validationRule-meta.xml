@@ -2,8 +2,9 @@
 <ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Order_Form_Scope_Guard</fullName>
     <active>true</active>
-    <description>Blocks the legacy CPQ Send with Adobe Sign path (sets ASSFCPQ__Quote_Document__c) on quotes in Subscription Order Form scope. The Order Form Send for Signature service never sets that field. Bypass: custom permission Order_Form_Guard_Bypass.</description>
+    <description>Blocks the legacy CPQ Send with Adobe Sign path (ASSFCPQ__Quote_Document__c set) on quotes in Subscription Order Form scope. Send for Signature never sets it. Bypass: Order_Form_Guard_Bypass. Time-boxed OFF until 11 Oct 2026 (Kam), re-arms itself.</description>
     <errorConditionFormula>AND(
+  TODAY() &gt;= DATE(2026, 10, 11),
   OR( ISNEW(), ISCHANGED( ASSFCPQ__Quote_Document__c ) ),
   NOT( ISBLANK( ASSFCPQ__Quote_Document__c ) ),
   ASSFCPQ__Quote_Document__r.SBQQ__Quote__r.Order_Form_Scoped__c,

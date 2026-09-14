@@ -95,7 +95,12 @@ async function upsert(type, extId, fields) {
   const contents = [
     ["OF-V12-CHEAD", "OF v1.2 - Page header", "HTML", "00-page-header.html"],
     ["OF-V12-CFOOT", "OF v1.2 - Page footer", "HTML", "00-page-footer.html"],
-    ["OF-V12-C01", "OF v1.2 - 01 Parties", "HTML", "01-parties.html"],
+    // 01 split 14 Sep 2026 (Kam): masthead / terms sentence (standard or Legal Monitor) / parties table.
+    ["OF-V12-C01", "OF v1.2 - 01a Masthead", "HTML", "01a-masthead.html"],
+    ["OF-V12-C01T", "OF v1.2 - 01b Terms sentence (standard)", "HTML", "01b-terms-standard.html"],
+    ["OF-V12-C01TL", "OF v1.2 - 01c Terms sentence (Legal Monitor)", "HTML", "01c-terms-legal-monitor.html"],
+    ["OF-V12-C01P", "OF v1.2 - 01d Parties", "HTML", "01d-parties.html"],
+    ["OF-V12-C09S", "OF v1.2 - Schedule 1 Legal Monitor heading", "HTML", "09-schedule-legal-monitor.html"],
     ["OF-V12-C02", "OF v1.2 - 02 Customer contacts", "HTML", "02-customer-contacts.html"],
     ["OF-V12-C03", "OF v1.2 - 03 Products intro", "HTML", "03-products-intro.html"],
     ["OF-V12-C03B", "OF v1.2 - 03b Tax statement", "HTML", "03b-tax-statement.html"],
@@ -139,7 +144,10 @@ async function upsert(type, extId, fields) {
   console.log("3/4 Template sections");
   const sectionIds = {};
   const sections = [
-    ["OF-V12-S10", "1 Parties", 10, "OF-V12-C01"],
+    ["OF-V12-S10", "1 Masthead", 10, "OF-V12-C01"],
+    ["OF-V12-S12", "1 Terms sentence", 12, "OF-V12-C01T", { printIf: "Order_Form_Not_Legal_Monitor__c" }],
+    ["OF-V12-S13", "1 Terms sentence (Legal Monitor)", 13, "OF-V12-C01TL", { printIf: "Order_Form_Legal_Monitor__c" }],
+    ["OF-V12-S15", "1 Parties", 15, "OF-V12-C01P"],
     ["OF-V12-S20", "2 Customer contacts", 20, "OF-V12-C02"],
     ["OF-V12-S30", "3 Products intro", 30, "OF-V12-C03"],
     ["OF-V12-S40", "3 Products table", 40, "OF-V12-CLINES"],
@@ -152,19 +160,46 @@ async function upsert(type, extId, fields) {
     ["OF-V12-S80", "7 Special terms", 80, "OF-V12-C07"],
     ["OF-V12-S85", "8 Other terms", 85, "OF-V12-C07B"],
     ["OF-V12-S90", "9 Execution", 90, "OF-V12-C08"],
+    // Legal Monitor software deals (14 Sep 2026, Kam): Schedule 1 = the existing CPQ quote-terms content the
+    // customer signs today, printed after the signature page, only when the stamp flow flagged the quote.
+    ["OF-V12-S94", "Schedule 1 heading (Legal Monitor)", 94, "OF-V12-C09S", { printIf: "Order_Form_Legal_Monitor__c", pageBreak: "Before" }],
+    ["OF-V12-S95", "Schedule 1 terms (Legal Monitor)", 95, "NAME:Legal Monitor Terms & Conditions v1", { printIf: "Order_Form_Legal_Monitor__c" }],
   ];
+  // Contents owned by other templates are referenced by Name, not upserted (e.g. the Legal Monitor quote terms).
+  for (const sec of sections) {
+    const ref = sec[3];
+    if (ref.startsWith("NAME:")) {
+      const found = await soql(`SELECT Id FROM SBQQ__TemplateContent__c WHERE Name = '${ref.slice(5).replace(/'/g, "\\'")}' LIMIT 1`);
+      contentIds[ref] = found.records && found.records.length ? found.records[0].Id : null;
+      console.log(`  content by name "${ref.slice(5)}" -> ${contentIds[ref] || "NOT FOUND (section skipped)"}`);
+    }
+  }
   for (const [suffix, tid] of templates) {
-    for (const [ext, name, order, contentExt] of sections) {
+    for (const [ext, name, order, contentExt, opts] of sections) {
+      if (!contentIds[contentExt]) { console.log(`  skipped section ${ext} (no content)`); continue; }
       const fields = {
         Name: name,
         SBQQ__Template__c: tid,
         SBQQ__Content__c: contentIds[contentExt],
         SBQQ__DisplayOrder__c: order,
+        SBQQ__FilterField__c: null, SBQQ__FilterOperator__c: null, SBQQ__FilterValue__c: null, SBQQ__PageBreak__c: null,
+        SBQQ__ConditionalPrintField__c: null,
       };
-      if (ext === "OF-V12-S40") fields.SBQQ__QuoteTotalsPrinted__c = true;
-      // Licence terms table: one row per product (first MDQ segment only), no totals row.
+      // Conditional sections (HTML / quote-terms content): CPQ prints the section only when the named
+      // quote CHECKBOX is true (Conditional Print Field). Filter Field/Operator/Value only filter LINE rows -
+      // they do not suppress an HTML section (14 Sep 2026: both terms sentences printed until this was switched).
+      if (opts && opts.printIf) fields.SBQQ__ConditionalPrintField__c = opts.printIf;
+      if (opts && opts.pageBreak) fields.SBQQ__PageBreak__c = opts.pageBreak;
+      // Products table: all lines except hidden Legal Monitor bundle parents (14 Sep 2026); quote totals row on.
+      if (ext === "OF-V12-S40") {
+        fields.SBQQ__QuoteTotalsPrinted__c = true;
+        fields.SBQQ__FilterField__c = "Order_Form_Print_Row__c";
+        fields.SBQQ__FilterOperator__c = "equals";
+        fields.SBQQ__FilterValue__c = "true";
+      }
+      // Licence terms table: one row per product (first MDQ segment only, no hidden bundle parents), no totals row.
       if (ext === "OF-V12-S45") {
-        fields.SBQQ__FilterField__c = "Is_First_Segment__c";
+        fields.SBQQ__FilterField__c = "Order_Form_Print_Licence_Row__c";
         fields.SBQQ__FilterOperator__c = "equals";
         fields.SBQQ__FilterValue__c = "true";
         fields.SBQQ__SummaryDisplay__c = "Never";

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Order_Form_Legal_Monitor__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Stamped by Quote_Stamp_Order_Form_Fields on every save: true when any line is in the Subs - Legal Monitor product family. Drives the Order Form&apos;s conditional sections (Legal Monitor terms sentence + Schedule 1 terms) instead of the General Subscription Terms link.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Set automatically when the quote carries a Legal Monitor software line. The Order Form then references the Legal Monitor Terms and Conditions (printed as Schedule 1) instead of the General Subscription Terms.</inlineHelpText>
+    <label>Order Form: Legal Monitor deal</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

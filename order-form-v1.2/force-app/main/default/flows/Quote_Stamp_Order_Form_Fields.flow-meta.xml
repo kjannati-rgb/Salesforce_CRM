@@ -360,8 +360,31 @@
                 <elementReference>CumulativeSubs</elementReference>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>HasLegalMonitorLine</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>CumulativeLegalMonitor</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
             <targetReference>Decision_Line_API</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Legal_Monitor_Flag</name>
+        <label>Stamp Legal Monitor deal flag</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Order_Form_Legal_Monitor__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>HasLegalMonitorLine</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Decision_Default_Template</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -930,6 +953,7 @@
         <name>IsSubsLine</name>
         <dataType>Boolean</dataType>
         <expression>OR({!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Subs - Law.com',
+{!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Subs - Legal Monitor',
 {!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Subs - Law Journal Press',
 {!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Subs - Regional',
 {!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Subs - Specialist Platforms',
@@ -944,6 +968,16 @@
         <name>CumulativeSubs</name>
         <dataType>Boolean</dataType>
         <expression>OR({!HasSubsLine}, {!IsSubsLine})</expression>
+    </formulas>
+    <formulas>
+        <name>IsLegalMonitorLine</name>
+        <dataType>Boolean</dataType>
+        <expression>{!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Subs - Legal Monitor'</expression>
+    </formulas>
+    <formulas>
+        <name>CumulativeLegalMonitor</name>
+        <dataType>Boolean</dataType>
+        <expression>OR({!HasLegalMonitorLine}, {!IsLegalMonitorLine})</expression>
     </formulas>
     <formulas>
         <name>InOrderFormScope</name>
@@ -999,7 +1033,7 @@ AND(NOT(ISBLANK({!$Record.SBQQ__StartDate__c})), {!$Record.SBQQ__StartDate__c} &
             <targetReference>Assign_Track_Subs</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
-            <targetReference>Decision_Default_Template</targetReference>
+            <targetReference>Assign_Legal_Monitor_Flag</targetReference>
         </noMoreValuesConnector>
     </loops>
     <loops>
@@ -1178,6 +1212,16 @@ AND(NOT(ISBLANK({!$Record.SBQQ__StartDate__c})), {!$Record.SBQQ__StartDate__c} &
         <isOutput>false</isOutput>
         <value>
             <stringValue>|</stringValue>
+        </value>
+    </variables>
+    <variables>
+        <name>HasLegalMonitorLine</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
         </value>
     </variables>
     <variables>

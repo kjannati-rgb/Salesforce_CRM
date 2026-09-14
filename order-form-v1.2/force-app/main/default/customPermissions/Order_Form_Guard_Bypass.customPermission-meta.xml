@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomPermission xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Lets the holder create Adobe agreements through the legacy CPQ Send with Adobe Sign path on quotes that are in Subscription Order Form scope (bypasses the Order_Form_Scope_Guard validation rule). CRM team only, for genuine exceptions.</description>
+    <isLicensed>false</isLicensed>
+    <label>Order Form Guard Bypass</label>
+</CustomPermission>

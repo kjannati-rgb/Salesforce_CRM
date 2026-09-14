@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customPermissions>
+        <enabled>true</enabled>
+        <name>Order_Form_Guard_Bypass</name>
+    </customPermissions>
+    <description>CRM team only. Grants the Order Form Guard Bypass custom permission so the holder can use the legacy CPQ Send with Adobe Sign path on an in-scope quote for a genuine exception.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Order Form - Guard Bypass (CRM team)</label>
+</PermissionSet>

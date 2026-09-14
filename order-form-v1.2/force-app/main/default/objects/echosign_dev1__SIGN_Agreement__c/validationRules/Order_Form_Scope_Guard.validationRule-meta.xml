@@ -2,13 +2,15 @@
 <ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Order_Form_Scope_Guard</fullName>
     <active>true</active>
-    <description>Blocks the legacy CPQ Send with Adobe Sign path (ASSFCPQ__Quote_Document__c set) on quotes in Subscription Order Form scope. Send for Signature never sets it. Bypass: Order_Form_Guard_Bypass. Time-boxed OFF until 11 Oct 2026 (Kam), re-arms itself.</description>
+    <description>Blocks the legacy CPQ Send with Adobe Sign path (ASSFCPQ__Quote_Document__c set): always when the document is the Subscription Order Form itself; from 11 Oct 2026 on any in-scope quote. Send for Signature never sets it. Bypass: Order_Form_Guard_Bypass.</description>
     <errorConditionFormula>AND(
-  TODAY() &gt;= DATE(2026, 10, 11),
   OR( ISNEW(), ISCHANGED( ASSFCPQ__Quote_Document__c ) ),
   NOT( ISBLANK( ASSFCPQ__Quote_Document__c ) ),
-  ASSFCPQ__Quote_Document__r.SBQQ__Quote__r.Order_Form_Scoped__c,
-  NOT( $Permission.Order_Form_Guard_Bypass )
+  NOT( $Permission.Order_Form_Guard_Bypass ),
+  OR(
+    ASSFCPQ__Quote_Document__r.SBQQ__QuoteTemplate__r.Name = "Subscription Order Form",
+    AND( TODAY() &gt;= DATE(2026, 10, 11), ASSFCPQ__Quote_Document__r.SBQQ__Quote__r.Order_Form_Scoped__c )
+  )
 )</errorConditionFormula>
-    <errorMessage>This quote is in Subscription Order Form scope. Close this page, open the quote and press Send for Signature: it sends the same document with the right checks and writes the customer&apos;s PO and VAT back. Questions: the CRM team.</errorMessage>
+    <errorMessage>This document is the Subscription Order Form, which must be sent with the Send for Signature button on the quote (it writes the customer&apos;s PO and VAT back). Close this page, open the quote and press Send for Signature. Questions: the CRM team.</errorMessage>
 </ValidationRule>

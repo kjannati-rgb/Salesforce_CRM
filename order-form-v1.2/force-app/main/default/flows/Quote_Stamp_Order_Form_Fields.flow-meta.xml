@@ -1080,7 +1080,7 @@
 {!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Instruct Counsel',
 {!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Performance Data - GxR/IP',
 {!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Performance Data - Lexology Index',
-{!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Advertising')</expression>
+{!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Subs - Lexology Intelligence')</expression>
     </formulas>
     <formulas>
         <name>CumulativeContributor</name>

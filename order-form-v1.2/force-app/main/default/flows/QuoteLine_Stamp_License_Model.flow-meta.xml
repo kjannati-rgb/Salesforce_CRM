@@ -18,6 +18,22 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Assign_Firmwide_From_Promo</name>
+        <label>OE promo: Firmwide License (Cayla Vichot, 16 Sep 2026)</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.License_Model__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Firmwide License</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Decision_Count</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assign_Limited_Access</name>
         <label>US-sold: Limited Access, count = seats</label>
         <locationX>0</locationX>
@@ -140,7 +156,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Decision_Family</targetReference>
+            <targetReference>Decision_Promo_OE</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>No override - derive</defaultConnectorLabel>
         <rules>
@@ -157,6 +173,31 @@
                 <targetReference>Assign_From_Override</targetReference>
             </connector>
             <label>Override set</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Decision_Promo_OE</name>
+        <label>OE promo (firmwide deal)?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Decision_Family</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No promo - family rules</defaultConnectorLabel>
+        <rules>
+            <name>Promo_OE</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>IsPromoOE</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Firmwide_From_Promo</targetReference>
+            </connector>
+            <label>Promo code OE - Firmwide License</label>
         </rules>
     </decisions>
     <decisions>
@@ -246,6 +287,11 @@
         </rules>
     </decisions>
     <environments>Default</environments>
+    <formulas>
+        <name>IsPromoOE</name>
+        <dataType>Boolean</dataType>
+        <expression>UPPER(TRIM(BLANKVALUE({!$Record.Promo_Code__c}, &quot;&quot;))) = &quot;OE&quot;</expression>
+    </formulas>
     <formulas>
         <name>IsLawcomFamily</name>
         <dataType>Boolean</dataType>

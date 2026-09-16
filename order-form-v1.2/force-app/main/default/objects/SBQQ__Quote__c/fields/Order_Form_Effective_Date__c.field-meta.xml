@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Order_Form_Effective_Date__c</fullName>
+    <description>Effective date printed on the Contributor Order Form: the quote start date when set, otherwise the earliest line start (edition products).</description>
+    <externalId>false</externalId>
+    <formula>BLANKVALUE(SBQQ__StartDate__c, Order_Form_Line_Term_Start__c)</formula>
+    <label>Order Form: effective date</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

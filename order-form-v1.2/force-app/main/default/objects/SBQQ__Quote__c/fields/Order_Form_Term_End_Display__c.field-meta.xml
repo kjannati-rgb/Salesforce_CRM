@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Order_Form_Term_End_Display__c</fullName>
+    <description>Term end printed on the Contributor Order Form: the later of the subscription term end and the latest line end, so a cross-sold edition running past the subscription year is covered.</description>
+    <externalId>false</externalId>
+    <formula>IF(ISBLANK(Order_Form_Term_End__c), Order_Form_Line_Term_End__c, IF(AND(NOT(ISBLANK(Order_Form_Line_Term_End__c)), Order_Form_Line_Term_End__c &gt; Order_Form_Term_End__c), Order_Form_Line_Term_End__c, Order_Form_Term_End__c))</formula>
+    <label>Order Form: term end (display)</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

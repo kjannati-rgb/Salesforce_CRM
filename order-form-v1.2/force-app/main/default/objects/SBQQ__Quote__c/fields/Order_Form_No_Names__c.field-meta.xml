@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Order_Form_No_Names__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Rep choice (Kam, 16 Sep 2026): tick to suppress named individuals (biography takers) in the Content column of the Contributor Order Form - the "No Names" document variant.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Tick to leave named individuals off the Order Form (the "No Names" version).</inlineHelpText>
+    <label>Order Form: no names</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

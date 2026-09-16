@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Order_Form_Line_Term_Start__c</fullName>
+    <description>Stamped by Quote_Stamp_Order_Form_Fields: earliest line start date (SUN Report date logic) across the quote. Edition products carry no quote start date, so the Contributor Order Form takes its effective date from here.</description>
+    <externalId>false</externalId>
+    <label>Order Form: earliest line start</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

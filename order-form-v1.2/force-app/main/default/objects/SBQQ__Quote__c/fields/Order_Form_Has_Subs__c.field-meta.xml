@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Order_Form_Has_Subs__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Stamped by Quote_Stamp_Order_Form_Fields on every save: true when any line is in a subscription product family. On the Contributor Order Form this prints the Licence terms block for cross-sold subscription lines.</description>
+    <externalId>false</externalId>
+    <label>Order Form: has subscription lines</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

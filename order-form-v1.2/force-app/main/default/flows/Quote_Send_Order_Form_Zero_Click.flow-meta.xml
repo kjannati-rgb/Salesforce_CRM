@@ -114,7 +114,7 @@
             <assignToReference>NotifBody</assignToReference>
             <operator>Assign</operator>
             <value>
-                <stringValue>Auto-send is on, but no generated document exists on this quote. Generate the Order Form (Subscription Order Form template), then save again to send.</stringValue>
+                <stringValue>Auto-send is on, but no generated document exists on this quote. Generate the Order Form (Subscription or Contributor Order Form template), then save again to send.</stringValue>
             </value>
         </assignmentItems>
         <connector>
@@ -130,7 +130,7 @@
             <assignToReference>NotifBody</assignToReference>
             <operator>Assign</operator>
             <value>
-                <stringValue>Auto-send is on, but the latest document on this quote was not generated with the Subscription Order Form template. Regenerate with that template and save again to send.</stringValue>
+                <stringValue>Auto-send is on, but the latest document on this quote was not generated with an Order Form template (Subscription or Contributor). Regenerate with the right template and save again to send.</stringValue>
             </value>
         </assignmentItems>
         <connector>
@@ -287,16 +287,16 @@
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>Get_Quote_Document.SBQQ__Template__c</leftValueReference>
-                <operator>NotEqualTo</operator>
+                <leftValueReference>IsOrderFormTemplate</leftValueReference>
+                <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>Subscription Order Form</stringValue>
+                    <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
                 <targetReference>Assign_Reason_Wrong_Template</targetReference>
             </connector>
-            <label>Latest document is not the Subscription Order Form</label>
+            <label>Latest document is not an Order Form (Subscription or Contributor)</label>
         </rules>
         <rules>
             <name>Document_Found</name>
@@ -309,10 +309,10 @@
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>Get_Quote_Document.SBQQ__Template__c</leftValueReference>
+                <leftValueReference>IsOrderFormTemplate</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>Subscription Order Form</stringValue>
+                    <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -326,6 +326,11 @@
         <name>NotifyUserId</name>
         <dataType>String</dataType>
         <expression>IF(ISBLANK({!$Record.SBQQ__SalesRep__c}), {!$Record.OwnerId}, {!$Record.SBQQ__SalesRep__c})</expression>
+    </formulas>
+    <formulas>
+        <name>IsOrderFormTemplate</name>
+        <dataType>Boolean</dataType>
+        <expression>OR({!Get_Quote_Document.SBQQ__Template__c} = 'Subscription Order Form', {!Get_Quote_Document.SBQQ__Template__c} = 'Contributor Order Form')</expression>
     </formulas>
     <interviewLabel>Quote - Send Order Form (Zero Click) {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Quote - Send Order Form (Zero Click)</label>

@@ -188,16 +188,16 @@
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>Get_Quote_Document.SBQQ__Template__c</leftValueReference>
-                <operator>NotEqualTo</operator>
+                <leftValueReference>IsOrderFormTemplate</leftValueReference>
+                <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>Subscription Order Form</stringValue>
+                    <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
                 <targetReference>Screen_Wrong_Template</targetReference>
             </connector>
-            <label>Latest document is not the Subscription Order Form</label>
+            <label>Latest document is not an Order Form (Subscription or Contributor)</label>
         </rules>
         <rules>
             <name>Document_Found</name>
@@ -216,6 +216,11 @@
         </rules>
     </decisions>
     <environments>Default</environments>
+    <formulas>
+        <name>IsOrderFormTemplate</name>
+        <dataType>Boolean</dataType>
+        <expression>OR({!Get_Quote_Document.SBQQ__Template__c} = 'Subscription Order Form', {!Get_Quote_Document.SBQQ__Template__c} = 'Contributor Order Form')</expression>
+    </formulas>
     <interviewLabel>Quote - Send Order Form (One Click) {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Quote - Send Order Form (One Click)</label>
     <processMetadataValues>
@@ -478,7 +483,7 @@
         <allowPause>false</allowPause>
         <fields>
             <name>WrongTemplateText</name>
-            <fieldText>&lt;p&gt;&lt;b&gt;The most recent document on this quote was not generated with the Subscription Order Form template.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Latest document: {!Get_Quote_Document.Name} (template: {!Get_Quote_Document.SBQQ__Template__c}). Nothing has been sent.&lt;/p&gt;&lt;p&gt;Open &lt;b&gt;Generate Document&lt;/b&gt;, pick the &lt;b&gt;Subscription Order Form&lt;/b&gt; template, generate, and try again.&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;b&gt;The most recent document on this quote was not generated with an Order Form template (Subscription Order Form or Contributor Order Form).&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Latest document: {!Get_Quote_Document.Name} (template: {!Get_Quote_Document.SBQQ__Template__c}). Nothing has been sent.&lt;/p&gt;&lt;p&gt;Open &lt;b&gt;Generate Document&lt;/b&gt;, pick the &lt;b&gt;Subscription Order Form&lt;/b&gt; (or &lt;b&gt;Contributor Order Form&lt;/b&gt;) template, generate, and try again.&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>

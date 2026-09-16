@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Order_Form_Line_Term_End__c</fullName>
+    <description>Stamped by Quote_Stamp_Order_Form_Fields: latest line end date (SUN Report date logic) across the quote.</description>
+    <externalId>false</externalId>
+    <label>Order Form: latest line end</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

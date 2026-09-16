@@ -367,6 +367,27 @@
                 <elementReference>CumulativeLegalMonitor</elementReference>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>HasContributorLine</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>CumulativeContributor</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>LineMinStart</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>NewMinStart</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>LineMaxEnd</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>NewMaxEnd</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
             <targetReference>Decision_Line_API</targetReference>
         </connector>
@@ -383,8 +404,52 @@
                 <elementReference>HasLegalMonitorLine</elementReference>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Order_Form_Contributor__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>HasContributorLine</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Order_Form_Has_Subs__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>HasSubsLine</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Order_Form_Line_Term_Start__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LineMinStart</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Order_Form_Line_Term_End__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LineMaxEnd</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
             <targetReference>Decision_Default_Template</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Contributor_Template</name>
+        <label>Default the Contributor Order Form template</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.SBQQ__DefaultTemplate__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Setup.Order_Form_Adobe_Settings__c.Contributor_Template_Id__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Brand_Rows</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -798,6 +863,42 @@
         </defaultConnector>
         <defaultConnectorLabel>Leave template as is</defaultConnectorLabel>
         <rules>
+            <name>Stamp_Contributor_Template</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>HasContributorLine</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>InOrderFormScope</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Setup.Order_Form_Adobe_Settings__c.Contributor_Template_Id__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.SBQQ__DefaultTemplate__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>$Setup.Order_Form_Adobe_Settings__c.Contributor_Template_Id__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Contributor_Template</targetReference>
+            </connector>
+            <label>Contributor line in scope - set the Contributor form (subs lines ride along)</label>
+        </rules>
+        <rules>
             <name>Stamp_Default_Template</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
@@ -968,6 +1069,33 @@
         <name>CumulativeSubs</name>
         <dataType>Boolean</dataType>
         <expression>OR({!HasSubsLine}, {!IsSubsLine})</expression>
+    </formulas>
+    <formulas>
+        <name>IsContributorLine</name>
+        <dataType>Boolean</dataType>
+        <expression>OR({!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Expert Insight - IP',
+{!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Expert Insight - GXRs',
+{!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Expert Insight - Lexology In-Depth',
+{!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Expert Insight - Lexology Panoramic',
+{!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Instruct Counsel',
+{!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Performance Data - GxR/IP',
+{!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Performance Data - Lexology Index',
+{!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Advertising')</expression>
+    </formulas>
+    <formulas>
+        <name>CumulativeContributor</name>
+        <dataType>Boolean</dataType>
+        <expression>OR({!HasContributorLine}, {!IsContributorLine})</expression>
+    </formulas>
+    <formulas>
+        <name>NewMinStart</name>
+        <dataType>Date</dataType>
+        <expression>IF(ISBLANK({!Loop_Brand_Lines.Start_Date_SUN_Report__c}), {!LineMinStart}, IF(OR(ISBLANK({!LineMinStart}), {!Loop_Brand_Lines.Start_Date_SUN_Report__c} &lt; {!LineMinStart}), {!Loop_Brand_Lines.Start_Date_SUN_Report__c}, {!LineMinStart}))</expression>
+    </formulas>
+    <formulas>
+        <name>NewMaxEnd</name>
+        <dataType>Date</dataType>
+        <expression>IF(ISBLANK({!Loop_Brand_Lines.End_Date_SUN_Report__c}), {!LineMaxEnd}, IF(OR(ISBLANK({!LineMaxEnd}), {!Loop_Brand_Lines.End_Date_SUN_Report__c} &gt; {!LineMaxEnd}), {!Loop_Brand_Lines.End_Date_SUN_Report__c}, {!LineMaxEnd}))</expression>
     </formulas>
     <formulas>
         <name>IsLegalMonitorLine</name>
@@ -1213,6 +1341,30 @@ AND(NOT(ISBLANK({!$Record.SBQQ__StartDate__c})), {!$Record.SBQQ__StartDate__c} &
         <value>
             <stringValue>|</stringValue>
         </value>
+    </variables>
+    <variables>
+        <name>HasContributorLine</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
+        <name>LineMinStart</name>
+        <dataType>Date</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>LineMaxEnd</name>
+        <dataType>Date</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>HasLegalMonitorLine</name>

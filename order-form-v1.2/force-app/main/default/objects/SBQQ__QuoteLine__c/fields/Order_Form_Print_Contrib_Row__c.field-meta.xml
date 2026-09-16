@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Order_Form_Print_Contrib_Row__c</fullName>
+    <description>Contributor Order Form products-table filter (16 Sep 2026): the Subscription rule (Order Form: print row) plus hide any zero-fee bundle parent - e.g. "Lexology Panoramic: Air Transport 2027 - Bundle" - whose priced chapter and content-slot children print as their own rows.</description>
+    <externalId>false</externalId>
+    <formula>AND(Order_Form_Print_Row__c, NOT(AND(SBQQ__Bundle__c, SBQQ__NetTotal__c = 0)))</formula>
+    <label>Order Form: print row (contributor)</label>
+    <type>Checkbox</type>
+</CustomField>

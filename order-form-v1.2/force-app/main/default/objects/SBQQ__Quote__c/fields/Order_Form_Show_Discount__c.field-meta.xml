@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Order_Form_Show_Discount__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Rep choice (Kam, 16 Sep 2026): tick to print List price and Discount columns on the Contributor Order Form products table. Off by default; the table then prints the net fee only, as the Subscription Order Form does.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Tick to show list price and discount columns on the Order Form. Leave off to print the net fee only.</inlineHelpText>
+    <label>Order Form: show discount</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

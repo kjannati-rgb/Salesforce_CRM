@@ -12,5 +12,5 @@
     AND( TODAY() &gt;= DATE(2026, 10, 11), ASSFCPQ__Quote_Document__r.SBQQ__Quote__r.Order_Form_Scoped__c )
   )
 )</errorConditionFormula>
-    <errorMessage>This document is the Subscription Order Form, which must be sent with the Send for Signature button on the quote (it writes the customer&apos;s PO and VAT back). Close this page, open the quote and press Send for Signature. Questions: the CRM team.</errorMessage>
+    <errorMessage>Press Save, not Send to Adobe Sign. Then go back to the quote and press Send for Signature: the Subscription Order Form is sent from there so the customer&apos;s PO and VAT are written back. Questions: the CRM team.</errorMessage>
 </ValidationRule>

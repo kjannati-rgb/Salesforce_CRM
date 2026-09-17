@@ -82,7 +82,7 @@
             <assignToReference>NotifBody</assignToReference>
             <operator>Assign</operator>
             <value>
-                <stringValue>Auto-send is on, but a Law.com firmwide line has no Authorised User count. Enter the Warranted Headcount on the quote line, regenerate the document, and save again to send.</stringValue>
+                <stringValue>Auto-send is on, but a Law.com firmwide line has no Authorised User count. Enter the Warranted Headcount on the quote line, regenerate the document (Generate Document, then Save - not Send to Adobe Sign), and save the quote again to send.</stringValue>
             </value>
         </assignmentItems>
         <connector>
@@ -98,7 +98,7 @@
             <assignToReference>NotifBody</assignToReference>
             <operator>Assign</operator>
             <value>
-                <stringValue>Auto-send is on, but a Benefiting Group licence line has no group description. Fill it in on the quote line, regenerate the document, and save again to send.</stringValue>
+                <stringValue>Auto-send is on, but a Benefiting Group licence line has no group description. Fill it in on the quote line, regenerate the document (Generate Document, then Save - not Send to Adobe Sign), and save the quote again to send.</stringValue>
             </value>
         </assignmentItems>
         <connector>
@@ -114,7 +114,7 @@
             <assignToReference>NotifBody</assignToReference>
             <operator>Assign</operator>
             <value>
-                <stringValue>Auto-send is on, but no generated document exists on this quote. Generate the Order Form (Subscription or Contributor Order Form template), then save again to send.</stringValue>
+                <stringValue>Auto-send is on, but no generated document exists on this quote. Open Generate Document, pick the Subscription Order Form, press Save (not Send to Adobe Sign), then save the quote again to send.</stringValue>
             </value>
         </assignmentItems>
         <connector>
@@ -130,7 +130,7 @@
             <assignToReference>NotifBody</assignToReference>
             <operator>Assign</operator>
             <value>
-                <stringValue>Auto-send is on, but the latest document on this quote was not generated with an Order Form template (Subscription or Contributor). Regenerate with the right template and save again to send.</stringValue>
+                <stringValue>Auto-send is on, but the latest document on this quote was not generated with the Subscription Order Form. Open Generate Document, pick that template, press Save (not Send to Adobe Sign), then save the quote again to send.</stringValue>
             </value>
         </assignmentItems>
         <connector>

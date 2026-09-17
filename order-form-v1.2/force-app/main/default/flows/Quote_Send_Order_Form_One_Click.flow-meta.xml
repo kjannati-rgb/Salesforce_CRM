@@ -451,7 +451,7 @@
         <allowPause>false</allowPause>
         <fields>
             <name>HeadcountMissingText</name>
-            <fieldText>&lt;p&gt;&lt;b&gt;A Law.com firmwide line has no Authorised User count.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Line: {!Get_Firmwide_No_Headcount.SBQQ__ProductName__c}&lt;/p&gt;&lt;p&gt;The Firmwide License sentence prints the customer&amp;#39;s approximate Authorised User count and its notify threshold, and we hold no attorney count for this account. Enter the Warranted Headcount on the quote line (Licence Model section, or the quote line editor), regenerate the document, and try again.&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;b&gt;A Law.com firmwide line has no Authorised User count.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Line: {!Get_Firmwide_No_Headcount.SBQQ__ProductName__c}&lt;/p&gt;&lt;p&gt;The Firmwide License sentence prints the customer&amp;#39;s approximate Authorised User count and its notify threshold, and we hold no attorney count for this account. Enter the Warranted Headcount on the quote line (Licence Model section, or the quote line editor), regenerate the document (Generate Document, then press &lt;b&gt;Save&lt;/b&gt;, not Send to Adobe Sign), and try again.&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>
@@ -467,7 +467,7 @@
         <allowPause>false</allowPause>
         <fields>
             <name>BGIncompleteText</name>
-            <fieldText>&lt;p&gt;&lt;b&gt;A Benefiting Group licence has no group definition.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Line: {!Get_Incomplete_BG_Line.SBQQ__ProductName__c}&lt;/p&gt;&lt;p&gt;The Order Form would print a bare "Benefiting Group" with no description of who is covered. On the quote line, fill in the Benefiting Group Description (preferred) or the Function Name and Group Size, regenerate the document, and try again.&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;b&gt;A Benefiting Group licence has no group definition.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Line: {!Get_Incomplete_BG_Line.SBQQ__ProductName__c}&lt;/p&gt;&lt;p&gt;The Order Form would print a bare "Benefiting Group" with no description of who is covered. On the quote line, fill in the Benefiting Group Description (preferred) or the Function Name and Group Size, regenerate the document (Generate Document, then press &lt;b&gt;Save&lt;/b&gt;, not Send to Adobe Sign), and try again.&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>
@@ -483,7 +483,7 @@
         <allowPause>false</allowPause>
         <fields>
             <name>WrongTemplateText</name>
-            <fieldText>&lt;p&gt;&lt;b&gt;The most recent document on this quote was not generated with an Order Form template (Subscription Order Form or Contributor Order Form).&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Latest document: {!Get_Quote_Document.Name} (template: {!Get_Quote_Document.SBQQ__Template__c}). Nothing has been sent.&lt;/p&gt;&lt;p&gt;Open &lt;b&gt;Generate Document&lt;/b&gt;, pick the &lt;b&gt;Subscription Order Form&lt;/b&gt; (or &lt;b&gt;Contributor Order Form&lt;/b&gt;) template, generate, and try again.&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;b&gt;The most recent document on this quote was not generated with the Subscription Order Form template.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Latest document: {!Get_Quote_Document.Name} (template: {!Get_Quote_Document.SBQQ__Template__c}). Nothing has been sent.&lt;/p&gt;&lt;p&gt;1. Open &lt;b&gt;Generate Document&lt;/b&gt; and pick the &lt;b&gt;Subscription Order Form&lt;/b&gt; template.&lt;/p&gt;&lt;p&gt;2. Press &lt;b&gt;Save&lt;/b&gt;. Do not press Send to Adobe Sign: it is blocked for this form and nothing gets saved.&lt;/p&gt;&lt;p&gt;3. Come back to the quote and press &lt;b&gt;Send for Signature&lt;/b&gt; again.&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>
@@ -499,7 +499,7 @@
         <allowPause>false</allowPause>
         <fields>
             <name>NoDocumentText</name>
-            <fieldText>&lt;p&gt;&lt;b&gt;No generated quote document exists.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Generate the Order Form PDF (Generate Document) before sending for signature.&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;b&gt;No generated quote document exists.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Nothing has been sent.&lt;/p&gt;&lt;p&gt;1. Open &lt;b&gt;Generate Document&lt;/b&gt; and pick the &lt;b&gt;Subscription Order Form&lt;/b&gt; template.&lt;/p&gt;&lt;p&gt;2. Press &lt;b&gt;Save&lt;/b&gt;. Do not press Send to Adobe Sign: it is blocked for this form and nothing gets saved.&lt;/p&gt;&lt;p&gt;3. Come back to the quote and press &lt;b&gt;Send for Signature&lt;/b&gt; again.&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Order_Form_BG_Undefined__c</fullName>
+    <description>True when a Benefiting Group line says nothing about who is covered, so the Order Form would print a bare "Benefiting Group". Mirrors every source License_Model_Display__c prints from: Description, Function Name, Benefitting Group (single), Benefitting Group (multi-select functions - the column the quote line editor shows on multi-year rows) and Group Type. Both send flows block on this (18 Sep 2026: the old check ignored the multi-select and Group Type).</description>
+    <externalId>false</externalId>
+    <formula>AND(
+  TEXT(License_Model__c) = "Benefiting Group",
+  ISBLANK(Benefiting_Group_Description__c),
+  ISBLANK(Function_Name__c),
+  ISBLANK(TEXT(Benefitting_Group__c)),
+  ISBLANK(TEXT(Benefitting_Group_Type__c)),
+  ISBLANK(Order_Form_BG_Functions__c)
+)</formula>
+    <label>Order Form: group not described</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

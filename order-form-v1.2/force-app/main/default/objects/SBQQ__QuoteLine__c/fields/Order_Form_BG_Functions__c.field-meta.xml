@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Order_Form_BG_Functions__c</fullName>
+    <description>18 Sep 2026: the functions picked in the multi-select Benefitting Group column (the column the quote line editor shows on multi-year rows), as text - e.g. "Legal and Compliance". Blank when only "Other" or countries are picked, because those do not say who is covered. Read by License_Model_Display__c and Order_Form_BG_Undefined__c.</description>
+    <externalId>false</externalId>
+    <formula>MID(IF(INCLUDES(Benefitting_Group2__c, "Legal"), " and Legal", "") &amp; IF(INCLUDES(Benefitting_Group2__c, "Compliance"), " and Compliance", "") &amp; IF(INCLUDES(Benefitting_Group2__c, "HR"), " and HR", "") &amp; IF(INCLUDES(Benefitting_Group2__c, "Finance"), " and Finance", "") &amp; IF(INCLUDES(Benefitting_Group2__c, "Procurement"), " and Procurement", "") &amp; IF(INCLUDES(Benefitting_Group2__c, "Data Privacy"), " and Data Privacy", "") &amp; IF(INCLUDES(Benefitting_Group2__c, "ESG"), " and ESG", ""), 6, 200)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Order Form: group functions</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

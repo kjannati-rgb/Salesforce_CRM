@@ -5,6 +5,16 @@
     <hasActivationRequired>false</hasActivationRequired>
     <fieldPermissions>
         <editable>false</editable>
+        <field>SBQQ__QuoteLine__c.Order_Form_BG_Functions__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>SBQQ__QuoteLine__c.Order_Form_BG_Undefined__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>SBQQ__QuoteLine__c.Order_Form_Print_Contrib_Row__c</field>
         <readable>true</readable>
     </fieldPermissions>

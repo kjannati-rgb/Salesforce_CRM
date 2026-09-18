@@ -98,7 +98,7 @@
             <assignToReference>NotifBody</assignToReference>
             <operator>Assign</operator>
             <value>
-                <stringValue>Auto-send is on, but a Benefiting Group licence line has no group description. Fill it in on the quote line, regenerate the document (Generate Document, then Save - not Send to Adobe Sign), and save the quote again to send.</stringValue>
+                <stringValue>Auto-send is on, but a Benefiting Group line does not say who is covered. In the quote line editor, fill in Function Name (or pick a function in the Benefitting Group column) on every year, or ask a manager to set License Model Override for named seats. Then Generate Document, press Save (not Send to Adobe Sign), and save the quote again to send.</stringValue>
             </value>
         </assignmentItems>
         <connector>
@@ -433,7 +433,7 @@
     </recordLookups>
     <recordLookups>
         <name>Get_Incomplete_BG_Line</name>
-        <label>Get a Benefiting Group line without wording</label>
+        <label>Get a Benefiting Group line that does not say who is covered</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
@@ -456,22 +456,8 @@
             </value>
         </filters>
         <filters>
-            <field>Benefiting_Group_Description__c</field>
-            <operator>IsNull</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </filters>
-        <filters>
-            <field>Function_Name__c</field>
-            <operator>IsNull</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </filters>
-        <filters>
-            <field>Benefitting_Group__c</field>
-            <operator>IsNull</operator>
+            <field>Order_Form_BG_Undefined__c</field>
+            <operator>EqualTo</operator>
             <value>
                 <booleanValue>true</booleanValue>
             </value>

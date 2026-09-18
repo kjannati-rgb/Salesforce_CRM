@@ -323,7 +323,7 @@
     </recordLookups>
     <recordLookups>
         <name>Get_Incomplete_BG_Line</name>
-        <label>Get a Benefiting Group line without wording</label>
+        <label>Get a Benefiting Group line that does not say who is covered</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
@@ -346,22 +346,8 @@
             </value>
         </filters>
         <filters>
-            <field>Benefiting_Group_Description__c</field>
-            <operator>IsNull</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </filters>
-        <filters>
-            <field>Function_Name__c</field>
-            <operator>IsNull</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </filters>
-        <filters>
-            <field>Benefitting_Group__c</field>
-            <operator>IsNull</operator>
+            <field>Order_Form_BG_Undefined__c</field>
+            <operator>EqualTo</operator>
             <value>
                 <booleanValue>true</booleanValue>
             </value>
@@ -467,7 +453,7 @@
         <allowPause>false</allowPause>
         <fields>
             <name>BGIncompleteText</name>
-            <fieldText>&lt;p&gt;&lt;b&gt;A Benefiting Group licence has no group definition.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Line: {!Get_Incomplete_BG_Line.SBQQ__ProductName__c}&lt;/p&gt;&lt;p&gt;The Order Form would print a bare "Benefiting Group" with no description of who is covered. On the quote line, fill in the Benefiting Group Description (preferred) or the Function Name and Group Size, regenerate the document (Generate Document, then press &lt;b&gt;Save&lt;/b&gt;, not Send to Adobe Sign), and try again.&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;b&gt;The group covered by this licence is not described yet.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Line: {!Get_Incomplete_BG_Line.SBQQ__ProductName__c}&lt;/p&gt;&lt;p&gt;This line is licensed to a Benefiting Group, which is the licence for Lexology Pro people products and for Law.com subscriptions billed outside the US. Without a description the Order Form would only say &quot;Benefiting Group&quot;. Nothing has been sent.&lt;/p&gt;&lt;p&gt;1. Open the quote line editor. On a multi-year deal, expand every year.&lt;/p&gt;&lt;p&gt;2. On each line, type who is covered in &lt;b&gt;Function Name&lt;/b&gt; (for example &quot;the Customer&amp;#39;s London legal team&quot;), or pick a function in the &lt;b&gt;Benefitting Group&lt;/b&gt; column. Then press &lt;b&gt;Save&lt;/b&gt;.&lt;/p&gt;&lt;p&gt;3. If the customer bought named seats rather than a group, ask a manager to set &lt;b&gt;License Model Override&lt;/b&gt; instead.&lt;/p&gt;&lt;p&gt;4. Generate Document, press &lt;b&gt;Save&lt;/b&gt; (not Send to Adobe Sign), then press &lt;b&gt;Send for Signature&lt;/b&gt; again.&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>

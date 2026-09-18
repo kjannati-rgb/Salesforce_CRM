@@ -165,4 +165,30 @@ private class OrderFormSignatureService_Test {
         System.assert(!result.success);
         System.assert(result.message.contains('not found'), result.message);
     }
+
+    @IsTest
+    static void failsWhenDocumentOlderThanLineChange() {
+        OrderFormSignatureService.settingsOverride = activeSettings();
+        SBQQ__Quote__c quote = getQuote();
+        if (quote.Signatory_Contact__c == null) {
+            quote.Signatory_Contact__c = [SELECT Id FROM Contact LIMIT 1].Id;
+            update quote;
+        }
+        OrderFormSignatureService.lastLineChangeOverride = Datetime.now().addDays(1);
+        OrderFormSignatureService.Result result = run(quote.Id);
+        System.assertEquals(false, result.success, 'a PDF older than the last line change must not be sent');
+        System.assert(result.message.contains('out of date'), result.message);
+    }
+
+    @IsTest
+    static void linkAgreementCarriesOpportunityAndAccount() {
+        Account account = [SELECT Id FROM Account LIMIT 1];
+        Id oppId = Opportunity.SObjectType.getDescribe().getKeyPrefix() + '000000000001AAA';
+        SBQQ__Quote__c quote = new SBQQ__Quote__c(Id = getQuote().Id, SBQQ__Account__c = account.Id,
+            SBQQ__Opportunity2__c = oppId);
+        echosign_dev1__SIGN_Agreement__c linked = OrderFormSignatureService.linkAgreement(null, quote);
+        System.assertEquals(quote.Id, linked.Quote__c);
+        System.assertEquals(account.Id, linked.echosign_dev1__Account__c);
+        System.assertEquals(oppId, linked.echosign_dev1__Opportunity__c);
+    }
 }

@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>63.0</apiVersion>
+    <assignments>
+        <name>Assign_values_for_CS_contacts</name>
+        <label>Assign values for CS contacts</label>
+        <locationX>50</locationX>
+        <locationY>782</locationY>
+        <assignmentItems>
+            <assignToReference>Assign_cs_contact_collection_value</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>CS_contact_collection_value</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Assign_modified_values</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Modify_collection_forMulti_picklist</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Opportunity_record_for_cs_contacts</targetReference>
+        </connector>
+    </assignments>
     <collectionProcessors>
         <name>filter_for_cs_contacts</name>
         <elementSubtype>FilterCollectionProcessor</elementSubtype>
@@ -25,7 +48,7 @@
     <decisions>
         <name>Check_if_record_is_new</name>
         <label>Check if record is new</label>
-        <locationX>446</locationX>
+        <locationX>578</locationX>
         <locationY>134</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -44,7 +67,7 @@
             <label>isNew</label>
         </rules>
     </decisions>
-    <description>This flow pulls opportunity team members from previous opportunity and created same for triggering record, this flow runs only for new records</description>
+    <description>This flow pulls opportunity team members from previous opportunity and created same for triggering record, this flow runs only for new records | Solutions Engineer role is deliberately NOT copied to the new opportunity (single-holder, deal-specific).</description>
     <environments>Default</environments>
     <formulas>
         <name>CS_contact_collection_value</name>
@@ -111,22 +134,60 @@
                 <elementReference>recordId.Previous_Opportunity__c</elementReference>
             </value>
         </filters>
+        <filters>
+            <field>TeamMemberRole</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Solutions Engineer</stringValue>
+            </value>
+        </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
         <object>OpportunityTeamMember</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordUpdates>
+        <name>Update_Opportunity_record_for_cs_contacts</name>
+        <label>Update Opportunity record for cs contacts</label>
+        <locationX>50</locationX>
+        <locationY>890</locationY>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>fault_notification2</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>CS_Contact__c</field>
+            <value>
+                <elementReference>Assign_modified_values</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Client_Engagement_Director__c</field>
+            <value>
+                <elementReference>recordId.Previous_Opportunity__r.Client_Engagement_Director__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
     <start>
-        <locationX>320</locationX>
+        <locationX>452</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Check_if_record_is_new</targetReference>
         </connector>
     </start>
-    <status>Obsolete</status>
+    <status>Active</status>
     <subflows>
         <name>fault_notification2</name>
         <label>fault notification</label>
-        <locationX>578</locationX>
+        <locationX>842</locationX>
         <locationY>350</locationY>
         <flowName>Opportunity_Fault_Email</flowName>
         <inputAssignments>
@@ -165,6 +226,9 @@
         <label>Create collection for cs contacts</label>
         <locationX>50</locationX>
         <locationY>674</locationY>
+        <connector>
+            <targetReference>Assign_values_for_CS_contacts</targetReference>
+        </connector>
         <dataType>String</dataType>
         <isCollection>true</isCollection>
         <scale>0</scale>

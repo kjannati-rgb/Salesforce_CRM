@@ -246,6 +246,35 @@ private class SmartConvertController_Test {
     }
 
     @IsTest
+    static void buildOffice_stampsFullAddressAndMatchesFirmName() {
+        // Regression (Sales Ops escalation, 18 Sep 2026): the office's first
+        // account must carry the lead's State, and must NOT get an auto-generated "— City"
+        // suffix that leaks onto CPQ's SBQQ__BillingName__c and prints as the legal entity
+        // name on customer contracts.
+        Lead l = new Lead(FirstName = 'Test', LastName = 'Guidedcreate', Company = 'Harbourline Advisory Demo',
+            Title = 'Owner', Email = 'test@harbourline-demo.com', Street = '100 Example Ave',
+            City = 'Miami', State = 'Florida', StateCode = 'FL', PostalCode = '33101',
+            Country = 'United States', CountryCode = 'US', Status = 'Open - Not Contacted');
+        insert l;
+        Test.startTest();
+        SmartConvertController.ConvertResult shell = SmartConvertController.createAccountShell(l.Id, null);
+        Test.stopTest();
+        System.assertNotEquals(null, shell);
+        if (shell.success) {
+            Account office = [SELECT Name, BillingStateCode, BillingState, BillingCity, BillingPostalCode
+                              FROM Account WHERE Id = :shell.accountId];
+            System.assertEquals('Harbourline Advisory Demo', office.Name,
+                'a firm\'s first office is named exactly like the firm - nothing to disambiguate yet');
+            System.assertEquals('FL', office.BillingStateCode, 'State carried from the lead');
+            System.assertEquals('Miami', office.BillingCity);
+            System.assertEquals('33101', office.BillingPostalCode);
+        } else {
+            System.assert(shell.message != null && shell.message.startsWith('Create blocked'),
+                'shell either succeeds or surfaces a blocked message: ' + shell.message);
+        }
+    }
+
+    @IsTest
     static void getMatch_freeMailRoutesToNoFirm() {
         // a free-mail address must NOT resolve to a firm by domain (gmail isn't a company key)
         Lead l = newLead('Gina', 'gina.personal@gmail.com', 'GB', 'London');

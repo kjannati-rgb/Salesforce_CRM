@@ -801,7 +801,8 @@ public with sharing class SmartConvertController {
 
     /** Create the Firm (when firmId is null) + first Office from the lead; returns the Office id. */
     private static Id buildShell(Id leadId, Id firmId) {
-        Lead ld = [SELECT Company, Country, CountryCode, City, Street, Email, Website FROM Lead WHERE Id = :leadId LIMIT 1];
+        Lead ld = [SELECT Company, Country, CountryCode, City, State, StateCode, PostalCode, Street, Email, Website
+                   FROM Lead WHERE Id = :leadId LIMIT 1];
         String firmName;
         if (firmId == null) {
             Id firmRt = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Firm').getRecordTypeId();
@@ -857,10 +858,17 @@ public with sharing class SmartConvertController {
 
     private static Account buildOffice(Id firmId, String firmName, Lead ld) {
         Id officeRt = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Office').getRecordTypeId();
-        String loc = String.isBlank(ld.City) ? (String.isBlank(ld.Country) ? 'HQ' : ld.Country) : ld.City;
-        return new Account(Name = firmName + ' — ' + loc, RecordTypeId = officeRt,
+        // Name matches the Firm exactly - both call sites create this firm's FIRST (only) office,
+        // so there is nothing yet to disambiguate. An earlier "Firm — City" suffix here was meant
+        // as a list-view aid, but Account.Name also feeds CPQ's SBQQ__BillingName__c verbatim, so
+        // the auto-generated suffix was printing on customer contracts as the legal entity name
+        // (Sales Ops escalation, 18 Sep 2026). If the Data Team later adds a genuine
+        // second office under this firm, THEY choose how to tell the two apart, informed by real
+        // company detail - not a city guessed from whatever the lead happened to type.
+        return new Account(Name = firmName, RecordTypeId = officeRt,
             Ultimate_Account__c = firmId, Originated_From_Lead__c = true,
-            BillingCountryCode = ld.CountryCode, BillingCity = ld.City, BillingStreet = ld.Street);
+            BillingCountryCode = ld.CountryCode, BillingStateCode = ld.StateCode,
+            BillingCity = ld.City, BillingStreet = ld.Street, BillingPostalCode = ld.PostalCode);
     }
 
     // ===== Helpers =====

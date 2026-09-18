@@ -5,6 +5,11 @@
     <hasActivationRequired>false</hasActivationRequired>
     <fieldPermissions>
         <editable>false</editable>
+        <field>SBQQ__Quote__c.Order_Form_Old_Terms_Text__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>SBQQ__QuoteLine__c.Order_Form_BG_Functions__c</field>
         <readable>true</readable>
     </fieldPermissions>

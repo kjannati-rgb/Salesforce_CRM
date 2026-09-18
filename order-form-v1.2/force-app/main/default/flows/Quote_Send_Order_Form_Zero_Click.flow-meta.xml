@@ -24,6 +24,9 @@
         <locationY>0</locationY>
         <actionName>customNotificationAction</actionName>
         <actionType>customNotificationAction</actionType>
+        <faultConnector>
+            <targetReference>Assign_Notice_Failed</targetReference>
+        </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>customNotifTypeId</name>
@@ -90,6 +93,19 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Assign_Notice_Failed</name>
+        <label>Notice could not be delivered (e.g. inactive rep) - do not fail the quote save</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>NoticeFailed</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
         <name>Assign_Reason_BG</name>
         <label>Reason - BG wording missing</label>
         <locationX>0</locationX>
@@ -99,6 +115,22 @@
             <operator>Assign</operator>
             <value>
                 <stringValue>Auto-send is on, but a Benefiting Group line does not say who is covered. In the quote line editor, fill in Function Name (or pick a function in the Benefitting Group column) on every year, or ask a manager to set License Model Override for named seats. Then Generate Document, press Save (not Send to Adobe Sign), and save the quote again to send.</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Assign_Recipient</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Reason_Old_Terms</name>
+        <label>Reason: old contributor terms in Special Terms</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>NotifBody</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Auto-send is on, but Special Terms name the old contributor terms or hold a full terms document. Remove that text, then Generate Document, press Save, and save the quote again to send. Customers with their own negotiated terms stay on their existing paper.</stringValue>
             </value>
         </assignmentItems>
         <connector>
@@ -193,12 +225,37 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Decision_Old_Terms</name>
+        <label>Old contributor terms in Special Terms?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Get_Quote_Document</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Special Terms fine</defaultConnectorLabel>
+        <rules>
+            <name>Old_Terms_Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Order_Form_Old_Terms_Text__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Reason_Old_Terms</targetReference>
+            </connector>
+            <label>Old terms found</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Decision_Headcount_Complete</name>
         <label>Firmwide headcount present?</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Get_Quote_Document</targetReference>
+            <targetReference>Decision_Old_Terms</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Headcounts present</defaultConnectorLabel>
         <rules>
@@ -529,6 +586,16 @@
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>NoticeFailed</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
     </variables>
     <variables>
         <name>RecipientIds</name>

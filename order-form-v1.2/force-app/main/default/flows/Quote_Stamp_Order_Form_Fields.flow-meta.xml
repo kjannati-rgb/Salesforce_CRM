@@ -375,6 +375,13 @@
             </value>
         </assignmentItems>
         <assignmentItems>
+            <assignToReference>HasAdvertisingLine</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>CumulativeAdvertising</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
             <assignToReference>LineMinStart</assignToReference>
             <operator>Assign</operator>
             <value>
@@ -409,6 +416,13 @@
             <operator>Assign</operator>
             <value>
                 <elementReference>HasContributorLine</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Order_Form_Old_Terms_Text__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>OldTermsInSpecialTerms</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -873,6 +887,13 @@
                 </rightValue>
             </conditions>
             <conditions>
+                <leftValueReference>HasAdvertisingLine</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
                 <leftValueReference>InOrderFormScope</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
@@ -896,7 +917,7 @@
             <connector>
                 <targetReference>Assign_Contributor_Template</targetReference>
             </connector>
-            <label>Contributor line in scope - set the Contributor form (subs lines ride along)</label>
+            <label>Contributor line in scope, no Advertising line - set the Contributor form (subs lines ride along)</label>
         </rules>
         <rules>
             <name>Stamp_Default_Template</name>
@@ -1071,6 +1092,21 @@
         <expression>OR({!HasSubsLine}, {!IsSubsLine})</expression>
     </formulas>
     <formulas>
+        <name>IsAdvertisingLine</name>
+        <dataType>Boolean</dataType>
+        <expression>{!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Advertising'</expression>
+    </formulas>
+    <formulas>
+        <name>CumulativeAdvertising</name>
+        <dataType>Boolean</dataType>
+        <expression>OR({!HasAdvertisingLine}, {!IsAdvertisingLine})</expression>
+    </formulas>
+    <formulas>
+        <name>OldTermsInSpecialTerms</name>
+        <dataType>Boolean</dataType>
+        <expression>AND({!HasContributorLine}, OR(CONTAINS(UPPER({!$Record.Special_Terms__c}), 'CONTRIBUTOR CONTENT TERMS'), CONTAINS(UPPER({!$Record.Special_Terms__c}), 'CONTRIBUTOR TERMS AND CONDITIONS'), LEN({!$Record.Special_Terms__c}) &gt; 3000))</expression>
+    </formulas>
+    <formulas>
         <name>IsContributorLine</name>
         <dataType>Boolean</dataType>
         <expression>OR({!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Expert Insight - IP',
@@ -1080,7 +1116,8 @@
 {!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Instruct Counsel',
 {!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Performance Data - GxR/IP',
 {!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Performance Data - Lexology Index',
-{!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Subs - Lexology Intelligence')</expression>
+{!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Subs - Lexology Intelligence',
+{!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Subs - Lexology Compete')</expression>
     </formulas>
     <formulas>
         <name>CumulativeContributor</name>
@@ -1340,6 +1377,16 @@ AND(NOT(ISBLANK({!$Record.SBQQ__StartDate__c})), {!$Record.SBQQ__StartDate__c} &
         <isOutput>false</isOutput>
         <value>
             <stringValue>|</stringValue>
+        </value>
+    </variables>
+    <variables>
+        <name>HasAdvertisingLine</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
         </value>
     </variables>
     <variables>

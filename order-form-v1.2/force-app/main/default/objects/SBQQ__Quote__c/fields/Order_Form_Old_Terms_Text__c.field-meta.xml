@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Order_Form_Old_Terms_Text__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Stamped by Quote_Stamp_Order_Form_Fields on contributor quotes (19 Sep 2026, Kam): true when Special Terms name the old contributor terms ("Contributor Content Terms" / "Contributor Terms and Conditions") or run past 3,000 characters, i.e. a pasted terms document. The Contributor Order Form sits under the published Contribution Terms, so both send flows refuse to send until Special Terms are cleaned up.</description>
+    <externalId>false</externalId>
+    <label>Order Form: old terms in Special Terms</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

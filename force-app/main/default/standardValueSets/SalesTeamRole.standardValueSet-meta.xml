@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StandardValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sorted>false</sorted>
+    <standardValue>
+        <fullName>Account Manager</fullName>
+        <default>false</default>
+        <label>Account Manager</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Channel Manager</fullName>
+        <default>false</default>
+        <label>Channel Manager</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Client Engagement Director</fullName>
+        <default>false</default>
+        <label>Client Engagement Director</label>
+    </standardValue>
+    <standardValue>
+        <fullName>CS Contact</fullName>
+        <default>false</default>
+        <label>CS Contact</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Executive Sponsor</fullName>
+        <default>false</default>
+        <label>Executive Sponsor</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Lead Qualifier</fullName>
+        <default>false</default>
+        <label>Lead Qualifier</label>
+    </standardValue>
+    <standardValue>
+        <fullName>On Demand CS</fullName>
+        <default>false</default>
+        <label>On Demand CS</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Pre-Sales Consultant</fullName>
+        <default>false</default>
+        <label>Pre-Sales Consultant</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Raised Hand CS</fullName>
+        <default>false</default>
+        <label>Raised Hand CS</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Sales Development Representative</fullName>
+        <default>false</default>
+        <label>Sales Development Representative</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Sales Manager</fullName>
+        <default>false</default>
+        <label>Sales Manager</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Sales Rep</fullName>
+        <default>false</default>
+        <label>Sales Rep</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Events Rep</fullName>
+        <default>false</default>
+        <label>Events Rep</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Reprints Rep</fullName>
+        <default>false</default>
+        <label>Reprints Rep</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Operations</fullName>
+        <default>false</default>
+        <label>Operations</label>
+    </standardValue>
+    <standardValue>
+        <fullName>E&amp;I CSM</fullName>
+        <default>false</default>
+        <label>E&amp;I CSM</label>
+    </standardValue>
+    <standardValue>
+        <fullName>PI Service Level</fullName>
+        <default>false</default>
+        <label>PI Service Level</label>
+    </standardValue>
+    <standardValue>
+        <fullName>PI CSM</fullName>
+        <default>false</default>
+        <label>PI CSM</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Law.com Service Level</fullName>
+        <default>false</default>
+        <label>Law.com Service Level</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Law.com CSM</fullName>
+        <default>false</default>
+        <label>Law.com CSM</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Tech Touch</fullName>
+        <default>false</default>
+        <label>Tech Touch</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Solutions Engineer</fullName>
+        <default>false</default>
+        <label>Solutions Engineer</label>
+    </standardValue>
+</StandardValueSet>

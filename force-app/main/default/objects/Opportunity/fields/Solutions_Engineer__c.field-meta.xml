@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Solutions_Engineer__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Stores the User who is the Solutions Engineer on this Opportunity's team (OpportunityTeamMember with Team Role = "Solutions Engineer"). System-stamped: set by the Opportunity Team widget (Opportunity_Team_Member_Manager) and the record-triggered flow Opportunity_Team_Member_Stamp_Role_Fields; cleared by the widget when that member is removed. Single-holder role. Deliberately kept off page layouts; used for reporting, filtering and list views.</description>
+    <inlineHelpText>Auto-populated from the Opportunity Team member with role "Solutions Engineer". Do not edit manually - add or remove the Solutions Engineer through the Opportunity Team widget.</inlineHelpText>
+    <label>Solutions Engineer</label>
+    <referenceTo>User</referenceTo>
+    <relationshipName>Solutions_Engineer_Opportunities</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Lookup</type>
+</CustomField>

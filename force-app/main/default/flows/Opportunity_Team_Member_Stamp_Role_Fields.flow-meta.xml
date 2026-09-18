@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <apiVersion>62.0</apiVersion>
-    <description>Record-triggered (after save, create/update) on OpportunityTeamMember. Stamps the parent Opportunity's Client_Engagement_Director__c / Sales_Development_Representative__c lookup from the team member, so the fields stay correct no matter how the member was added (screen-flow widget, native Opportunity Team list, data load, or sync flow). Fault paths swallow stamp errors so they never block the team-member DML. Companion to the deletion-clear flow.</description>
+    <description>Record-triggered (after save, create/update) on OpportunityTeamMember. Stamps the parent Opportunity's Client_Engagement_Director__c / Sales_Development_Representative__c / Solutions_Engineer__c lookup from the team member, so the fields stay correct no matter how the member was added (screen-flow widget, native Opportunity Team list, data load, or sync flow). Fault paths swallow stamp errors so they never block the team-member DML. Companion to the deletion-clear flow.</description>
     <assignments>
         <name>asg_SwallowFault</name>
         <label>Swallow Stamp Fault</label>
@@ -28,6 +28,13 @@
         <dataType>String</dataType>
         <value>
             <stringValue>Sales Development Representative</stringValue>
+        </value>
+    </constants>
+    <constants>
+        <name>const_RoleSE</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Solutions Engineer</stringValue>
         </value>
     </constants>
     <decisions>
@@ -66,6 +73,21 @@
                 <targetReference>upd_StampSDR</targetReference>
             </connector>
             <label>Sales Development Representative</label>
+        </rules>
+    <rules>
+            <name>rule_SE</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.TeamMemberRole</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>const_RoleSE</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>upd_StampSE</targetReference>
+            </connector>
+            <label>Solutions Engineer</label>
         </rules>
     </decisions>
     <environments>Default</environments>
@@ -140,6 +162,31 @@
         </inputAssignments>
         <object>Opportunity</object>
     </recordUpdates>
+    <recordUpdates>
+        <name>upd_StampSE</name>
+        <label>Stamp SE on Opportunity</label>
+        <locationX>704</locationX>
+        <locationY>384</locationY>
+        <description>Sets Opportunity.Solutions_Engineer__c to this team member's user.</description>
+        <faultConnector>
+            <targetReference>asg_SwallowFault</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.OpportunityId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Solutions_Engineer__c</field>
+            <value>
+                <elementReference>$Record.UserId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
     <start>
         <locationX>176</locationX>
         <locationY>0</locationY>
@@ -159,6 +206,13 @@
             <operator>EqualTo</operator>
             <value>
                 <stringValue>Sales Development Representative</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>TeamMemberRole</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Solutions Engineer</stringValue>
             </value>
         </filters>
         <object>OpportunityTeamMember</object>

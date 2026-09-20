@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Order_Form_Term_Text__c</fullName>
+    <description>Contributor Order Form Term row, stamped by Quote_Stamp_Order_Form_Fields (20 Sep 2026): a period ("16/08/2026 to 15/08/2027") when any line is time-based, otherwise the span of the edition dates, or a single date when every edition falls on one.</description>
+    <externalId>false</externalId>
+    <label>Order Form: term text</label>
+    <length>80</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

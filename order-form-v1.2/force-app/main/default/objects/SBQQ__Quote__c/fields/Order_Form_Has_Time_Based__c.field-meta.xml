@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Order_Form_Has_Time_Based__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Stamped by Quote_Stamp_Order_Form_Fields (20 Sep 2026): true when any line's product is Time-Based. On the Contributor Order Form the Term row then prints a period; an edition-only quote prints the span of its edition dates instead.</description>
+    <externalId>false</externalId>
+    <label>Order Form: has time-based lines</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

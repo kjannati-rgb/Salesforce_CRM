@@ -382,6 +382,13 @@
             </value>
         </assignmentItems>
         <assignmentItems>
+            <assignToReference>HasTimeBasedLine</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>CumulativeTimeBased</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
             <assignToReference>LineMinStart</assignToReference>
             <operator>Assign</operator>
             <value>
@@ -416,6 +423,20 @@
             <operator>Assign</operator>
             <value>
                 <elementReference>HasContributorLine</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Order_Form_Term_Text__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>TermTextValue</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Order_Form_Has_Time_Based__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>HasTimeBasedLine</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -1092,6 +1113,28 @@
         <expression>OR({!HasSubsLine}, {!IsSubsLine})</expression>
     </formulas>
     <formulas>
+        <name>EffectiveDateValue</name>
+        <dataType>Date</dataType>
+        <expression>BLANKVALUE({!$Record.SBQQ__StartDate__c}, {!LineMinStart})</expression>
+    </formulas>
+    <formulas>
+        <name>TermTextValue</name>
+        <dataType>String</dataType>
+        <expression>IF(ISBLANK({!EffectiveDateValue}), "",
+  IF(OR(ISBLANK({!LineMaxEnd}), {!EffectiveDateValue} = {!LineMaxEnd}), RIGHT("0" &amp; TEXT(DAY({!EffectiveDateValue})), 2) &amp; "/" &amp; RIGHT("0" &amp; TEXT(MONTH({!EffectiveDateValue})), 2) &amp; "/" &amp; TEXT(YEAR({!EffectiveDateValue})),
+    RIGHT("0" &amp; TEXT(DAY({!EffectiveDateValue})), 2) &amp; "/" &amp; RIGHT("0" &amp; TEXT(MONTH({!EffectiveDateValue})), 2) &amp; "/" &amp; TEXT(YEAR({!EffectiveDateValue})) &amp; " to " &amp; RIGHT("0" &amp; TEXT(DAY({!LineMaxEnd})), 2) &amp; "/" &amp; RIGHT("0" &amp; TEXT(MONTH({!LineMaxEnd})), 2) &amp; "/" &amp; TEXT(YEAR({!LineMaxEnd}))))</expression>
+    </formulas>
+    <formulas>
+        <name>IsTimeBasedLine</name>
+        <dataType>Boolean</dataType>
+        <expression>TEXT({!Loop_Brand_Lines.SBQQ__Product__r.Subscription_Model__c}) = 'Time-Based'</expression>
+    </formulas>
+    <formulas>
+        <name>CumulativeTimeBased</name>
+        <dataType>Boolean</dataType>
+        <expression>OR({!HasTimeBasedLine}, {!IsTimeBasedLine})</expression>
+    </formulas>
+    <formulas>
         <name>IsAdvertisingLine</name>
         <dataType>Boolean</dataType>
         <expression>{!Loop_Brand_Lines.SBQQ__ProductFamily__c} = 'Advertising'</expression>
@@ -1127,12 +1170,12 @@
     <formulas>
         <name>NewMinStart</name>
         <dataType>Date</dataType>
-        <expression>IF(ISBLANK({!Loop_Brand_Lines.Start_Date_SUN_Report__c}), {!LineMinStart}, IF(OR(ISBLANK({!LineMinStart}), {!Loop_Brand_Lines.Start_Date_SUN_Report__c} &lt; {!LineMinStart}), {!Loop_Brand_Lines.Start_Date_SUN_Report__c}, {!LineMinStart}))</expression>
+        <expression>IF(ISBLANK({!Loop_Brand_Lines.Order_Form_Line_Date__c}), {!LineMinStart}, IF(OR(ISBLANK({!LineMinStart}), {!Loop_Brand_Lines.Order_Form_Line_Date__c} &lt; {!LineMinStart}), {!Loop_Brand_Lines.Order_Form_Line_Date__c}, {!LineMinStart}))</expression>
     </formulas>
     <formulas>
         <name>NewMaxEnd</name>
         <dataType>Date</dataType>
-        <expression>IF(ISBLANK({!Loop_Brand_Lines.End_Date_SUN_Report__c}), {!LineMaxEnd}, IF(OR(ISBLANK({!LineMaxEnd}), {!Loop_Brand_Lines.End_Date_SUN_Report__c} &gt; {!LineMaxEnd}), {!Loop_Brand_Lines.End_Date_SUN_Report__c}, {!LineMaxEnd}))</expression>
+        <expression>IF(ISBLANK(BLANKVALUE({!Loop_Brand_Lines.Order_Form_Line_End_Date__c}, {!Loop_Brand_Lines.Order_Form_Line_Date__c})), {!LineMaxEnd}, IF(OR(ISBLANK({!LineMaxEnd}), BLANKVALUE({!Loop_Brand_Lines.Order_Form_Line_End_Date__c}, {!Loop_Brand_Lines.Order_Form_Line_Date__c}) &gt; {!LineMaxEnd}), BLANKVALUE({!Loop_Brand_Lines.Order_Form_Line_End_Date__c}, {!Loop_Brand_Lines.Order_Form_Line_Date__c}), {!LineMaxEnd}))</expression>
     </formulas>
     <formulas>
         <name>IsLegalMonitorLine</name>
@@ -1377,6 +1420,16 @@ AND(NOT(ISBLANK({!$Record.SBQQ__StartDate__c})), {!$Record.SBQQ__StartDate__c} &
         <isOutput>false</isOutput>
         <value>
             <stringValue>|</stringValue>
+        </value>
+    </variables>
+    <variables>
+        <name>HasTimeBasedLine</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
         </value>
     </variables>
     <variables>

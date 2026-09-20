@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Order_Form_Line_End_Date__c</fullName>
+    <description>Contributor Order Form "End date" column (20 Sep 2026, Kam): only Time-Based products run over a period, so the cell stays empty for point-in-time (Edition-Based) lines.</description>
+    <externalId>false</externalId>
+    <formula>IF(TEXT(SBQQ__Product__r.Subscription_Model__c) = "Time-Based", End_Date_SUN_Report__c, null)</formula>
+    <label>Order Form: end date</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

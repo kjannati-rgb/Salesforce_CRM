@@ -220,15 +220,15 @@ async function upsert(type, extId, fields) {
   // Every column is pinned to its section: columns without a Section print in EVERY
   // Line Items section, which would drag the fee/date columns into the licence block.
   const columns = [
-    ["OF-C1-L10", "Publication and product", 10, "SBQQ__ProductName__c", 30, "Left", "OF-C1-S40"],
+    ["OF-C1-L10", "Publication and product", 10, "SBQQ__ProductName__c", 28, "Left", "OF-C1-S40"],
     ["OF-C1-L20", "Content", 20, "Order_Form_Content__c", 36, "Left", "OF-C1-S40"],
-    ["OF-C1-L50", "Start date", 50, "Start_Date_SUN_Report__c", 11, "Center", "OF-C1-S40"],
-    ["OF-C1-L60", "End date", 60, "End_Date_SUN_Report__c", 11, "Center", "OF-C1-S40"],
-    ["OF-C1-L30", "Fee (excl. tax)", 70, "SBQQ__NetTotal__c", 12, "Right", "OF-C1-S40"],
+    ["OF-C1-L50", "Date", 50, "Order_Form_Line_Date__c", 11, "Center", "OF-C1-S40"],
+    ["OF-C1-L60", "End date", 60, "Order_Form_Line_End_Date__c", 11, "Center", "OF-C1-S40"],
+    ["OF-C1-L30", "Fee (excl. tax)", 70, "SBQQ__NetTotal__c", 14, "Right", "OF-C1-S40"],
     ["OF-C1-LD10", "Publication and product", 10, "SBQQ__ProductName__c", 20, "Left", "OF-C1-S41"],
-    ["OF-C1-LD20", "Content", 20, "Order_Form_Content__c", 24, "Left", "OF-C1-S41"],
-    ["OF-C1-LD50", "Start date", 50, "Start_Date_SUN_Report__c", 12, "Center", "OF-C1-S41"],
-    ["OF-C1-LD60", "End date", 60, "End_Date_SUN_Report__c", 12, "Center", "OF-C1-S41"],
+    ["OF-C1-LD20", "Content", 20, "Order_Form_Content__c", 22, "Left", "OF-C1-S41"],
+    ["OF-C1-LD50", "Date", 50, "Order_Form_Line_Date__c", 12, "Center", "OF-C1-S41"],
+    ["OF-C1-LD60", "End date", 60, "Order_Form_Line_End_Date__c", 12, "Center", "OF-C1-S41"],
     ["OF-C1-LD25", "List price", 65, "SBQQ__ListPrice__c", 10, "Right", "OF-C1-S41"],
     ["OF-C1-LD27", "Discount", 67, "SBQQ__AdditionalDiscount__c", 10, "Right", "OF-C1-S41"],
     ["OF-C1-LD30", "Fee (excl. tax)", 70, "SBQQ__NetTotal__c", 12, "Right", "OF-C1-S41"],

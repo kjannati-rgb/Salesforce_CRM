@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Order_Form_Line_Date__c</fullName>
+    <description>Contributor Order Form "Date" column (20 Sep 2026, Kam): point-in-time products print this one date - the line Product Date, falling back to the SUN Report start date for editions that carry no product date yet. Time-Based products print it as the start of their period, with Order Form: end date alongside.</description>
+    <externalId>false</externalId>
+    <formula>BLANKVALUE(Product_Date__c, Start_Date_SUN_Report__c)</formula>
+    <label>Order Form: date</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

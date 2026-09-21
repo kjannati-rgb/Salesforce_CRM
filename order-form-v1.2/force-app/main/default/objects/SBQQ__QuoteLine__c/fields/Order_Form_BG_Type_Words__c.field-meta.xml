@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Order_Form_BG_Type_Words__c</fullName>
-    <description>21 Sep 2026 (Charlie Murray, VARO Partners): the words the Benefiting Group sentence uses when the group is described only by its type. Reads Benefitting Group Type first, then Law.com BG Group - the field Law.com reps actually fill on the segmented line (54 lines last year) and which the form previously ignored. Corporate means the in-house legal function; a law firm or consultancy means the organisation.</description>
+    <description>21 Sep 2026 (Kam, after Charlie Murray / VARO Partners): the words the Benefiting Group sentence uses when the group is described only by its type. Benefitting Group Type first - Corporate means the in-house legal function - then the Law.com BG Group field Law.com reps fill on the segmented line, where any value prints "organisation": a Law.com customer buys for the whole company as often as for its legal team, so the wider wording is the safe default and a rep who means a single team names it in Function Name.</description>
     <externalId>false</externalId>
     <formula>IF(TEXT(Benefitting_Group_Type__c) = "Corporate", "in-house legal function",
   IF(NOT(ISBLANK(TEXT(Benefitting_Group_Type__c))), "organisation",
-    IF(TEXT(Law_com_BG_Group__c) = "Corporate", "in-house legal function",
-      IF(NOT(ISBLANK(TEXT(Law_com_BG_Group__c))), "organisation", ""))))</formula>
+    IF(NOT(ISBLANK(TEXT(Law_com_BG_Group__c))), "organisation", "")))</formula>
     <label>Order Form: group type words</label>
     <required>false</required>
     <trackTrending>false</trackTrending>

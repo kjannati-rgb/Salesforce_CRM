@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Order_Form_Content__c</fullName>
-    <description>Contributor Order Form "Content" column (16 Sep 2026): one text that names whatever the line carries - chapter (content slot jurisdiction or free-prose type + title), named individual (biography taker; hidden when the quote is No Names), scope, reports covered, word count, content type, order year, submission deadline, Intelligence office tier - and, for a cross-sold subscription line, the short licence label. Parts are joined with a middle dot; the leading separator is trimmed.</description>
+    <description>Contributor Order Form "Content" column (16 Sep 2026): one text that names whatever the line carries - chapter (content slot jurisdiction or free-prose type + title), named individual (biography taker; hidden when the quote is No Names), scope, reports covered, word count, content type, order year, submission deadline, Intelligence office tier - and, for a cross-sold subscription line, the short licence label. Parts are joined with a middle dot; the leading separator is trimmed. 21 Sep 2026: a zero-fee add-on with nothing else to say (Bespoke PDF, print copies) prints "Included at no charge" rather than an empty cell.</description>
     <externalId>false</externalId>
     <formula>MID(
 IF(NOT(ISBLANK(TEXT(Content_Slot__r.Jurisdiction__c))), " · Chapter: " &amp; TEXT(Content_Slot__r.Jurisdiction__c), IF(NOT(ISBLANK(TEXT(Free_Prose_Type__c))), " · " &amp; TEXT(Free_Prose_Type__c) &amp; IF(NOT(ISBLANK(Free_Prose_Title__c)), ": " &amp; Free_Prose_Title__c, ""), "")) &amp;
@@ -14,7 +14,8 @@ IF(NOT(ISBLANK(TEXT(Order_Year__c))), " · " &amp; TEXT(Order_Year__c), "") &amp
 IF(NOT(ISBLANK(Submission_Deadline_Date__c)), " · Submission by " &amp; TEXT(DAY(Submission_Deadline_Date__c)) &amp; "/" &amp; TEXT(MONTH(Submission_Deadline_Date__c)) &amp; "/" &amp; TEXT(YEAR(Submission_Deadline_Date__c)), "") &amp;
 IF(NOT(ISBLANK(TEXT(Lexology_Intelligence_Office_Tier__c))), " · Office tier: " &amp; TEXT(Lexology_Intelligence_Office_Tier__c), "") &amp;
 IF(AND(ISBLANK(Bio_Taker__c), ISBLANK(TEXT(Content_Slot__r.Jurisdiction__c)), ISBLANK(TEXT(Free_Prose_Type__c)), NOT(ISBLANK(TEXT(License_Model__c)))), " · " &amp; License_Model_Short__c, ""),
-4, 1000)</formula>
+4, 1000)
+&amp; IF(AND(SBQQ__NetTotal__c = 0, ISBLANK(TEXT(Content_Slot__r.Jurisdiction__c)), ISBLANK(TEXT(Free_Prose_Type__c)), ISBLANK(Bio_Taker__c), ISBLANK(TEXT(Scope__c)), ISBLANK(TEXT(Reports_Covered__c)), ISBLANK(TEXT(Number_of_Words__c)), ISBLANK(TEXT(Content_Type__c)), ISBLANK(TEXT(Order_Year__c)), ISBLANK(Submission_Deadline_Date__c), ISBLANK(TEXT(Lexology_Intelligence_Office_Tier__c)), ISBLANK(TEXT(License_Model__c))), "Included at no charge", "")</formula>
     <label>Order Form: content</label>
     <required>false</required>
     <trackTrending>false</trackTrending>

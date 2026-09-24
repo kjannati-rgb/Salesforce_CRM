@@ -16,6 +16,21 @@ private class BrandCustomerStatus_Test {
     }
 
     @IsTest
+    static void lawComFamily_radarCompassVerdictSearch() {
+        // Commercial (Khris Fenton, 24 Sep 2026): Radar, Compass and VerdictSearch are sold as one
+        // Law.com family. Radar/Compass products carry Brand__c 'Law.com' (same brand -> Upsell);
+        // VerdictSearch is its own brand in the family (-> Cross-sell against Law.com and back).
+        System.assertEquals('Law.com', BrandCustomerStatus.resolveLeadBrand(null, 'LAW.COM RADAR', null));
+        System.assertEquals('Law.com', BrandCustomerStatus.resolveLeadBrand(null, 'Legal Radar', null));
+        System.assertEquals('Law.com', BrandCustomerStatus.resolveLeadBrand(null, 'Legal Compass', null));
+        System.assertEquals('VerdictSearch', BrandCustomerStatus.resolveLeadBrand(null, 'VerdictSearch.com', null));
+        System.assertEquals('Law.com', BrandCustomerStatus.familyOf('Law.com'));
+        System.assertEquals('Law.com', BrandCustomerStatus.familyOf('VerdictSearch'));
+        // marketing-campaign strings are deliberately NOT mapped (some are advertising, not Law.com subs)
+        System.assertEquals(null, BrandCustomerStatus.resolveLeadBrand(null, 'Law.com Promo - Media Kit Announcement', null));
+    }
+
+    @IsTest
     static void forFirm_prospectWhenNoActiveSub() {
         Account firm = new Account(Name = 'Brand Prospect Firm', RecordTypeId = FIRM_RT);
         insert firm;

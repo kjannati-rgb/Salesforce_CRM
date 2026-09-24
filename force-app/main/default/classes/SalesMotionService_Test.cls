@@ -36,6 +36,38 @@ private class SalesMotionService_Test {
         System.assertEquals('New Business', a.motion, 'but it never makes the enquiry a cross-sell');
     }
 
+    private static User userInTeam(String team) {
+        Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User' LIMIT 1];
+        String key = 'tm' + String.valueOf(Math.abs(Crypto.getRandomInteger())).left(6);
+        User u = new User(FirstName = 'Team', LastName = 'Rep', Alias = key.left(8), Email = key + '@lbr-demo.test',
+            Username = key + '.' + System.currentTimeMillis() + '@lbr-demo.test', ProfileId = p.Id, Team__c = team,
+            EmailEncodingKey = 'UTF-8', LanguageLocaleKey = 'en_US', LocaleSidKey = 'en_GB', TimeZoneSidKey = 'Europe/London');
+        insert u;
+        return u;
+    }
+
+    @IsTest
+    static void repFallback_teamLineDecidesOnlyWhenLeadNamesNoProduct() {
+        // Commercial (Khris Fenton, 24 Sep 2026): the opportunity owner's product line decides the
+        // motion when the lead doesn't say which product it's about.
+        User lawcomRep = userInTeam('ALM Legal - Info Services');
+        User dataRep = userInTeam('Data');
+        Test.startTest();
+        SalesMotionService.Assessment noProduct = SalesMotionService.assessForRep(null, null, null, lawcomRep.Id);
+        SalesMotionService.Assessment namedProduct = SalesMotionService.assessForRep(null, 'Lexology Intelligence', null, lawcomRep.Id);
+        SalesMotionService.Assessment freeText = SalesMotionService.assessForRep(null, null, 'Benefits Pro', lawcomRep.Id);
+        SalesMotionService.Assessment unmappedTeam = SalesMotionService.assessForRep(null, null, null, dataRep.Id);
+        Test.stopTest();
+        System.assertEquals('Law.com', noProduct.brand, 'no product on the lead -> the rep\'s line');
+        System.assertEquals(true, noProduct.brandFromRep);
+        System.assertEquals('Lexology Intelligence', namedProduct.brand, 'a recognised product on the lead still wins');
+        System.assertEquals(false, namedProduct.brandFromRep);
+        System.assertEquals('Law.com', freeText.brand, 'unrecognised free text falls back to the rep\'s line too');
+        System.assertEquals(null, unmappedTeam.brand, 'a team with no single product line changes nothing');
+        System.assertEquals(false, unmappedTeam.brandFromRep);
+        System.assertEquals('New Business', unmappedTeam.motion);
+    }
+
     @IsTest
     static void firmHasWonBusiness_falseWhenNone() {
         Account firm = new Account(Name = 'No Won Firm', RecordTypeId = FIRM_RT);

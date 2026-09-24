@@ -68,12 +68,29 @@ public with sharing class BrandCustomerStatus {
         return String.isBlank(canonical) ? null : matchGroupMap().get(canonical);
     }
 
+    // Rows with this Source_Field__c map a sales TEAM to the product line it sells, not a product value.
+    @TestVisible private static final String TEAM_SOURCE_FIELD = 'User.Team__c';
+
     /** Resolve an inbound brand/product value (Lead field or form) to a canonical Brand__c via CMDT. */
     public static String canonicalBrand(String sourceValue) {
         if (String.isBlank(sourceValue)) return null;
         String needle = sourceValue.trim();
         for (Brand_Mapping__mdt m : Brand_Mapping__mdt.getAll().values()) {
+            if (m.Source_Field__c == TEAM_SOURCE_FIELD) continue;
             if (m.Source_Value__c != null && m.Source_Value__c.equalsIgnoreCase(needle)) {
+                return m.Canonical_Brand__c;
+            }
+        }
+        return null;
+    }
+
+    /** The single product line a sales team sells (null when the team is unmapped or sells several). */
+    public static String canonicalBrandForTeam(String team) {
+        if (String.isBlank(team)) return null;
+        String needle = team.trim();
+        for (Brand_Mapping__mdt m : Brand_Mapping__mdt.getAll().values()) {
+            if (m.Source_Field__c == TEAM_SOURCE_FIELD && m.Source_Value__c != null
+                    && m.Source_Value__c.equalsIgnoreCase(needle)) {
                 return m.Canonical_Brand__c;
             }
         }

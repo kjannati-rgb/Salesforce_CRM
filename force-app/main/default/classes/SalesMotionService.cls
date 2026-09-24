@@ -31,6 +31,7 @@ public with sharing class SalesMotionService {
         @AuraEnabled public Boolean familyCustomer;// active term for a sibling in the same family
         @AuraEnabled public String brandFamily;    // family name (e.g. Specialist Platforms)
         @AuraEnabled public Boolean knownAccount;  // firm has prior won business (any brand) - context only, not the motion
+        @AuraEnabled public Boolean brandFromRep;  // lead named no product, so the converting rep's product line was used
         @AuraEnabled public String motion;         // New Business | Cross-sell | Upsell | Renewal
         @AuraEnabled public Date renewalDate;      // active term end (Upsell/Renewal)
     }
@@ -42,6 +43,7 @@ public with sharing class SalesMotionService {
         a.brandFamily = BrandCustomerStatus.familyOf(canonicalBrand);
         a.brandCustomer = false;
         a.familyCustomer = false;
+        a.brandFromRep = false;
         if (firmId != null && String.isNotBlank(canonicalBrand)) {
             BrandCustomerStatus.Status bs = BrandCustomerStatus.forFirm(firmId, canonicalBrand);
             a.brandStatus = bs.label;
@@ -60,6 +62,32 @@ public with sharing class SalesMotionService {
     public static Assessment assessFromSource(Id firmId, String lexologyProduct, String almInterest, String formBrand) {
         String canonical = BrandCustomerStatus.resolveLeadBrand(lexologyProduct, almInterest, formBrand);
         return assess(firmId, canonical);
+    }
+
+    /**
+     * Door 1, when a rep converts: the lead's own product decides when it names one we recognise;
+     * otherwise the converting rep's product line does, because the opportunity they create is for
+     * what their team sells (Commercial, 24 Sep 2026). The Pardot door has no rep and never uses this.
+     */
+    public static Assessment assessForRep(Id firmId, String lexologyProduct, String almInterest, Id repUserId) {
+        String canonical = BrandCustomerStatus.resolveLeadBrand(lexologyProduct, almInterest, null);
+        Boolean fromRep = false;
+        if (canonical == null) {
+            canonical = brandForUser(repUserId);
+            fromRep = canonical != null;
+        }
+        Assessment a = assess(firmId, canonical);
+        a.brandFromRep = fromRep;
+        return a;
+    }
+
+    /** The product line of the user's sales team (User.Team__c), or null when it maps to no single line. */
+    public static String brandForUser(Id userId) {
+        if (userId == null) return null;
+        for (User u : [SELECT Team__c FROM User WHERE Id = :userId LIMIT 1]) {
+            return BrandCustomerStatus.canonicalBrandForTeam(u.Team__c);
+        }
+        return null;
     }
 
     /** Pure rule: decide the motion from the resolved signals. */

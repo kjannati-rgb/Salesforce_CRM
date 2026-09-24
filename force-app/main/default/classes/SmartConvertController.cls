@@ -24,6 +24,7 @@ public with sharing class SmartConvertController {
         @AuraEnabled public Boolean conflict;
         @AuraEnabled public Boolean existingCustomer;
         @AuraEnabled public Boolean knownAccount;  // firm has prior won opps (existing relationship, any brand)
+        @AuraEnabled public Boolean brandFromRep;  // lead named no product; brand is the converting rep's product line
         @AuraEnabled public Boolean familyCustomer; // holds an active SIBLING title in the same brand family
         @AuraEnabled public String brand;         // canonical brand resolved for this lead
         @AuraEnabled public String brandFamily;   // brand family this brand belongs to (e.g. Specialist Platforms)
@@ -203,8 +204,10 @@ public with sharing class SmartConvertController {
         // Brand-aware sales motion — ONE shared brain (same call the convert path + Pardot door use).
         // Preview assesses the auto-matched firm; convert re-assesses the firm of the office actually
         // chosen (authoritative). Same firm => identical motion; a cross-firm office override re-evaluates.
-        v.brand = BrandCustomerStatus.resolveLeadBrand(ld.Lexology_Product__c, ld.ALM_Product_Interest__c, null);
-        SalesMotionService.Assessment sm = SalesMotionService.assess(m.resolvedFirmId, v.brand);
+        SalesMotionService.Assessment sm = SalesMotionService.assessForRep(
+            m.resolvedFirmId, ld.Lexology_Product__c, ld.ALM_Product_Interest__c, UserInfo.getUserId());
+        v.brand = sm.brand;
+        v.brandFromRep = sm.brandFromRep;
         v.brandStatus = sm.brandStatus;
         v.brandFamily = sm.brandFamily;
         v.familyCustomer = sm.familyCustomer;
@@ -663,6 +666,8 @@ public with sharing class SmartConvertController {
     public class MotionResult {
         public String motion;     // New Business | Cross-sell | Upsell | Renewal
         public Date renewalDate;  // active term end (Upsell/Renewal only)
+        public String brand;      // the brand the motion was assessed against (lead's product, else rep's line)
+        public Boolean brandFromRep = false;
     }
 
     /** Resolve the motion at convert time from the actual target office + the lead's brand. */
@@ -676,10 +681,12 @@ public with sharing class SmartConvertController {
             for (Account o : [SELECT Ultimate_Account__c FROM Account WHERE Id = :officeId LIMIT 1]) {
                 if (o.Ultimate_Account__c != null) firmId = o.Ultimate_Account__c;
             }
-            SalesMotionService.Assessment a =
-                SalesMotionService.assessFromSource(firmId, l.Lexology_Product__c, l.ALM_Product_Interest__c, null);
+            SalesMotionService.Assessment a = SalesMotionService.assessForRep(
+                firmId, l.Lexology_Product__c, l.ALM_Product_Interest__c, UserInfo.getUserId());
             mo.motion = a.motion;
             mo.renewalDate = a.renewalDate;
+            mo.brand = a.brand;
+            mo.brandFromRep = a.brandFromRep == true;
         } catch (Exception e) {
             // best-effort; default to New Business
         }
@@ -700,11 +707,14 @@ public with sharing class SmartConvertController {
             Lead l = [SELECT Company, LeadSource, Lexology_Product__c, ALM_Product_Interest__c
                       FROM Lead WHERE Id = :leadId LIMIT 1];
             String brand = BrandCustomerStatus.resolveLeadBrand(l.Lexology_Product__c, l.ALM_Product_Interest__c, null);
+            Boolean fromRep = false;
+            if (brand == null && mo != null && mo.brand != null) { brand = mo.brand; fromRep = true; }
             String co = String.isBlank(l.Company) ? 'New Business' : l.Company;
             String motion = (mo != null && String.isNotBlank(mo.motion)) ? mo.motion : 'New Business';
             Opportunity opp = new Opportunity(Id = oppId);
             opp.Name = co + (brand != null ? ' - ' + brand : '') + ' - ' + motion;
-            opp.Description = 'Inbound lead' + (brand != null ? ' interested in ' + brand : '')
+            opp.Description = (fromRep ? ('Inbound lead for ' + brand + ' (converting rep\'s product line)')
+                                       : ('Inbound lead' + (brand != null ? ' interested in ' + brand : '')))
                 + ' — ' + motion + '. Converted via Smart Convert.';
             opp.Type = oppTypeFor(motion);
             if (String.isNotBlank(brand)) opp.Product_list__c = brand;
@@ -1093,26 +1103,34 @@ public with sharing class SmartConvertController {
             b.cls = 'ok'; b.ic = 'refresh';
             String ends = (v.renewalDate != null) ? (' Their current term ends ' + v.renewalDate.format() + '.') : '';
             b.html = '<b>Existing ' + v.brand + ' customer — renewal opportunity.</b>' + ends
-                + ' Convert into the existing office and create the renewal.';
+                + ' Convert into the existing office and create the renewal.' + repLineNote(v);
         } else if (v.oppMotion == 'Upsell') {
             b.cls = 'ok'; b.ic = 'trending';
-            b.html = '<b>Existing ' + v.brand + ' customer — upsell opportunity.</b> Convert into the existing office and add the expansion opportunity (no new account needed).';
+            b.html = '<b>Existing ' + v.brand + ' customer — upsell opportunity.</b> Convert into the existing office and add the expansion opportunity (no new account needed).'
+                + repLineNote(v);
         } else if (v.oppMotion == 'Cross-sell') {
             b.cls = 'info'; b.ic = 'wand';
             b.html = '<b>Existing ' + v.brandFamily + ' client — cross-sell into ' + v.brand + '.</b> They already subscribe to another '
-                + v.brandFamily + ' title but not ' + v.brand + ' — a warm cross-sell. Convert into the existing office.';
+                + v.brandFamily + ' title but not ' + v.brand + ' — a warm cross-sell. Convert into the existing office.' + repLineNote(v);
         } else if (v.brand != null && v.brandStatus == 'prospect') {
             b.cls = 'info'; b.ic = 'trending';
-            b.html = (v.knownAccount == true)
+            b.html = ((v.knownAccount == true)
                 ? ('<b>New business for ' + v.brand + '.</b> This firm already works with us on other products, but holds no active '
                     + v.brand + ' subscription — so for ' + v.brand + ' this is new business, not a cross-sell.')
                 : ('<b>New to ' + v.brand + '.</b> They don\'t have an active ' + v.brand
-                    + ' subscription at this firm — a real ' + v.brand + ' opportunity.');
+                    + ' subscription at this firm — a real ' + v.brand + ' opportunity.')) + repLineNote(v);
         } else {
             b.cls = 'info'; b.ic = 'location';
             b.html = 'We\'ve pre-selected the best office by location, then by opportunity activity. Just confirm before you convert.';
         }
         return b;
+    }
+
+    /** Tells the rep when their own team's product line, not the lead, decided the brand. */
+    private static String repLineNote(View v) {
+        return (v.brandFromRep == true)
+            ? ' <i>The lead doesn\'t name a product, so this is based on your team\'s line — ' + v.brand + '.</i>'
+            : '';
     }
 
     private static String money(Decimal v) {

@@ -31,6 +31,19 @@ private class BrandCustomerStatus_Test {
     }
 
     @IsTest
+    static void teamRows_resolveTeamsOnly_neverLeadValues() {
+        System.assertEquals('Law.com', BrandCustomerStatus.canonicalBrandForTeam('ALM Legal - Info Services'));
+        System.assertEquals('Lexology PRO', BrandCustomerStatus.canonicalBrandForTeam('Lexology Pro'));
+        System.assertEquals(null, BrandCustomerStatus.canonicalBrandForTeam('Specialist Platforms'),
+            'multi-title team: no single line until Commercial decides');
+        System.assertEquals(null, BrandCustomerStatus.canonicalBrandForTeam('Data'));
+        // a team name typed into a lead field must not be read as a product
+        System.assertEquals(null, BrandCustomerStatus.canonicalBrand('ALM Legal - Info Services'));
+        // and product rows never answer for a team
+        System.assertEquals(null, BrandCustomerStatus.canonicalBrandForTeam('Legal Radar'));
+    }
+
+    @IsTest
     static void forFirm_prospectWhenNoActiveSub() {
         Account firm = new Account(Name = 'Brand Prospect Firm', RecordTypeId = FIRM_RT);
         insert firm;

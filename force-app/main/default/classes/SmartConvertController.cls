@@ -1099,15 +1099,15 @@ public with sharing class SmartConvertController {
             b.html = '<b>Existing ' + v.brand + ' customer — upsell opportunity.</b> Convert into the existing office and add the expansion opportunity (no new account needed).';
         } else if (v.oppMotion == 'Cross-sell') {
             b.cls = 'info'; b.ic = 'wand';
-            b.html = (v.familyCustomer == true && String.isNotBlank(v.brandFamily))
-                ? ('<b>Existing ' + v.brandFamily + ' client — cross-sell into ' + v.brand + '.</b> They already subscribe to another '
-                    + v.brandFamily + ' title but not ' + v.brand + ' — a warm cross-sell. Convert into the existing office.')
-                : ('<b>Existing client' + (v.brand != null ? ', new to ' + v.brand : '') + ' — cross-sell opportunity.</b> They already do business with us, just not on this '
-                    + (v.brand != null ? 'brand' : 'line') + '. Convert into the existing office.');
+            b.html = '<b>Existing ' + v.brandFamily + ' client — cross-sell into ' + v.brand + '.</b> They already subscribe to another '
+                + v.brandFamily + ' title but not ' + v.brand + ' — a warm cross-sell. Convert into the existing office.';
         } else if (v.brand != null && v.brandStatus == 'prospect') {
             b.cls = 'info'; b.ic = 'trending';
-            b.html = '<b>New to ' + v.brand + '.</b> They don\'t have an active ' + v.brand
-                + ' subscription at this firm (they may subscribe to other brands) — a real ' + v.brand + ' opportunity.';
+            b.html = (v.knownAccount == true)
+                ? ('<b>New business for ' + v.brand + '.</b> This firm already works with us on other products, but holds no active '
+                    + v.brand + ' subscription — so for ' + v.brand + ' this is new business, not a cross-sell.')
+                : ('<b>New to ' + v.brand + '.</b> They don\'t have an active ' + v.brand
+                    + ' subscription at this firm — a real ' + v.brand + ' opportunity.');
         } else {
             b.cls = 'info'; b.ic = 'location';
             b.html = 'We\'ve pre-selected the best office by location, then by opportunity activity. Just confirm before you convert.';

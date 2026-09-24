@@ -8,12 +8,17 @@
  *  - Door 1 (SDR cockpit / SmartConvertController) — at match preview AND at convert.
  *  - Door 2 (Pardot form completion) — via the @InvocableMethod, for flow.
  *
- * Motion rules (per-title customer, with family cross-sell):
+ * Motion rules - driven ONLY by active subscriptions relevant to the enquiry's product:
  *  - active term for THIS brand, ending within the renewal window  -> Renewal
  *  - active term for THIS brand, ending later                      -> Upsell
- *  - active term for a SIBLING brand in the same family, OR any
- *    prior won business with the firm                              -> Cross-sell
+ *  - active term for a SIBLING brand in the same family
+ *    (Brand_Mapping__mdt.Family__c)                                -> Cross-sell
  *  - otherwise                                                     -> New Business
+ *
+ * Prior won business with the firm on an UNRELATED product (e.g. a Lexology or Events deal
+ * when the enquiry is for Law.com) is New Business for the enquiring brand, per Commercial
+ * (Khris Fenton, 24 Sep 2026). knownAccount is still reported as relationship context, but
+ * it never decides the motion. Which brands count as "related" is purely the Family__c config.
  */
 public with sharing class SalesMotionService {
 
@@ -25,7 +30,7 @@ public with sharing class SalesMotionService {
         @AuraEnabled public Boolean brandCustomer; // active term for this exact title
         @AuraEnabled public Boolean familyCustomer;// active term for a sibling in the same family
         @AuraEnabled public String brandFamily;    // family name (e.g. Specialist Platforms)
-        @AuraEnabled public Boolean knownAccount;  // firm has prior won business (any brand)
+        @AuraEnabled public Boolean knownAccount;  // firm has prior won business (any brand) - context only, not the motion
         @AuraEnabled public String motion;         // New Business | Cross-sell | Upsell | Renewal
         @AuraEnabled public Date renewalDate;      // active term end (Upsell/Renewal)
     }
@@ -47,7 +52,7 @@ public with sharing class SalesMotionService {
             a.brandStatus = 'unknown';
         }
         a.knownAccount = firmHasWonBusiness(firmId);
-        a.motion = classify(canonicalBrand, a.brandCustomer, a.familyCustomer, a.renewalDate, a.knownAccount);
+        a.motion = classify(canonicalBrand, a.brandCustomer, a.familyCustomer, a.renewalDate);
         return a;
     }
 
@@ -58,13 +63,13 @@ public with sharing class SalesMotionService {
     }
 
     /** Pure rule: decide the motion from the resolved signals. */
-    public static String classify(String brand, Boolean brandCustomer, Boolean familyCustomer,
-            Date renewalDate, Boolean knownAccount) {
-        if (String.isNotBlank(brand) && brandCustomer == true) {
+    public static String classify(String brand, Boolean brandCustomer, Boolean familyCustomer, Date renewalDate) {
+        if (String.isBlank(brand)) return 'New Business';   // no known product -> nothing it could be relevant to
+        if (brandCustomer == true) {
             Boolean renewing = renewalDate != null && renewalDate <= Date.today().addDays(RENEWAL_WINDOW_DAYS);
             return renewing ? 'Renewal' : 'Upsell';
         }
-        if (familyCustomer == true || knownAccount == true) return 'Cross-sell';
+        if (familyCustomer == true) return 'Cross-sell';
         return 'New Business';
     }
 

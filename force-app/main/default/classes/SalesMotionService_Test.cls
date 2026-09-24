@@ -9,16 +9,31 @@ private class SalesMotionService_Test {
         Date soon = Date.today().addDays(30);
         Date later = Date.today().addDays(300);
         // active term for this brand, ending soon -> Renewal; ending later -> Upsell
-        System.assertEquals('Renewal', SalesMotionService.classify('GCR', true, true, soon, true));
-        System.assertEquals('Upsell', SalesMotionService.classify('GCR', true, true, later, true));
+        System.assertEquals('Renewal', SalesMotionService.classify('GCR', true, true, soon));
+        System.assertEquals('Upsell', SalesMotionService.classify('GCR', true, true, later));
         // not this title, but a sibling in the family -> Cross-sell
-        System.assertEquals('Cross-sell', SalesMotionService.classify('GAR', false, true, null, false));
-        // not this title, no sibling, but prior won business -> Cross-sell
-        System.assertEquals('Cross-sell', SalesMotionService.classify('Lexology', false, false, null, true));
-        // nothing -> New Business
-        System.assertEquals('New Business', SalesMotionService.classify('Lexology', false, false, null, false));
-        // brand customer flag ignored when there's no brand
-        System.assertEquals('New Business', SalesMotionService.classify(null, true, false, soon, false));
+        System.assertEquals('Cross-sell', SalesMotionService.classify('GAR', false, true, null));
+        // no active subscription relevant to the enquiry -> New Business
+        System.assertEquals('New Business', SalesMotionService.classify('Lexology', false, false, null));
+        // no resolvable product: nothing to be relevant to, whatever the flags say
+        System.assertEquals('New Business', SalesMotionService.classify(null, true, false, soon));
+        System.assertEquals('New Business', SalesMotionService.classify(null, false, true, null));
+    }
+
+    @IsTest
+    static void wonBusinessOnOtherBrands_isNewBusiness_notCrossSell() {
+        // Regression (Khris Fenton, 24 Sep 2026): a Law.com enquiry at a firm with Closed Won
+        // deals on OTHER products is New Business for Law.com, not a cross-sell.
+        Account firm = new Account(Name = 'Won Elsewhere Firm', RecordTypeId = FIRM_RT);
+        insert firm;
+        Id officeRt = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Office').getRecordTypeId();
+        insert new Account(Name = 'Won Elsewhere Office', RecordTypeId = officeRt, Ultimate_Account__c = firm.Id,
+            No_of_Won_Office_Opportunities__c = 7);
+        Test.startTest();
+        SalesMotionService.Assessment a = SalesMotionService.assess(firm.Id, 'Law.com');
+        Test.stopTest();
+        System.assertEquals(true, a.knownAccount, 'won business is still surfaced as relationship context');
+        System.assertEquals('New Business', a.motion, 'but it never makes the enquiry a cross-sell');
     }
 
     @IsTest

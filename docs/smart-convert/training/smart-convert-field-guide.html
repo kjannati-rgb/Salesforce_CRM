@@ -1,0 +1,445 @@
+<title>Smart Convert Field Guide</title>
+<style>
+:root{
+  --navy:#003340; --teal:#00707a; --cyan:#00c8a7; --azure:#008f96;
+  --bg:#F6F9FB; --card:#ffffff; --ink:#122736; --ink2:#3a4b60; --ink3:#5B6B82;
+  --line:#dfe6ec; --line2:#ecf1f5;
+  --teal-bg:#E9F6F5; --teal-line:#BFE4E1;
+  --gold:#8a6210; --gold-bg:#F8F0DC; --green:#157A52; --green-bg:#E6F3EC;
+  --red:#B8402F; --red-bg:#FBEDEA;
+  --mock-bg:#eef2f6; --shadow:0 1px 2px rgba(10,26,47,.05),0 6px 18px rgba(10,26,47,.06);
+  --serif:Georgia,"Times New Roman",serif;
+  --sans:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,"Cascadia Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --navy:#cfe6ea; --teal:#5fd0c4; --cyan:#00c8a7; --azure:#4dbcb2;
+    --bg:#0e1a20; --card:#15242c; --ink:#e5eef2; --ink2:#b9c8d2; --ink3:#8fa3b0;
+    --line:#27404b; --line2:#1d323c;
+    --teal-bg:#123a3c; --teal-line:#1f5a58;
+    --gold:#e0b45e; --gold-bg:#2e2713; --green:#6fce9f; --green-bg:#13301f;
+    --red:#f09a8a; --red-bg:#3a1c14;
+    --mock-bg:#0a141a; --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --navy:#cfe6ea; --teal:#5fd0c4; --cyan:#00c8a7; --azure:#4dbcb2;
+  --bg:#0e1a20; --card:#15242c; --ink:#e5eef2; --ink2:#b9c8d2; --ink3:#8fa3b0;
+  --line:#27404b; --line2:#1d323c;
+  --teal-bg:#123a3c; --teal-line:#1f5a58;
+  --gold:#e0b45e; --gold-bg:#2e2713; --green:#6fce9f; --green-bg:#13301f;
+  --red:#f09a8a; --red-bg:#3a1c14;
+  --mock-bg:#0a141a; --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.35);
+}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;margin:0}
+.wrap{max-width:860px;margin:0 auto;padding:40px 22px 80px}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);font-weight:600}
+.kicker::before{content:"";display:inline-block;width:16px;height:2px;background:var(--cyan);border-radius:2px;margin-right:8px;vertical-align:middle}
+h1{font-family:var(--serif);font-size:clamp(30px,5vw,42px);line-height:1.1;letter-spacing:-.02em;color:var(--navy);margin:10px 0 10px;text-wrap:balance}
+h2{font-family:var(--serif);font-size:26px;letter-spacing:-.015em;color:var(--navy);margin:0 0 6px;text-wrap:balance}
+h3{font-size:15px;color:var(--navy);margin:22px 0 8px}
+.lede{font-size:17px;color:var(--ink2);max-width:58ch;margin:0 0 8px}
+p{max-width:66ch}
+section{margin-top:58px}
+.stepnum{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--teal);color:#fff;font-weight:700;font-size:14px;font-family:var(--sans);margin-right:10px;vertical-align:middle}
+:root[data-theme="dark"] .stepnum{color:#08211f}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .stepnum{color:#08211f}}
+.meta{color:var(--ink3);font-size:13px}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin:26px 0 0}
+.toc a{font-size:12.5px;font-weight:600;color:var(--teal);background:var(--teal-bg);border:1px solid var(--teal-line);border-radius:999px;padding:6px 12px;text-decoration:none}
+.toc a:hover{filter:brightness(.96)}
+a{color:var(--teal)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow)}
+.do{border-left:none;background:var(--teal-bg);border:1px solid var(--teal-line);border-radius:12px;padding:14px 18px;margin:16px 0}
+.do b{color:var(--teal)}
+.warn{background:var(--gold-bg);border:1px solid var(--gold);border-radius:12px;padding:14px 18px;margin:16px 0;color:var(--ink)}
+.warn b{color:var(--gold)}
+.okbox{background:var(--green-bg);border:1px solid var(--green);border-radius:12px;padding:14px 18px;margin:16px 0}
+.okbox b{color:var(--green)}
+.rules{counter-reset:r;display:grid;gap:0;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);padding:0;margin:18px 0;list-style:none}
+.rules li{counter-increment:r;display:flex;gap:14px;align-items:baseline;padding:13px 18px;border-top:1px solid var(--line2);font-size:14.5px}
+.rules li:first-child{border-top:none}
+.rules li::before{content:counter(r);font-family:var(--mono);font-weight:700;color:var(--teal);min-width:1.2em;text-align:right}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+.tblwrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+th{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);text-align:left;padding:12px 16px;border-bottom:1px solid var(--line)}
+td{padding:12px 16px;border-bottom:1px solid var(--line2);vertical-align:top;color:var(--ink2)}
+tr:last-child td{border-bottom:none}
+td b{color:var(--ink)}
+.diagram{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow);overflow-x:auto}
+.diagram svg{display:block;min-width:640px;margin:0 auto}
+figcaption{font-size:12.5px;color:var(--ink3);margin-top:10px;text-align:center}
+figure{margin:18px 0}
+/* ===== faithful component mockups ===== */
+.shot{background:var(--mock-bg);border:1px solid var(--line);border-radius:16px;padding:22px;margin:18px 0;overflow-x:auto}
+.sc{min-width:560px;max-width:640px;margin:0 auto;background:#fff;border:1px solid #E1E7F0;border-radius:16px;color:#0A1A2F;font-family:var(--sans);box-shadow:0 1px 2px rgba(10,26,47,.06),0 10px 34px rgba(10,26,47,.10);position:relative}
+.sc *{box-sizing:border-box}
+.sc-top{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid #E1E7F0}
+.sc-mark{width:24px;height:24px;border-radius:50%;flex:none;background:radial-gradient(circle at 50% 50%,#008f96 0 26%,#fff 27% 34%,transparent 35%);border:2px solid #003340}
+.sc-wm{font-family:var(--serif);font-weight:600;font-size:16px;color:#003340}
+.sc-sub{display:block;font-weight:600;color:#5B6B82;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase}
+.sc-cent{margin-left:auto;font-weight:700;font-size:10px;letter-spacing:.2em;color:#003340}
+.sc-cent i{color:#00c8a7;font-style:normal}
+.sc-pill{font-family:var(--mono);font-size:9px;color:#157A52;background:#E6F3EC;border:1px solid #c9e7d8;padding:3px 8px;border-radius:999px;font-weight:600}
+.sc-steps{display:flex;gap:6px;padding:12px 18px 4px;background:#F6F9FB}
+.sc-st{flex:1;display:flex;align-items:center;gap:6px;opacity:.45;font-size:9.5px;font-weight:600;color:#3a4b60;white-space:nowrap}
+.sc-st.on{opacity:1}
+.sc-st i{width:18px;height:18px;border-radius:50%;display:inline-grid;place-items:center;font-size:9px;font-weight:700;font-style:normal;background:#EEF1F7;border:1px solid #E1E7F0;flex:none}
+.sc-st.on i{background:#00707a;color:#fff;border-color:#00707a}
+.sc-st.done i{background:#157A52;color:#fff;border-color:#157A52}
+.sc-qbar{display:flex;gap:6px;flex-wrap:wrap;padding:4px 18px 8px;background:#F6F9FB}
+.chip{font-family:var(--mono);font-size:9px;font-weight:700;color:#3a4b60;background:#EEF1F7;border:1px solid #E1E7F0;padding:3px 8px;border-radius:999px}
+.chip.ok{color:#157A52;background:#E6F3EC;border-color:#c9e7d8}
+.chip.bad{color:#B8402F;background:#FBEDEA;border-color:#f0d2cd}
+.chip.none{color:#5B6B82;background:transparent;border-style:dashed;font-weight:600}
+.sc-stage{padding:10px 18px 18px;background:#F6F9FB;border-radius:0 0 16px 16px}
+.sc-eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#00707a;font-weight:600}
+.sc-eyebrow::before{content:"";display:inline-block;width:12px;height:2px;background:#00c8a7;border-radius:2px;margin-right:6px;vertical-align:middle}
+.sc-title{font-family:var(--serif);font-weight:600;font-size:20px;letter-spacing:-.018em;margin:6px 0 3px;color:#003340}
+.sc-body{color:#5B6B82;font-size:11.5px;margin:0 0 12px;max-width:60ch}
+.express{border:1.5px solid #157A52;background:#E6F3EC;border-radius:12px;padding:12px 14px;margin-bottom:12px}
+.express h4{margin:0;font-size:12px;color:#157A52}
+.express p{margin:4px 0 10px;font-size:12px;color:#003340}
+.btn{display:inline-block;font-weight:700;font-size:11.5px;border-radius:9px;padding:8px 13px;background:#00707a;color:#fff;border:1px solid #00707a}
+.link{font-size:11px;font-weight:600;color:#3a4b60;margin-left:12px}
+.cand{background:#fff;border:1.5px solid #EEF1F7;border-radius:11px;padding:11px 13px;margin-bottom:8px;box-shadow:0 1px 2px rgba(10,26,47,.05);display:flex;gap:10px;align-items:flex-start;position:relative}
+.cand.sel{border-color:#008f96;background:linear-gradient(180deg,#F2FAF9,#FFF 78%);box-shadow:0 0 0 3px rgba(0,143,150,.13)}
+.radio{width:15px;height:15px;border-radius:50%;border:2px solid #5B6B82;flex:none;margin-top:2px}
+.cand.sel .radio{border:4.5px solid #008f96}
+.cand h5{margin:0;font-size:12.5px;color:#003340}
+.cand small{display:block;color:#5B6B82;font-size:10.5px;margin-top:1px}
+.cand .val{margin-left:auto;text-align:right;flex:none}
+.cand .val b{font-family:var(--serif);font-size:16px;color:#003340;display:block;line-height:1}
+.cand .val span{font-size:8.5px;color:#5B6B82;text-transform:uppercase;letter-spacing:.08em}
+.badge{position:absolute;top:-8px;left:12px;color:#fff;font-size:8.5px;font-weight:700;padding:2px 7px;border-radius:999px;background:#00707a}
+.banner{display:flex;gap:9px;align-items:flex-start;padding:10px 12px;border-radius:10px;font-size:11px;line-height:1.45;margin-bottom:12px}
+.banner.warn2{background:#F8F0DC;border:1px solid #ecdcb0;color:#7d5c12}
+.banner.ok2{background:#E6F3EC;border:1px solid #c9e7d8;color:#0c6b46}
+.banner.info2{background:#E9F6F5;border:1px solid #BFE4E1;color:#00707a}
+.banner.block2{background:#FBEDEA;border:1px solid #f0d2cd;color:#8f3527}
+.ctx{background:#fff;border:1px solid #EEF1F7;border-radius:11px;padding:9px 13px;margin-bottom:10px;display:flex;align-items:center;gap:8px;font-size:11px;box-shadow:0 1px 2px rgba(10,26,47,.05)}
+.ctx b{font-size:11.5px;color:#003340}
+.ctx span{color:#5B6B82;font-size:10.5px}
+.ctx .chev{margin-left:auto;color:#5B6B82}
+.tm{font-size:9.5px;color:#00707a;background:#E9F6F5;border:1px solid #BFE4E1;border-radius:999px;padding:2px 8px;font-weight:700}
+.seal{width:56px;height:56px;border-radius:50%;margin:8px auto 10px;background:radial-gradient(circle at 30% 25%,#1f9e69,#157A52);display:grid;place-items:center;color:#fff;font-size:26px;box-shadow:0 6px 18px rgba(21,122,82,.22),0 0 0 7px rgba(21,122,82,.08)}
+.seal.err{background:radial-gradient(circle at 30% 25%,#d6776e,#B8402F);box-shadow:0 6px 18px rgba(184,64,47,.22),0 0 0 7px rgba(184,64,47,.08)}
+.center{text-align:center}
+.na{max-width:400px;margin:14px auto 0;text-align:left;border:1px solid #EEF1F7;border-radius:11px;padding:12px 14px;background:#fff;box-shadow:0 1px 2px rgba(10,26,47,.05)}
+.na h5{margin:0 0 6px;font-size:11.5px;color:#003340}
+.na p{font-size:11px;color:#3a4b60;margin:0 0 8px}
+.na .row{display:flex;gap:10px;font-size:10.5px;color:#3a4b60;margin-bottom:7px}
+.pillbtns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.pillbtn{font-size:11px;font-weight:700;color:#00707a;background:#E9F6F5;border:1px solid #BFE4E1;border-radius:9px;padding:7px 11px}
+.callout{position:absolute;width:22px;height:22px;border-radius:50%;background:var(--cyan);color:#00312b;display:grid;place-items:center;font-weight:800;font-size:12px;font-family:var(--sans);box-shadow:0 2px 8px rgba(0,0,0,.25);z-index:5}
+.legend{display:grid;gap:8px;margin-top:14px}
+.legend div{display:flex;gap:10px;align-items:baseline;font-size:13.5px;color:var(--ink2)}
+.legend i{width:20px;height:20px;border-radius:50%;background:var(--cyan);color:#00312b;display:inline-grid;place-items:center;font-weight:800;font-size:11px;font-style:normal;flex:none;transform:translateY(4px)}
+.faq dt{font-weight:700;color:var(--navy);margin-top:16px}
+.faq dd{margin:4px 0 0;color:var(--ink2);max-width:66ch}
+footer{margin-top:70px;border-top:1px solid var(--line);padding-top:18px;color:var(--ink3);font-size:13px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="kicker">Centellic · Revenue Operations</div>
+  <h1>Smart Convert Field Guide</h1>
+  <p class="lede">Everything a rep needs to convert a lead correctly, first time — the five screens, what each one is asking you, and what happens when you click.</p>
+  <p class="meta">Live in production · applies to everyone with the Smart Convert button on their Lead pages · 5-minute read</p>
+  <nav class="toc">
+    <a href="#rules">The 30-second version</a>
+    <a href="#map">How matching works</a>
+    <a href="#steps">The five screens</a>
+    <a href="#motions">Customer or prospect?</a>
+    <a href="#special">Special situations</a>
+    <a href="#fix">Troubleshooting</a>
+  </nav>
+</header>
+
+<section id="rules">
+  <div class="kicker">If you read nothing else</div>
+  <h2>The 30-second version</h2>
+  <ol class="rules">
+    <li>Open the Lead → click <b>Smart Convert</b>. If a green card appears and the details look right, <b>Convert now</b> — you're done in one click.</li>
+    <li><b>Location decides the office</b>, not deal counts — the office's address becomes the contact's address.</li>
+    <li>If the email matches someone we know, the wizard <b>links to them</b>. Never create a second copy of a person.</li>
+    <li>Already subscribes to this product, or a related one? The wizard makes it a <b>Renewal, Upsell or Cross-sell</b> for you. A client of other, unrelated products is still <b>New Business</b> for yours.</li>
+    <li>Open deal already covers this product? <b>Add to it</b> — don't split the deal. (The opportunity toggle is off by default; switch it on only when this enquiry should open a new deal.)</li>
+    <li>Check <b>Account context</b> for the CSM who covers this product before you reach out.</li>
+    <li>Finish with the <b>follow-up task</b> — a converted lead with no next action goes cold.</li>
+    <li>"Convert blocked" is the system explaining itself, not crashing. Read the message; it names the fix.</li>
+  </ol>
+</section>
+
+<section id="map">
+  <div class="kicker">The big picture</div>
+  <h2>How matching works</h2>
+  <p>The wizard reads the lead's <b>email domain</b> and checks it against every firm and office we hold. One of three things happens — and each path protects you from creating a duplicate:</p>
+  <figure class="diagram">
+    <svg viewBox="0 0 760 330" font-family="Helvetica Neue,Arial,sans-serif">
+      <defs><marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" fill="#5B6B82"/></marker></defs>
+      <rect x="290" y="14" width="180" height="52" rx="12" fill="#003340"/>
+      <text x="380" y="36" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="700">Lead arrives</text>
+      <text x="380" y="53" text-anchor="middle" fill="#9fd8d2" font-size="10.5">jane@dentons.com</text>
+      <rect x="290" y="96" width="180" height="46" rx="12" fill="#E9F6F5" stroke="#00707a" stroke-width="1.5"/>
+      <text x="380" y="115" text-anchor="middle" fill="#00707a" font-size="12" font-weight="700">Domain checked against</text>
+      <text x="380" y="131" text-anchor="middle" fill="#00707a" font-size="12" font-weight="700">every firm &amp; office</text>
+      <line x1="380" y1="66" x2="380" y2="94" stroke="#5B6B82" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="380" y1="142" x2="130" y2="182" stroke="#5B6B82" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="380" y1="142" x2="380" y2="182" stroke="#5B6B82" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="380" y1="142" x2="630" y2="182" stroke="#5B6B82" stroke-width="1.5" marker-end="url(#arr)"/>
+      <rect x="30" y="186" width="200" height="60" rx="12" fill="#E6F3EC" stroke="#157A52" stroke-width="1.5"/>
+      <text x="130" y="209" text-anchor="middle" fill="#157A52" font-size="12.5" font-weight="700">Exactly one firm</text>
+      <text x="130" y="227" text-anchor="middle" fill="#157A52" font-size="10.5">green card · one-click convert</text>
+      <rect x="280" y="186" width="200" height="60" rx="12" fill="#F8F0DC" stroke="#8a6210" stroke-width="1.5"/>
+      <text x="380" y="209" text-anchor="middle" fill="#7d5c12" font-size="12.5" font-weight="700">Several firms share it</text>
+      <text x="380" y="227" text-anchor="middle" fill="#7d5c12" font-size="10.5">you pick — never automatic</text>
+      <rect x="530" y="186" width="200" height="60" rx="12" fill="#E9F6F5" stroke="#00707a" stroke-width="1.5"/>
+      <text x="630" y="209" text-anchor="middle" fill="#00707a" font-size="12.5" font-weight="700">No match</text>
+      <text x="630" y="227" text-anchor="middle" fill="#00707a" font-size="10.5">guided create + duplicate checks</text>
+      <line x1="130" y1="246" x2="360" y2="292" stroke="#5B6B82" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="380" y1="246" x2="380" y2="290" stroke="#5B6B82" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="630" y1="246" x2="400" y2="292" stroke="#5B6B82" stroke-width="1.5" marker-end="url(#arr)"/>
+      <rect x="270" y="294" width="220" height="30" rx="15" fill="#003340"/>
+      <text x="380" y="313" text-anchor="middle" fill="#ffffff" font-size="11.5" font-weight="700">Converted — right firm, right office, no duplicate</text>
+    </svg>
+    <figcaption>Personal addresses (gmail, yahoo…) are never used as a company key — those leads go straight to search and guided create. And when the email domain is one we've never seen but the lead's <b>website</b> matches a firm we know (alias domains like @victoria.com vs victoriassecret.com), the match comes through at "worth a check" confidence for you to confirm.</figcaption>
+  </figure>
+</section>
+
+<section id="steps">
+  <div class="kicker">Screen by screen</div>
+  <h2>The five screens</h2>
+  <p>The stepper across the top always shows where you are. Most converts never see all five screens — a confident match jumps from screen 2 straight to Done.</p>
+
+  <h3><span class="stepnum">1</span>Inbound — who arrived?</h3>
+  <p>A read-only summary of the lead. The <b>quality strip</b> under the stepper follows you through every screen:</p>
+  <div class="shot"><div class="sc">
+    <span class="callout" style="top:86px;left:16px">1</span>
+    <span class="callout" style="top:12px;right:88px">2</span>
+    <div class="sc-top"><span class="sc-mark"></span><span><span class="sc-wm">Smart Convert</span><span class="sc-sub">RevOps · Match &amp; Select</span></span><span class="sc-cent">CE<i>N</i>TELLIC</span><span class="sc-pill">LIVE</span></div>
+    <div class="sc-steps"><span class="sc-st on"><i>1</i>Inbound</span><span class="sc-st"><i>2</i>Match</span><span class="sc-st"><i>3</i>Choose office</span><span class="sc-st"><i>4</i>Confirm</span><span class="sc-st"><i>5</i>Done</span></div>
+    <div class="sc-qbar"><span class="chip">Grade B+</span><span class="chip">Score 87</span><span class="chip">Radar fit 82</span><span class="chip ok">Email: Valid</span></div>
+    <div class="sc-stage">
+      <div class="sc-eyebrow">One engine · two doors</div>
+      <div class="sc-title">An enquiry lands</div>
+      <p class="sc-body">Name, title, email, company and location — exactly what the person submitted.</p>
+    </div>
+  </div></div>
+  <div class="legend">
+    <div><i>1</i><span><b>Quality strip</b> — Pardot Grade &amp; Score plus email verification, on every screen — and an <b>ALM Radar fit</b> chip where the lead carries one. A dashed "No Pardot score on this lead" chip means the lead was never scored (common for hand-created leads) — not an error.</span></div>
+    <div><i>2</i><span><b>Environment badge</b> — LIVE means production. If it names a sandbox, you're practising, not converting for real.</span></div>
+  </div>
+
+  <h3><span class="stepnum">2</span>Match — the one-click moment</h3>
+  <p>When exactly one firm owns the domain and one office is the obvious home, you get the green express card:</p>
+  <div class="shot"><div class="sc">
+    <span class="callout" style="top:118px;left:16px">1</span>
+    <div class="sc-top"><span class="sc-mark"></span><span><span class="sc-wm">Smart Convert</span><span class="sc-sub">RevOps · Match &amp; Select</span></span><span class="sc-cent">CE<i>N</i>TELLIC</span><span class="sc-pill">LIVE</span></div>
+    <div class="sc-steps"><span class="sc-st done"><i>✓</i>Inbound</span><span class="sc-st on"><i>2</i>Match</span><span class="sc-st"><i>3</i>Choose office</span><span class="sc-st"><i>4</i>Confirm</span><span class="sc-st"><i>5</i>Done</span></div>
+    <div class="sc-qbar"><span class="chip">Grade B+</span><span class="chip">Score 87</span><span class="chip ok">Email: Valid</span></div>
+    <div class="sc-stage">
+      <div class="express">
+        <h4>⚡ High-confidence match — convert in one click</h4>
+        <p>Dentons → <b>Dentons UK and Middle East LLP</b> · cross-sell</p>
+        <div style="font-size:10px;color:#3a4b60;margin:8px 0 6px;display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:13px;border-radius:8px;background:#c4ccd4;position:relative"><span style="position:absolute;left:1px;top:1px;width:11px;height:11px;border-radius:50%;background:#fff"></span></span> Also create the cross-sell opportunity <span style="color:#5B6B82">(off — flip on if this should open a deal)</span></div>
+        <span class="btn">⚡ Convert now</span><span class="link">Review details →</span>
+      </div>
+      <div class="sc-eyebrow">Resolve · indexed, instant</div>
+      <div class="sc-title">Who is this, really?</div>
+      <p class="sc-body">The match trace shows its working in plain language, with a confidence meter.</p>
+    </div>
+  </div></div>
+  <div class="legend">
+    <div><i>1</i><span><b>Convert now</b> finishes everything — account, contact, placement — in one click. <b>Review details</b> walks the full wizard instead. When in doubt, review; it costs 20 seconds. The <b>create-opportunity toggle sits right on the green card</b> (off by default) — flip it before clicking if this enquiry should open a deal.</span></div>
+  </div>
+  <div class="do"><b>What you do:</b> details right → <b>Convert now</b> (flip the opportunity toggle on the card first if a deal should be created). Anything looks off → <b>Review details</b>.</div>
+
+  <h3><span class="stepnum">3</span>Choose office — location wins</h3>
+  <p>Candidate offices are ranked <b>location first, deal volume second</b>, and the recommendation is pre-selected:</p>
+  <div class="shot"><div class="sc">
+    <span class="callout" style="top:168px;left:16px">1</span>
+    <span class="callout" style="top:168px;right:16px">2</span>
+    <span class="callout" style="bottom:56px;left:16px">3</span>
+    <div class="sc-top"><span class="sc-mark"></span><span><span class="sc-wm">Smart Convert</span><span class="sc-sub">RevOps · Match &amp; Select</span></span><span class="sc-cent">CE<i>N</i>TELLIC</span><span class="sc-pill">LIVE</span></div>
+    <div class="sc-steps"><span class="sc-st done"><i>✓</i>Inbound</span><span class="sc-st done"><i>✓</i>Match</span><span class="sc-st on"><i>3</i>Choose office</span><span class="sc-st"><i>4</i>Confirm</span><span class="sc-st"><i>5</i>Done</span></div>
+    <div class="sc-qbar"><span class="chip">Grade B+</span><span class="chip">Score 87</span><span class="chip ok">Email: Valid</span></div>
+    <div class="sc-stage">
+      <div class="sc-eyebrow">Select · location first</div>
+      <div class="sc-title">Convert into the right office</div>
+      <div class="cand sel" style="margin-top:10px"><span class="badge">Address match · recommended</span><span class="radio"></span>
+        <div><h5>Dentons UK and Middle East LLP</h5><small>London, GB · matches lead location</small><small>41 contacts · 6 opps this FY</small></div>
+        <div class="val"><b>23</b><span>£1.2M won</span></div>
+      </div>
+      <div class="cand"><span class="radio"></span>
+        <div><h5>Dentons US LLP</h5><small>New York, US</small><small>28 contacts · 9 opps this FY</small></div>
+        <div class="val"><b>31</b><span>£1.8M won</span></div>
+      </div>
+      <p class="sc-body" style="margin-top:6px">Wrong firm? Search &amp; pick a different one — by firm <i>or office</i> name.</p>
+    </div>
+  </div></div>
+  <div class="legend">
+    <div><i>1</i><span><b>Recommended office</b> — pre-selected because the lead's location matches. The US office has <em>more</em> won business, and still doesn't win: the address on the office becomes the contact's address.</span></div>
+    <div><i>2</i><span><b>The numbers</b> — won deals, value, contacts — context, not the deciding factor.</span></div>
+    <div><i>3</i><span><b>Manual search</b> — the escape hatch when the auto-match is wrong or empty. Searching an office name (e.g. "Dentons UK") finds it and pre-selects it under its parent firm.</span></div>
+  </div>
+  <div class="do"><b>What you do:</b> usually nothing — the right office is already selected. Click Next.</div>
+
+  <h3><span class="stepnum">4</span>Confirm — the full picture before you commit</h3>
+  <p>One screen with everything that matters: who's on the account, what's already in play, and who this enquiry should attach to.</p>
+  <div class="shot"><div class="sc">
+    <span class="callout" style="top:160px;left:16px">1</span>
+    <span class="callout" style="top:212px;left:16px">2</span>
+    <span class="callout" style="top:286px;left:16px">3</span>
+    <span class="callout" style="bottom:52px;left:16px">4</span>
+    <div class="sc-top"><span class="sc-mark"></span><span><span class="sc-wm">Smart Convert</span><span class="sc-sub">RevOps · Match &amp; Select</span></span><span class="sc-cent">CE<i>N</i>TELLIC</span><span class="sc-pill">LIVE</span></div>
+    <div class="sc-steps"><span class="sc-st done"><i>✓</i>Inbound</span><span class="sc-st done"><i>✓</i>Match</span><span class="sc-st done"><i>✓</i>Choose office</span><span class="sc-st on"><i>4</i>Confirm</span><span class="sc-st"><i>5</i>Done</span></div>
+    <div class="sc-qbar"><span class="chip">Grade B+</span><span class="chip">Score 87</span><span class="chip ok">Email: Valid</span></div>
+    <div class="sc-stage">
+      <div class="ctx">🛡 <b>Account context</b> <span>Sarah Poole · E&amp;I CSM · 20 contacts · 2 committee gaps</span><span class="chev">▾</span></div>
+      <div class="banner warn2">🗂 This firm already has an open <b>&nbsp;GCR&nbsp;</b> opportunity — consider adding to it instead of creating a second. The create-opportunity toggle is off.</div>
+      <div class="banner info2">🔗 <b>This person already exists&nbsp;</b> at this firm — we'll link the enquiry to them instead of creating a second record.</div>
+      <div class="ctx" style="margin-bottom:0"><span>Create an opportunity</span> <span class="tm" style="margin-left:auto">OFF — switch on if this should open a deal</span></div>
+    </div>
+  </div></div>
+  <div class="legend">
+    <div><i>1</i><span><b>Account context</b> (click to expand) — the account team across the firm with the CSM who covers this product highlighted, plus the firm's known contacts and which buying roles we're missing.</span></div>
+    <div><i>2</i><span><b>Open deals</b> — every open opportunity with stage, type, value, close date and owner. Same product already in play? Join that deal.</span></div>
+    <div><i>3</i><span><b>Existing person</b> — matched by email; the enquiry attaches to them. We never move people between offices (that would overwrite their address).</span></div>
+    <div><i>4</i><span><b>Opportunity toggle — off by default.</b> Switch it on only when this enquiry should open a new deal; pick the currency if it's not yours.</span></div>
+  </div>
+  <div class="do"><b>What you do:</b> scan the context, decide on the opportunity toggle, click <b>Convert</b>.</div>
+
+  <h3><span class="stepnum">5</span>Done — and the next action</h3>
+  <div class="shot"><div class="sc">
+    <span class="callout" style="bottom:150px;left:16px">1</span>
+    <div class="sc-top"><span class="sc-mark"></span><span><span class="sc-wm">Smart Convert</span><span class="sc-sub">RevOps · Match &amp; Select</span></span><span class="sc-cent">CE<i>N</i>TELLIC</span><span class="sc-pill">LIVE</span></div>
+    <div class="sc-steps"><span class="sc-st done"><i>✓</i>Inbound</span><span class="sc-st done"><i>✓</i>Match</span><span class="sc-st done"><i>✓</i>Choose office</span><span class="sc-st done"><i>✓</i>Confirm</span><span class="sc-st on"><i>5</i>Done</span></div>
+    <div class="sc-stage center">
+      <div class="seal">✓</div>
+      <div class="sc-eyebrow" style="text-align:center">Converted</div>
+      <div class="sc-title">Converted. No duplicate.</div>
+      <div class="pillbtns"><span class="pillbtn">View Account</span><span class="pillbtn">View Contact</span><span class="pillbtn">View Opportunity</span></div>
+      <div class="na">
+        <h5>🎯 Next action</h5>
+        <p>Qualify the GCR enquiry and book a discovery call. <b>Sarah Poole (E&amp;I CSM)</b> covers this firm.</p>
+        <div class="row"><span>Type: <b>Call</b></span><span>Due: <b>In 2 days</b></span><span>Assign to: <b>Me</b></span></div>
+        <span class="btn" style="font-size:10.5px">+ Create follow-up task</span>
+      </div>
+    </div>
+  </div></div>
+  <div class="legend">
+    <div><i>1</i><span><b>The follow-up task</b> — type, due date, assignee (you, or hand it straight to the covering CSM) and your comments. Ten seconds here is the difference between a pipeline and a graveyard.</span></div>
+  </div>
+</section>
+
+<section id="motions">
+  <div class="kicker">The clever part</div>
+  <h2>Customer or prospect? The wizard already knows</h2>
+  <p>Before you confirm, the system checks whether the firm <b>actively subscribes to the product the enquiry is about</b> — the one the lead names or, when it names none, <b>your team's product line</b> (the banner tells you when it's done that). Deals the firm has won on other, unrelated products don't count. What it finds changes what gets created:</p>
+  <figure class="diagram">
+    <svg viewBox="0 0 760 300" font-family="Helvetica Neue,Arial,sans-serif">
+      <defs><marker id="arr2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" fill="#5B6B82"/></marker></defs>
+      <rect x="255" y="12" width="250" height="44" rx="12" fill="#003340"/>
+      <text x="380" y="39" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">Does the firm subscribe to this product?</text>
+      <line x1="300" y1="56" x2="180" y2="94" stroke="#5B6B82" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <line x1="460" y1="56" x2="580" y2="94" stroke="#5B6B82" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <text x="205" y="80" fill="#157A52" font-size="11" font-weight="700">YES — active term</text>
+      <text x="500" y="80" fill="#5B6B82" font-size="11" font-weight="700">NO</text>
+      <rect x="80" y="98" width="200" height="40" rx="12" fill="#E9F6F5" stroke="#00707a" stroke-width="1.5"/>
+      <text x="180" y="123" text-anchor="middle" fill="#00707a" font-size="11.5" font-weight="700">When does the term end?</text>
+      <rect x="480" y="98" width="200" height="40" rx="12" fill="#E9F6F5" stroke="#00707a" stroke-width="1.5"/>
+      <text x="580" y="116" text-anchor="middle" fill="#00707a" font-size="11" font-weight="700">Subscribes to a related</text>
+      <text x="580" y="130" text-anchor="middle" fill="#00707a" font-size="11" font-weight="700">product in the same family?</text>
+      <line x1="130" y1="138" x2="105" y2="180" stroke="#5B6B82" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <line x1="230" y1="138" x2="265" y2="180" stroke="#5B6B82" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <line x1="530" y1="138" x2="475" y2="180" stroke="#5B6B82" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <line x1="630" y1="138" x2="655" y2="180" stroke="#5B6B82" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <text x="88" y="166" fill="#5B6B82" font-size="10">within 90 days</text>
+      <text x="255" y="166" fill="#5B6B82" font-size="10">later than 90 days</text>
+      <text x="440" y="166" fill="#5B6B82" font-size="10">yes</text>
+      <text x="662" y="166" fill="#5B6B82" font-size="10">no</text>
+      <rect x="30" y="184" width="150" height="62" rx="12" fill="#E6F3EC" stroke="#157A52" stroke-width="1.5"/>
+      <text x="105" y="208" text-anchor="middle" fill="#157A52" font-size="13" font-weight="700">RENEWAL</text>
+      <text x="105" y="226" text-anchor="middle" fill="#157A52" font-size="9.5">close date = term end</text>
+      <text x="105" y="238" text-anchor="middle" fill="#157A52" font-size="9.5">lands on the renewal forecast</text>
+      <rect x="210" y="184" width="150" height="62" rx="12" fill="#E6F3EC" stroke="#157A52" stroke-width="1.5"/>
+      <text x="285" y="212" text-anchor="middle" fill="#157A52" font-size="13" font-weight="700">UPSELL</text>
+      <text x="285" y="230" text-anchor="middle" fill="#157A52" font-size="9.5">grow the live subscription</text>
+      <rect x="400" y="184" width="150" height="62" rx="12" fill="#E9F6F5" stroke="#00707a" stroke-width="1.5"/>
+      <text x="475" y="212" text-anchor="middle" fill="#00707a" font-size="13" font-weight="700">CROSS-SELL</text>
+      <text x="475" y="230" text-anchor="middle" fill="#00707a" font-size="9.5">family client, new title</text>
+      <rect x="580" y="184" width="150" height="62" rx="12" fill="#F6F9FB" stroke="#5B6B82" stroke-width="1.5"/>
+      <text x="655" y="212" text-anchor="middle" fill="#3a4b60" font-size="13" font-weight="700">NEW BUSINESS</text>
+      <text x="655" y="228" text-anchor="middle" fill="#5B6B82" font-size="9.5">incl. clients of</text>
+      <text x="655" y="240" text-anchor="middle" fill="#5B6B82" font-size="9.5">unrelated products</text>
+      <text x="380" y="284" text-anchor="middle" fill="#5B6B82" font-size="11" font-style="italic">The opportunity Type, name and close date are set automatically to match.</text>
+    </svg>
+    <figcaption>A customer of this product or its family is an opportunity, not a rejection — the wizard does the classification so you don't have to.</figcaption>
+  </figure>
+  <p><b>Product families:</b> <b>Law.com</b> — including Radar and Compass, plus VerdictSearch — and the <b>Specialist Platforms</b> titles (GAR, GCR, GIR, WTR, IAM and the rest of that group). Every Lexology product stands alone: a Lexology PRO subscription doesn't make them a Lexology Intelligence customer.</p>
+</section>
+
+<section id="special">
+  <div class="kicker">When it's not the happy path</div>
+  <h2>Special situations</h2>
+
+  <h3>Several firms share the domain</h3>
+  <p>You'll be asked to pick. <b>Take the extra ten seconds</b> — your choice decides where the contact and any deal live, and a wrong pick means Data Team cleanup. Each card shows the firm's domain, its <b>office locations</b> (so similarly named firms separate at a glance) and its footprint (offices · contacts · won deals) — compare against the lead's email; if unsure, check the firm's website first.</p>
+
+  <h3>No match at all — create instantly, sell faster</h3>
+  <p>This used to be the slow lane: account creation was locked down, so a genuinely new company meant emailing the Data Team and waiting before you could even convert. <b>Not any more.</b> The wizard runs its duplicate checks, then builds the new firm and its first office on the spot — you pick one reason from a picklist and you're converting within seconds, not days. The office takes the company's name exactly as it appears on the lead, with the full address including state, so quotes and contracts show the right legal name. The Data Team is notified automatically to review and enrich the new account behind you, so speed and data quality both win.</p>
+
+  <h3>Not a fit? Disqualify — but keep the person</h3>
+  <p>The Disqualify button converts <b>without an opportunity</b> and records your reason. The person still lands under the right firm — because today's "not interested" is next year's renewal contact. Nothing is thrown away.</p>
+
+  <h3>Convert blocked</h3>
+  <div class="shot"><div class="sc">
+    <div class="sc-top"><span class="sc-mark"></span><span><span class="sc-wm">Smart Convert</span><span class="sc-sub">RevOps · Match &amp; Select</span></span><span class="sc-cent">CE<i>N</i>TELLIC</span><span class="sc-pill">LIVE</span></div>
+    <div class="sc-stage center">
+      <div class="seal err">!</div>
+      <div class="sc-title">Convert blocked</div>
+      <p class="sc-body" style="margin:0 auto;max-width:46ch">Convert blocked: Validation error on Contact: Please add the Salutation to this Contact.</p>
+      <p class="sc-body" style="margin:8px auto 0;max-width:46ch;font-size:10px">One of the data-quality checks stopped this — the message above tells you why, so nothing happens silently.</p>
+    </div>
+  </div></div>
+  <p>This is a <b>feature</b>: one of the org's data-quality rules stopped the convert, and the message names it. Fix the named thing on the lead (in the example above: add Mr/Ms as the Salutation), then hit <b>Restart</b>.</p>
+</section>
+
+<section id="fix">
+  <div class="kicker">Quick answers</div>
+  <h2>Troubleshooting</h2>
+  <div class="tblwrap"><table>
+    <tr><th>You see…</th><th>It means…</th><th>Do this</th></tr>
+    <tr><td><b>"You do not have access to the Apex class…"</b></td><td>You don't have the Smart Convert permission set.</td><td>Ask RevOps for the <b>LeadMatchSelect</b> permission set.</td></tr>
+    <tr><td><b>"Please add the Salutation to this Contact"</b></td><td>An org rule requires Mr/Ms/Dr on every contact.</td><td>Add a Salutation on the lead, then Restart.</td></tr>
+    <tr><td><b>"No Pardot score on this lead"</b> chip</td><td>The lead was never scored — usual for manually created leads.</td><td>Nothing — it's information, not an error.</td></tr>
+    <tr><td><b>No green express card</b></td><td>The match needs your judgement (several firms, or none).</td><td>Walk the wizard — it asks one question at a time.</td></tr>
+    <tr><td><b>Old screens / missing features</b></td><td>Your browser cached an old version.</td><td><b>Log out and back in</b> — a hard-refresh (Ctrl+F5) doesn't always clear it.</td></tr>
+    <tr><td><b>"Email flagged Invalid"</b> warning</td><td>Verification says the address is dead.</td><td>Consider Disqualify (reason: invalid email) instead of converting.</td></tr>
+    <tr><td><b>"Matched via the lead's website"</b></td><td>The email domain is new to us, but the lead's website matches a firm we know (an alias domain).</td><td>Confirm the firm looks right, then convert — and tell the Data Team so the alias domain can be added.</td></tr>
+    <tr><td><b>"…based on your team's line"</b> in the banner</td><td>The lead doesn't name a product, so the wizard checked the firm against your team's product line.</td><td>Nothing — but if the enquiry is really for another team's product, pass the lead to them instead of converting.</td></tr>
+    <tr><td>Contact went to a <b>different office</b> than expected</td><td>The person already exists at that office; we never move people.</td><td>Nothing — it's flagged for review automatically.</td></tr>
+  </table></div>
+
+  <dl class="faq">
+    <dt>Do I still use the standard Convert button?</dt>
+    <dd>No — it's gone: the native Convert button has been removed from the Lead page. Smart Convert is how leads are converted: same outcome, minus the duplicates and the guesswork.</dd>
+    <dt>What if the wizard picks the wrong firm?</dt>
+    <dd>Use "Wrong firm? Search &amp; pick a different one" on the office screen — search by firm or office name. Your correction is recorded and helps us improve the matching.</dd>
+    <dt>Why is the opportunity toggle off by default?</dt>
+    <dd>Not every enquiry should open a deal, and half of them belong on a deal that already exists. Switch it on when this enquiry genuinely starts something new.</dd>
+    <dt>The firm is already our client — why does it say New Business?</dt>
+    <dd>Because they don't subscribe to <em>this</em> product or a related one. Being a Lexology or Events client doesn't make a Law.com enquiry a cross-sell — for Law.com it's new business, and that's how it's reported.</dd>
+  </dl>
+</section>
+
+<footer>
+  <p><b>Need help?</b> Full training &amp; UAT documentation lives on the CRM Support Confluence space ("Smart Convert — Lead Conversion: Rep Training Guide &amp; UAT Script"). Issues → Kamyar Jannati / Revenue Operations, with a screenshot and the exact blocked message.</p>
+  <p>Centellic · Revenue Operations · Smart Convert — live in production since August 2026 · sales-motion rules updated 24 September 2026.</p>
+</footer>
+
+</div>

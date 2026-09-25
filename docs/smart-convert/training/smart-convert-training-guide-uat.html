@@ -1,0 +1,184 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Smart Convert — Rep Training Guide &amp; UAT Script</title>
+<style>
+body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;color:#122736;line-height:1.55;margin:0;padding:36px 44px;font-size:12.5px}
+h1{font-family:Georgia,serif;font-size:27px;color:#003340;letter-spacing:-.02em;margin:4px 0 4px}
+h2{font-family:Georgia,serif;font-size:19px;color:#003340;letter-spacing:-.01em;margin:28px 0 6px;border-bottom:2px solid #00c8a7;padding-bottom:4px}
+h3{font-size:13.5px;color:#003340;margin:16px 0 5px}
+.kicker{font-family:Consolas,monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#00707a;font-weight:600}
+.status{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.05em;color:#0c6b46;background:#E6F3EC;border:1px solid #c9e7d8;border-radius:4px;padding:2px 8px;text-transform:uppercase}
+.meta{color:#5B6B82;font-size:11.5px}
+p{max-width:72ch;margin:6px 0}
+ul,ol{margin:6px 0;padding-left:22px}
+li{margin:3px 0}
+table{border-collapse:collapse;width:100%;font-size:11px;margin:8px 0;page-break-inside:auto}
+th{background:#F0F4F7;font-family:Consolas,monospace;font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:#5B6B82;text-align:left;padding:7px 9px;border:1px solid #dfe6ec}
+td{padding:7px 9px;border:1px solid #e8eef2;vertical-align:top}
+tr{page-break-inside:avoid}
+.panel{border-radius:8px;padding:10px 14px;margin:10px 0;font-size:12px}
+.info{background:#E9F6F5;border:1px solid #BFE4E1;color:#00565e}
+.warn{background:#F8F0DC;border:1px solid #ecdcb0;color:#6b4f10}
+.good{background:#E6F3EC;border:1px solid #c9e7d8;color:#0c6b46}
+code{font-family:Consolas,monospace;font-size:11px;background:#F0F4F7;border-radius:3px;padding:1px 4px}
+.pagebreak{page-break-before:always}
+footer{margin-top:26px;border-top:1px solid #dfe6ec;padding-top:8px;color:#5B6B82;font-size:10.5px}
+</style></head><body>
+
+<div class="kicker">Centellic · Revenue Operations · CRM Support</div>
+<h1>Smart Convert — Rep Training Guide &amp; UAT Script</h1>
+<p class="meta"><span class="status">Live in production</span> &nbsp;since 14 August 2026 · UAT completed in FULLUAT · Owner: Kamyar Jannati (Head Data and CRM)</p>
+<div class="panel info"><b>Who this document is for:</b> the RevOps team, to train sales reps and SDRs on the Smart Convert lead-conversion cockpit — with the UAT script retained at the back as the acceptance record and regression pack.</div>
+
+<h2>1. What is Smart Convert, and why it exists</h2>
+<p>Converting a lead used to be where duplicates were born: the same firm created fifteen times (Dentons ×15, KPMG ×11 in production), contacts under the wrong office with the wrong address, and existing customers treated as brand-new prospects.</p>
+<p><b>Smart Convert replaces the native Convert button</b> (now removed from the Lead page) with a guided, 5-step cockpit that:</p>
+<ul>
+<li><b>Matches the lead to the right firm automatically</b> using the email domain — no typing, no guessing.</li>
+<li><b>Places the contact under the right office</b> (location first — because the office address is stamped onto the contact).</li>
+<li><b>Never creates a duplicate person</b> — it finds existing contacts by email and links the enquiry to them.</li>
+<li><b>Knows whether the firm already subscribes to the product</b> the enquiry is about (or, when the lead names none, the converting rep's own product line), and frames the convert as New Business, Cross-sell, Upsell or Renewal accordingly.</li>
+<li><b>Creates genuinely new firms on the spot</b> — duplicate-checked, in seconds, with the Data Team notified to enrich behind you. No more waiting to sell.</li>
+<li><b>Shows the room before you act</b>: the covering account-team member, existing open opportunities, the firm's known contacts.</li>
+<li><b>Closes the loop</b> with a one-click follow-up task so no converted lead dies untouched.</li>
+</ul>
+
+<h2>2. Before you start</h2>
+<table>
+<tr><th style="width:24%">Prerequisite</th><th>Detail</th></tr>
+<tr><td>Permission set</td><td><code>LeadMatchSelect</code> must be assigned. Without it the wizard can't resolve firms (and the Apex classes aren't accessible).</td></tr>
+<tr><td>Where to find it</td><td>Open any <b>Lead</b> record → <b>Smart Convert</b> quick action. It opens the wizard in a modal.</td></tr>
+<tr><td>Fresh session</td><td><b>Log out and back in</b> (or fully close the browser) after any new deployment. Lightning caches components aggressively, and a hard-refresh (Ctrl+F5) doesn't always clear it — one rep kept seeing a week-old version until he logged out.</td></tr>
+<tr><td>Environment badge</td><td>The header names the org: <b>LIVE</b> in production, or the sandbox name (e.g. FULLUAT) when practising.</td></tr>
+</table>
+
+<h2>3. The wizard — step by step</h2>
+<h3>Step 1 · Inbound</h3>
+<p>Who arrived: name, title, email, company, location — plus the <b>quality strip</b> (Pardot Grade &amp; Score, email validity, and an <b>ALM Radar fit</b> chip where the lead carries one) which follows you through every screen. Chips appear only when the lead carries that data; a dashed "No Pardot score on this lead" chip means the lead was never scored (usual for manually created leads) — information, not an error. A red "Email: Invalid" chip means verification flagged the address — consider disqualifying instead of converting a dead email.</p>
+
+<h3>Step 2 · Match</h3>
+<p>The engine resolves the email domain to a firm and shows its working in plain language, with a confidence meter:</p>
+<ul>
+<li><b>Strong match (one firm owns this domain)</b> — a green "High-confidence match — convert in one click" card appears. The <b>create-opportunity toggle (and currency) sits right on the card</b>, off by default — flip it before clicking if this enquiry should open a deal. Details right? <b>Convert now</b> finishes the whole job in one click. "Review details" walks the full wizard.</li>
+<li><b>Several firms share the domain</b> — you pick the right one at the next step; never automatic. Each card shows the firm's domain, its <b>office locations</b> (so similar names separate at a glance) and its footprint.</li>
+<li><b>No match</b> — guided create (new firm + office) with duplicate checks first. The new office takes the <b>company name exactly as on the lead</b> (no location suffix — the account name flows onto quotes and contracts as the legal entity name) and the lead's <b>full address, including state</b>.</li>
+</ul>
+<div class="panel info">Free personal domains (gmail, yahoo, etc.) are never used as a firm key — those leads fall back to company-name search and guided create. When the email domain is unknown to us but the lead's <b>website</b> matches a firm we know (alias domains), the match comes through at review confidence — the rep confirms, never one-click.</div>
+
+<h3>Step 3 · Choose office</h3>
+<p>Candidate offices are ranked <b>location first, deal volume second</b>. The recommended office is pre-selected; each card shows city/country, contacts, won opportunities and value.</p>
+<div class="panel warn"><b>Why location beats deal volume:</b> the office's address is stamped onto the new contact. An office with more opportunities never outranks the office the person actually works in — opportunity count only breaks ties. When the two disagree, the wizard flags it for review instead of auto-converting.</div>
+<p><b>Wrong firm?</b> "Search &amp; pick a different one" finds any existing firm <b>or office</b> by name (an office hit resolves to its parent firm and pre-selects that office). "Back to the recommendation" undoes the override.</p>
+
+<h3>Step 4 · Confirm</h3>
+<ul>
+<li><b>Account context bar</b> (click to expand): the account team across the firm with the member <b>whose role covers this product</b> highlighted (Law.com CSM / PI CSM / E&amp;I CSM), plus the buying committee — known contacts tagged by role (Knowledge/PSL, Library/Research, L&amp;D, Practice leadership) with gap chips for the personas we're missing.</li>
+<li><b>Open opportunities panel</b>: every open opp with stage, type, amount, close date, owner — and a renewal chip with the budget renewal date where relevant. If an open opp already covers this product, join that deal rather than splitting it.</li>
+<li><b>Who should this enquiry attach to?</b> An email match pre-selects the existing contact — no second record. A contact at a different office shows a "possible move" note: we attach where they already are and <b>never move people between offices</b>.</li>
+<li><b>Create Opportunity toggle — OFF by default.</b> Switch it on only when this enquiry should open a new deal. The <b>currency</b> selector defaults to your user currency — change it if the deal is in another currency.</li>
+</ul>
+
+<h3>Step 5 · Done</h3>
+<ul>
+<li>Links to the new Account, Contact and Opportunity, plus a next step tailored to the situation — e.g. "Qualify the GCR enquiry and book a discovery call. Sarah Poole (E&amp;I CSM) covers this firm."</li>
+<li><b>One-click follow-up task</b>: Type (Call / Email / Meeting / Product Demo / Product Trial / Connect on LinkedIn / Other), due date, assignee (you, or hand it to the covering CSM), and your comments. The task lands on the new contact and opportunity.</li>
+</ul>
+
+<h2>4. Sales motions — what the wizard decides and why</h2>
+<div class="panel warn"><b>Rules changed 24 September 2026</b> at Commercial's request (Khris Fenton, VP New Business, Law.com). Before that date, any Closed Won deal at the firm — on any product — made an enquiry a Cross-sell. It no longer does: only active subscriptions relevant to the enquiry count.</div>
+<p><b>Which product is the enquiry about?</b> The product the lead names, if we recognise it. If the lead names nothing (or free text we don't recognise), the <b>converting rep's own product line</b> — the opportunity they create is for what their team sells — and the banner tells the rep so. Leads arriving via Pardot forms have no rep yet, so they use the lead's product only.</p>
+<table>
+<tr><th>Motion</th><th>When</th><th>What the wizard does</th></tr>
+<tr><td><b>Renewal</b></td><td>Active subscription to <b>this product</b>, ending within 90 days</td><td>Opportunity Type = Renewal; <b>close date = term end</b> (lands on the renewal forecast)</td></tr>
+<tr><td><b>Upsell</b></td><td>Active subscription to <b>this product</b>, ending more than 90 days out</td><td>Opportunity Type = Upsell</td></tr>
+<tr><td><b>Cross-sell</b></td><td>No subscription to this product, but an active subscription to a <b>related product in the same family</b></td><td>Opportunity Type = Repeat Business; banner names the family</td></tr>
+<tr><td><b>New Business</b></td><td>Anything else — <b>including firms that are customers of unrelated products</b> (a Lexology or Events client enquiring about Law.com is New Business for Law.com)</td><td>Opportunity Type = New Business; close date = platform default (end of current quarter). Where the firm does business with us elsewhere, the banner says so — as context, not as a cross-sell</td></tr>
+</table>
+<table>
+<tr><th style="width:26%">Product family</th><th>Members (what counts as "related")</th></tr>
+<tr><td><b>Law.com</b></td><td>Law.com — including Radar and Compass, which are Law.com-branded products — plus VerdictSearch. Lead values like "LAW.COM RADAR", "Legal Radar", "Legal Compass", "VerdictSearch.com" and "LAW.COM INTERNATIONAL" are recognised; marketing-campaign text ("Law.com Promo - …") is not, because several of those are advertising enquiries.</td></tr>
+<tr><td><b>Specialist Platforms</b></td><td>GAR, GBRR, GCR, GDR, GIR, GRR, IAM, IPBC, LACCA, WTR</td></tr>
+<tr><td>Everything else</td><td>Stands alone — e.g. each Lexology product (a Lexology PRO subscription doesn't make the firm a Lexology Intelligence customer)</td></tr>
+</table>
+<table>
+<tr><th style="width:52%">Rep's team (User → Team)</th><th>Product line used when the lead names none</th></tr>
+<tr><td>ALM Legal - Info Services; ALM Legal - Info Services - Customer Care</td><td>Law.com family</td></tr>
+<tr><td>Lexology Pro / Lexology Intelligence</td><td>Lexology PRO / Lexology Intelligence</td></tr>
+<tr><td>Expert Insight - Lexology Panoramic / Expert Insight - Lexology In-Depth / Performance Data - Lexology Index</td><td>Lexology Panoramic / Lexology In-Depth / Lexology Index</td></tr>
+<tr><td>Specialist Platforms, GxRs, Events, Marketing Services, TBRC, Data and all other teams</td><td>None — the lead's product only (multi-title teams await a Commercial decision)</td></tr>
+</table>
+<p>Families and team mappings live in the <code>Brand_Mapping__mdt</code> custom metadata — changing them is configuration, not code.</p>
+<div class="panel good"><b>Key training message:</b> an existing customer <i>of this product or its family</i> is an opportunity, not a rejection — it's an upsell, renewal or cross-sell. A customer of unrelated products is new business for yours. The only genuine duplicate case is an open opp already covering this brand — then join it, or disqualify as duplicate.</div>
+
+<h2>5. Disqualifying — but keeping the record</h2>
+<p>The <b>Disqualify</b> button never throws the person away. It runs the same convert with <b>no opportunity</b>, links the person to the right account and contact, and records the reason (required). One complete view of every customer — a disqualified lead today is a renewal contact tomorrow.</p>
+
+<h2>6. Golden rules (the 30-second version)</h2>
+<ol>
+<li>Green express card + correct details = <b>one click and you're done</b>.</li>
+<li><b>Location decides the office</b>, not deal counts — the address goes onto the contact.</li>
+<li><b>Never create a second person</b> — if the email matches, link.</li>
+<li>Customer of this product or its family ≠ disqualify — it's an <b>upsell / renewal / cross-sell</b>. Customer of something unrelated = <b>new business</b> for you.</li>
+<li>Open opp for the same brand? <b>Add to it</b>, don't split the deal. The opportunity toggle is <b>off by default</b> — opt in when a new deal is genuinely starting.</li>
+<li>Check the <b>covering CSM</b> in Account context before reaching out.</li>
+<li>Always leave with a <b>follow-up task</b> — converted-but-untouched is how leads die.</li>
+<li>"Convert blocked" means a data-quality check stopped it — read the message; nothing fails silently.</li>
+</ol>
+
+<h2>7. What gets recorded (for RevOps)</h2>
+<p>Every convert stamps telemetry on the Lead: <code>Conversion_Source__c</code> = "Smart Convert", <code>Match_Confidence__c</code> (ONECLICK / REVIEW / GUIDED_CREATE), <code>Opportunity_Motion__c</code>, <code>New_Account_Created__c</code>, <code>Recommended_Office__c</code>, <code>Overrode_Recommendation__c</code>, <code>Manual_Search_Used__c</code>, <code>Create_Reason__c</code>, <code>Disqualify_Reason__c</code>. This powers duplicate-creation, motion-mix and matcher-feedback reporting, and shows where matching needs enrichment.</p>
+<div class="panel warn"><b>Reporting caveat:</b> <code>Opportunity_Motion__c</code> on leads converted <b>before 24 September 2026</b> over-states Cross-sell (1,152 of the first 2,231 conversions were stamped Cross-sell under the old rule). Salesforce locks converted leads, so that history can't be corrected. For motion reporting use <b>Opportunity Type</b> — the ten open opportunities still carrying the old "Repeat Business" were corrected on 24 September.</div>
+
+<div class="pagebreak"></div>
+<h2>8. UAT testing script (acceptance record &amp; regression pack)</h2>
+<div class="panel info"><b>How to run:</b> use real leads matching each scenario's profile; each convert consumes its lead, so use a fresh lead per test. Record Pass/Fail + observations; report issues with the test ID, the lead link and a screenshot.</div>
+
+<h3>A. Core conversion paths</h3>
+<table>
+<tr><th>ID</th><th>Scenario</th><th>Lead profile</th><th>Steps</th><th>Expected result</th></tr>
+<tr><td>T1</td><td>Express one-click convert</td><td>Corporate email matching exactly one firm, one obvious office</td><td>Open Smart Convert → green card → <b>Convert now</b></td><td>Converts in one click; Done screen links Account/Contact/Opportunity; contact under the recommended office</td></tr>
+<tr><td>T2</td><td>Full wizard walk</td><td>Same as T1</td><td><b>Review details</b> → all steps → Convert</td><td>Every step renders; office numbers show real figures; convert succeeds</td></tr>
+<tr><td>T3</td><td>Existing contact — link</td><td>Email matches an existing Contact</td><td>Confirm → "This person already exists" → Convert</td><td>No new contact — enquiry attaches to the existing contact at their current office</td></tr>
+<tr><td>T4</td><td>Cross-office contact</td><td>Email matches a contact at office B; lead location suggests office A</td><td>Confirm → read possible-move note → Convert</td><td>Contact NOT moved; lands at their office; flagged for review</td></tr>
+<tr><td>T5</td><td>Ambiguous firm</td><td>Domain shared by 2+ firms</td><td>"Which company?" → pick → Convert</td><td>Picked firm's offices shown; convert lands under it</td></tr>
+<tr><td>T6</td><td>Manual firm/office search</td><td>Auto-match wrong or empty</td><td>Search by firm AND office name → pick → also press Back after searching</td><td>Both hit types return (office hits show "Office of {firm}" and pre-select that office); Back leaves Next enabled</td></tr>
+<tr><td>T7</td><td>No match — guided create</td><td>Unknown corporate domain, full US address incl. <b>state</b></td><td>Walk through → Create Reason (required) → Convert</td><td>New Firm (no address) + Office + Contact; Next disabled until reason; account flagged for review. Office named <b>exactly like the firm</b> (no " — City" suffix); Office and Contact carry the <b>state</b></td></tr>
+<tr><td>T8</td><td>Firm exists, no office</td><td>Lead matches an office-less firm</td><td>Walk through → Convert</td><td>New office under the EXISTING firm — no duplicate firm</td></tr>
+</table>
+
+<h3>B. Sales motion &amp; opportunity behaviour</h3>
+<table>
+<tr><th>ID</th><th>Scenario</th><th>Lead profile</th><th>Steps</th><th>Expected result</th></tr>
+<tr><td>T9</td><td>Renewal motion</td><td>Brand actively subscribed, term ends within ~90 days</td><td>Check banners → convert with opportunity ON</td><td>Renewal banner with term end; Opportunity Type = Renewal; <b>Close Date = term end</b></td></tr>
+<tr><td>T10</td><td>Upsell motion</td><td>Active subscription, term ends &gt; 90 days</td><td>As T9</td><td>Upsell banner; Opportunity Type = Upsell</td></tr>
+<tr><td>T11</td><td>Cross-sell motion</td><td>Active subscription to a <b>sibling in the same family</b>, not this product (e.g. GAR subscriber + GCR lead; VerdictSearch subscriber + Law.com lead)</td><td>As T9</td><td>Cross-sell banner (family named); Opportunity Type = Repeat Business</td></tr>
+<tr><td>T12</td><td>Open opp on same brand</td><td>Brand with an OPEN opp on the firm</td><td>Confirm → check open-opps panel and toggle</td><td>Open opps listed with stage/type/amount/close/owner (+ renewal chip); toggle is <b>off by default for every convert</b>; warning recommends adding to the existing deal</td></tr>
+<tr><td>T13</td><td>Currency</td><td>Any convert with opportunity ON</td><td>Change the currency → Convert</td><td>Opportunity in the selected currency; default was your user's currency</td></tr>
+<tr><td>T23</td><td>Customer of unrelated products</td><td>Law.com lead at a firm with Closed Won deals on other products (e.g. Lexology, Events) and <b>no</b> Law.com-family subscription</td><td>As T9</td><td>Banner: "New business for Law.com — this firm already works with us on other products"; Opportunity Type = <b>New Business</b> (never Repeat Business)</td></tr>
+<tr><td>T24</td><td>Rep's product line fallback</td><td>Lead with <b>no product</b>, converted by a rep in team "ALM Legal - Info Services", at a firm with an active Law.com subscription</td><td>As T9</td><td>Upsell banner noting "based on your team's line — Law.com"; Opportunity Type = Upsell; opportunity name includes "Law.com". A rep in an unmapped team (e.g. Data) gets New Business</td></tr>
+<tr><td>T25</td><td>Law.com family spelling</td><td>Lead product "LAW.COM RADAR" or "Legal Compass", firm with an active Law.com subscription</td><td>As T9</td><td>Recognised as Law.com: Upsell (or Renewal if ending within 90 days)</td></tr>
+</table>
+
+<h3>C. Context, quality &amp; follow-up</h3>
+<table>
+<tr><th>ID</th><th>Scenario</th><th>Lead profile</th><th>Steps</th><th>Expected result</th></tr>
+<tr><td>T14</td><td>Account context / covering CSM</td><td>Firm with Account Team members</td><td>Confirm → expand Account context</td><td>Team across the firm's offices; covering member highlighted and named in the summary; committee shows contacts + persona gaps</td></tr>
+<tr><td>T15</td><td>Follow-up task</td><td>After any successful convert</td><td>Done → set Type/Due/Assign + comment → Create task → open it</td><td>Task with chosen Type, due date, assignee; comments contain only your text; linked to contact and opportunity</td></tr>
+<tr><td>T16</td><td>Contact role stamped</td><td>After any convert with opportunity</td><td>New Opportunity → Contact Roles</td><td>Converted contact's role = <b>Decision Maker</b></td></tr>
+<tr><td>T17</td><td>Invalid email warning</td><td>Lead with Email Verification Status = Invalid</td><td>Open the wizard → check chips + Match step</td><td>Red "Email: Invalid" chip + warning suggesting disqualify</td></tr>
+<tr><td>T18</td><td>Disqualify — kept on record</td><td>Any lead with a convert target</td><td>Disqualify → reason → confirm</td><td>Reason required; converts with NO opportunity; "kept on record" screen; reason stamped</td></tr>
+<tr><td>T19</td><td>Free-mail lead</td><td>gmail/yahoo address + company name</td><td>Open the wizard</td><td>No false domain match — routes to search / guided create</td></tr>
+<tr><td>T20</td><td>Header badge</td><td>Any lead</td><td>Look at the header</td><td>Badge names the actual org; processing overlay with progress messages during convert</td></tr>
+<tr><td>T21</td><td>Express opportunity toggle</td><td>Any high-confidence lead</td><td>On the green card, flip the create-opportunity toggle ON → Convert now</td><td>Opportunity created from the one-click path; toggle defaults off when left alone</td></tr>
+<tr><td>T22</td><td>Website-fallback match</td><td>Lead whose email domain matches nothing, with a website matching a known firm</td><td>Open the wizard → check the confidence label</td><td>Firm resolves via the website; confidence reads "matched via the lead's website" at review level; NO express card (never one-click)</td></tr>
+</table>
+
+<h2>Appendix — environment notes</h2>
+<ul>
+<li>Each convert consumes its lead — use a fresh lead per test.</li>
+<li><b>Prefer real inbound leads</b> over hand-made test leads — hand-made leads carry no Pardot score, no email-verification status and often no address, so several panels legitimately show less.</li>
+<li>Sandbox email deliverability is usually restricted — Data Team notification emails may not deliver from sandboxes.</li>
+<li>Office cards compute their numbers live when stored rollups are unpopulated, so figures always reflect actual opportunity data.</li>
+<li>For T24, the tester's own <b>User → Team</b> decides the fallback — check yours before running it.</li>
+</ul>
+
+<footer>Centellic · Revenue Operations · Smart Convert — live in production since 14 August 2026 · sales-motion rules updated 24 September 2026. Companion document: "Smart Convert — Field Guide for Reps" (CRM Support Confluence space).</footer>
+</body></html>

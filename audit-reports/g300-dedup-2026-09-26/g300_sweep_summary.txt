@@ -1,0 +1,44 @@
+G300 Dedup Sweep Summary
+=========================
+G300 Firm accounts checked: 302
+Former names (aliases) used: 32
+Unique duplicate-candidate pairs found: 376
+  vs non-G300 Firm records: 375 pairs, 374 distinct candidate records
+  within the G300 set: 1 pairs
+  tier 1 (exact name/alias): 186
+  tier 2 (short form / extension): 151
+  tier 3 (website/identifier only): 39
+G300 firms with >=1 duplicate candidate: 154
+G300 records with a completeness gap: 159
+Names not name-matched (too short/generic): 0
+
+Pairs per signal:
+  alias_exact: 30
+  alias_extends: 12
+  alias_short_form: 8
+  name_exact: 155
+  name_extends: 62
+  name_short_form: 73
+  website_domain_match: 41
+  within_g300:alias_exact: 1
+
+Candidates by creation date and creator (top 10):
+  2026-08-20 Kieran Hansen: 122
+  2026-07-25 Kieran Hansen: 78
+  2025-11-13 Kieran Hansen: 48
+  2021-01-20 Kamyar Jannati: 48
+  2026-08-22 Kieran Hansen: 14
+  2025-12-22 Kieran Hansen: 5
+  2025-08-19 Kieran Hansen: 3
+  2025-09-04 Kieran Hansen: 3
+  2026-08-26 Kieran Hansen: 2
+  2023-05-23 Kieran Hansen: 2
+
+IMPORTANT: this is a candidate list, not a merge instruction.
+Several patterns in this data are legacy predecessor-firm names
+(e.g. a firm that renamed or merged years ago) that may be
+intentional historical records rather than true duplicates -
+review each row before merging. Website-only matches are often
+people or unrelated organisations carrying the firm's domain.
+Confirm merge direction manually per record, per the CE-master
+lesson from the 24 Sep run.

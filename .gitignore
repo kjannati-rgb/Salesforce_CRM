@@ -12,3 +12,7 @@ deploy-options.json
 .DS_Store
 Thumbs.db
 *.log
+
+# Python
+__pycache__/
+*.pyc
